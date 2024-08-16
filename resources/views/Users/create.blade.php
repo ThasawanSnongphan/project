@@ -226,7 +226,7 @@
                                             <input class="form-control" type="text"  name="Admin" id="Admin" required='required' data-validate-length-range="8,20" /></div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="flag" class="col-form-label col-md-3 col-sm-3  label-align">flag<span class="required">*</span></label>
+                                        <label for="flag" class="col-form-label col-md-3 col-sm-3  label-align">สถานะ<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="flag" id="flag" required='required' data-validate-length-range="8,20" /></div>
                                     </div>

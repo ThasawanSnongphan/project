@@ -49,7 +49,7 @@
                                     <form method="POST" action="{{route('pro.update',$pro_char->id)}}"novalidate enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
-                                            <label for="title"
+                                            <label for="name"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
