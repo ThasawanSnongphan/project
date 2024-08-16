@@ -64,12 +64,12 @@
                                                 <th scope="row">{{$i}}</th>
                                                 <td>{{ $pro->pro_cha_name }}</td>
                                                 <td>
-                                                    {{-- <a
-                                                            href="{{ route('costs.edit', $pro->id) }}"><i
+                                                    <a
+                                                            href="{{ route('pro.edit', $pro->id) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('costs.delete', $pro->id) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $pro->costname }} หรือไม่')"><i
-                                                                class="fa fa-times btn btn-danger"></i></a> --}}
+                                                        <a href="{{ route('pro.delete', $pro->id) }}"
+                                                            onclick="return confirm('ต้องการลบข่าว {{ $pro->pro_cha_name }} หรือไม่')"><i
+                                                                class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>
                                             @php
