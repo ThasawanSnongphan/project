@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearController;
 use App\Http\Controllers\CostTypeController;
 use App\Http\Controllers\ExpenseBadgetController;
+use App\Http\Controllers\ProCharecController;
 
 Route::get('/', [NewsController::class,'index']);
 Route::get('create',[NewsController::class,'create']);
@@ -41,4 +42,6 @@ Route::post('costInsert',[CostTypeController::class,'insert']);
 Route::get('costDelete/{id}',[CostTypeController::class,'delete'])->name('costs.delete');
 Route::get('costedit/{id}',[CostTypeController::class,'edit'])->name('costs.edit');
 Route::post('costupdate/{id}',[CostTypeController::class,'update'])->name('costs.update');
+
+Route::get('proChar',[ProCharecController::class,'index']);
 
