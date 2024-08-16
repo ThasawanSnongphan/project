@@ -13,4 +13,23 @@ class ProCharecController extends Controller
         return view('ProjectCharac.index',compact('pro_char'));
     }
 
+    function create(){
+        return view('ProjectCharac.create');
+    }
+
+    function insert(Request $request ){
+        $request->validate(
+            [
+                'name'=>'required'
+            ],
+            [
+                'name.required'=>'กรุณากรอกลักษณะโครงการ'
+            ]
+        );
+        $pro_char = new ProjectCharec();
+        $pro_char->pro_cha_name = $request->input('name');
+        $pro_char->save();
+        return redirect('/proChar');
+    }
+
 }

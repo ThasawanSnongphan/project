@@ -80,7 +80,7 @@
                                         <li><a href="/create">เพิ่มข่าวประชาสัมพันธ์</a></li>
                                         <li><a href="/costCreate">เพิ่มหมวดรายจ่าย </a></li>
                                         <li><a href="/ExCreate">เพิ่มงบรายจ่าย</a></li>
-                                        <li><a href="form_buttons.html">Form Buttons</a></li>
+                                        <li><a href="/prochaCreate">เพิ่มลักษณะโครงการ</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i> UI Elements <span

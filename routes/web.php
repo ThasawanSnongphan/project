@@ -44,4 +44,6 @@ Route::get('costedit/{id}',[CostTypeController::class,'edit'])->name('costs.edit
 Route::post('costupdate/{id}',[CostTypeController::class,'update'])->name('costs.update');
 
 Route::get('proChar',[ProCharecController::class,'index']);
+Route::get('prochaCreate',[ProCharecController::class,'create']);
+Route::post('prochaInsert',[ProCharecController::class,'insert']);
 
