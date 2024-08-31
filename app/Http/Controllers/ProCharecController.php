@@ -29,13 +29,13 @@ class ProCharecController extends Controller
         $pro_char = new ProjectCharec();
         $pro_char->pro_cha_name = $request->input('name');
         $pro_char->save();
-        return redirect('/proChar');
+        return redirect('/ProjectCharac.index');
     }
 
     
     function delete($id){
         DB::table('project_charecs')->where('id',$id)->delete();
-        return redirect('/proChar');
+        return redirect('/ProjectCharac.index');
     }
 
     function edit($id){
@@ -51,11 +51,11 @@ class ProCharecController extends Controller
                 'name.required'=>'กรุณากรอกลักษณะโครงการ'
             ]
         );
-        $cost_types=[
+        $pro_char=[
             'pro_cha_name'=>$request->name
         ];
-        DB::table('project_charecs')->where('id',$id)->update($cost_types);
-        return redirect('/proChar'); 
+        DB::table('project_charecs')->where('id',$id)->update($pro_char);
+        return redirect('/ProjectCharac.index'); 
     }
 
 

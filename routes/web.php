@@ -49,3 +49,5 @@ Route::post('prochaInsert',[ProCharecController::class,'insert']);
 Route::get('proDelete/{id}',[ProCharecController::class,'delete'])->name('pro.delete');
 Route::get('proedit/{id}',[ProCharecController::class,'edit'])->name('pro.edit');
 Route::post('proupdate/{id}',[ProCharecController::class,'update'])->name('pro.update');
+
+// Route::get('login',)

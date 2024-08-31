@@ -1,29 +1,6 @@
 @extends('layout')
 @section('title', 'User')
 @section('content')
-    {{-- <h2 class="m-2">User</h2> --}}
-    {{-- <a href="/uCreate" class="btn btn-primary m-2">Add User</a> --}}
-    {{-- <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">FirstName</th>
-                <th scope="col">LastName</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $user)
-            <tr>
-                <th scope="row"></th>
-                <td>{{$user->firstname_en}}</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr> 
-            @endforeach
-        </tbody>
-    </table> --}}
-
     <div class="container body">
         <div class="main_container">
             <div role="main">
@@ -44,6 +21,8 @@
                             </div>
                         </div>
                     </div>
+                    
+                    @include('Users.create');
 
                     <div class="row" style="display: block;">
                         <div class="col-md-12 col-sm-12  ">

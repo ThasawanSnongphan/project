@@ -71,6 +71,7 @@
                                         <li><a href="/cost_type">หมวดรายจ่าย</a></li>
                                         <li><a href="/Expense">งบรายจ่าย</a></li>
                                         <li><a href="/proChar">ลักษณะโครงการ</a></li>
+                                        <li><a href="#">ประเภทโครงการ</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>

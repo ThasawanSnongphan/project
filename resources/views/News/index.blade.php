@@ -47,6 +47,8 @@
 
                         <div class="clearfix"></div>
 
+                        @include('News.create')
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="x_panel">
@@ -68,8 +70,9 @@
                                         </ul>
                                         <div class="clearfix"></div>
                                     </div>
+                                   
                                     <div class="x_content">
-
+                                           
                                         <div class="row">
                                             @foreach ($news as $new)
                                             <div class="col-md-55">
