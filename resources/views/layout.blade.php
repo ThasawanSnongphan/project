@@ -70,18 +70,16 @@
                                         <li><a href="/year">ปีงบประมาณ</a></li>
                                         <li><a href="/cost_type">หมวดรายจ่าย</a></li>
                                         <li><a href="/Expense">งบรายจ่าย</a></li>
+                                        <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
                                         <li><a href="/proChar">ลักษณะโครงการ</a></li>
-                                        <li><a href="#">ประเภทโครงการ</a></li>
+                                        <li><a href="/projectIntegrat">การบูรณาการ</a></li>
+                                        <li><a href="/status">สถานะ</a></li>
+                                        <li><a href="/plan">แผนงานมหาลัย</a></li>
+                                        <li><a href="/projectType">ประเภทโครงการ</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="/yCreate">เพิ่มปีงบประมาณ</a></li>
-                                        <li><a href="/uCreate">เพิ่มผู้ใช้งาน</a></li>
-                                        <li><a href="/create">เพิ่มข่าวประชาสัมพันธ์</a></li>
-                                        <li><a href="/costCreate">เพิ่มหมวดรายจ่าย </a></li>
-                                        <li><a href="/ExCreate">เพิ่มงบรายจ่าย</a></li>
-                                        <li><a href="/prochaCreate">เพิ่มลักษณะโครงการ</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i> UI Elements <span
@@ -212,7 +210,7 @@
                                         <span>Settings</span>
                                     </a>
                                     <a class="dropdown-item" href="javascript:;">Help</a>
-                                    <a class="dropdown-item" href="login.html"><i
+                                    <a class="dropdown-item" href="/logout"><i
                                             class="fa fa-sign-out pull-right"></i> Log Out</a>
                                 </div>
                             </li>

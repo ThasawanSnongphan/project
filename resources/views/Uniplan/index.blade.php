@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ProjectType')
+@section('title', 'UniversityPlan')
 @section('content')
 <div class="container body">
     <div class="main_container">
@@ -8,11 +8,11 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>ประเภทโครงการ</h3>
+                        <h3>แผนงานมหาลัย</h3>
                     </div>
 
                     <div class="title_right">
-                        <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+                        <div class="col-md-5 col-sm-5   form-group pull-right top_search">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Search for...">
                                 <span class="input-group-btn">
@@ -23,14 +23,14 @@
                     </div>
                 </div>
 
-                @include('ProjectType.create')
+                @include('UniPlan.create')
 
                 <div class="row" style="display: block;">
                     <div class="col-md-3 col-sm-3  "></div>
                     <div class="col-md-6 col-sm-6  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>ประเภทโครงการ</h2>
+                                <h2>แผนงานมหาลัย</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -61,16 +61,16 @@
                                         @php
                                             $i=1;
                                         @endphp
-                                        @foreach ($project_type as $pro )
+                                        @foreach ($plan as $plan )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td>{{ $pro->name }}</td>
+                                                <td>{{ $plan->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('projectType.edit', $pro->id) }}"><i
+                                                            href="{{ route('plan.edit', $plan->id) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('projectType.delete', $pro->id) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $pro->name }} หรือไม่')"><i
+                                                        <a href="{{ route('plan.delete', $plan->id) }}"
+                                                            onclick="return confirm('ต้องการลบสถานะ {{ $plan->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

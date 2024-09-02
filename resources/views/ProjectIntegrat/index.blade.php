@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ProjectType')
+@section('title', 'ProjectIntegrat')
 @section('content')
 <div class="container body">
     <div class="main_container">
@@ -8,7 +8,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>ประเภทโครงการ</h3>
+                        <h3>การบูรณาการ</h3>
                     </div>
 
                     <div class="title_right">
@@ -23,14 +23,14 @@
                     </div>
                 </div>
 
-                @include('ProjectType.create')
+                @include('ProjectIntegrat.create')
 
                 <div class="row" style="display: block;">
                     <div class="col-md-3 col-sm-3  "></div>
                     <div class="col-md-6 col-sm-6  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>ประเภทโครงการ</h2>
+                                <h2>การบูรณาการ</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -61,15 +61,15 @@
                                         @php
                                             $i=1;
                                         @endphp
-                                        @foreach ($project_type as $pro )
+                                        @foreach ($project_integrat as $pro )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
                                                 <td>{{ $pro->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('projectType.edit', $pro->id) }}"><i
+                                                            href="{{ route('projectIntegrat.edit', $pro->id) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('projectType.delete', $pro->id) }}"
+                                                        <a href="{{ route('projectIntegrat.delete', $pro->id) }}"
                                                             onclick="return confirm('ต้องการลบข่าว {{ $pro->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

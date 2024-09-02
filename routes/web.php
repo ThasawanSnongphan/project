@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\UserController;
@@ -7,6 +8,12 @@ use App\Http\Controllers\YearController;
 use App\Http\Controllers\CostTypeController;
 use App\Http\Controllers\ExpenseBadgetController;
 use App\Http\Controllers\ProCharecController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\UniPlanController;
+use App\Http\Controllers\BadgetTypeController;
+use App\Http\Controllers\ProjectTypeController;
+use App\Http\Controllers\ProjectIntegratController;
 
 Route::get('/', [NewsController::class,'index']);
 Route::get('create',[NewsController::class,'create']);
@@ -50,4 +57,40 @@ Route::get('proDelete/{id}',[ProCharecController::class,'delete'])->name('pro.de
 Route::get('proedit/{id}',[ProCharecController::class,'edit'])->name('pro.edit');
 Route::post('proupdate/{id}',[ProCharecController::class,'update'])->name('pro.update');
 
-// Route::get('login',)
+Route::get('status',[StatusController::class,'index']);
+Route::get('statusCreate',[StatusController::class,'create']);
+Route::post('statusInsert',[StatusController::class,'insert']);
+Route::get('statusDelete/{id}',[StatusController::class,'delete'])->name('status.delete');
+Route::get('statusEdit/{id}',[StatusController::class,'edit'])->name('status.edit');
+Route::post('statusUpdate/{id}',[StatusController::class,'update'])->name('status.update');
+
+Route::get('plan',[UniPlanController::class,'index']);
+Route::get('planCreate',[UniPlanController::class,'create']);
+Route::post('planInsert',[UniPlanController::class,'insert']);
+Route::get('planDelete/{id}',[UniPlanController::class,'delete'])->name('plan.delete');
+Route::get('planEdit/{id}',[UniPlanController::class,'edit'])->name('plan.edit');
+Route::post('planUpdate/{id}',[UniPlanController::class,'update'])->name('plan.update');
+
+Route::get('BadgetType',[BadgetTypeController::class,'index']);
+Route::post('BadgetTypeInsert',[BadgetTypeController::class,'insert']);
+Route::get('BadegetTypeDelete/{id}',[BadgetTypeController::class,'delete'])->name('badgetType.delete');
+Route::get('BadgetTypeEdit/{id}',[BadgetTypeController::class,'edit'])->name('badgetType.edit');
+Route::post('BadgetTypeUpdate/{id}',[BadgetTypeController::class,'update'])->name('badgetType.update');
+
+Route::get('projectType',[ProjectTypeController::class,'index']);
+Route::post('projectTypeInsert',[ProjectTypeController::class,'insert']);
+Route::get('projectTypeDelete/{id}',[ProjectTypeController::class,'delete'])->name('projectType.delete');
+Route::get('projectTypeEdit/{id}',[ProjectTypeController::class,'edit'])->name('projectType.edit');
+Route::post('projectTypeUpdate/{id}',[ProjectTypeController::class,'update'])->name('projectType.update');
+
+Route::get('projectIntegrat',[ProjectIntegratController::class,'index']);
+Route::post('projectIntegratInsert',[ProjectIntegratController::class,'insert']);
+Route::get('projectIntegratDelete/{id}',[ProjectIntegratController::class,'delete'])->name('projectIntegrat.delete');
+Route::get('projectIntegratEdit/{id}',[ProjectIntegratController::class,'edit'])->name('projectIntegrat.edit');
+Route::post('projectIntegratUpdate/{id}',[ProjectIntegratController::class,'update'])->name('projectIntegrat.update');
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
