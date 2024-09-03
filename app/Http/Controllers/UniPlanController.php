@@ -23,7 +23,7 @@ class UniPlanController extends Controller
                 'name'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกสถานะ'
+                'name.required'=>'กรุณากรอกแผนงานมหาวิทยาลัย'
             ]
         );
         $plan = new UniPlan();

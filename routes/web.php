@@ -14,8 +14,10 @@ use App\Http\Controllers\UniPlanController;
 use App\Http\Controllers\BadgetTypeController;
 use App\Http\Controllers\ProjectTypeController;
 use App\Http\Controllers\ProjectIntegratController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', [NewsController::class,'index']);
+
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);
 Route::get('ndelete/{id}',[NewsController::class,'delete'])->name('news.delete');
@@ -89,8 +91,8 @@ Route::get('projectIntegratDelete/{id}',[ProjectIntegratController::class,'delet
 Route::get('projectIntegratEdit/{id}',[ProjectIntegratController::class,'edit'])->name('projectIntegrat.edit');
 Route::post('projectIntegratUpdate/{id}',[ProjectIntegratController::class,'update'])->name('projectIntegrat.update');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/login', [NewsController::class,'login']);
+//Route::get('/home', [HomeController::class, 'index'])->name('home');

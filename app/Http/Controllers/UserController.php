@@ -18,48 +18,7 @@ class UserController extends Controller
         return view('Users.create');
     }
 
-    public function insert(Request $request){
-        $users = new Users();
-        $users->username = $request->input('username');
-        $users->email = $request->input('email');
-        $users->password = Hash::make($request->input('password'));
-        $users->account_type = $request->input('account_type');
-        $users->full_prefix_name_th = $request->input('full_prefix_name_th');
-        $users->firstname_th = $request->input('firstname_th');
-        $users->lastname_th = $request->input('lastname_th');
-        $users->firstname_en = $request->input('firstname_en');
-        $users->lastname_en = $request->input('lastname_en');
-        $users->personnel_type_id = $request->input('personnel_type_id');
-        $users->personnel_type_name = $request->input('personnel_type_name');
-        $users->position_id = $request->input('position_id');
-        $users->position_name = $request->input('position_name');
-        $users->position_type_id = $request->input('position_type_id');
-        $users->position_type_th = $request->input('position_type_th');
-        $users->faculty_code = $request->input('faculty_code');
-        $users->faculty_name = $request->input('faculty_name');
-        $users->department_code = $request->input('department_code');
-        $users->department_name = $request->input('department_name');
-        $users->Executive = $request->input('Executive');
-        $users->Planning_Analyst = $request->input('Planning_Analyst');
-        $users->Department_head = $request->input('Department_head');
-        $users->Supply_Analyst = $request->input('Supply_Analyst');
-        $users->Responsible = $request->input('Responsible');
-        $users->Admin = $request->input('Admin');
-        $users->flag = $request->input('flag');
-        $users->save();
-        return redirect('/users');
-    }
-
-    function delete($id){
-        DB::table('users')->where('id',$id)->delete();
-        return redirect('/users');
-    }
-
-    function edit($id){
-        $users=DB::table('users')->where('id',$id)->first();
-        return view('Users.update',compact('users'));
-    }
-    function update(Request $request,$id){
+    function insert(Request $request){
         $request->validate(
             [
                 'username'=>'required',
@@ -90,6 +49,55 @@ class UserController extends Controller
                 'flag'=>'required'
             ],
             [
+                'username.required'=>'กรุณากรอกusername'
+            ]
+        );
+        $users = new Users();
+        $users->username = $request->input('username');
+        $users->email = $request->input('email');
+        $users->password = Hash::make($request->input('password'));
+        $users->account_type = $request->input('account_type');
+        $users->full_prefix_name_th = $request->input('full_prefix_name_th');
+        $users->firstname_th = $request->input('firstname_th');
+        $users->lastname_th = $request->input('lastname_th');
+        $users->firstname_en = $request->input('firstname_en');
+        $users->lastname_en = $request->input('lastname_en');
+        $users->personnel_type_id = $request->input('personnel_type_id');
+        $users->personnel_type_name = $request->input('personnel_type_name');
+        $users->position_id = $request->input('position_id');
+        $users->position_name = $request->input('position_name');
+        $users->position_type_id = $request->input('position_type_id');
+        $users->position_type_th = $request->input('position_type_th');
+        $users->faculty_code = $request->input('faculty_code');
+        $users->faculty_name = $request->input('faculty_name');
+        $users->department_code = $request->input('department_code');
+        $users->department_name = $request->input('department_name');
+        $users->executive = $request->has('executive') ? true : false;
+        $users->Planning_Analyst = $request->has('Planning_Analyst') ? true : false;
+        $users->Department_head = $request->has('Department_head') ? true : false;
+        $users->Supply_Analyst = $request->has('Supply_Analyst') ? true : false;
+        $users->Responsible = $request->has('Responsible') ? true : false;
+        $users->Admin = $request->has('Admin') ? true : false;
+        $users->flag = $request->has('flag') ? true : false;
+        $users->save();
+        return redirect('/users');
+    }
+
+    function delete($id){
+        DB::table('users')->where('id',$id)->delete();
+        return redirect('/users');
+    }
+
+    function edit($id){
+        $users=DB::table('users')->where('id',$id)->first();
+        return view('Users.update',compact('users'));
+    }
+    function update(Request $request,$id){
+        $request->validate(
+            [
+                
+            ],
+            [
                 // 'title.required'=>'กรุณากรอกหัวข้อข่าว',
                 // 'content.required'=>'กรุณากรอกรายละเอียดข่าว',
                 // 'img.nullable'=>'กรุณาใส่รูปภาพ'
@@ -115,13 +123,13 @@ class UserController extends Controller
                 'faculty_name'=>$request->faculty_name,
                 'department_code'=>$request->department_code,
                 'department_name'=>$request->department_name,
-                'Executive'=>$request->Executive,
-                'Planning_Analyst'=>$request->Planning_Analyst,
-                'Department_head'=>$request->Department_head,
-                'Supply_Analyst'=>$request->Supply_Analyst,
-                'Responsible'=>$request->Responsible,
-                'Admin'=>$request->Admin,
-                'flag'=>$request->flag
+                'Executive'=>$request->has('Executive') ? true : false,
+                'Planning_Analyst'=>$request->has('Planning_Analyst') ? true : false,
+                'Department_head'=>$request->has('Department_head') ? true : false,
+                'Supply_Analyst'=>$request->has('Supply_Analyst') ? true : false,
+                'Responsible'=>$request->has('Responsible') ? true : false,
+                'Admin'=>$request->has('Admin') ? true : false,
+                'flag'=>$request->has('flag') ? true : false
         ];
         DB::table('users')->where('id',$id)->update($users);
         return redirect('/users'); 

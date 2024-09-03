@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
+    function login(){
+        return view('login');
+    }
+    
     function index(){
         $news=DB::table('news')->get();
         return view('News.index',compact('news'));

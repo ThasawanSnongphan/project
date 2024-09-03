@@ -78,7 +78,7 @@
                                             <div class="col-md-55">
                                                 <div class="thumbnail">
                                                     <div class="image view view-first">
-                                                        <img style="width: 100%; display: block;" src="{{ Storage::url($new->img)}}"
+                                                        <img style="width: 100%; display: block;" src="{{ asset('storage/' . $new->img) }}"
                                                              />
                                                         <div class="mask">
                                                             <p>Your Text</p>

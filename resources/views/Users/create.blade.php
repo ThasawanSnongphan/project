@@ -210,14 +210,98 @@
                         </div>
                     </div>
                     <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Executive
+                            (ผู้บริหาร) <span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Executive" name="Executive" {{ old('Executive') ? 'checked' : '' }}/> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Planning_Analyst
+                            (เจ้าหน้าที่แผน)<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Planning_Analyst" name="Planning_Analyst" {{ old('Planning_Analyst') ? 'checked' : '' }}  /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Department_head(หัวหน้าฝ่าย)<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Department_head" name="Department_head" {{ old('Department_head') ? 'checked' : '' }}  /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Supply_Analyst (นักวิชาการพัสดุ)<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Supply_Analyst" name="Supply_Analyst" {{ old('Supply_Analyst') ? 'checked' : '' }}  /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Responsible
+                            (ผู้รับผิดชอบโครงการ)<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Responsible" name="Responsible"  checked {{ old('Responsible') ? 'checked' : '' }}   /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Admin
+                            (แอดมิน)<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="Admin" name="Admin" {{ old('Admin') ? 'checked' : '' }}  /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">สถานะ<span
+                                class="required">*</span></label>
+                        <div class="col-md-9 col-sm-9 ">
+                            <div class="">
+                                <label>
+                                    <input type="checkbox" class="js-switch" id="flag" name="flag" checked {{ old('flag') ? 'checked' : '' }}  /> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {{-- <div class="field item form-group">
                         <label for="Executive" class="col-form-label col-md-3 col-sm-3  label-align">Executive
                             (ผู้บริหาร) <span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="Executive" id="Executive"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="Planning_Analyst"
                             class="col-form-label col-md-3 col-sm-3  label-align">Planning_Analyst
                             (เจ้าหน้าที่แผน)<span class="required">*</span></label>
@@ -225,8 +309,8 @@
                             <input class="form-control" type="text" name="Planning_Analyst" id="Planning_Analyst"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="Department_head"
                             class="col-form-label col-md-3 col-sm-3  label-align">Department_head(หัวหน้าฝ่าย)<span
                                 class="required">*</span></label>
@@ -234,8 +318,8 @@
                             <input class="form-control" type="text" name="Department_head" id="Department_head"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="Supply_Analyst"
                             class="col-form-label col-md-3 col-sm-3  label-align">Supply_Analyst (นักวิชาการพัสดุ)<span
                                 class="required">*</span></label>
@@ -243,31 +327,31 @@
                             <input class="form-control" type="text" name="Supply_Analyst" id="Supply_Analyst"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="Responsible" class="col-form-label col-md-3 col-sm-3  label-align">Responsible
                             (ผู้รับผิดชอบโครงการ)<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="Responsible" id="Responsible"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="Admin" class="col-form-label col-md-3 col-sm-3  label-align">Admin
                             (แอดมิน)<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="Admin" id="Admin"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="flag" class="col-form-label col-md-3 col-sm-3  label-align">สถานะ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="flag" id="flag"
                                 required='required' data-validate-length-range="8,20" />
                         </div>
-                    </div>
+                    </div> --}}
 
 
 

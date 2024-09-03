@@ -158,39 +158,85 @@
                                             <input class="form-control" type="text" name="department_name" id="department_name" required='required' data-validate-length-range="8,20" value="{{$users->department_name}}" /></div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="Executive" class="col-form-label col-md-3 col-sm-3  label-align">Executive (ผู้บริหาร) <span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text" name="Executive" id="Executive" required='required' data-validate-length-range="8,20" value="{{$users->Executive}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Executive
+                                            (ผู้บริหาร) <span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Executive" name="Executive" {{ $users->Executive ? 'checked' : '' }}/> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="Planning_Analyst" class="col-form-label col-md-3 col-sm-3  label-align">Planning_Analyst (เจ้าหน้าที่แผน)<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text" name="Planning_Analyst" id="Planning_Analyst" required='required' data-validate-length-range="8,20" value="{{$users->Planning_Analyst}}" /></div>
-                                    </div> 
-                                    <div class="field item form-group">
-                                        <label for="Department_head" class="col-form-label col-md-3 col-sm-3  label-align">Department_head(หัวหน้าฝ่าย)<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text" name="Department_head" id="Department_head" required='required' data-validate-length-range="8,20" value="{{$users->Department_head}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Planning_Analyst
+                                            (เจ้าหน้าที่แผน)<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Planning_Analyst" name="Planning_Analyst" {{ $users->Planning_Analyst ? 'checked' : '' }}  /> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="Supply_Analyst" class="col-form-label col-md-3 col-sm-3  label-align">Supply_Analyst (นักวิชาการพัสดุ)<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="Supply_Analyst" id="Supply_Analyst" required='required' data-validate-length-range="8,20" value="{{$users->Supply_Analyst}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Department_head(หัวหน้าฝ่าย)<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Department_head" name="Department_head" {{ $users->Department_head ? 'checked' : '' }}  /> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="Responsible" class="col-form-label col-md-3 col-sm-3  label-align">Responsible (ผู้รับผิดชอบโครงการ)<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="Responsible" id="Responsible" required='required' data-validate-length-range="8,20" value="{{$users->Responsible}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Supply_Analyst (นักวิชาการพัสดุ)<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Supply_Analyst" name="Supply_Analyst" {{ $users->Supply_Analyst ? 'checked' : '' }}  /> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="Admin" class="col-form-label col-md-3 col-sm-3  label-align">Admin (แอดมิน)<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="Admin" id="Admin" required='required' data-validate-length-range="8,20" value="{{$users->Admin}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Responsible
+                                            (ผู้รับผิดชอบโครงการ)<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Responsible" name="Responsible"   {{ $users->Responsible ? 'checked' : '' }}   /> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="field item form-group">
-                                        <label for="flag" class="col-form-label col-md-3 col-sm-3  label-align">flag<span class="required">*</span></label>
-                                        <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="flag" id="flag" required='required' data-validate-length-range="8,20" value="{{$users->flag}}" /></div>
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">Admin
+                                            (แอดมิน)<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="Admin" name="Admin" {{ $users->Admin ? 'checked' : '' }}  /> 
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="field item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align">สถานะ<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 ">
+                                            <div class="">
+                                                <label>
+                                                    <input type="checkbox" class="js-switch" id="flag" name="flag" {{ $users->flag ? 'checked' : '' }}  /> 
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
 
                              

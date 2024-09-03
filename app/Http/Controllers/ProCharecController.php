@@ -29,13 +29,13 @@ class ProCharecController extends Controller
         $pro_char = new ProjectCharec();
         $pro_char->pro_cha_name = $request->input('name');
         $pro_char->save();
-        return redirect('/ProjectCharac.index');
+        return redirect('/proChar');
     }
 
     
     function delete($id){
         DB::table('project_charecs')->where('id',$id)->delete();
-        return redirect('/ProjectCharac.index');
+        return redirect('/proChar');
     }
 
     function edit($id){

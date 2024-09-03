@@ -3,6 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,7 +13,14 @@
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-
+    <!-- bootstrap-wysiwyg -->
+    <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="../vendors/select2/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Switchery -->
+    <link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
+    <!-- starrr -->
+    <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
@@ -43,18 +51,21 @@
 
                     <div class="clearfix"></div>
 
-                    <!-- menu profile quick info -->
-                    <div class="profile clearfix">
-                        <div class="profile_pic">
-                            <img src="{{ asset('production/images/img.jpg') }}" alt="..."
-                                class="img-circle profile_img">
+                    @auth
+                        <!-- menu profile quick info -->
+                        <div class="profile clearfix">
+                            <div class="profile_pic">
+                                <img src="{{ asset('production/images/img.jpg') }}" alt="..."
+                                    class="img-circle profile_img">
+                            </div>
+                            <div class="profile_info">
+                                <span>Welcome,</span>
+                                <h2>John Doe</h2>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <span>Welcome,</span>
-                            <h2>John Doe</h2>
-                        </div>
-                    </div>
-                    <!-- /menu profile quick info -->
+                        <!-- /menu profile quick info -->
+                    @endauth
+
 
                     <br />
 
@@ -197,23 +208,30 @@
                     </div>
                     <nav class="nav navbar-nav">
                         <ul class=" navbar-right">
-                            <li class="nav-item dropdown open" style="padding-left: 15px;">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
-                                    id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ asset('production/images/img.jpg') }}" alt="">John Doe
-                                </a>
-                                <div class="dropdown-menu dropdown-usermenu pull-right"
-                                    aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="javascript:;"> Profile</a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <span class="badge bg-red pull-right">50%</span>
-                                        <span>Settings</span>
+                            @auth
+                                <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
+                                        id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                        <img src="{{ asset('production/images/img.jpg') }}" alt="">John Doe
                                     </a>
-                                    <a class="dropdown-item" href="javascript:;">Help</a>
-                                    <a class="dropdown-item" href="/logout"><i
-                                            class="fa fa-sign-out pull-right"></i> Log Out</a>
-                                </div>
-                            </li>
+                                    <div class="dropdown-menu dropdown-usermenu pull-right"
+                                        aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="javascript:;"> Profile</a>
+                                        <a class="dropdown-item" href="javascript:;">
+                                            <span class="badge bg-red pull-right">50%</span>
+                                            <span>Settings</span>
+                                        </a>
+                                        <a class="dropdown-item" href="javascript:;">Help</a>
+                                        <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out pull-right"></i>
+                                            Log Out</a>
+                                    </div>
+                                </li>
+                            @endauth
+                            @guest
+                                <li class="nav-item" style="padding-left: 15px;">
+                                    <a class="nav-link" href="/login">Login</a>
+                                </li>
+                            @endguest
 
                             <li role="presentation" class="nav-item dropdown open">
                                 <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1"
@@ -359,9 +377,26 @@
     <!-- bootstrap-daterangepicker -->
     <script src="../vendors/moment/min/moment.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
+    <!-- bootstrap-wysiwyg -->
+    <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+    <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+    <script src="../vendors/google-code-prettify/src/prettify.js"></script>
+    <!-- jQuery Tags Input -->
+    <script src="../vendors/jquery.tagsinput/src/jquery.tagsinput.js"></script>
+    <!-- Switchery -->
+    <script src="../vendors/switchery/dist/switchery.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+    <!-- Select2 -->
+    <script src="../vendors/select2/dist/js/select2.full.min.js"></script>
+    <!-- Parsley -->
+    <script src="../vendors/parsleyjs/dist/parsley.min.js"></script>
+    <!-- Autosize -->
+    <script src="../vendors/autosize/dist/autosize.min.js"></script>
+    <!-- jQuery autocomplete -->
+    <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
+    <!-- starrr -->
+    <script src="../vendors/starrr/dist/starrr.js"></script>
 
 </body>
 
