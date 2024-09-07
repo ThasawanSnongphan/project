@@ -45,26 +45,25 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella
+                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella
                                 Alela!</span></a>
                     </div>
 
                     <div class="clearfix"></div>
 
-                    @auth
-                        <!-- menu profile quick info -->
+                    
+                    @if (Auth::check())
                         <div class="profile clearfix">
-                            <div class="profile_pic">
+                            {{-- <div class="profile_pic">
                                 <img src="{{ asset('production/images/img.jpg') }}" alt="..."
                                     class="img-circle profile_img">
-                            </div>
+                            </div> --}}
                             <div class="profile_info">
-                                <span>Welcome,</span>
-                                <h2>John Doe</h2>
+                                <span>Welcome,</span> <br>
+                                {{ Auth::user()->firstname_th }} {{ Auth::user()->lastname_th }}
                             </div>
                         </div>
-                        <!-- /menu profile quick info -->
-                    @endauth
+                    @endif
 
 
                     <br />
@@ -87,6 +86,7 @@
                                         <li><a href="/status">สถานะ</a></li>
                                         <li><a href="/plan">แผนงานมหาลัย</a></li>
                                         <li><a href="/projectType">ประเภทโครงการ</a></li>
+                                        <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -212,7 +212,8 @@
                                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
                                         id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                        <img src="{{ asset('production/images/img.jpg') }}" alt="">John Doe
+                                        {{-- <img src="{{ asset('production/images/img.jpg') }}" alt=""> --}}
+                                        {{ Auth::user()->firstname_en }} {{ Auth::user()->lastname_en }}
                                     </a>
                                     <div class="dropdown-menu dropdown-usermenu pull-right"
                                         aria-labelledby="navbarDropdown">
@@ -222,7 +223,7 @@
                                             <span>Settings</span>
                                         </a>
                                         <a class="dropdown-item" href="javascript:;">Help</a>
-                                        <a class="dropdown-item" href="/logout"><i class="fa fa-sign-out pull-right"></i>
+                                        <a class="dropdown-item" href="/login"><i class="fa fa-sign-out pull-right"></i>
                                             Log Out</a>
                                     </div>
                                 </li>

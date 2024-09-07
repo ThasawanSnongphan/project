@@ -14,9 +14,17 @@ use App\Http\Controllers\UniPlanController;
 use App\Http\Controllers\BadgetTypeController;
 use App\Http\Controllers\ProjectTypeController;
 use App\Http\Controllers\ProjectIntegratController;
+use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AuthController;
+
 
 Route::get('/', [NewsController::class,'index']);
+Auth::routes();
+Route::get('/login', [AuthController::class,'login']);
+Route::post('loginPost',[AuthController::class,'loginPost']);
+
+
 
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);
@@ -41,9 +49,9 @@ Route::post('update/{id}',[YearController::class,'update'])->name('years.update'
 Route::get('Expense',[ExpenseBadgetController::class,'index']);
 Route::get('ExCreate',[ExpenseBadgetController::class,'create']);
 Route::post('ExInsert',[ExpenseBadgetController::class,'insert']);
-Route::get('exDelete/{id}',[ExpenseBadgetController::class,'delete'])->name('ex.delete');
-Route::get('exedit/{id}',[ExpenseBadgetController::class,'edit'])->name('ex.edit');
-Route::post('exupdate/{id}',[ExpenseBadgetController::class,'update'])->name('ex.update');
+Route::get('exDelete/{expID}',[ExpenseBadgetController::class,'delete'])->name('ex.delete');
+Route::get('exedit/{expID}',[ExpenseBadgetController::class,'edit'])->name('ex.edit');
+Route::post('exupdate/{expID}',[ExpenseBadgetController::class,'update'])->name('ex.update');
 
 Route::get('cost_type',[CostTypeController::class,'index']);
 Route::get('costCreate',[CostTypeController::class,'create']);
@@ -91,8 +99,11 @@ Route::get('projectIntegratDelete/{id}',[ProjectIntegratController::class,'delet
 Route::get('projectIntegratEdit/{id}',[ProjectIntegratController::class,'edit'])->name('projectIntegrat.edit');
 Route::post('projectIntegratUpdate/{id}',[ProjectIntegratController::class,'update'])->name('projectIntegrat.update');
 
+Route::get('target',[TargetController::class,'index']);
+Route::post('targetInsert',[TargetController::class,'insert']);
+Route::get('targetDelete/{id}',[TargetController::class,'delete'])->name('target.delete');
+Route::get('targetEdit/{id}',[TargetController::class,'edit'])->name('target.edit');
+Route::post('targetUpdate/{id}',[TargetController::class,'update'])->name('target.update');
 
 
-Auth::routes();
-Route::get('/login', [NewsController::class,'login']);
 //Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ExpenseBadget')
+@section('title', 'UnivarsityPlan')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -7,7 +7,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>แก้ไขงบรายจ่าย</h3>
+                            <h3>แก้ไขกลุ่มเป้าหมาย</h3>
                         </div>
 
                         <div class="title_right">
@@ -28,7 +28,7 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>งบรายจ่าย </h2>
+                                    <h2>กลุ่มเป้าหมาย </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -46,15 +46,15 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('ex.update',$expanse->expID)}}"novalidate enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('target.update',$target->TarID)}}"novalidate enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
-                                            <label for="title"
+                                            <label for="name"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="textt" name="name" id="name"
-                                                    required='required' data-validate-length-range="8,20" value="{{$expanse->exname}}"  />
+                                                    required='required' data-validate-length-range="8,20" value="{{$target->name}}"  />
                                                 @error('name')
                                                     <div class="m-2">
                                                         <span class="text text-danger">{{ $message }}</span>

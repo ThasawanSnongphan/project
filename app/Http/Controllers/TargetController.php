@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Targets;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+
+class TargetController extends Controller
+{
+    function index(){
+        $target=DB::table('targets')->get();
+        return view('Targets.index',compact('target'));
+    }
+
+    function insert(Request $request ){
+        $request->validate(
+            [
+                'name'=>'required'
+            ],
+            [
+                'name.required'=>'กรุณากรอกแผนงานมหาวิทยาลัย'
+            ]
+        );
+        $target = new Targets();
+        $target->name = $request->input('name');
+        $target->save();
+        return redirect('/target');
+    }
+
+    function delete($id){
+        DB::table('targets')->where('TarID',$id)->delete();
+        return redirect('/target');
+    }
+
+    function edit($id){
+        $target=DB::table('targets')->where('TarID',$id)->first();
+        return view('Targets.update',compact('target'));
+    }
+    function update(Request $request,$id){
+        $request->validate(
+            [
+                'name'=>'required'
+            ],
+            [
+                'name.required'=>'กรุณากรอกแผนงานมหาวิทยาลัย'
+            ]
+        );
+        $target=[
+            'name'=>$request->name
+        ];
+        DB::table('targets')->where('TarID',$id)->update($target);
+        return redirect('/target'); 
+    }
+}

@@ -28,8 +28,14 @@
                         <div class="col-md-6 col-sm-6">
                             <input type="text" class="form-control" data-validate-length-range="6"
                                 data-validate-words="2" name="username" id="username" required="required" />
+                            @error('username')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
+
                     <div class="field item form-group">
                         <label for="email" class="col-form-label col-md-3 col-sm-3  label-align">email<span
                                 class="required">*</span></label>
@@ -211,24 +217,24 @@
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Executive
-                            (ผู้บริหาร) <span
-                                class="required">*</span></label>
+                            (ผู้บริหาร) <span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Executive" name="Executive" {{ old('Executive') ? 'checked' : '' }}/> 
+                                    <input type="checkbox" class="js-switch" id="Executive" name="Executive"
+                                        {{ old('Executive') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Planning_Analyst
-                            (เจ้าหน้าที่แผน)<span
-                                class="required">*</span></label>
+                            (เจ้าหน้าที่แผน)<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Planning_Analyst" name="Planning_Analyst" {{ old('Planning_Analyst') ? 'checked' : '' }}  /> 
+                                    <input type="checkbox" class="js-switch" id="Planning_Analyst"
+                                        name="Planning_Analyst" {{ old('Planning_Analyst') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
@@ -239,42 +245,44 @@
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Department_head" name="Department_head" {{ old('Department_head') ? 'checked' : '' }}  /> 
+                                    <input type="checkbox" class="js-switch" id="Department_head"
+                                        name="Department_head" {{ old('Department_head') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="field item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">Supply_Analyst (นักวิชาการพัสดุ)<span
-                                class="required">*</span></label>
+                        <label class="col-form-label col-md-3 col-sm-3 label-align">Supply_Analyst
+                            (นักวิชาการพัสดุ)<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Supply_Analyst" name="Supply_Analyst" {{ old('Supply_Analyst') ? 'checked' : '' }}  /> 
+                                    <input type="checkbox" class="js-switch" id="Supply_Analyst"
+                                        name="Supply_Analyst" {{ old('Supply_Analyst') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Responsible
-                            (ผู้รับผิดชอบโครงการ)<span
-                                class="required">*</span></label>
+                            (ผู้รับผิดชอบโครงการ)<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Responsible" name="Responsible"  checked {{ old('Responsible') ? 'checked' : '' }}   /> 
+                                    <input type="checkbox" class="js-switch" id="Responsible" name="Responsible"
+                                        checked {{ old('Responsible') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Admin
-                            (แอดมิน)<span
-                                class="required">*</span></label>
+                            (แอดมิน)<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="Admin" name="Admin" {{ old('Admin') ? 'checked' : '' }}  /> 
+                                    <input type="checkbox" class="js-switch" id="Admin" name="Admin"
+                                        {{ old('Admin') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>
@@ -285,7 +293,8 @@
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
-                                    <input type="checkbox" class="js-switch" id="flag" name="flag" checked {{ old('flag') ? 'checked' : '' }}  /> 
+                                    <input type="checkbox" class="js-switch" id="flag" name="flag" checked
+                                        {{ old('flag') ? 'checked' : '' }} />
                                 </label>
                             </div>
                         </div>

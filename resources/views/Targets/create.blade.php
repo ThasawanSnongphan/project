@@ -3,7 +3,7 @@
     <div class="col-md-6 col-sm-6">
         <div class="x_panel">
             <div class="x_title">
-                <h2>เพิ่มหมวดรายจ่าย </h2>
+                <h2>เพิ่มกลุ่มเป้าหมาย</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -21,21 +21,9 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/costInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/targetInsert"novalidate enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">งบรายจ่าย<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <select id="expID" name="expID" class="form-control" required>
-                                @foreach ($expanses as $item)
-                                    <option value="{{ $item->expID }}">{{$item->exname}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field item form-group">
-
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
@@ -47,7 +35,6 @@
                                 </div>
                             @enderror
                         </div>
-
                     </div>
 
 

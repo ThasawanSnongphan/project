@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ExpenseBadget')
+@section('title', 'Targets')
 @section('content')
 <div class="container body">
     <div class="main_container">
@@ -8,7 +8,7 @@
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>งบรายจ่าย</h3>
+                        <h3>กลุ่มเป้าหมาย</h3>
                     </div>
 
                     <div class="title_right">
@@ -23,14 +23,14 @@
                     </div>
                 </div>
 
-                @include('ExpenseBadgets.create')
+                @include('Targets.create')
 
                 <div class="row" style="display: block;">
                     <div class="col-md-3 col-sm-3  "></div>
                     <div class="col-md-6 col-sm-6  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>งบรายจ่าย</h2>
+                                <h2>กลุ่มเป้าหมาย</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -61,16 +61,16 @@
                                         @php
                                             $i=1;
                                         @endphp
-                                        @foreach ($expense as $ex )
+                                        @foreach ($target as $tar )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td>{{ $ex->exname }}</td>
+                                                <td>{{ $tar->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('ex.edit', $ex->expID) }}"><i
+                                                            href="{{route('target.edit',$tar->TarID)}}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('ex.delete', $ex->expID) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $ex->exname }} หรือไม่')"><i
+                                                        <a href="{{route('target.delete',$tar->TarID)}}"
+                                                            onclick="return confirm('ต้องการลบกลุ่มเป้าหมาย {{ $tar->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>
