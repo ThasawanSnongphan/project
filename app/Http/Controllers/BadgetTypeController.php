@@ -19,7 +19,7 @@ class BadgetTypeController extends Controller
                 'name'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกหมวดรายจ่าย'
+                'name.required'=>'กรุณากรอกประเภทงบประมาณ'
             ]
         );
         $badget_type = new BadgetType();

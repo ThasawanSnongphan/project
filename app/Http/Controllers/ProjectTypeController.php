@@ -19,7 +19,7 @@ class ProjectTypeController extends Controller
                 'name'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกประเภทโครงการ'
+                'name.required'=>'กรุณากรอกประเภทงบประมาณ'
             ]
         );
         $project_type = new ProjectType();

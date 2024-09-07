@@ -20,7 +20,7 @@ class TargetController extends Controller
                 'name'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกแผนงานมหาวิทยาลัย'
+                'name.required'=>'กรุณากรอกกลุ่มเป้าหมาย'
             ]
         );
         $target = new Targets();

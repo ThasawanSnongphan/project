@@ -25,6 +25,7 @@ class UserController extends Controller
                 'username'=>'required',
                 'email'=>'required',
                 'password'=>'required',
+                'password2'=>'required',
                 'account_type'=>'required',
                 'full_prefix_name_th'=>'required',
                 'firstname_th'=>'required',
@@ -41,19 +42,13 @@ class UserController extends Controller
                 'faculty_name'=>'required',
                 'department_code'=>'required',
                 'department_name'=>'required',
-                'Executive'=>'required',
-                'Planning_Analyst'=>'required',
-                'Department_head'=>'required',
-                'Supply_Analyst'=>'required',
-                'Responsible'=>'required',
-                'Admin'=>'required',
-                'flag'=>'required'
+                
             ],
-            [
-                'username.required'=>'กรุณากรอกusername'
-            ]
+            // [
+            //     'username.required'=>'กรุณากรอกusername'
+            // ]
         );
-        $users = new Users();
+        $users = new User();
         $users->username = $request->input('username');
         $users->email = $request->input('email');
         $users->password = Hash::make($request->input('password'));

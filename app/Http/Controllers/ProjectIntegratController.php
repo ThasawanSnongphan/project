@@ -19,7 +19,7 @@ class ProjectIntegratController extends Controller
                 'name'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกสถานะ'
+                'name.required'=>'กรุณากรอกการบูรณาการ'
             ]
         );
         $project_integrat = new ProjectIntegrat();

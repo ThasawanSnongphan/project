@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
-   
+    
     
     function index(){
         $news=DB::table('news')->get();
@@ -39,15 +39,11 @@ class NewsController extends Controller
 
         if ($request->hasFile('img')) {
             // เก็บไฟล์ในโฟลเดอร์ 'images' ภายใต้ 'storage/app/public'
-            $img = $request->file('img')->store('images', 'public');
+            $img = $request->file('img')->store('public/images');
              // เก็บ path ของรูปในฐานข้อมูล
         }
-        $news->img = $img;
-        // if ($request->hasFile('img')) {
-        //     $img = $request->file('img')->insert('images', 'public');
-        //     $news->image = $img;
-        // }
-
+        $imageName = basename($img);
+        $news->img = $imageName;
         $news->save();
         return redirect('/');
     }

@@ -88,6 +88,7 @@
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div>
         <!-- /page content -->
     </div>
 </div>

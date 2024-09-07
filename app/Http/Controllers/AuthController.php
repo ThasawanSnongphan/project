@@ -12,7 +12,7 @@ class AuthController extends Controller
     function login(){
         return view('login');
     }
-
+   
     function loginPost(Request $request){
         $request->validate([
             "email" => "required",

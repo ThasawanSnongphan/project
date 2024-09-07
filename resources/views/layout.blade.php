@@ -45,13 +45,12 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella
-                                Alela!</span></a>
+                        <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Strategic Plan</span></a>
                     </div>
 
                     <div class="clearfix"></div>
 
-                    
+
                     @if (Auth::check())
                         <div class="profile clearfix">
                             {{-- <div class="profile_pic">
@@ -76,17 +75,20 @@
                                 <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
-                                        <li><a href="/users">Users</a></li>
-                                        <li><a href="/year">ปีงบประมาณ</a></li>
-                                        <li><a href="/cost_type">หมวดรายจ่าย</a></li>
-                                        <li><a href="/Expense">งบรายจ่าย</a></li>
-                                        <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
-                                        <li><a href="/proChar">ลักษณะโครงการ</a></li>
-                                        <li><a href="/projectIntegrat">การบูรณาการ</a></li>
-                                        <li><a href="/status">สถานะ</a></li>
-                                        <li><a href="/plan">แผนงานมหาลัย</a></li>
-                                        <li><a href="/projectType">ประเภทโครงการ</a></li>
-                                        <li><a href="/target">กลุ่มเป้าหมาย</a></li>
+                                        @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
+                                            <li><a href="/users">Users</a></li>
+                                            <li><a href="/year">ปีงบประมาณ</a></li>
+                                            <li><a href="/cost_type">หมวดรายจ่าย</a></li>
+                                            <li><a href="/Expense">งบรายจ่าย</a></li>
+                                            <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
+                                            <li><a href="/proChar">ลักษณะโครงการ</a></li>
+                                            <li><a href="/projectIntegrat">การบูรณาการ</a></li>
+                                            <li><a href="/status">สถานะ</a></li>
+                                            <li><a href="/plan">แผนงานมหาลัย</a></li>
+                                            <li><a href="/projectType">ประเภทโครงการ</a></li>
+                                            <li><a href="/target">กลุ่มเป้าหมาย</a></li>
+                                        @endif
+
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -223,7 +225,7 @@
                                             <span>Settings</span>
                                         </a>
                                         <a class="dropdown-item" href="javascript:;">Help</a>
-                                        <a class="dropdown-item" href="/login"><i class="fa fa-sign-out pull-right"></i>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i>
                                             Log Out</a>
                                     </div>
                                 </li>
@@ -310,6 +312,9 @@
                             </li>
                         </ul>
                     </nav>
+                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </div>
             <!-- /top navigation -->

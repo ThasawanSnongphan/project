@@ -29,13 +29,14 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="name" id="name" required='required'
                                 data-validate-length-range="8,20" />
+                            @error('name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
-                    @error('title')
-                        <div class="m-2">
-                            <span class="text text-danger">{{ $message }}</span>
-                        </div>
-                    @enderror
+
 
 
                     <div class="ln_solid">

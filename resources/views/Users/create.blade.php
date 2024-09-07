@@ -42,6 +42,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" name="email" id="email" class='email' required="required"
                                 type="email" />
+                            @error('email')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -51,6 +56,11 @@
                             <input class="form-control" type="password" id="password1" name="password"
                                 title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
                                 required />
+                            @error('password')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                             {{-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" --}}
                             <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
                                 <i id="slash" class="fa fa-eye-slash"></i>
@@ -64,6 +74,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="password" name="password2" id="password2"
                                 data-validate-linked='password' required='required' />
+                                @error('password2')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -73,6 +88,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" name="account_type" id="account_type"
                                 data-validate-length-range="5,15" type="text" />
+                                @error('account_type')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
 
@@ -83,6 +103,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="full_prefix_name_th"
                                 id="full_prefix_name_th" data-validate-linked='email' required='required' />
+                                @error('full_prefix_name_th')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -92,6 +117,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="firstname_th" id="firstname_th"
                                 data-validate-minmax="10,100" required='required'>
+                                @error('firstname_th')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
 
@@ -102,6 +132,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text"name="lastname_th" id="lastname_th"
                                 data-validate-minmax="10,100" required='required'>
+                                @error('lastname_th')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
 
@@ -114,6 +149,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="firstname_en" id="firstname_en"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('firstname_en')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -123,6 +163,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="lastname_en" id="lastname_en"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('lastname_en')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -132,6 +177,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="personnel_type_id"
                                 id="personnel_type_id" required='required' data-validate-length-range="8,20" />
+                                @error('personnel_type_id')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -141,6 +191,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="personnel_type_name"
                                 id="personnel_type_name" required='required' data-validate-length-range="8,20" />
+                                @error('personnel_type_name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -150,6 +205,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="position_id" id="position_id"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('position_id')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -159,6 +219,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="position_name" id="position_name"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('position_name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -168,6 +233,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="position_type_id" id="position_type_id"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('position_type_id')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -177,6 +247,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="position_type_th" id="position_type_th"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('position_type_th')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -186,6 +261,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="faculty_code" id="faculty_code"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('faculty_code')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -195,6 +275,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="faculty_name" id="faculty_name"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('faculty_name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -204,6 +289,11 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="department_code" id="department_code"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('department_code')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -213,11 +303,16 @@
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="department_name" id="department_name"
                                 required='required' data-validate-length-range="8,20" />
+                                @error('department_name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Executive
-                            (ผู้บริหาร) <span class="required">*</span></label>
+                            (ผู้บริหาร)</label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
@@ -229,7 +324,7 @@
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Planning_Analyst
-                            (เจ้าหน้าที่แผน)<span class="required">*</span></label>
+                            (เจ้าหน้าที่แผน)</label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
@@ -240,8 +335,8 @@
                         </div>
                     </div>
                     <div class="field item form-group">
-                        <label class="col-form-label col-md-3 col-sm-3 label-align">Department_head(หัวหน้าฝ่าย)<span
-                                class="required">*</span></label>
+                        <label
+                            class="col-form-label col-md-3 col-sm-3 label-align">Department_head(หัวหน้าฝ่าย)</label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
@@ -253,7 +348,7 @@
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Supply_Analyst
-                            (นักวิชาการพัสดุ)<span class="required">*</span></label>
+                            (นักวิชาการพัสดุ)</label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
@@ -277,7 +372,7 @@
                     </div>
                     <div class="field item form-group">
                         <label class="col-form-label col-md-3 col-sm-3 label-align">Admin
-                            (แอดมิน)<span class="required">*</span></label>
+                            (แอดมิน)</label>
                         <div class="col-md-9 col-sm-9 ">
                             <div class="">
                                 <label>
@@ -299,71 +394,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-                    {{-- <div class="field item form-group">
-                        <label for="Executive" class="col-form-label col-md-3 col-sm-3  label-align">Executive
-                            (ผู้บริหาร) <span class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Executive" id="Executive"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="Planning_Analyst"
-                            class="col-form-label col-md-3 col-sm-3  label-align">Planning_Analyst
-                            (เจ้าหน้าที่แผน)<span class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Planning_Analyst" id="Planning_Analyst"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="Department_head"
-                            class="col-form-label col-md-3 col-sm-3  label-align">Department_head(หัวหน้าฝ่าย)<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Department_head" id="Department_head"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="Supply_Analyst"
-                            class="col-form-label col-md-3 col-sm-3  label-align">Supply_Analyst (นักวิชาการพัสดุ)<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Supply_Analyst" id="Supply_Analyst"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="Responsible" class="col-form-label col-md-3 col-sm-3  label-align">Responsible
-                            (ผู้รับผิดชอบโครงการ)<span class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Responsible" id="Responsible"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="Admin" class="col-form-label col-md-3 col-sm-3  label-align">Admin
-                            (แอดมิน)<span class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="Admin" id="Admin"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-                    {{-- <div class="field item form-group">
-                        <label for="flag" class="col-form-label col-md-3 col-sm-3  label-align">สถานะ<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="flag" id="flag"
-                                required='required' data-validate-length-range="8,20" />
-                        </div>
-                    </div> --}}
-
-
-
                     <div class="ln_solid">
                         <div class="form-group">
                             <div class="col-md-6 offset-md-3">

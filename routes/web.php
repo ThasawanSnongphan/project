@@ -23,6 +23,12 @@ Route::get('/', [NewsController::class,'index']);
 Auth::routes();
 Route::get('/login', [AuthController::class,'login']);
 Route::post('loginPost',[AuthController::class,'loginPost']);
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate(); // ล้าง session
+    request()->session()->regenerateToken(); // ป้องกัน CSRF attacks
+    return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
+});
 
 
 
@@ -107,3 +113,10 @@ Route::post('targetUpdate/{id}',[TargetController::class,'update'])->name('targe
 
 
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('admin');
+Route::get('/dashboard', [AuthController::class, 'someFunction']);
+
