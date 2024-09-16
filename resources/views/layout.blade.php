@@ -78,8 +78,10 @@
                                         @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                             <li><a href="/users">Users</a></li>
                                             <li><a href="/year">ปีงบประมาณ</a></li>
-                                            <li><a href="/cost_type">หมวดรายจ่าย</a></li>
+                                            <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
+                                            <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
                                             <li><a href="/Expense">งบรายจ่าย</a></li>
+                                            <li><a href="/cost_type">หมวดรายจ่าย</a></li>
                                             <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
                                             <li><a href="/proChar">ลักษณะโครงการ</a></li>
                                             <li><a href="/projectIntegrat">การบูรณาการ</a></li>
@@ -88,7 +90,10 @@
                                             <li><a href="/projectType">ประเภทโครงการ</a></li>
                                             <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                         @endif
-
+                                        @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            <li><a href="/project">สร้างโครงการ</a></li>
+                                        @endif
+                                        
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>

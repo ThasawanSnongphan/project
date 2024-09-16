@@ -17,6 +17,9 @@ use App\Http\Controllers\ProjectIntegratController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\StrategicController;
+use App\Http\Controllers\SFAController;
 
 
 Route::get('/', [NewsController::class,'index']);
@@ -30,7 +33,7 @@ Route::post('/logout', function () {
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
 
-
+Route::get('/project', [ProjectController::class,'index']);
 
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);
@@ -111,6 +114,13 @@ Route::get('targetDelete/{id}',[TargetController::class,'delete'])->name('target
 Route::get('targetEdit/{id}',[TargetController::class,'edit'])->name('target.edit');
 Route::post('targetUpdate/{id}',[TargetController::class,'update'])->name('target.update');
 
+Route::get('strategic',[StrategicController::class,'index']);
+Route::post('strategicInsert',[StrategicController::class,'insert']);
+Route::get('strategicDelete/{id}',[StrategicController::class,'delete'])->name('strategic.delete');
+Route::get('strategicEdit/{id}',[StrategicController::class,'edit'])->name('strategic.edit');
+Route::post('strategicUpdate/{id}',[StrategicController::class,'update'])->name('strategic.update');
+
+Route::get('SFA',[SFAController::class,'index']);
 
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 

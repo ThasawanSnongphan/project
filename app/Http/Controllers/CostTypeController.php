@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class CostTypeController extends Controller
 {
-    public function expanse()
-    {
-        return $this->belongsTo(ExpenseBadgets::class);
-    }
-
     function index(){
         $cost_types=DB::table('cost_types')->get();
         $expanses = DB::table('expense_badgets')->get();
@@ -23,16 +18,12 @@ class CostTypeController extends Controller
     function create(){
         $expanses = ExpenseBadgets::all();
         return view('CostTypes.create', compact('expanses'));
-        //  $expanses = DB::table('expense_badgets')->get();
-        // return view('CostTypes.create',compact('expanses'));
     }
 
     
 
     function insert(Request $request ){
-        // สมมุติว่าใช้คอลัมน์ที่ถูกต้อง
-        // $expID = $request->input('expID');
-        // $expanses = ExpenseBadgets::find($expID);
+        $expanses = ExpenseBadgets::where('expID', $request->input('expID'))->first();
         $request->validate(
             [
                 'name'=>'required'

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpenseBadgets;
-use App\Models\CostTypes;
+// use App\Models\CostTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExpenseBadgetController extends Controller
 {
     
-    public function costTypes()
-    {
-        return $this->hasMany(CostTypes::class);
-    }
+    // public function costTypes()
+    // {
+    //     return $this->hasMany(CostTypes::class);
+    // }
 
 
     function index(){

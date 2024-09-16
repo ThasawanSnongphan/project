@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cost_types', function (Blueprint $table) {
+        Schema::create('strategics', function (Blueprint $table) {
             $table->id();
-            $table->string('costname');
-            $table->foreignId('expID')->constrained('expense_badgets');
+            $table->string('nname');
+            $table->unsignedBigInteger('yearID');
+            $table->foreign('yearID')->references('yearID')->on('years')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cost_types');
+        Schema::dropIfExists('strategics');
     }
 };
