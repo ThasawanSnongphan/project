@@ -33,12 +33,12 @@ class UniPlanController extends Controller
     }
 
     function delete($id){
-        DB::table('uni_plans')->where('id',$id)->delete();
+        DB::table('uni_plans')->where('planID',$id)->delete();
         return redirect('/plan');
     }
 
     function edit($id){
-        $plan=DB::table('uni_plans')->where('id',$id)->first();
+        $plan=DB::table('uni_plans')->where('planID',$id)->first();
         return view('UniPlan.update',compact('plan'));
     }
     function update(Request $request,$id){
@@ -53,7 +53,7 @@ class UniPlanController extends Controller
         $plan=[
             'name'=>$request->name
         ];
-        DB::table('uni_plans')->where('id',$id)->update($plan);
+        DB::table('uni_plans')->where('planID',$id)->update($plan);
         return redirect('/plan'); 
     }
 }

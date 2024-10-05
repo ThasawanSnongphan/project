@@ -89,7 +89,7 @@
                                                         {{-- <a
                                                                 href="{{ route('edit', $year->id) }}"><i
                                                                     class="fa fa-pencil btn btn-warning"></i></a> --}}
-                                                            <a href="{{ route('years.delete', $year->id) }}"
+                                                            <a href="{{ route('years.delete', $year->yearID) }}"
                                                                 onclick="return confirm('ต้องการลบข่าว {{ $year->name }} หรือไม่')"><i
                                                                     class="fa fa-times btn btn-danger"></i></a>
                                                     </td>

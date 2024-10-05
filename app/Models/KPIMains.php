@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Year extends Model
+class KPIMains extends Model
 {
     use HasFactory;
-    public function strategics()
+    public function tactics()
     {
-        return $this->hasMany(Strategic::class, 'yearID','yearID');
+        return $this->belongsTo(Tactics::class, 'tacID','tacID');
     }
 }

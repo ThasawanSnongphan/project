@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'UnivarsityPlan')
+@section('title', 'Tactics')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -7,7 +7,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>แก้ไขสถานะ</h3>
+                            <h3>แก้ไขกลยุทธ์</h3>
                         </div>
 
                         <div class="title_right">
@@ -28,7 +28,7 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>สถานะ </h2>
+                                    <h2>กลยุทธ์ </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -46,15 +46,30 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('plan.update',$plan->planID)}}"novalidate enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('tactics.update',$tactics->tacID)}}"novalidate
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
-                                            <label for="name"
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="goalID" name="goalID" class="form-control" required>
+                                                    @foreach ($goal as $goal)
+                                                        <option value="{{ $goal->goalID }}" <?php if ($goal->goalID == $tactics->goalID) { echo "selected"; } ?>>{{ $goal->name }}</option>
+                                                    @endforeach
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="field item form-group">
+                                            <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <input class="form-control" type="textt" name="name" id="name"
-                                                    required='required' data-validate-length-range="8,20" value="{{$plan->name}}"  />
+                                                <input class="form-control" type="text" name="name" id="name"
+                                                    required='required' data-validate-length-range="8,20"
+                                                    value="{{ $tactics->name }}" />
                                                 @error('name')
                                                     <div class="m-2">
                                                         <span class="text text-danger">{{ $message }}</span>

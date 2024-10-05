@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('uni_plans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('goals', function (Blueprint $table) {
+            $table->id('goalID');
             $table->string('name');
+            $table->unsignedBigInteger('SFAID');
+            $table->foreign('SFAID')->references('SFAID')->on('strategic_issues')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('uni_plans');
+        Schema::dropIfExists('goals');
     }
 };

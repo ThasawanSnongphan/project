@@ -67,9 +67,9 @@
                                                 <td>{{ $plan->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('plan.edit', $plan->id) }}"><i
+                                                            href="{{ route('plan.edit', $plan->planID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('plan.delete', $plan->id) }}"
+                                                        <a href="{{ route('plan.delete', $plan->planID) }}"
                                                             onclick="return confirm('ต้องการลบสถานะ {{ $plan->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

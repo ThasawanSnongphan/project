@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expense_badgets', function (Blueprint $table) {
-            $table->id();
-            $table->string('exname');
+        Schema::create('uni_plans', function (Blueprint $table) {
+            $table->id('planID');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expense_badgets');
+        Schema::dropIfExists('uni_plans');
     }
 };

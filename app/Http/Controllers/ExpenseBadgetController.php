@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UniPlan;
+use App\Models\Funds;
 use App\Models\ExpenseBadgets;
-// use App\Models\CostTypes;
+use App\Models\CostTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExpenseBadgetController extends Controller
 {
     
-    // public function costTypes()
-    // {
-    //     return $this->hasMany(CostTypes::class);
-    // }
+    public function costTypes()
+    {
+        return $this->hasMany(CostTypes::class);
+    }
 
 
     function index(){
+        $plan=UniPlan::all();
+        $fund=Funds::all();
         $expense=DB::table('expense_badgets')->get();
-        return view('ExpenseBadgets.index',compact('expense'));
+        return view('ExpenseBadgets.index',compact('expense','fund','plan'));
     }
 
     function create(){
@@ -26,6 +30,7 @@ class ExpenseBadgetController extends Controller
     }
 
     function insert(Request $request ){
+        $fund=Funds::where('fundID',$request->input('fundID'))->first();
         $request->validate(
             [
                 'name'=>'required'
@@ -36,6 +41,7 @@ class ExpenseBadgetController extends Controller
         );
         $expense = new ExpenseBadgets();
         $expense->exname = $request->input('name');
+        $expanse->fundID = $fund->fundID;
         $expense->save();
         return redirect('/Expense');
     }

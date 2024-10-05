@@ -53,7 +53,9 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>แผนงานมหาลัย</th>
+                                            <th>กองุทน</th>
+                                            <th>งบรายจ่าย</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -64,6 +66,8 @@
                                         @foreach ($expense as $ex )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
+                                                <td></td>
+                                                <td>{{ $fund->firstWhere('fundID',$ex->fundID)->name ?? 'ไม่พบกลยุทธ์' }}</td>
                                                 <td>{{ $ex->exname }}</td>
                                                 <td>
                                                     <a

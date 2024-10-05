@@ -3,7 +3,7 @@
     <div class="col-md-6 col-sm-6">
         <div class="x_panel">
             <div class="x_title">
-                <h2>เพิ่มงบรายจ่าย </h2>
+                <h2>เพิ่มกองทุน </h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -21,7 +21,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/ExInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/fundInsert"novalidate enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาลัย<span
@@ -35,18 +35,8 @@
                         </div>
                     </div>
                     <div class="field item form-group">
+
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กองทุน<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <select id="fundID" name="fundID" class="form-control" required>
-                                @foreach ($fund as $item)
-                                    <option value="{{$item->fundID}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="name" id="name" required='required'
@@ -57,6 +47,7 @@
                                 </div>
                             @enderror
                         </div>
+
                     </div>
 
 
