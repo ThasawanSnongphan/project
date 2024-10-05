@@ -66,7 +66,7 @@
                                     @foreach ($fund as $item )
                                         <tr>
                                             <th scope="row">{{$i}}</th>
-                                            <td>{{$plan->firstWhere('planID',$item->planID)->name ?? 'ไม่พบกลยุทธ์' }}</td>
+                                            <td>{{$plan->firstWhere('planID',$item->planID)->name ?? 'ไม่พบแผนงายมหาลัย' }}</td>
                                             <td>{{$item->name}}</td>
                                             <td></td>
                                             <td>

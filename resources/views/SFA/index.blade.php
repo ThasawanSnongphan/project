@@ -48,7 +48,19 @@
                             </div>
 
                             <div class="x_content">
-
+                                <div class="field item  form-group ">
+                                    <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
+                                    <div class="col-md-2 col-sm-2 m-2 ">
+                                        <select name="year" id="year" class="form-control">
+                                            <option data-year="ทั้งหมด">ทั้งหมด</option>
+                                            @foreach ($year as $year)
+                                                <option value="{{ $year->yearID }}" data-year="{{ $year->name }}">
+                                                    {{ $year->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                                 <table class="table table-striped text-center">
                                     <thead>
                                         <tr>
@@ -85,12 +97,34 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-
+                                <script>
+                                    // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
+                                    document.getElementById('year').addEventListener('change', function() {
+                                        // ดึงค่า "data-year" จาก option ที่ถูกเลือก
+                                        var selectedOption = this.options[this.selectedIndex];
+                                        var year = selectedOption.getAttribute('data-year');
+                                        console.log(year);
+    
+                                        const tableRows = document.querySelectorAll("table tbody tr");
+    
+    
+                                        tableRows.forEach(row => {
+                                            const yearCell = row.children[1]
+                                                .textContent; // Assuming year is in the second cell (index 1)
+    
+                                            // Check if the row should be displayed
+                                            if (year === "" || year === "ทั้งหมด" || yearCell.includes(year)) {
+                                                row.style.display = ""; // Show the row
+                                            } else {
+                                                row.style.display = "none"; // Hide the row
+                                            }
+                                        });
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-1 col-sm-1 "></div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>

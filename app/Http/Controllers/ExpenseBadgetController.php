@@ -21,7 +21,7 @@ class ExpenseBadgetController extends Controller
     function index(){
         $plan=UniPlan::all();
         $fund=Funds::all();
-        $expense=DB::table('expense_badgets')->get();
+        $expense=ExpenseBadgets::all();
         return view('ExpenseBadgets.index',compact('expense','fund','plan'));
     }
 
@@ -41,7 +41,7 @@ class ExpenseBadgetController extends Controller
         );
         $expense = new ExpenseBadgets();
         $expense->exname = $request->input('name');
-        $expanse->fundID = $fund->fundID;
+        $expense->fundID = $fund->fundID;
         $expense->save();
         return redirect('/Expense');
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UniPlan;
+use App\Models\Funds;
 use App\Models\ExpenseBadgets;
 use App\Models\CostTypes;
 use Illuminate\Http\Request;
@@ -10,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 class CostTypeController extends Controller
 {
     function index(){
-        $cost_types=DB::table('cost_types')->get();
-        $expanses = DB::table('expense_badgets')->get();
-        return view('CostTypes.index',compact('cost_types', 'expanses'));
+        $plan=UniPlan::all();
+        $fund=Funds::all();
+        $cost_types=CostTypes::all();
+        $expanses = ExpenseBadgets::all();
+        return view('CostTypes.index',compact('cost_types', 'expanses','plan','fund'));
     }
 
     function create(){

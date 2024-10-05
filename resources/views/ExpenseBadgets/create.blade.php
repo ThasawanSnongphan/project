@@ -29,22 +29,53 @@
                         <div class="col-md-6 col-sm-6">
                             <select id="planID" name="planID" class="form-control" required>
                                 @foreach ($plan as $item)
-                                    <option value="{{$item->planID}}">{{$item->name}}</option>
+                                    <option value="{{ $item->planID }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กองทุน<span
+                        <label class="col-form-label col-md-3 col-sm-3  label-align">กองทุน<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="fundID" name="fundID" class="form-control" required>
-                                @foreach ($fund as $item)
-                                    <option value="{{$item->fundID}}">{{$item->name}}</option>
-                                @endforeach
+
                             </select>
                         </div>
                     </div>
+                    <script>
+                        const funds = @json($fund);
+
+                        function updateFundDropdown(selectedPlanID) {
+                            const fundSelect = document.getElementById('fundID');
+                            fundSelect.innerHTML = '';
+                            const filteredFunds = funds.filter(fund => fund.planID == selectedPlanID);
+                            filteredFunds.forEach(fund => {
+                                const option = document.createElement('option');
+                                option.value = fund.fundID;
+                                option.textContent = fund.name;
+                                fundSelect.appendChild(option);
+                            });
+
+
+                        }
+                        window.onload = function() {
+                            const planSelect = document.getElementById('planID');
+                            const fundSelect = document.getElementById('fundID');
+
+                            // เมื่อเปลี่ยนปีงบประมาณ
+                            planSelect.addEventListener('change', function() {
+                                const selectedPlanID = this.value;
+                                updateFundDropdown(selectedPlanID);
+                            });
+
+                            // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+                            const defaultPlanID = planSelect.value;
+                            if (defaultPlanID) {
+                                updateFundDropdown(defaultPlanID);
+                            }
+                        };
+                    </script>
                     <div class="field item form-group">
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
                                 class="required">*</span></label>

@@ -80,13 +80,16 @@
                                             <li><a href="/year">ปีงบประมาณ</a></li>
                                             <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
                                             <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
+                                            <li><a href="/goal">เป้าประสงค์</a></li>
+                                            <li><a href="/tactics">กลยุทธ์</a></li>
+                                            <li><a href="/plan">แผนงานมหาลัย</a></li>
+                                            <li><a href="/fund">กองทุน</a></li>
                                             <li><a href="/Expense">งบรายจ่าย</a></li>
                                             <li><a href="/cost_type">หมวดรายจ่าย</a></li>
                                             <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
                                             <li><a href="/proChar">ลักษณะโครงการ</a></li>
                                             <li><a href="/projectIntegrat">การบูรณาการ</a></li>
                                             <li><a href="/status">สถานะ</a></li>
-                                            <li><a href="/plan">แผนงานมหาลัย</a></li>
                                             <li><a href="/projectType">ประเภทโครงการ</a></li>
                                             <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                         @endif

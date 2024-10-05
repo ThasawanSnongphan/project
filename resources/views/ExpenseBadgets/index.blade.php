@@ -63,11 +63,11 @@
                                         @php
                                             $i=1;
                                         @endphp
-                                        @foreach ($expense as $ex )
+                                        @foreach ($expense as $ex)
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td></td>
-                                                <td>{{ $fund->firstWhere('fundID',$ex->fundID)->name ?? 'ไม่พบกลยุทธ์' }}</td>
+                                                <td>{{$ex->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
+                                                <td>{{ $fund->firstWhere('fundID',$ex->fundID)->name ?? 'ไม่พบกองทุน' }}</td>
                                                 <td>{{ $ex->exname }}</td>
                                                 <td>
                                                     <a

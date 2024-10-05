@@ -79,9 +79,9 @@
                                                     <div class="col-md-55">
                                                         <div class="thumbnail">
                                                             <div class="image view view-first">
-                                                                {{-- {{dd(asset('storage/app/public/images/' . $new->img))}} --}}
+                                                                {{-- {{dd(asset('public/images/News' . $new->img))}} --}}
                                                                 <img style="width: 100%; display: block;"
-                                                                    src="{{ asset('storage/app/public/images/' . $new->img) }}" />
+                                                                    src="{{ asset('images/News/' . $new->img) }}" />
                                                                 <div class="mask">
                                                                     <p>Your Text</p>
                                                                     <div class="tools tools-bottom">

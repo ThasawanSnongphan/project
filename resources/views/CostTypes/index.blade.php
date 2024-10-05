@@ -26,8 +26,8 @@
                 @include('CostTypes.create')
 
                 <div class="row" style="display: block;">
-                    <div class="col-md-3 col-sm-3  "></div>
-                    <div class="col-md-6 col-sm-6  ">
+                    <div class="col-md-1 col-sm-1  "></div>
+                    <div class="col-md-10 col-sm-10  ">
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>หมวดรายจ่าย</h2>
@@ -53,7 +53,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>แผนงานมหาลัย</th>
+                                            <th>กองทุน</th>
+                                            <th>งบรายจ่าย</th>
+                                            <th>หมวดรายจ่าย</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -64,6 +67,9 @@
                                         @foreach ($cost_types as $cost )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
+                                                <td>{{$cost->expense->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
+                                                <td>{{$cost->expense->fund->name ?? 'ไม่พบกองทุน'}}</td>
+                                                <td>{{$expanses->firstWhere('expID',$cost->expID)->exname ?? 'ไม่พบงบรายจ่าย'}}</td>
                                                 <td>{{ $cost->costname }}</td>
                                                 <td>
                                                     <a
@@ -84,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-3  "></div>
+                    <div class="col-md-1 col-sm-1  "></div>
                 </div>
             </div>
         </div>

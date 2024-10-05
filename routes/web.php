@@ -20,7 +20,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\StrategicController;
 use App\Http\Controllers\SFAController;
-
+use App\Http\Controllers\GoalController;
+use App\Http\Controllers\TacticsController;
+use App\Http\Controllers\FundController;
 
 Route::get('/', [NewsController::class,'index']);
 Auth::routes();
@@ -125,6 +127,24 @@ Route::post('SFAInsert',[SFAController::class,'insert']);
 Route::get('SFADelete/{id}',[SFAController::class,'delete'])->name('SFA.delete');
 Route::get('SFAEdit/{id}',[SFAController::class,'edit'])->name('SFA.edit');
 Route::post('SFAUpdate/{id}',[SFAController::class,'update'])->name('SFA.update');
+
+Route::get('goal',[GoalController::class,'index']);
+Route::post('goalInsert',[GoalController::class,'insert']);
+Route::get('goalDelete/{id}',[GoalController::class,'delete'])->name('goal.delete');
+Route::get('goalEdit/{id}',[GoalController::class,'edit'])->name('goal.edit');
+Route::post('goalUpdate/{id}',[GoalController::class,'update'])->name('goal.update');
+
+Route::get('tactics',[TacticsController::class,'index']);
+Route::post('tacticsInsert',[TacticsController::class,'insert']);
+Route::get('tacticsDelete/{id}',[TacticsController::class,'delete'])->name('tactics.delete');
+Route::get('tacticsEdit/{id}',[TacticsController::class,'edit'])->name('tactics.edit');
+Route::post('tacticsUpdate/{id}',[TacticsController::class,'update'])->name('tactics.update');
+
+Route::get('fund',[FundController::class,'index']);
+Route::post('fundInsert',[FundController::class,'insert']);
+Route::get('fundDelete/{id}',[FundController::class,'delete'])->name('fund.delete');
+Route::get('fundEdit/{id}',[FundController::class,'edit'])->name('fund.edit');
+Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.update');
 
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 

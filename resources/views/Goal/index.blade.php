@@ -51,7 +51,7 @@
                             <div class="field item  form-group ">
                                 <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
                                 <div class="col-md-2 col-sm-2 m-2 ">
-                                    <select name="year" id="yearID" class="form-control">
+                                    <select name="yearID" id="yearID" class="form-control">
                                         <option data-year="ทั้งหมด">ทั้งหมด</option>
                                         @foreach ($year as $year)
                                             <option value="{{ $year->yearID }}" data-year="{{ $year->name }}">
@@ -68,7 +68,7 @@
                                         <th>ปีงบประมาณ</th>
                                         <th>แผนยุทธศาสตร์</th>
                                         <th>ประเด็นยุทธศาสตร์</th>
-                                        <th>name</th>
+                                        <th>เป้าประสงค์</th>
                                         <th></th>
                                     </tr>
                                 </thead>

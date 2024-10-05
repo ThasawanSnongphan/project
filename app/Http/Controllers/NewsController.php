@@ -38,9 +38,15 @@ class NewsController extends Controller
         $news->content = $request->input('content');
 
         if ($request->hasFile('img')) {
-            // เก็บไฟล์ในโฟลเดอร์ 'images' ภายใต้ 'storage/app/public'
-            $img = $request->file('img')->store('public/images');
-             // เก็บ path ของรูปในฐานข้อมูล
+            // เก็บไฟล์ในโฟลเดอร์ 'images' ภายใต้โฟลเดอร์ 'public'
+            $img = $request->file('img')->move(public_path('images/News'), $request->file('img')->getClientOriginalName());
+            
+            // ถ้าคุณต้องการเก็บแค่ชื่อไฟล์ในฐานข้อมูล
+            $filename = $request->file('img')->getClientOriginalName();
+        
+            // เก็บ path หรือชื่อไฟล์ในฐานข้อมูล เช่น:
+            // $model->image_path = 'images/' . $filename;
+            // $model->save();
         }
         $imageName = basename($img);
         $news->img = $imageName;
