@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('strategic.update', $strategic->id) }}"novalidate
+                                    <form method="POST" action="{{ route('strategic.update', $strategic->straID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -56,9 +56,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="yearID" name="yearID" class="form-control" required>
                                                     @foreach ($year as $year)
-                                                        <option value="{{ $year->yearID }}">{{ $year->name }}</option>
+                                                        <option value="{{ $year->yearID }}"  @if ($year->yearID == $strategic->yearID) selected @endif > {{ $year->name }}</option>
                                                     @endforeach
-                                                    
                                                 </select>
                                             </div>
                                         </div>

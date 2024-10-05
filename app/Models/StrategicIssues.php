@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class StrategicIssues extends Model
 {
     use HasFactory;
+    public function strategic()
+    {
+        return $this->belongsTo(Strategics::class, 'straID','straID');
+    }
 }

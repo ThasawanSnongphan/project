@@ -36,7 +36,7 @@
                     </div>
                     <div class="field item form-group">
 
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="name" id="name" required='required'

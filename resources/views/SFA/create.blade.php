@@ -21,22 +21,31 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/strategicInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/SFAInsert"novalidate enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="yearID" name="yearID" class="form-control" required>
-                                @foreach ($strategic as $item)
-                                    <option value="{{$item->straID}}">{{$item->name}}</option>
+                                @foreach ($year as $item)
+                                    <option value="{{ $item->yearID }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="field item form-group">
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <select id="straID" name="straID" class="form-control" required>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
 
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                        <label for="title"
+                            class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="name" id="name" required='required'
@@ -50,8 +59,6 @@
 
                     </div>
 
-
-
                     <div class="ln_solid">
                         <div class="form-group ">
                             <div class="col-md-6 offset-md-3">
@@ -61,6 +68,51 @@
                         </div>
                     </div>
                 </form>
+
+                <script>
+                    const strategic = @json($strategic);
+
+                    function updatePlanDropdown(selectedYearID) {
+                        const planSelect = document.getElementById('straID');
+                        planSelect.innerHTML = '';
+
+                        const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
+                        filteredPlans.forEach(plan => {
+                            const option = document.createElement('option');
+                            option.value = plan.straID;
+                            option.textContent = plan.name;
+                            planSelect.appendChild(option);
+                        });
+
+                        // เรียกใช้ฟังก์ชันเพื่ออัปเดตกกลยุทธ์โดยอิงจากแผนที่เลือกแรก
+                        if (filteredPlans.length > 0) {
+                            updateTacticsDropdown(filteredPlans[0].straID); // ใช้ straID ของแผนแรก
+                        }
+                    }
+                    window.onload = function() {
+                        const yearSelect = document.getElementById('yearID');
+                        const planSelect = document.getElementById('straID');
+
+                        // เมื่อเปลี่ยนปีงบประมาณ
+                        yearSelect.addEventListener('change', function() {
+                            const selectedYearID = this.value;
+                            updatePlanDropdown(selectedYearID);
+                        });
+
+                        // เมื่อเปลี่ยนแผนยุทธศาสตร์
+                        planSelect.addEventListener('change', function() {
+                            const selectedPlanID = this.value;
+                            updateTacticsDropdown(selectedPlanID);
+                        });
+
+                        // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+                        const defaultYearID = yearSelect.value;
+                        if (defaultYearID) {
+                            updatePlanDropdown(defaultYearID);
+                        }
+                    };
+                </script>
+
             </div>
         </div>
     </div>

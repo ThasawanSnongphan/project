@@ -54,9 +54,21 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
+                                                <select id="yearID" name="yearID" class="form-control" required>
+                                                    @foreach ($year as $year)
+                                                        <option value="{{ $year->yearID }}" > {{ $year->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="field item form-group">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
                                                 <select id="straID" name="straID" class="form-control" required>
                                                     @foreach ($strategic as $stra)
-                                                        <option value="{{ $stra->straID }}" <?php if ($stra->straID == $SFA->straID) { echo "selected"; } ?> >{{ $stra->name }}</option>
+                                                        <option value="{{ $stra->straID }}" @if ($stra->straID == $SFA->straID) selected @endif >{{ $stra->name }}</option>
                                                     @endforeach
                                                     
                                                 </select>
@@ -64,7 +76,7 @@
                                         </div>
                                         <div class="field item form-group">
                                             <label for="title"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"
@@ -77,6 +89,50 @@
                                                 @enderror
                                             </div>
                                         </div>
+
+                                        <script>
+                                            const strategic = @json($strategic);
+                        
+                                            function updatePlanDropdown(selectedYearID) {
+                                                const planSelect = document.getElementById('straID');
+                                                planSelect.innerHTML = '';
+                        
+                                                const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
+                                                filteredPlans.forEach(plan => {
+                                                    const option = document.createElement('option');
+                                                    option.value = plan.straID;
+                                                    option.textContent = plan.name;
+                                                    planSelect.appendChild(option);
+                                                });
+                        
+                                                // เรียกใช้ฟังก์ชันเพื่ออัปเดตกกลยุทธ์โดยอิงจากแผนที่เลือกแรก
+                                                if (filteredPlans.length > 0) {
+                                                    updateTacticsDropdown(filteredPlans[0].straID); // ใช้ straID ของแผนแรก
+                                                }
+                                            }
+                                            // window.onload = function() {
+                                            //     const yearSelect = document.getElementById('yearID');
+                                            //     const planSelect = document.getElementById('straID');
+                        
+                                            //     // เมื่อเปลี่ยนปีงบประมาณ
+                                            //     yearSelect.addEventListener('change', function() {
+                                            //         const selectedYearID = this.value;
+                                            //         updatePlanDropdown(selectedYearID);
+                                            //     });
+                        
+                                            //     // เมื่อเปลี่ยนแผนยุทธศาสตร์
+                                            //     planSelect.addEventListener('change', function() {
+                                            //         const selectedPlanID = this.value;
+                                            //         updateTacticsDropdown(selectedPlanID);
+                                            //     });
+                        
+                                            //     // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+                                            //     const defaultYearID = yearSelect.value;
+                                            //     if (defaultYearID) {
+                                            //         updatePlanDropdown(defaultYearID);
+                                            //     }
+                                            // };
+                                        </script>
 
 
 

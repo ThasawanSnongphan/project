@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 class StrategicController extends Controller
 {
     function index(){
-        $year=DB::table('years')->get();
-        $strategic=DB::table('strategics')->get();
+        $year=Year::all();
+        $strategic=Strategics::all();
         return view('Strategics.index',compact('year','strategic'));
     }
     function create(){
@@ -42,19 +42,13 @@ class StrategicController extends Controller
 
     function edit($id){
         $strategic=DB::table('strategics')->where('straID',$id)->first();
+        
         $year = Year::all(); 
         return view('Strategics.update',compact('strategic','year'));
     }
     function update(Request $request,$id){
         $year = Year::where('yearID',$request->input('yearID'))->first();
-        // $request->validate(
-        //     [
-        //         'name'=>'required'
-        //     ],
-        //     [
-        //         'name.required'=>'กรุณากรอกแผนยุทธศาสตร์'
-        //     ]
-        // );
+        
         $strategic=[
             'yearID'=>$request->yearID,
             'name'=>$request->name

@@ -8,8 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Year extends Model
 {
     use HasFactory;
-    public function strategics()
-    {
-        return $this->hasMany(Strategic::class, 'yearID','yearID');
-    }
+   
 }

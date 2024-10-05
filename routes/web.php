@@ -121,6 +121,10 @@ Route::get('strategicEdit/{id}',[StrategicController::class,'edit'])->name('stra
 Route::post('strategicUpdate/{id}',[StrategicController::class,'update'])->name('strategic.update');
 
 Route::get('SFA',[SFAController::class,'index']);
+Route::post('SFAInsert',[SFAController::class,'insert']);
+Route::get('SFADelete/{id}',[SFAController::class,'delete'])->name('SFA.delete');
+Route::get('SFAEdit/{id}',[SFAController::class,'edit'])->name('SFA.edit');
+Route::post('SFAUpdate/{id}',[SFAController::class,'update'])->name('SFA.update');
 
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 
