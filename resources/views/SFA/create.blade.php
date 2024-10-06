@@ -77,16 +77,21 @@
                         planSelect.innerHTML = '';
 
                         const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-                        filteredPlans.forEach(plan => {
-                            const option = document.createElement('option');
-                            option.value = plan.straID;
-                            option.textContent = plan.name;
-                            planSelect.appendChild(option);
-                        });
 
-                        // เรียกใช้ฟังก์ชันเพื่ออัปเดตกกลยุทธ์โดยอิงจากแผนที่เลือกแรก
-                        if (filteredPlans.length > 0) {
-                            updateTacticsDropdown(filteredPlans[0].straID); // ใช้ straID ของแผนแรก
+                        if (filteredPlans.length === 0) {
+                            const noPlanOption = document.createElement('option');
+                            noPlanOption.value = '';
+                            noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
+                            planSelect.appendChild(noPlanOption);
+                            planSelect.disabled = true;
+                        } else {
+                            planSelect.disabled = false;
+                            filteredPlans.forEach(plan => {
+                                const option = document.createElement('option');
+                                option.value = plan.straID;
+                                option.textContent = plan.name;
+                                planSelect.appendChild(option);
+                            });
                         }
                     }
                     window.onload = function() {
@@ -97,12 +102,6 @@
                         yearSelect.addEventListener('change', function() {
                             const selectedYearID = this.value;
                             updatePlanDropdown(selectedYearID);
-                        });
-
-                        // เมื่อเปลี่ยนแผนยุทธศาสตร์
-                        planSelect.addEventListener('change', function() {
-                            const selectedPlanID = this.value;
-                            updateTacticsDropdown(selectedPlanID);
                         });
 
                         // เรียกใช้ครั้งแรกเมื่อโหลดหน้า

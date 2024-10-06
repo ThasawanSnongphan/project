@@ -59,7 +59,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="goalID" name="goalID" class="form-control" required>
-                                
+
                             </select>
                         </div>
                     </div>
@@ -75,15 +75,23 @@
                             planSelect.innerHTML = '';
 
                             const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-                            filteredPlans.forEach(plan => {
-                                const option = document.createElement('option');
-                                option.value = plan.straID;
-                                option.textContent = plan.name;
-                                planSelect.appendChild(option);
-                            });
-                            if (filteredPlans.length > 0) {
+
+                            if (filteredPlans.length === 0) {
+                                const noPlanOption = document.createElement('option');
+                                noPlanOption.value = '';
+                                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
+                                planSelect.appendChild(noPlanOption);
+                                planSelect.disabled = true;
+                                updateIssueDropdown(null);
+                            } else {
+                                planSelect.disabled = false;
+                                filteredPlans.forEach(plan => {
+                                    const option = document.createElement('option');
+                                    option.value = plan.straID;
+                                    option.textContent = plan.name;
+                                    planSelect.appendChild(option);
+                                });
                                 updateIssueDropdown(filteredPlans[0].straID);
-                                
                             }
                         }
 
@@ -91,18 +99,36 @@
                         function updateIssueDropdown(selectedPlanID) {
                             const issueSelect = document.getElementById('SFAID');
                             issueSelect.innerHTML = '';
-
-                            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-                            filteredIssues.forEach(issue => {
-                                const option = document.createElement('option');
-                                option.value = issue.SFAID;
-                                option.textContent = issue.name;
-                                issueSelect.appendChild(option);
-                            });
-                            if (filteredIssues.length > 0) {
-                                updateGoalDropdown(filteredIssues[0].SFAID);
+                            
+                            if (!selectedPlanID) {
+                                const noIssueOption = document.createElement('option');
+                                noIssueOption.value = '';
+                                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                issueSelect.appendChild(noIssueOption);
+                                issueSelect.disabled = true;
+                                updateGoalDropdown(null);
+                                return;
                             }
 
+                            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+
+                            if (filteredIssues.length === 0) {
+                                const noIssueOption = document.createElement('option');
+                                noIssueOption.value = '';
+                                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                issueSelect.appendChild(noIssueOption);
+                                issueSelect.disabled = true;
+                                updateGoalDropdown(null);
+                            } else {
+                                issueSelect.disabled = false;
+                                filteredIssues.forEach(issue => {
+                                    const option = document.createElement('option');
+                                    option.value = issue.SFAID;
+                                    option.textContent = issue.name;
+                                    issueSelect.appendChild(option);
+                                });
+                                updateGoalDropdown(filteredIssues[0].SFAID);
+                            }
                         }
 
                         // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
@@ -110,15 +136,34 @@
                             const goalSelect = document.getElementById('goalID');
                             goalSelect.innerHTML = '';
 
+                            if(!selectedSFAID){
+                                const noGoalOption = document.createElement('option');
+                                noGoalOption.value='';
+                                noGoalOption.textContent='ไม่มีเป้าประสงค์';
+                                goalSelect.appendChild(noGoalOption);
+                                goalSelect.disabled = true;
+                                return;
+                            }
+
                             // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
                             const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
 
-                            filteredGoals.forEach(goal => {
-                                const option = document.createElement('option');
-                                option.value = goal.goalID;
-                                option.textContent = goal.name;
-                               goalSelect.appendChild(option);
-                            });
+                            if (filteredGoals.length === 0) {
+                                const noGoalOption = document.createElement('option');
+                                noGoalOption.value = '';
+                                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                                goalSelect.appendChild(noGoalOption);
+                                goalSelect.disabled = true;
+                            } else {
+                                goalSelect.disabled = false;
+                                filteredGoals.forEach(goal => {
+                                    const option = document.createElement('option');
+                                    option.value = goal.goalID;
+                                    option.textContent = goal.name;
+                                    goalSelect.appendChild(option);
+                                });
+                            }
+
                         }
 
                         // Event listeners สำหรับ dropdown ต่าง ๆ

@@ -31,6 +31,8 @@
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
 
+    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -82,6 +84,7 @@
                                             <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
                                             <li><a href="/goal">เป้าประสงค์</a></li>
                                             <li><a href="/tactics">กลยุทธ์</a></li>
+                                            <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
                                             <li><a href="/plan">แผนงานมหาลัย</a></li>
                                             <li><a href="/fund">กองทุน</a></li>
                                             <li><a href="/Expense">งบรายจ่าย</a></li>
@@ -353,6 +356,8 @@
 
         </div>
     </div>
+
+    
 
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>

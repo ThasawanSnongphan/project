@@ -23,6 +23,7 @@ use App\Http\Controllers\SFAController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\TacticsController;
 use App\Http\Controllers\FundController;
+use App\Http\Controllers\KPIMainController;
 
 Route::get('/', [NewsController::class,'index']);
 Auth::routes();
@@ -139,6 +140,12 @@ Route::post('tacticsInsert',[TacticsController::class,'insert']);
 Route::get('tacticsDelete/{id}',[TacticsController::class,'delete'])->name('tactics.delete');
 Route::get('tacticsEdit/{id}',[TacticsController::class,'edit'])->name('tactics.edit');
 Route::post('tacticsUpdate/{id}',[TacticsController::class,'update'])->name('tactics.update');
+
+Route::get('KPIMain',[KPIMainController::class,'index']);
+Route::post('KPIMainInsert',[KPIMainController::class,'insert']);
+Route::get('KPIMainDelete/{id}',[KPIMainController::class,'delete'])->name('KPIMain.delete');
+Route::get('KPIMainsEdit/{id}',[KPIMainController::class,'edit'])->name('KPIMain.edit');
+Route::post('KPIMainUpdate/{id}',[KPIMainController::class,'update'])->name('KPIMain.update');
 
 Route::get('fund',[FundController::class,'index']);
 Route::post('fundInsert',[FundController::class,'insert']);

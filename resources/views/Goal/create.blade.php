@@ -64,13 +64,22 @@
                             planSelect.innerHTML = '';
 
                             const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-                            filteredPlans.forEach(plan => {
-                                const option = document.createElement('option');
-                                option.value = plan.straID;
-                                option.textContent = plan.name;
-                                planSelect.appendChild(option);
-                            });
-                            if (filteredPlans.length > 0) {
+
+                            if (filteredPlans.length === 0) {
+                                const noPlanOption = document.createElement('option');
+                                noPlanOption.value = '';
+                                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
+                                planSelect.appendChild(noPlanOption);
+                                planSelect.disabled = true;
+                                updateIssueDropdown(null);
+                            } else {
+                                planSelect.disabled = false;
+                                filteredPlans.forEach(plan => {
+                                    const option = document.createElement('option');
+                                    option.value = plan.straID;
+                                    option.textContent = plan.name;
+                                    planSelect.appendChild(option);
+                                });
                                 updateIssueDropdown(filteredPlans[0].straID);
                             }
                         }
@@ -80,17 +89,37 @@
                             const issueSelect = document.getElementById('SFAID');
                             issueSelect.innerHTML = '';
 
+                            if(!selectedPlanID){
+                                const noIssueOption = document.createElement('option');
+                                noIssueOption.value = '';
+                                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                issueSelect.appendChild(noIssueOption);
+                                issueSelect.disabled = true;
+                                return;
+                            }
+
                             const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-                            filteredIssues.forEach(issue => {
-                                const option = document.createElement('option');
-                                option.value = issue.SFAID;
-                                option.textContent = issue.name;
-                                issueSelect.appendChild(option);
-                            });
+
+                            if (filteredIssues.length === 0) {
+                                const noIssueOption = document.createElement('option');
+                                noIssueOption.value = '';
+                                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                issueSelect.appendChild(noIssueOption);
+                                issueSelect.disabled = true;
+                            } else {
+                                issueSelect.disabled = false;
+                                filteredIssues.forEach(issue => {
+                                    const option = document.createElement('option');
+                                    option.value = issue.SFAID;
+                                    option.textContent = issue.name;
+                                    issueSelect.appendChild(option);
+                                });
+                            }
+
 
                         }
 
-                        
+
 
                         // Event listeners สำหรับ dropdown ต่าง ๆ
                         window.onload = function() {
@@ -115,9 +144,9 @@
                             // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
                             const defaultYearID = yearSelect.value;
                             const defaultPLanID = planSelect.value;
-                            if (defaultYearID  ) {
+                            if (defaultYearID) {
                                 updatePlanDropdown(defaultYearID);
-                               
+
                             }
 
                         };
