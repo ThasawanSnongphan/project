@@ -50,14 +50,22 @@
                             const fundSelect = document.getElementById('fundID');
                             fundSelect.innerHTML = '';
                             const filteredFunds = funds.filter(fund => fund.planID == selectedPlanID);
-                            filteredFunds.forEach(fund => {
-                                const option = document.createElement('option');
-                                option.value = fund.fundID;
-                                option.textContent = fund.name;
-                                fundSelect.appendChild(option);
-                            });
 
-
+                            if (filteredFunds.length === 0) {
+                                const noFundOption = document.createElement('option');
+                                noFundOption.value = '';
+                                noFundOption.textContent = 'ไม่มีกองทุน';
+                                fundSelect.appendChild(noFundOption);
+                                fundSelect.disabled = true;
+                            } else {
+                                fundSelect.disabled = false;
+                                filteredFunds.forEach(fund => {
+                                    const option = document.createElement('option');
+                                    option.value = fund.fundID;
+                                    option.textContent = fund.name;
+                                    fundSelect.appendChild(option);
+                                });
+                            }
                         }
                         window.onload = function() {
                             const planSelect = document.getElementById('planID');

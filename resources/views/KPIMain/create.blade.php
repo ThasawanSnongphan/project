@@ -248,7 +248,7 @@
 
                             goalSelect.addEventListener('change', function() {
                                 const selectedGoalID = this.value;
-                                updateTecticsDropdown(selectedGoalID);
+                                updateTacticsDropdown(selectedGoalID);
                             });
 
                             // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
