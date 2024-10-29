@@ -61,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <table class="table table-striped text-center">
+                            <table id="example" class="display">
                                 <thead>
                                     <tr>
                                         <th>#</th>

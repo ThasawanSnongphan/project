@@ -1,27 +1,6 @@
 @extends('layout')
 @section('title', 'Home')
 @section('content')
-    {{-- <h2 class="m-2">ข่าวประชาสัมพันธ์</h2> --}}
-    {{-- <a href="/create" class="btn btn-primary">เพิ่มข่าวประชาสัมพันธ์</a> --}}
-    {{-- <div class="row">
-        @foreach ($news as $new)
-        <div class="col mt-3">
-            <div class="card" style="width: 18rem;">
-                <img src="{{ Storage::url('images/' . $new->img)}}" class="card-img-top"> --}}
-    {{-- <p>{{dd(Storage::url('app/public/images/' . $new->img)) }}</p> --}}
-    {{-- <div class="card-body">
-                    <h5 class="card-title">{{ $new->title }}</h5>
-                    <p class="card-text">{{ $new->content }}</p>
-                    <a href="{{route('edit',$new->id)}}" class="btn btn-warning">แก้ไข</a>
-                    <a href="{{route('delete',$new->id)}}" class="btn btn-danger" 
-                       onclick="return confirm('ต้องการลบข่าว {{$new->title}} หรือไม่')" >ลบ
-                    </a>
-                </div>
-            </div>
-        </div>
-    @endforeach
-    </div> --}}
-
     <body class="nav-md">
         <div class="container body">
             <div class="main_container">

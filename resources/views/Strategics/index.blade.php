@@ -58,69 +58,71 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                                <table class="table table-striped text-center">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>ปีงบประมาณ</th>
-                                            <th>แผนยุทธศาสตร์</th>
-                                            <th>สถานะ</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $sortedStrategic = $strategic->sortBy('yearID');
-                                            $i = 1;
-                                        @endphp
-                                        @foreach ($sortedStrategic as $stra)
-                                            <tr >
-                                                <th scope="row">{{ $i }}</th>
-                                                <td>{{ $year->firstWhere('yearID', $stra->yearID)->name ?? 'ไม่ปีงบประมาณ' }}</td>
-                                                <td>{{ $stra->name }}</td>
-                                                <td></td>
-                                                <td>
-                                                    <a href="{{ route('strategic.edit', $stra->straID) }}">
-                                                        <i class="fa fa-pencil btn btn-warning"></i>
-                                                    </a>
-                                                    <a href="{{ route('strategic.delete', $stra->straID) }}" onclick="return confirm('ต้องการลบข่าว {{ $stra->name }} หรือไม่')">
-                                                        <i class="fa fa-times btn btn-danger"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            @php
-                                                $i++;
-                                            @endphp
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <script>
-                                    // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
-                                    document.getElementById('year').addEventListener('change', function() {
-                                        // ดึงค่า "data-year" จาก option ที่ถูกเลือก
-                                        var selectedOption = this.options[this.selectedIndex];
-                                        var year = selectedOption.getAttribute('data-year');
-                                        console.log(year);
-    
-                                        const tableRows = document.querySelectorAll("table tbody tr");
-    
-    
-                                        tableRows.forEach(row => {
-                                            const yearCell = row.children[1]
-                                                .textContent; // Assuming year is in the second cell (index 1)
-    
-                                            // Check if the row should be displayed
-                                            if (year === "" || year === "ทั้งหมด" || yearCell.includes(year)) {
-                                                row.style.display = ""; // Show the row
-                                            } else {
-                                                row.style.display = "none"; // Hide the row
-                                            }
-                                        });
-                                    });
-                                </script>
 
-                            
+                            <table id="example" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ปีงบประมาณ</th>
+                                        <th>แผนยุทธศาสตร์</th>
+                                        <th>สถานะ</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $sortedStrategic = $strategic->sortBy('yearID');
+                                        $i = 1;
+                                    @endphp
+                                    @foreach ($sortedStrategic as $stra)
+                                        <tr>
+                                            <th scope="row">{{ $i }}</th>
+                                            <td>{{ $year->firstWhere('yearID', $stra->yearID)->name ?? 'ไม่ปีงบประมาณ' }}
+                                            </td>
+                                            <td>{{ $stra->name }}</td>
+                                            <td></td>
+                                            <td>
+                                                <a href="{{ route('strategic.edit', $stra->straID) }}">
+                                                    <i class="fa fa-pencil btn btn-warning"></i>
+                                                </a>
+                                                <a href="{{ route('strategic.delete', $stra->straID) }}"
+                                                    onclick="return confirm('ต้องการลบข่าว {{ $stra->name }} หรือไม่')">
+                                                    <i class="fa fa-times btn btn-danger"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $i++;
+                                        @endphp
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <script>
+                                // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
+                                document.getElementById('year').addEventListener('change', function() {
+                                    // ดึงค่า "data-year" จาก option ที่ถูกเลือก
+                                    var selectedOption = this.options[this.selectedIndex];
+                                    var year = selectedOption.getAttribute('data-year');
+                                    console.log(year);
+
+                                    const tableRows = document.querySelectorAll("table tbody tr");
+
+
+                                    tableRows.forEach(row => {
+                                        const yearCell = row.children[1]
+                                            .textContent; // Assuming year is in the second cell (index 1)
+
+                                        // Check if the row should be displayed
+                                        if (year === "" || year === "ทั้งหมด" || yearCell.includes(year)) {
+                                            row.style.display = ""; // Show the row
+                                        } else {
+                                            row.style.display = "none"; // Hide the row
+                                        }
+                                    });
+                                });
+                            </script>
+
+
                         </div>
                     </div>
                     <div class="col-md-1 col-sm-1  "></div>

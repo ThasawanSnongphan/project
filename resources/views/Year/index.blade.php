@@ -1,29 +1,9 @@
 @extends('layout')
 @section('title', 'Year')
 @section('content')
-    {{-- <h2 class="m-2">ปีงบประมาณ</h2>
-    <a href="/yCreate" class="btn btn-primary m-2">เพิ่มปีงบประมาณ</a>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-        </tbody>
-    </table> --}}
+    
     <div class="container body">
         <div class="main_container">
-            <!-- page content -->
             <div role="main">
                 <div class="">
                     <div class="page-title">
@@ -46,8 +26,9 @@
                     @include('Year.create')
 
                     <div class="row" style="display: block;">
-                        <div class="col-md-3 col-sm-3  "></div>
-                        <div class="col-md-6 col-sm-6  ">
+                        <div class="col-md-3 col-sm-1  "></div>
+                        <div class="col-md-6 col-sm-10  ">
+                            
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>ปีงบประมาณ</h2>
@@ -69,7 +50,7 @@
                                 </div>
                                 <div class="x_content">
 
-                                    <table class="table table-striped text-center">
+                                    <table id="example" class="display">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -86,9 +67,6 @@
                                                     <th scope="row">{{$i}}</th>
                                                     <td>{{ $year->name }}</td>
                                                     <td>
-                                                        {{-- <a
-                                                                href="{{ route('edit', $year->id) }}"><i
-                                                                    class="fa fa-pencil btn btn-warning"></i></a> --}}
                                                             <a href="{{ route('years.delete', $year->yearID) }}"
                                                                 onclick="return confirm('ต้องการลบข่าว {{ $year->name }} หรือไม่')"><i
                                                                     class="fa fa-times btn btn-danger"></i></a>
@@ -104,18 +82,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3  "></div>
-
-
-
-
-
-
-
+                        <div class="col-md-3 col-sm-1  "></div>
                     </div>
                 </div>
             </div>
-            <!-- /page content -->
         </div>
     </div>
+      
+    
+    
+    
+    
+    
 @endsection
+
