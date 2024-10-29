@@ -67,9 +67,9 @@
                                                 <td>{{ $tar->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{route('target.edit',$tar->TarID)}}"><i
+                                                            href="{{route('target.edit',$tar->tarID)}}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{route('target.delete',$tar->TarID)}}"
+                                                        <a href="{{route('target.delete',$tar->tarID)}}"
                                                             onclick="return confirm('ต้องการลบกลุ่มเป้าหมาย {{ $tar->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

@@ -29,12 +29,12 @@ class ProjectIntegratController extends Controller
     }
 
     function delete($id){
-        DB::table('project_integrats')->where('id',$id)->delete();
+        DB::table('project_integrats')->where('proInID',$id)->delete();
         return redirect('/projectIntegrat');
     }
 
     function edit($id){
-        $project_integrat=DB::table('project_integrats')->where('id',$id)->first();
+        $project_integrat=DB::table('project_integrats')->where('proInID',$id)->first();
         return view('ProjectIntegrat.update',compact('project_integrat'));
     }
     function update(Request $request,$id){
@@ -49,7 +49,7 @@ class ProjectIntegratController extends Controller
         $project_integrat=[
             'name'=>$request->name
         ];
-        DB::table('project_integrats')->where('id',$id)->update($project_integrat);
+        DB::table('project_integrats')->where('proInID',$id)->update($project_integrat);
         return redirect('/projectIntegrat'); 
     }
 }

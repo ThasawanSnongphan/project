@@ -67,9 +67,9 @@
                                                 <td>{{ $status->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('status.edit', $status->id) }}"><i
+                                                            href="{{ route('status.edit', $status->statusID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('status.delete', $status->id) }}"
+                                                        <a href="{{ route('status.delete', $status->statusID) }}"
                                                             onclick="return confirm('ต้องการลบสถานะ {{ $status->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

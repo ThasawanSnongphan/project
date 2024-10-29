@@ -67,10 +67,10 @@
                                                 <td>{{ $bad->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('badgetType.edit', $bad->id) }}"><i
+                                                            href="{{ route('badgetType.edit', $bad->badID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('badgetType.delete', $bad->id) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $bad->name }} หรือไม่')"><i
+                                                        <a href="{{ route('badgetType.delete', $bad->badID) }}"
+                                                            onclick="return confirm('ต้องการลบ {{ $bad->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

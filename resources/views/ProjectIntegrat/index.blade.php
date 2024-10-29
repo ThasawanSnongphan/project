@@ -67,10 +67,10 @@
                                                 <td>{{ $pro->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('projectIntegrat.edit', $pro->id) }}"><i
+                                                            href="{{ route('projectIntegrat.edit', $pro->proInID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('projectIntegrat.delete', $pro->id) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $pro->name }} หรือไม่')"><i
+                                                        <a href="{{ route('projectIntegrat.delete', $pro->proInID) }}"
+                                                            onclick="return confirm('ต้องการลบการบูรณาการ {{ $pro->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

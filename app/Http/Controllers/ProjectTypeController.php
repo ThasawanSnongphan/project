@@ -29,12 +29,12 @@ class ProjectTypeController extends Controller
     }
 
     function delete($id){
-        DB::table('project_types')->where('id',$id)->delete();
+        DB::table('project_types')->where('proTypeID',$id)->delete();
         return redirect('/projectType');
     }
 
     function edit($id){
-        $project_type=DB::table('project_types')->where('id',$id)->first();
+        $project_type=DB::table('project_types')->where('proTypeID',$id)->first();
         return view('projectType.update',compact('project_type'));
     }
     function update(Request $request,$id){
@@ -49,7 +49,7 @@ class ProjectTypeController extends Controller
         $project_type=[
             'name'=>$request->name
         ];
-        DB::table('project_types')->where('id',$id)->update($project_type);
+        DB::table('project_types')->where('proTypeID',$id)->update($project_type);
         return redirect('/projectType'); 
     }
 }

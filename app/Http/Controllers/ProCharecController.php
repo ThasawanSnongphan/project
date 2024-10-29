@@ -34,12 +34,12 @@ class ProCharecController extends Controller
 
     
     function delete($id){
-        DB::table('project_charecs')->where('id',$id)->delete();
+        DB::table('project_charecs')->where('proChaID',$id)->delete();
         return redirect('/proChar');
     }
 
     function edit($id){
-        $pro_char=DB::table('project_charecs')->where('id',$id)->first();
+        $pro_char=DB::table('project_charecs')->where('proChaID',$id)->first();
         return view('ProjectCharac.update',compact('pro_char'));
     }
     function update(Request $request,$id){
@@ -54,7 +54,7 @@ class ProCharecController extends Controller
         $pro_char=[
             'pro_cha_name'=>$request->name
         ];
-        DB::table('project_charecs')->where('id',$id)->update($pro_char);
+        DB::table('project_charecs')->where('proChaID',$id)->update($pro_char);
         return redirect('/ProjectCharac.index'); 
     }
 

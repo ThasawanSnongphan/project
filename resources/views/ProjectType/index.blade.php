@@ -67,10 +67,10 @@
                                                 <td>{{ $pro->name }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('projectType.edit', $pro->id) }}"><i
+                                                            href="{{ route('projectType.edit', $pro->proTypeID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('projectType.delete', $pro->id) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $pro->name }} หรือไม่')"><i
+                                                        <a href="{{ route('projectType.delete', $pro->proTypeID) }}"
+                                                            onclick="return confirm('ต้องการลบประเภทโครงการ {{ $pro->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

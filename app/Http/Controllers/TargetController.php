@@ -30,12 +30,12 @@ class TargetController extends Controller
     }
 
     function delete($id){
-        DB::table('targets')->where('TarID',$id)->delete();
+        DB::table('targets')->where('tarID',$id)->delete();
         return redirect('/target');
     }
 
     function edit($id){
-        $target=DB::table('targets')->where('TarID',$id)->first();
+        $target=DB::table('targets')->where('tarID',$id)->first();
         return view('Targets.update',compact('target'));
     }
     function update(Request $request,$id){
@@ -50,7 +50,7 @@ class TargetController extends Controller
         $target=[
             'name'=>$request->name
         ];
-        DB::table('targets')->where('TarID',$id)->update($target);
+        DB::table('targets')->where('tarID',$id)->update($target);
         return redirect('/target'); 
     }
 }

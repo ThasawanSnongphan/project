@@ -29,12 +29,12 @@ class BadgetTypeController extends Controller
     }
 
     function delete($id){
-        DB::table('badget_types')->where('id',$id)->delete();
+        DB::table('badget_types')->where('badID',$id)->delete();
         return redirect('/BadgetType');
     }
 
     function edit($id){
-        $badget_type=DB::table('badget_Types')->where('id',$id)->first();
+        $badget_type=DB::table('badget_Types')->where('badID',$id)->first();
         return view('badgetType.update',compact('badget_type'));
     }
     function update(Request $request,$id){
@@ -49,7 +49,7 @@ class BadgetTypeController extends Controller
         $badget_type=[
             'name'=>$request->name
         ];
-        DB::table('badget_types')->where('id',$id)->update($badget_type);
+        DB::table('badget_types')->where('badID',$id)->update($badget_type);
         return redirect('/BadgetType'); 
     }
 }

@@ -153,19 +153,6 @@
                     </div>
 
                     <div class="row field item form-group align-items-center">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ลักษณะโครงการ<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <select id="charecter" name="charecter" class="form-control" required>
-                                @foreach ($projectCharec as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->pro_cha_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row field item form-group align-items-center">
                         <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">

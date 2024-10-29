@@ -33,12 +33,12 @@ class StatusController extends Controller
     }
 
     function delete($id){
-        DB::table('statuses')->where('id',$id)->delete();
+        DB::table('statuses')->where('statusID',$id)->delete();
         return redirect('/status');
     }
 
     function edit($id){
-        $status=DB::table('statuses')->where('id',$id)->first();
+        $status=DB::table('statuses')->where('statusID',$id)->first();
         return view('status.update',compact('status'));
     }
     function update(Request $request,$id){
@@ -53,7 +53,7 @@ class StatusController extends Controller
         $status=[
             'name'=>$request->name
         ];
-        DB::table('statuses')->where('id',$id)->update($status);
+        DB::table('statuses')->where('statusID',$id)->update($status);
         return redirect('/status'); 
     }
 }
