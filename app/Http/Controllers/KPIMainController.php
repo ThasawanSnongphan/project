@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\DB;
 class KPIMainController extends Controller
 {
     function index(){
-        // $year=DB::table('years')->get()->keyBy('yearID');
-        // $strategic=DB::table('strategics')->get()->keyBy('straID');
-        // $tactics=DB::table('tactics')->get()->keyBy('tacID');
-
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();

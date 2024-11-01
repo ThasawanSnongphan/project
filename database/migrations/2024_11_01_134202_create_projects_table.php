@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->id();
+            $table->id('proID');
             $table->string('name');
             $table->string('format');
             $table->string('PrinciDetaiil');
@@ -20,6 +20,8 @@ return new class extends Migration
             $table->foreign('proTypeID')->references('proTypeID')->on('project_types')->onDelete('cascade');
             $table->unsignedBigInteger('yearID');
             $table->foreign('yearID')->references('yearID')->on('years')->onDelete('cascade');
+            $table->unsignedBigInteger('straID');
+            $table->foreign('straID')->references('straID')->on('strategics')->onDelete('cascade');
             $table->unsignedBigInteger('proChaID');
             $table->foreign('proChaID')->references('proChaID')->on('project_charecs')->onDelete('cascade');
             $table->unsignedBigInteger('proInID');

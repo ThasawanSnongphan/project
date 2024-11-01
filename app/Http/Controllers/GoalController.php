@@ -43,9 +43,11 @@ class GoalController extends Controller
     }
 
     function edit($id){
-        $goal=DB::table('goals')->where('goalID',$id)->first();
+        $goal=Goals::with('SFA.strategic.year')->where('goalID',$id)->first();
+        $year=Year::all();
         $SFA = StrategicIssues::all(); 
-        return view('Goal.update',compact('goal','SFA'));
+        $strategic=Strategics::all();
+        return view('Goal.update',compact('goal','year','SFA','strategic'));
     }
     function update(Request $request,$id){
         $goal=[

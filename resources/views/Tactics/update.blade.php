@@ -46,22 +46,54 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('tactics.update',$tactics->tacID)}}"novalidate
+                                    <form method="POST" action="{{ route('tactics.update', $tactics->tacID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
+                                        <div class="field item form-group">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="year" name="year" class="form-control" required>
+                                                    @foreach ($year as $item)
+                                                        <option value="{{ $item->yearID }}" 
+                                                            {{ $item->yearID == $tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}> 
+                                                            {{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="field item form-group">
+                                            <label for="plan"
+                                                class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="straID" name="straID" class="form-control" required>
+                                                    <!-- แผนจะถูกโหลดที่นี่ -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="field item form-group">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="SFAID" name="SFAID" class="form-control" required>
+                                                    <!-- ประเด็นยุทธศาสตร์จะถูกโหลดที่นี่ -->
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="field item form-group">
                                             <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="goalID" name="goalID" class="form-control" required>
-                                                    @foreach ($goal as $goal)
-                                                        <option value="{{ $goal->goalID }}" <?php if ($goal->goalID == $tactics->goalID) { echo "selected"; } ?>>{{ $goal->name }}</option>
-                                                    @endforeach
-                                                    
+
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="field item form-group">
                                             <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">name<span
@@ -77,6 +109,162 @@
                                                 @enderror
                                             </div>
                                         </div>
+
+                                        <script>
+                                            const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
+                                            const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
+                                            const goals = @json($goal); // ข้อมูลเป้าประสงค์
+
+                                            // ฟังก์ชันอัปเดต dropdown ของแผน
+                                            function updatePlanDropdown(selectedYearID) {
+                                                const planSelect = document.getElementById('straID');
+                                                planSelect.innerHTML = '';
+
+                                                const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
+
+                                                if (filteredPlans.length === 0) {
+                                                    const noPlanOption = document.createElement('option');
+                                                    noPlanOption.value = '';
+                                                    noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
+                                                    planSelect.appendChild(noPlanOption);
+                                                    planSelect.disabled = true;
+                                                    updateIssueDropdown(null);
+                                                } else {
+                                                    planSelect.disabled = false;
+                                                    filteredPlans.forEach(plan => {
+                                                        const option = document.createElement('option');
+                                                        option.value = plan.straID;
+                                                        option.textContent = plan.name;
+                                                        // console.log(plan.straID , {{ $tactics->goal->SFA->straID }});
+                                                        if (plan.straID == '{{ $tactics->goal->SFA->straID }}') {
+                                                            option.selected = true;
+                                                            updateIssueDropdown(plan.straID);
+                                                        }
+                                                        planSelect.appendChild(option);
+                                                    });
+                                                    if(!filteredPlans.some(plan => plan.straID == '{{ $tactics->goal->SFA->straID }}')) {
+                                                        updateIssueDropdown(filteredPlans[0].straID);
+                                                    }
+                                                }
+                                            }
+
+                                            // ฟังก์ชันอัปเดต dropdown ของประเด็นยุทธศาสตร์
+                                            function updateIssueDropdown(selectedPlanID) {
+                                                console.log(selectedPlanID);
+                                                const issueSelect = document.getElementById('SFAID');
+                                                issueSelect.innerHTML = '';
+
+                                                if (!selectedPlanID) {
+                                                    const noIssueOption = document.createElement('option');
+                                                    noIssueOption.value = '';
+                                                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                                    issueSelect.appendChild(noIssueOption);
+                                                    issueSelect.disabled = true;
+                                                    updateGoalDropdown(null);
+                                                    return;
+                                                }
+
+                                                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+
+                                                if (filteredIssues.length === 0) {
+                                                    const noIssueOption = document.createElement('option');
+                                                    noIssueOption.value = '';
+                                                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                                                    issueSelect.appendChild(noIssueOption);
+                                                    issueSelect.disabled = true;
+                                                    updateGoalDropdown(null);
+                                                } else {
+                                                    issueSelect.disabled = false;
+                                                    filteredIssues.forEach(issue => {
+                                                        const option = document.createElement('option');
+                                                        option.value = issue.SFAID;
+                                                        option.textContent = issue.name;
+                                                        // console.log(issue.SFAID , '$tactics->goal->SFAID' );
+                                                        
+                                                        if (issue.SFAID == '{{ $tactics->goal->SFAID }}') {
+                                                            option.selected = true;
+                                                            updateGoalDropdown(issue.SFAID);
+                                                        } 
+               
+                                                        issueSelect.appendChild(option);
+                                                    });
+                                                    if(!filteredIssues.some(issue => issue.SFAID == '{{$tactics->goal->SFAID}}')){
+                                                        updateGoalDropdown(filteredIssues[0].SFAID);
+                                                    }
+                                                }
+                                            }
+
+                                            // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
+                                            function updateGoalDropdown(selectedSFAID) {
+                                                const goalSelect = document.getElementById('goalID');
+                                                goalSelect.innerHTML = '';
+
+                                                if (!selectedSFAID) {
+                                                    const noGoalOption = document.createElement('option');
+                                                    noGoalOption.value = '';
+                                                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                                                    goalSelect.appendChild(noGoalOption);
+                                                    goalSelect.disabled = true;
+                                                    return;
+                                                }
+
+                                                // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
+                                                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+
+                                                if (filteredGoals.length === 0) {
+                                                    const noGoalOption = document.createElement('option');
+                                                    noGoalOption.value = '';
+                                                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                                                    goalSelect.appendChild(noGoalOption);
+                                                    goalSelect.disabled = true;
+                                                } else {
+                                                    goalSelect.disabled = false;
+                                                    filteredGoals.forEach(goal => {
+                                                        const option = document.createElement('option');
+                                                        option.value = goal.goalID;
+                                                        option.textContent = goal.name;
+                                                        if(goal.goalID == '{{$tactics->goalID}}'){
+                                                            option.selected = true;
+                                                        }
+                                                        goalSelect.appendChild(option);
+                                                    });
+                                                }
+
+                                            }
+
+                                            // Event listeners สำหรับ dropdown ต่าง ๆ
+                                            window.onload = function() {
+                                                const yearSelect = document.getElementById('year');
+                                                const planSelect = document.getElementById('straID');
+                                                const issueSelect = document.getElementById('SFAID');
+
+
+                                                // เมื่อเปลี่ยนปีงบประมาณ
+                                                yearSelect.addEventListener('change', function() {
+                                                    const selectedYearID = this.value;
+                                                    updatePlanDropdown(selectedYearID);
+                                                });
+
+                                                // เมื่อเปลี่ยนแผนยุทธศาสตร์
+                                                planSelect.addEventListener('change', function() {
+                                                    const selectedPlanID = this.value;
+                                                    updateIssueDropdown(selectedPlanID);
+                                                });
+
+                                                issueSelect.addEventListener('change', function() {
+                                                    const selectedSFAID = this.value;
+                                                    updateGoalDropdown(selectedSFAID);
+                                                });
+
+
+
+                                                // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+                                                const defaultYearID = yearSelect.value;
+                                                if (defaultYearID) {
+                                                    updatePlanDropdown(defaultYearID);
+                                                }
+                                            };
+                                        </script>
 
 
 

@@ -40,7 +40,7 @@ class SFAController extends Controller
     }
 
     function edit($id){
-        $SFA=DB::table('strategic_issues')->where('SFAID',$id)->first();
+        $SFA = StrategicIssues::with('strategic.year')->where('SFAID', $id)->first();
         $strategic = Strategics::all();
         $year = Year::all(); 
         return view('SFA.update',compact('SFA','strategic','year'));

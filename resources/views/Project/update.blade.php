@@ -32,8 +32,7 @@
                         <div class="col-md-6 col-sm-6">
                             <select id="year" name="yearID" class="form-control" required>
                                 @foreach ($year as $item)
-                                    <option value="{{ $item->yearID }}">
-                                        {{ $item->name }}</option>
+                                    <option value="{{ $item->yearID }}" <?php if ($item->yearID == $project->yearID) { echo "selected"; } ?>>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -44,7 +43,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="name" id="name" required='required'
-                                data-validate-length-range="8,20" />
+                                data-validate-length-range="8,20" value="{{$project->name}}"/>
                             @error('name')
                                 <div class="m-2">
                                     <span class="text text-danger">{{ $message }}</span>
@@ -90,8 +89,8 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="format" name="format" class="form-control" required>
-                                <option value="team">team</option>
-                                <option value="department">department</option>
+                                <option value="team" <?php if ($project->format == 'team') { echo "selected"; } ?>>team</option>
+                                <option value="department" <?php if ($project->format == 'department') { echo "selected"; } ?>>department</option>
                             </select>
                         </div>
                     </div>
@@ -101,6 +100,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="straID" name="straID" class="form-control" required>
+                               
                                 <!-- แผนจะถูกโหลดที่นี่ -->
                             </select>
                         </div>
@@ -148,7 +148,7 @@
                         <div class="col-md-4 col-sm-4">
                             <select id="type" name="proTypeID" class="form-control" required>
                                 @foreach ($projectType as $item)
-                                    <option value="{{ $item->proTypeID }}">
+                                    <option value="{{ $item->proTypeID }}" <?php if ($item->proTypeID == $project->proTypeID) { echo "selected"; } ?> >
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -158,7 +158,7 @@
                         <div class="col-md-4 col-sm-4">
                             <select id="charecter" name="proChaID" class="form-control" required>
                                 @foreach ($projectCharec as $item)
-                                    <option value="{{ $item->proChaID }}">
+                                    <option value="{{ $item->proChaID }}" <?php if ($item->proChaID == $project->proChaID) { echo "selected"; } ?>>
                                         {{ $item->pro_cha_name }}</option>
                                 @endforeach
                             </select>
@@ -166,21 +166,15 @@
                     </div>
 
                     <div class="row field item form-group align-items-center">
-                        <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
+                        <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="integrat" name="proInID" class="form-control" required onchange="toggleTextarea()">
+                            <select id="integrat" name="proInID" class="form-control" required>
                                 @foreach ($projectIntegrat as $item)
-                                    <option value="{{ $item->proInID }}">
+                                    <option value="{{ $item->proInID }}" <?php if ($item->proInID == $project->proInID) { echo "selected"; } ?>>
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="row field item form-group align-items-center" id="otherTextContainer" style="display: none;">
-                        <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
-                        <div class="col-md-6 col-sm-6">
-                            <textarea id="otherText" name="otherText" class="form-control" placeholder="เรื่อง"></textarea>
                         </div>
                     </div>
 
@@ -188,7 +182,7 @@
                         <label for="title"
                             class="col-form-label col-md-3 col-sm-3  label-align">หลักการและเหตุผล<span
                                 class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6 d-flex">
+                        <div class="col-md-6 col-sm-6">
                             <textarea class="form-control" name="principle" id="principle" required='required'
                                 data-validate-length-range="8,20"></textarea>
                             @error('principle')
@@ -258,7 +252,7 @@
                         <div class="col-md-6 col-sm-6">
                             <select id="target" name="tarID" class="form-control" required>
                                 @foreach ($target as $item)
-                                    <option value="{{ $item->tarID }}">
+                                    <option value="{{ $item->tarID }}" <?php if ($item->tarID == $project->tarID) { echo "selected"; } ?>>
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -314,7 +308,7 @@
                         <div class="col-md-6 col-sm-6">
                             <select id="badget" name="badID" class="form-control" required>
                                 @foreach ($badgetType as $item)
-                                    <option value="{{ $item->badID }}">
+                                    <option value="{{ $item->badID }}" <?php if ($item->badID == $project->badID) { echo "selected"; } ?>>
                                         {{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -327,7 +321,7 @@
                         <div class="col-md-6 col-sm-6">
                             <select id="planID" name="planID" class="form-control" required>
                                 @foreach ($uniplan as $item)
-                                    <option value="{{ $item->planID }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->planID }}" <?php if ($item->planID == $project->planID) { echo "selected"; } ?>>{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -501,7 +495,6 @@
 </div>
 
 <script>
-    
     const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
     const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
     const goals = @json($goal); // ข้อมูลเป้าประสงค์
@@ -510,22 +503,6 @@
     const funds = @json($fund);
     const expenses = @json($expanses);
     const costTypes = @json($costTypes);
-
-    const proIn = @json($projectIntegrat);
-  
-
-    function toggleTextarea() {
-        var select = document.getElementById("integrat");
-        var otherTextContainer = document.getElementById("otherTextContainer");
-        
-        if (select.value === '6') {
-            otherTextContainer.style.display = "flex";
-        } else {
-            otherTextContainer.style.display = "none";
-        }
-    }
-
-    
 
     // ฟังก์ชันอัปเดต dropdown ของแผน
     function updatePlanDropdown(selectedYearID) {
