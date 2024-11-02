@@ -64,6 +64,7 @@
                                 </div>
                             @enderror
                         </div>
+                       
                         <div class="col-md-3 col-sm-3">
                             <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่มผู้รับผิดชอบ</button>
                         </div>
@@ -184,7 +185,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <textarea class="form-control" name="principle" id="principle" required='required'
-                                data-validate-length-range="8,20"></textarea>
+                                data-validate-length-range="8,20">{{$project->princiDetail}}</textarea>
                             @error('principle')
                                 <div class="m-2">
                                     <span class="text text-danger">{{ $message }}</span>
@@ -197,8 +198,11 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">วัตถุประสงค์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
+                           
                             <input class="form-control" type="text" name="objID" id="object"
-                                required='required' data-validate-length-range="8,20" />
+                            required='required' data-validate-length-range="8,20" />
+                           
+                            
 
                         </div>
                         <div class="col-md-3 col-sm-3">
@@ -524,9 +528,16 @@
                 const option = document.createElement('option');
                 option.value = plan.straID;
                 option.textContent = plan.name;
+                if(plan.straID == '{{$project->straID}}'){
+                    option.selected = true;
+                    updateIssueDropdown(plan.straID);
+                }
                 planSelect.appendChild(option);
             });
-            updateIssueDropdown(filteredPlans[0].straID);
+            if(!filteredPlans.some(plan => plan.straID == '{{$project->straID}}')){
+                updateIssueDropdown(filteredPlans[0].straID);
+            }
+            
         }
     }
 

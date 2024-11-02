@@ -3,7 +3,7 @@
     <div class="col-md-8 col-sm-8">
         <div class="x_panel">
             <div class="x_title">
-                <h2>เพิ่มกลยุทธ์</h2>
+                <h2>เพิ่มตัวชี้วัดของแผน</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>

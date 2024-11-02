@@ -45,12 +45,12 @@ class CostTypeController extends Controller
     }
     
     function delete($id){
-        DB::table('cost_types')->where('id',$id)->delete();
+        DB::table('cost_types')->where('costID',$id)->delete();
         return redirect('/cost_type');
     }
 
     function edit($id){
-        $cost_types=DB::table('cost_types')->where('id',$id)->first();
+        $cost_types=DB::table('cost_types')->where('costID',$id)->first();
         return view('CostTypes.update',compact('cost_types'));
     }
     function update(Request $request,$id){
@@ -65,7 +65,7 @@ class CostTypeController extends Controller
         $cost_types=[
             'costname'=>$request->costname
         ];
-        DB::table('cost_types')->where('id',$id)->update($cost_types);
+        DB::table('cost_types')->where('costID',$id)->update($cost_types);
         return redirect('/cost_type'); 
     }
 }

@@ -40,4 +40,26 @@ class KPIMainController extends Controller
         $KPIMain->save();
         return redirect('/KPIMain');
     }
+
+    function edit($id){
+        $year = Year::all(); // ดึงข้อมูลปี
+        $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
+        $SFA = StrategicIssues::all();
+        $goal = Goals::all();
+        $tactics = Tactics::all();
+        
+        $KPIMain=KPIMains::with(['tactics.goal.SFA.strategic.year'])->where('KPIMainID',$id)->first();
+        return view('KPIMain.update',compact('year','strategic','tactics','SFA','goal','KPIMain'));
+    }
+    function update(Request $request,$id){
+        // $tacID = Tactics::where('tacID',$request->input('tacID'))->first();
+        $KPIMain=[
+            'tacID'=>$request->tacID,
+            'name'=>$request->name,
+            'count'=>$request->count,
+            'target'=>$request->target
+        ];
+        DB::table('k_p_i_mains')->where('KPIMainID',$id)->update($KPIMain);
+        return redirect('/KPIMain'); 
+    }
 }

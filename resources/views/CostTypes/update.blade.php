@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('costs.update',$cost_types->id)}}"novalidate enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('costs.update',$cost_types->costID)}}"novalidate enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
                                             <label for="title"

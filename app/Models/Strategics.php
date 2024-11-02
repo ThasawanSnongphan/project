@@ -12,4 +12,11 @@ class Strategics extends Model
     {
         return $this->belongsTo(Year::class, 'yearID','yearID');
     }
+
+    // public function projects()
+    // {
+    //     return $this->belongsToMany(Projects::class, 'strategic_maps', 'straID', 'proID');
+    // }
+
+
 }

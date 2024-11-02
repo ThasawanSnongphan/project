@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
@@ -32,17 +33,17 @@
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
-    
 
-    
-    
-    
-   
 
-   
-    
-    
-   
+
+
+
+
+
+
+
+
+
 
 
     <title>@yield('title')</title>
@@ -78,7 +79,7 @@
                     <br />
 
                     <!-- sidebar menu -->
-                    
+
 
                     @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
@@ -107,7 +108,7 @@
                                             <li><a href="/target">กลุ่มเป้าหมาย</a></li>
 
                                             @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                                                <li><a href="/project">สร้างโครงการ</a></li>
+                                                <li><a href="/project">โครงการ</a></li>
                                             @endif
                                         </ul>
                                     </li>
@@ -116,18 +117,18 @@
                         </div>
                     @else
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        <div class="menu_section">
-                            <h3>General</h3>
-                            <ul class="nav side-menu">
-                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                            <div class="menu_section">
+                                <h3>General</h3>
+                                <ul class="nav side-menu">
+                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
 
-                                    </ul>
-                                </li>
-                            </ul>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
                     @endif
                     <!-- /sidebar menu -->
 
@@ -156,111 +157,125 @@
                     <div class="nav toggle">
                         <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                     </div>
-                    <nav class="nav navbar-nav">
-                        <ul class=" navbar-right">
-                            @auth
-                                <li class="nav-item dropdown open" style="padding-left: 15px;">
-                                    <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
-                                        id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                        {{-- <img src="{{ asset('production/images/img.jpg') }}" alt=""> --}}
-                                        {{ Auth::user()->firstname_en }} {{ Auth::user()->lastname_en }}
-                                    </a>
-                                    <div class="dropdown-menu dropdown-usermenu pull-right"
-                                        aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="javascript:;"> Profile</a>
-                                        <a class="dropdown-item" href="javascript:;">
-                                            <span class="badge bg-red pull-right">50%</span>
-                                            <span>Settings</span>
-                                        </a>
-                                        <a class="dropdown-item" href="javascript:;">Help</a>
-                                        <a class="dropdown-item" href="#"
-                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
-                                                class="fa fa-sign-out pull-right"></i>
-                                            Log Out</a>
-                                    </div>
-                                </li>
-                            @endauth
-                            @guest
-                                <li class="nav-item" style="padding-left: 15px;">
-                                    <a class="nav-link" href="/login">Login</a>
-                                </li>
-                            @endguest
+                    <nav class="nav navbar-nav ">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="navbar-left m-2">
+                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                               
+                                    <a type='submit' class="btn btn-secondary" href="/projectcreate">สร้างโครงการ</a>
 
-                            <li role="presentation" class="nav-item dropdown open">
-                                <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1"
-                                    data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul class="dropdown-menu list-unstyled msg_list" role="menu"
-                                    aria-labelledby="navbarDropdown1">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="images/img.jpg"
-                                                    alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were
-                                                where...
-                                            </span>
+                               
+                            @endif
+                        </div>
+                            <ul class=" navbar-right">
+                                @auth
+                                    <li class="nav-item dropdown open" style="padding-left: 15px;">
+                                        <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
+                                            id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                                            {{-- <img src="{{ asset('production/images/img.jpg') }}" alt=""> --}}
+                                            {{ Auth::user()->firstname_en }} {{ Auth::user()->lastname_en }}
                                         </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="images/img.jpg"
-                                                    alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were
-                                                where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="images/img.jpg"
-                                                    alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were
-                                                where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="images/img.jpg"
-                                                    alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were
-                                                where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <div class="text-center">
-                                            <a class="dropdown-item">
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
+                                        <div class="dropdown-menu dropdown-usermenu pull-right"
+                                            aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="javascript:;"> Profile</a>
+                                            <a class="dropdown-item" href="javascript:;">
+                                                <span class="badge bg-red pull-right">50%</span>
+                                                <span>Settings</span>
                                             </a>
+                                            <a class="dropdown-item" href="javascript:;">Help</a>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
+                                                    class="fa fa-sign-out pull-right"></i>
+                                                Log Out</a>
                                         </div>
                                     </li>
-                                </ul>
-                            </li>
-                        </ul>
+                                @endauth
+                                @guest
+                                    <li class="nav-item" style="padding-left: 15px;">
+                                        <a class="nav-link" href="/login">Login</a>
+                                    </li>
+                                @endguest
+
+                                <li role="presentation" class="nav-item dropdown open">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1"
+                                        data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span class="badge bg-green">6</span>
+                                    </a>
+                                    <ul class="dropdown-menu list-unstyled msg_list" role="menu"
+                                        aria-labelledby="navbarDropdown1">
+                                        <li class="nav-item">
+                                            <a class="dropdown-item">
+                                                <span class="image"><img src="images/img.jpg"
+                                                        alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They
+                                                    were
+                                                    where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item">
+                                                <span class="image"><img src="images/img.jpg"
+                                                        alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They
+                                                    were
+                                                    where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item">
+                                                <span class="image"><img src="images/img.jpg"
+                                                        alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They
+                                                    were
+                                                    where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="dropdown-item">
+                                                <span class="image"><img src="images/img.jpg"
+                                                        alt="Profile Image" /></span>
+                                                <span>
+                                                    <span>John Smith</span>
+                                                    <span class="time">3 mins ago</span>
+                                                </span>
+                                                <span class="message">
+                                                    Film festivals used to be do-or-die moments for movie makers. They
+                                                    were
+                                                    where...
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <div class="text-center">
+                                                <a class="dropdown-item">
+                                                    <strong>See All Alerts</strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </nav>
                     <form id="logout-form" action="/logout" method="POST" style="display: none;">
                         @csrf
@@ -298,9 +313,11 @@
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-   
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
     <!-- Bootstrap -->
     <script src="../vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- FastClick -->
@@ -360,7 +377,7 @@
         $(document).ready(function() {
             $('#example').DataTable();
         });
-        </script>
+    </script>
 </body>
 
 </html>

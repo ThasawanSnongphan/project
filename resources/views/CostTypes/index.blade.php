@@ -73,9 +73,9 @@
                                                 <td>{{ $cost->costname }}</td>
                                                 <td>
                                                     <a
-                                                            href="{{ route('costs.edit', $cost->id) }}"><i
+                                                            href="{{ route('costs.edit', $cost->costID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('costs.delete', $cost->id) }}"
+                                                        <a href="{{ route('costs.delete', $cost->costID) }}"
                                                             onclick="return confirm('ต้องการลบข่าว {{ $cost->costname }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

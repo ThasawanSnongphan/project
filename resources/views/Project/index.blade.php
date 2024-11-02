@@ -2,6 +2,7 @@
 @section('title', 'Project')
 @section('content')
     {{-- @include('Project.create') --}}
+    
     <table id="example" class="display">
         <thead>
 
@@ -76,14 +77,14 @@
             @endforeach
         </tbody>
     </table>
-    <script>
+    {{-- <script>
         import DataTable from 'datatables.net-dt';
         import 'datatables.net-responsive-dt';
 
         let table = new DataTable('#myTable', {
             responsive: true
         });
-    </script>
-    <a type='submit' class="btn btn-primary" href="/projectcreate">สร้างโปรเจค</a>
+    </script> --}}
+    {{-- <a type='submit' class="btn btn-primary" href="/projectcreate">สร้างโปรเจค</a> --}}
 
 @endsection

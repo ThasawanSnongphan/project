@@ -7,7 +7,7 @@
         <div class="">
             <div class="page-title">
                 <div class="title_left">
-                    <h3>กลยุทธ์</h3>
+                    <h3>ตัวชี้วัดของแผน</h3>
                 </div>
 
                 <div class="title_right">
@@ -29,7 +29,7 @@
                 <div class="col-md-10 col-sm-10  ">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>กลยุทธ์</h2>
+                            <h2>ตัวชี้วัดของแผน</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -96,7 +96,7 @@
                                             <td>{{ $item->target }}</td>
                                             <td>
                                                 <a
-                                                        href=""><i
+                                                        href="{{route('KPIMain.edit',$item->KPIMainID)}}"><i
                                                             class="fa fa-pencil btn btn-warning"></i></a>
                                                     <a href=""
                                                         onclick="return confirm('ต้องการลบตัวชี้วัดบังคับ   หรือไม่')"><i
