@@ -9,6 +9,10 @@ class Projects extends Model
 {
     use HasFactory;
     protected $primaryKey = 'proID';
+    public function strategicMap()
+    {
+        return $this->hasMany(StrategicMap::class,'proID'); // หรือ hasOne ตามความสัมพันธ์
+    }
     // public function objectiveProjects()
     // {
     //     return $this->hasMany(ObjectiveProjects::class,'proID');

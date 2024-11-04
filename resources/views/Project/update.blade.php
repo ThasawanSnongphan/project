@@ -507,7 +507,7 @@
     const funds = @json($fund);
     const expenses = @json($expanses);
     const costTypes = @json($costTypes);
-
+    const strategicMaps = @json($project->strategicMap);
     // ฟังก์ชันอัปเดต dropdown ของแผน
     function updatePlanDropdown(selectedYearID) {
         const planSelect = document.getElementById('straID');
@@ -528,13 +528,15 @@
                 const option = document.createElement('option');
                 option.value = plan.straID;
                 option.textContent = plan.name;
-                if(plan.straID == '{{$project->straID}}'){
+                strategicMaps.forEach(map => {
+                    if (map.straID == plan.straID) {
                     option.selected = true;
                     updateIssueDropdown(plan.straID);
-                }
+                    }
+                });
                 planSelect.appendChild(option);
             });
-            if(!filteredPlans.some(plan => plan.straID == '{{$project->straID}}')){
+            if(!filteredPlans.some(plan => strategicMaps.some(map => map.straID == plan.straID))){
                 updateIssueDropdown(filteredPlans[0].straID);
             }
             
@@ -557,7 +559,8 @@
         }
 
         const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-
+//         console.log("Selected Plan ID:", selectedPlanID);
+// console.log("Filtered Issues:", filteredIssues);
         if (filteredIssues.length === 0) {
             const noIssueOption = document.createElement('option');
             noIssueOption.value = '';
@@ -571,9 +574,17 @@
                 const option = document.createElement('option');
                 option.value = issue.SFAID;
                 option.textContent = issue.name;
+                strategicMaps.forEach(map => {
+                    if (map.SFAID == issue.SFAID) {
+                    option.selected = true;
+                    updateGoalDropdown (issue.SFAID);
+                    }
+                });
                 issueSelect.appendChild(option);
             });
+            if(!filteredIssues.some(issue => strategicMaps.some(map => map.SFAID == issue.SFAID))){
             updateGoalDropdown(filteredIssues[0].SFAID);
+            }
 
         }
     }
@@ -609,10 +620,17 @@
                 const option = document.createElement('option');
                 option.value = goal.goalID;
                 option.textContent = goal.name;
+                strategicMaps.forEach(map => {
+                    if (map.goalID == goal.goalID) {
+                    option.selected = true;
+                    updateTacticsDropdown (goal.goalID);
+                    }
+                });
                 goalSelect.appendChild(option);
             });
+            if(!filteredGoals.some(goal => strategicMaps.some(map => map.goalID == goal.goalID))){
             updateTacticsDropdown(filteredGoals[0].goalID);
-
+            }
         }
     }
 
@@ -645,6 +663,12 @@
                 const option = document.createElement('option');
                 option.value = tactic.tacID;
                 option.textContent = tactic.name;
+                strategicMaps.forEach(map => {
+                    if (map.tacID == tactic.tacID) {
+                    option.selected = true;
+                    // updateTacticsDropdown ( tactic.tacID);
+                    }
+                });
                 tacticsSelect.appendChild(option);
             });
         }

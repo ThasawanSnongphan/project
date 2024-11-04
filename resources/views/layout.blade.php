@@ -123,6 +123,9 @@
                                     <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            <li><a href="/project">โครงการ</a></li>
+                                        @endif
 
                                         </ul>
                                     </li>
@@ -162,7 +165,6 @@
                             <div class="navbar-left m-2">
                             @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                                
-                                    <a type='submit' class="btn btn-secondary" href="/projectcreate">สร้างโครงการ</a>
 
                                
                             @endif

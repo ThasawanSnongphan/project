@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('objective_projects', function (Blueprint $table) {
-            $table->id('objProID');
+        Schema::create('objective_maps', function (Blueprint $table) {
+            $table->id('objMapID');
             $table->unsignedBigInteger('objID');
             $table->foreign('objID')->references('objID')->on('objectives')->onDelete('cascade'); 
             $table->unsignedBigInteger('proID');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('objective_projects');
+        Schema::dropIfExists('objective_maps');
     }
 };

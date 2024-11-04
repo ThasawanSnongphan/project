@@ -73,19 +73,7 @@
                         </div>
 
                         <div id="userDropdownContainer"></div>
-                        {{-- <div class="row field item form-group align-items-center">
-                            <div class="col-md-3 col-sm-3 "></div>
-                            <div class="col-md-6 col-sm-6">
-                                <select class="form-control" id="userDropdown" style="display: none;">
-                                    <option value="">เลือกผู้รับผิดชอบ</option>
-                                </select>
 
-                            </div>
-                            <div class="col-md-3 col-sm-3">
-                                <button type="button" style="display: none;" id="userDelete" class="btn btn-danger mt-2"
-                                    onclick="removeSelectedUser()">ลบ</button>
-                            </div>
-                        </div> --}}
 
 
                         <div class="row field item form-group align-items-center">
@@ -93,7 +81,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="affiliation" id="affiliation"
-                                    required='required' data-validate-length-range="8,20" disabled />
+                                    required='required' data-validate-length-range="8,20" disabled
+                                    value="{{ Auth::user()->faculty_name }}" />
                                 @error('affiliation')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
@@ -117,7 +106,7 @@
                             <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="straID" name="straID" class="form-control" required>
+                                <select id="straID" name="straID[]" class="form-control" required onchange="KPIMainNone()">
                                     <!-- แผนจะถูกโหลดที่นี่ -->
                                 </select>
                             </div>
@@ -131,7 +120,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="SFAID" name="SFAID" class="form-control" required>
+                                <select id="SFAID" name="SFAID[]" class="form-control" required>
                                     <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                 </select>
                             </div>
@@ -141,7 +130,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="goalID" name="goalID" class="form-control" required>
+                                <select id="goalID" name="goalID[]" class="form-control" required>
                                     <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                 </select>
                             </div>
@@ -151,7 +140,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="tacID" name="tacID" class="form-control" required>
+                                <select id="tacID" name="tacID[]" class="form-control" required>
                                     <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                 </select>
                             </div>
@@ -222,14 +211,61 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">วัตถุประสงค์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="objective" id="obj"
+                                <input class="form-control" type="text" name="obj[]" id="obj"
                                     required='required' data-validate-length-range="8,20" />
 
                             </div>
                             <div class="col-md-3 col-sm-3">
-                                <button type='button' class="btn btn-primary">เพิ่ม</button>
+                                <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
                             </div>
                         </div>
+
+                        <div id="insertObj"></div>
+
+                        <div class="row field item form-group align-items-center" id="KPIMainNone" style="display: flex;">
+                            <label for="title"
+                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผน</label>
+                            <div class="row col-md-9 col-sm-9 border m-1">
+                                <div class="col-md-12 col-sm-12">
+                                    <div
+                                        class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
+                                        <label for="title"
+                                            class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
+                                    </div>
+                                    <div
+                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                        <label class="col-form-label label-align ">หน่วยนับ</label>
+
+                                    </div>
+                                    <div
+                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                        <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="col-md-4 col-sm-4 m-1">
+                                        <select id="KPIMain" name="KPIMainID[]" class="form-control" required>
+                                            <!-- KPIจะถูกโหลดที่นี่ -->
+                                        </select>
+                                    </div>
+                                    <div class=" col-md-3 col-sm-3 m-1">
+                                        <input class="form-control" type="text" name="countProject[]" id="">
+
+                                    </div>
+                                    <div class=" col-md-3 col-sm-3 m-1">
+                                        <input class="form-control" type="text" name="targetProject[]"
+                                            id="">
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 m-1">
+                                        <button type='button' class="btn btn-primary"
+                                            onclick="insertKPIMain()">เพิ่ม</button>
+
+                                    </div>
+                                </div>
+                                <div id="insertKPIMain" ></div>
+                            </div>
+                        </div>
+
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดความสำเร็จโครงการ</label>
@@ -252,20 +288,23 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="KPIProject" id="">
+                                        <input class="form-control" type="text" name="KPIProject[]" id="">
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countProject" id="">
+                                        <input class="form-control" type="text" name="countProject[]" id="">
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetProject" id="">
+                                        <input class="form-control" type="text" name="targetProject[]"
+                                            id="">
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
-                                        <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
+                                        <button type='button' class="btn btn-primary"
+                                            onclick="insertKPIProject()">เพิ่ม</button>
 
                                     </div>
                                 </div>
+                                <div id="insertKPIProject"></div>
                             </div>
                         </div>
 
@@ -283,7 +322,7 @@
                                 </select>
                             </div>
                             <div class="col-md-1 col-sm-1 m-1">
-                                <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
+                                <button type='button' class="btn btn-primary">เพิ่ม</button>
 
                             </div>
                         </div>
@@ -309,20 +348,21 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="stepName" id="">
+                                        <input class="form-control" type="text" name="stepName[]" id="">
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepStart" id="">
+                                        <input class="form-control" type="date" name="stepStart[]" id="">
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepEnd" id="">
+                                        <input class="form-control" type="date" name="stepEnd[]" id="">
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
-                                        <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
-
+                                        <button type='button' class="btn btn-primary"
+                                            onclick="insertStep()">เพิ่ม</button>
                                     </div>
                                 </div>
+                                <div id="insertStep"></div>
                             </div>
                         </div>
 
@@ -385,30 +425,30 @@
                                 </div>
 
 
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-12 col-sm-12 ">
                                     <div
                                         class="row col-md-3 col-sm-3 mr-1 d-flex justify-content-center align-items-center">
                                         <label for="title" class="col-form-label label-align">ประเภทรายจ่าย</label>
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label class="col-form-label label-align ">แผนการใใช้จ่าย</label>
+                                        <label class="col-form-label label-align ">แผนการใช้จ่าย</label>
 
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">แผนการใใช้จ่าย</label>
+                                        <label for="title" class="col-form-label label-align">แผนการใช้จ่าย</label>
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">แผนการใใช้จ่าย</label>
+                                        <label for="title" class="col-form-label label-align">แผนการใช้จ่าย</label>
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">แผนการใใช้จ่าย</label>
+                                        <label for="title" class="col-form-label label-align">แผนการใช้จ่าย</label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-12 col-sm-12 ">
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
                                         <select id="expID" name="expID" class="form-control" required>
@@ -416,34 +456,36 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-1 col-sm-1">
+                                    {{-- <div class="col-md-1 col-sm-1">
                                         <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
 
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
                                         <select id="costType" name="costID" class="form-control" required>
 
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu1" id="">
+                                        <input class="form-control" type="text" name="costQu1[]" id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu2" id="">
+                                        <input class="form-control" type="text" name="costQu2[]" id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu3" id="">
+                                        <input class="form-control" type="text" name="costQu3[]" id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu4" id="">
+                                        <input class="form-control" type="text" name="costQu4[]" id="">
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
-                                        <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
-
+                                        <button type='button' class="btn btn-primary"
+                                            onclick="insertCostType()">เพิ่ม</button>
                                     </div>
                                 </div>
+                                <div id="insertExpense"></div>
+                                <div id="insertCostType"></div>
                             </div>
                         </div>
 
@@ -472,7 +514,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประโยชน์ที่คาดว่าจะได้รับ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="benefit" id="benefit"
+                                <input class="form-control" type="text" name="benefit[]" id="benefit"
                                     required='required' data-validate-length-range="8,20" />
                                 @error('object')
                                     <div class="m-2">
@@ -481,17 +523,18 @@
                                 @enderror
                             </div>
                             <div class="col-md-1 col-sm-1 ">
-                                <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
+                                <button type='button' class="btn btn-primary" onclick="insertBenefit()">เพิ่ม</button>
 
                             </div>
                         </div>
+                        <div id="insertBenefit"></div>
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="file" name="object" id="object"
+                                <input class="form-control" type="file" name="file" id="object"
                                     required='required' data-validate-length-range="8,20" />
                                 @error('object')
                                     <div class="m-2">
@@ -500,15 +543,19 @@
                                 @enderror
                             </div>
                             <div class="col-md-1 col-sm-1 ">
-                                <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
+                                <button type='button' class="btn btn-primary" onclick="insertFile()">เพิ่ม</button>
 
                             </div>
                         </div>
+                        <div id="insertFile"></div>
 
                         <div class="ln_solid">
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary" value="บันทึก">บันทึก</button>
+
+                                    <button type='submit' class="btn btn-secondary" value="ส่ง" disabled>ส่ง</button>
+
                                 </div>
                             </div>
                         </div>
@@ -524,12 +571,366 @@
         const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
         const goals = @json($goal); // ข้อมูลเป้าประสงค์
         const tactics = @json($tactics); // ข้อมูลกลยุทธ์
-
+        const KPIMains = @json($KPIMain);
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
 
         const proIn = @json($projectIntegrat);
+
+
+
+
+
+        function insertObj() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
+
+            const colMD3 = document.createElement('div');
+            colMD3.classList.add('col-md-3', 'col-ssm-3');
+
+            const colMD6 = document.createElement('div');
+            colMD6.classList.add('col-md-6', 'col-sm-6');
+
+            const InputObjt = document.createElement('input');
+            InputObjt.classList.add('form-control');
+            InputObjt.type = 'text';
+            InputObjt.name = 'obj[]';
+
+            mainContainer.appendChild(colMD3);
+            mainContainer.appendChild(colMD6);
+            colMD6.appendChild(InputObjt);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainContainer.appendChild(deleteButton);
+
+            document.getElementById('insertObj').appendChild(mainContainer);
+
+        }
+
+        function insertBenefit() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
+
+            const colMD3 = document.createElement('div');
+            colMD3.classList.add('col-md-3', 'col-ssm-3');
+
+            const colMD6 = document.createElement('div');
+            colMD6.classList.add('col-md-6', 'col-sm-6');
+
+            const InputBenefit = document.createElement('input');
+            InputBenefit.classList.add('form-control');
+            InputBenefit.type = 'text';
+            InputBenefit.name = 'benefit[]';
+
+            mainContainer.appendChild(colMD3);
+            mainContainer.appendChild(colMD6);
+            colMD6.appendChild(InputBenefit);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainContainer.appendChild(deleteButton);
+
+            document.getElementById('insertBenefit').appendChild(mainContainer);
+
+        }
+
+        function insertFile() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
+
+            const colMD3 = document.createElement('div');
+            colMD3.classList.add('col-md-3', 'col-ssm-3');
+
+            const colMD6 = document.createElement('div');
+            colMD6.classList.add('col-md-6', 'col-sm-6');
+
+            const inputFile = document.createElement('input');
+            inputFile.classList.add('form-control');
+            inputFile.type = 'file';
+            inputFile.name = 'file[]';
+
+            mainContainer.appendChild(colMD3);
+            mainContainer.appendChild(colMD6);
+            colMD6.appendChild(inputFile);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainContainer.appendChild(deleteButton);
+
+            document.getElementById('insertFile').appendChild(mainContainer);
+
+        }
+
+        function insertKPIMain() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('col-md-12', 'col-sm-12');
+
+            const colKPI = document.createElement('div');
+            colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
+
+            const KPIDropdown = document.createElement('select');
+            KPIDropdown.classList.add('form-control');
+            KPIDropdown.id = 'KPIMainID';
+            KPIDropdown.innerHTML = '';
+
+            const colCount = document.createElement('div');
+            colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const countInput = document.createElement('input');
+            countInput.classList.add('form-control');
+            countInput.type = 'text';
+            countInput.name = 'countProject[]';
+
+            const colTarget = document.createElement('div');
+            colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const targetInput = document.createElement('input');
+            targetInput.classList.add('form-control');
+            targetInput.type = 'text';
+            targetInput.name = 'targetProject[]';
+
+            const colDelete = document.createElement('div');
+            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+            mainContainer.appendChild(colKPI);
+            mainContainer.appendChild(colCount);
+            mainContainer.appendChild(colTarget);
+            mainContainer.appendChild(colDelete);
+            colKPI.appendChild(KPIDropdown);
+            colCount.appendChild(countInput);
+            colTarget.appendChild(targetInput);
+            colDelete.appendChild(deleteButton);
+            // เพิ่มปุ่มลบลงใน mainContainer
+            document.getElementById('insertKPIMain').appendChild(mainContainer);
+        }
+
+
+        function insertKPIProject() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('col-md-12', 'col-sm-12');
+            mainContainer.style.display = "flex"; 
+
+            const colKPI = document.createElement('div');
+            colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
+
+            const KPIInput = document.createElement('input');
+            KPIInput.classList.add('form-control');
+            KPIInput.type = 'text';
+            KPIInput.name = 'KPIProject[]';
+
+            const colCount = document.createElement('div');
+            colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const countInput = document.createElement('input');
+            countInput.classList.add('form-control');
+            countInput.type = 'text';
+            countInput.name = 'countProject[]';
+
+            const colTarget = document.createElement('div');
+            colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const targetInput = document.createElement('input');
+            targetInput.classList.add('form-control');
+            targetInput.type = 'text';
+            targetInput.name = 'targetProject[]';
+
+            const colDelete = document.createElement('div');
+            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+            mainContainer.appendChild(colKPI);
+            mainContainer.appendChild(colCount);
+            mainContainer.appendChild(colTarget);
+            mainContainer.appendChild(colDelete);
+            colKPI.appendChild(KPIInput);
+            colCount.appendChild(countInput);
+            colTarget.appendChild(targetInput);
+            colDelete.appendChild(deleteButton);
+            // เพิ่มปุ่มลบลงใน mainContainer
+            document.getElementById('insertKPIProject').appendChild(mainContainer);
+        }
+
+        function insertStep() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('col-md-12', 'col-sm-12');
+
+            const colName = document.createElement('div');
+            colName.classList.add('col-md-4', 'col-sm-4', 'm-1');
+
+            const NameInput = document.createElement('input');
+            NameInput.classList.add('form-control');
+            NameInput.type = 'text';
+            NameInput.name = 'stepName[]';
+
+            const colStart = document.createElement('div');
+            colStart.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const startInput = document.createElement('input');
+            startInput.classList.add('form-control');
+            startInput.type = 'date';
+            startInput.name = 'stepStart[]';
+
+            const colEnd = document.createElement('div');
+            colEnd.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const EndInput = document.createElement('input');
+            EndInput.classList.add('form-control');
+            EndInput.type = 'date';
+            EndInput.name = 'stepEnd[]';
+
+            const colDelete = document.createElement('div');
+            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+            mainContainer.appendChild(colName);
+            mainContainer.appendChild(colStart);
+            mainContainer.appendChild(colEnd);
+            mainContainer.appendChild(colDelete);
+            colName.appendChild(NameInput);
+            colStart.appendChild(startInput);
+            colEnd.appendChild(EndInput);
+            colDelete.appendChild(deleteButton);
+            // เพิ่มปุ่มลบลงใน mainContainer
+            document.getElementById('insertStep').appendChild(mainContainer);
+        }
+
+
+
+        function insertCostType() {
+            const dropdownCount = document.querySelectorAll('.Expense').length + 1;
+
+            const mainExpenseContainer = document.createElement('div');
+            mainExpenseContainer.classList.add('col-md-12', 'col-sm-12');
+
+            const colExpense = document.createElement('div');
+            colExpense.classList.add('col-md-3', 'col-sm-3', 'mr-1');
+            // ใส่ข้อความหรือเนื้อหา
+
+            const ExpenseDropdown = document.createElement('select');
+            ExpenseDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
+            ExpenseDropdown.id = 'expID';
+            ExpenseDropdown.innerHTML = '';
+
+            colExpense.appendChild(ExpenseDropdown);
+            mainExpenseContainer.appendChild(colExpense);
+
+            const mainCostTypeContainer = document.createElement('div');
+            mainCostTypeContainer.classList.add('col-md-12', 'col-sm-12', 'mt-2');
+
+            const colCostType = document.createElement('div');
+            colCostType.classList.add('row', 'col-md-3', 'col-sm-3', 'mr-1');
+
+            const costTypeDropdown = document.createElement('select');
+            costTypeDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
+            costTypeDropdown.id = 'costType';
+            costTypeDropdown.innerHTML = '';
+
+            colCostType.appendChild(costTypeDropdown);
+            mainCostTypeContainer.appendChild(colCostType);
+
+            const colCostQu1 = document.createElement('div');
+            colCostQu1.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
+
+            const CostQu1Input = document.createElement('input');
+            CostQu1Input.classList.add('form-control');
+            CostQu1Input.type = 'text';
+            CostQu1Input.name = 'CostQu1[]';
+
+            colCostQu1.appendChild(CostQu1Input);
+            mainCostTypeContainer.appendChild(colCostQu1);
+
+            const colCostQu2 = document.createElement('div');
+            colCostQu2.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
+
+            const CostQu2Input = document.createElement('input');
+            CostQu2Input.classList.add('form-control');
+            CostQu2Input.type = 'text';
+            CostQu2Input.name = 'CostQu2[]';
+
+            colCostQu2.appendChild(CostQu2Input);
+            mainCostTypeContainer.appendChild(colCostQu2);
+
+            const colCostQu3 = document.createElement('div');
+            colCostQu3.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
+
+            const CostQu3Input = document.createElement('input');
+            CostQu3Input.classList.add('form-control');
+            CostQu3Input.type = 'text';
+            CostQu3Input.name = 'CostQu3[]';
+
+            colCostQu3.appendChild(CostQu3Input);
+            mainCostTypeContainer.appendChild(colCostQu3);
+
+
+            const colCostQu4 = document.createElement('div');
+            colCostQu4.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
+
+            const CostQu4Input = document.createElement('input');
+            CostQu4Input.classList.add('form-control');
+            CostQu4Input.type = 'text';
+            CostQu4Input.name = 'CostQu4[]';
+
+            colCostQu4.appendChild(CostQu4Input);
+            mainCostTypeContainer.appendChild(colCostQu4);
+
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainExpenseContainer.remove();
+                mainCostTypeContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainCostTypeContainer.appendChild(deleteButton);
+
+            document.getElementById('insertExpense').appendChild(mainExpenseContainer);
+            document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
+        }
 
         const users = @json($user);
         const currentUserId = {{ Auth::user()->id }};
@@ -542,7 +943,7 @@
 
             const colMd3 = document.createElement('div');
             colMd3.classList.add('col-md-3', 'col-sm-3');
-             // ใส่ข้อความหรือเนื้อหา
+            // ใส่ข้อความหรือเนื้อหา
 
             const dropdownCol = document.createElement('div');
             dropdownCol.classList.add('col-md-6', 'col-sm-6');
@@ -553,11 +954,11 @@
             userDropdown.innerHTML = '';
 
             users.forEach(user => {
-                if (user.id != currentUserId ) {
-                const option = document.createElement('option');
-                option.value = user.id;
-                option.textContent = user.firstname_th;
-                userDropdown.appendChild(option);
+                if (user.id != currentUserId) {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.firstname_th;
+                    userDropdown.appendChild(option);
                 }
             });
 
@@ -578,40 +979,6 @@
 
             document.getElementById('userDropdownContainer').appendChild(mainContainer);
         }
-        // function showDropdown() {
-        //     const userDropdown = document.getElementById('userDropdown');
-        //     const userDelete = document.getElementById('userDelete');
-        //     console.log('showDropdown called'); // ตรวจสอบว่าเรียกฟังก์ชันจริง
-        //     console.log('Current users:', users);
-        //     userDropdown.style.display = 'block';
-        //     userDelete.style.display = 'block';
-        //     userDropdown.innerHTML = '';
-        //     users.forEach(user => {
-        //         if (user.id != currentUserId) {
-        //             const option = document.createElement('option');
-        //             option.value = user.id;
-        //             option.textContent = user.firstname_th;
-        //             userDropdown.appendChild(option);
-        //         }
-        //     });
-        // }
-        //     function removeSelectedUser() {
-        //         // ดึง dropdown element
-        //         const userDropdown = document.getElementById('userDropdown');
-        // const userDelete = document.getElementById('userDelete');
-
-        //         // ตรวจสอบว่ามีตัวเลือกที่ถูกเลือกหรือไม่
-        //         if (userDropdown.selectedIndex !== -1) {
-        //             // ลบตัวเลือกที่เลือกอยู่
-        //             userDropdown.remove(userDropdown.selectedIndex);
-
-        //             // ตรวจสอบว่ามีตัวเลือกเหลือหรือไม่ ถ้าไม่มีให้ซ่อนปุ่มลบ
-
-        //                 userDropdown.style.display = 'none';
-        //                 userDelete.style.display = 'none';
-
-        //         }
-        //     }
 
 
         function toggleTextarea() {
@@ -739,6 +1106,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
+                updateKPIMain(null);
                 return;
             }
 
@@ -751,6 +1119,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
+                updateKPIMain(null);
             } else {
                 tacticsSelect.disabled = false;
                 filteredTactics.forEach(tactic => {
@@ -759,9 +1128,56 @@
                     option.textContent = tactic.name;
                     tacticsSelect.appendChild(option);
                 });
+                updateKPIMain(filteredTactics[0].tacID);
             }
             // แสดงกลยุทธ์ใน dropdown
 
+        }
+
+        function updateKPIMain(selectedtacID) {
+            const KPIMainSelect = document.getElementById('KPIMain');
+            KPIMainSelect.innerHTML = '';
+
+            if (!selectedtacID) {
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value = '';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIMainSelect.appendChild(noKPIMainOption);
+                KPIMainSelect.disabled = true;
+                return;
+            }
+
+            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
+            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.tacID == selectedtacID);
+
+            if (filteredKPIMains.length === 0) {
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value = '';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIMainSelect.appendChild(noKPIMainOption);
+                KPIMainSelect.disabled = true;
+            } else {
+                KPIMainSelect.disabled = false;
+                filteredKPIMains.forEach(KPIMain => {
+                    const option = document.createElement('option');
+                    option.value = KPIMain.KPIMainID;
+                    option.textContent = KPIMain.name;
+                    KPIMainSelect.appendChild(option);
+                });
+            }
+            // แสดงกลยุทธ์ใน dropdown
+
+        }
+
+        function KPIMainNone() {
+            var select = document.getElementById("straID");
+            var otherTextContainer = document.getElementById("KPIMainNone");
+
+            if (select.value !== '1' || select.value !== '2') {
+                otherTextContainer.style.display = "none";
+            } else {
+                otherTextContainer.style.display = "flex";
+            }
         }
 
         function updateExpenseDropdown(selectedPlanID) {
@@ -825,9 +1241,11 @@
             const StrategicSelect = document.getElementById('straID');
             const SFASelect = document.getElementById('SFAID');
             const goalSelect = document.getElementById('goalID');
+            const tacSelect = document.getElementById('tacID');
 
             const planSelect = document.getElementById('planID');
             const EXPSelect = document.getElementById('expID');
+
 
 
             // เมื่อเปลี่ยนปีงบประมาณ
@@ -852,6 +1270,13 @@
                 const selectedGoalID = this.value;
                 updateTacticsDropdown(selectedGoalID);
             });
+
+            tacSelect.addEventListener('change', function() {
+                const selectedtacID = this.value;
+                updateKPIMain(selectedtacID);
+            });
+
+
 
             planSelect.addEventListener('change', function() {
                 const selectedPlanID = this.value;

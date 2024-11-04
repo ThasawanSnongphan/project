@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class KPIProjects extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'KPIProID';
 }

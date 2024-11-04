@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Benefits extends Model
+class KPIProjectMap extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'bnfID';
 }
