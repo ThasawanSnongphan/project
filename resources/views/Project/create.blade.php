@@ -106,12 +106,14 @@
                             <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="straID" name="straID[]" class="form-control" required onchange="KPIMainNone()">
+                                <select id="straID" name="straID[]" class="form-control" required
+                                    onchange="KPIMainNone()">
                                     <!-- แผนจะถูกโหลดที่นี่ -->
                                 </select>
                             </div>
                             <div class="col-md-3 col-sm-3">
-                                <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่มความสอดคล้อง</button>
+                                <button type='button' class="btn btn-primary"
+                                    onclick="insertStrategic()">เพิ่มความสอดคล้อง</button>
                             </div>
                         </div>
 
@@ -145,6 +147,8 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div id="insertStrategic"></div>
 
 
 
@@ -222,7 +226,8 @@
 
                         <div id="insertObj"></div>
 
-                        <div class="row field item form-group align-items-center" id="KPIMainNone" style="display: flex;">
+                        <div class="row field item form-group align-items-center" id="KPIMainNone"
+                            style="display: flex;">
                             <label for="title"
                                 class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผน</label>
                             <div class="row col-md-9 col-sm-9 border m-1">
@@ -249,12 +254,13 @@
                                         </select>
                                     </div>
                                     <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countProject[]" id="">
+                                        <input class="form-control" type="text" name="countMain[]" id="countMain"
+                                            disabled>
 
                                     </div>
                                     <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetProject[]"
-                                            id="">
+                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain"
+                                            disabled>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -262,7 +268,7 @@
 
                                     </div>
                                 </div>
-                                <div id="insertKPIMain" ></div>
+                                <div id="insertKPIMain"></div>
                             </div>
                         </div>
 
@@ -321,10 +327,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-1 col-sm-1 m-1">
-                                <button type='button' class="btn btn-primary">เพิ่ม</button>
 
-                            </div>
                         </div>
 
                         <div class="row field item form-group align-items-center">
@@ -404,22 +407,22 @@
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label class="col-form-label label-align ">ไตรมาศ 1 (ต.ค-ธ.ค)</label>
+                                        <label class="col-form-label label-align ">ไตรมาส 1 (ต.ค-ธ.ค)</label>
 
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">ไตรมาศ 2
+                                        <label for="title" class="col-form-label label-align">ไตรมาส 2
                                             (ม.ค-มี.ค)</label>
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">ไตรมาศ 3
+                                        <label for="title" class="col-form-label label-align">ไตรมาส 3
                                             (เม.ย-มิ.ย)</label>
                                     </div>
                                     <div
                                         class="row col-md-2 col-sm-2 mr-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">ไตรมาศ 4
+                                        <label for="title" class="col-form-label label-align">ไตรมาส 4
                                             (ก.ค-ก.ย)</label>
                                     </div>
                                 </div>
@@ -528,7 +531,7 @@
                             </div>
                         </div>
                         <div id="insertBenefit"></div>
-
+                        {{-- เพิ่มประเภทของไฟล์ --}}
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ<span
@@ -578,9 +581,33 @@
 
         const proIn = @json($projectIntegrat);
 
+        function insertStrategic() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
+            // สร้าง label
+            const label = document.createElement('label');
+            label.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
+            label.classList.add('col-form-laabel','col-md-3','col-sm-3','label-align');
+            label.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
 
+            // เพิ่ม label ลงใน mainContainer
+            mainContainer.appendChild(label);
 
+            const divstraID = document.createElement('div');
+            divstraID.classList.add('col-md-6','col-sm-6');
+            
+            const straDropdown = document.createElement('select');
+            straDropdown.classList.add('form-control');
+            straDropdown.id='straID';
+            straDropdown.innerHTML='';
+            mainContainer.appendChild(divstraID);
+            divstraID.appendChild(straDropdown);
+            
+
+            // ตอนนี้ mainContainer จะมีทั้ง label และ input
+            document.getElementById('insertStrategic').appendChild(mainContainer); // หรือเพิ่มไปที่ container อื่น
+        }
 
         function insertObj() {
             const mainContainer = document.createElement('div');
@@ -738,7 +765,7 @@
         function insertKPIProject() {
             const mainContainer = document.createElement('div');
             mainContainer.classList.add('col-md-12', 'col-sm-12');
-            mainContainer.style.display = "flex"; 
+            mainContainer.style.display = "flex";
 
             const colKPI = document.createElement('div');
             colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
@@ -1134,40 +1161,60 @@
 
         }
 
+
         function updateKPIMain(selectedtacID) {
             const KPIMainSelect = document.getElementById('KPIMain');
+            const countMainInput = document.getElementById('countMain');
+            const targetInput = document.getElementById('targetMain');
+
+            // ล้างค่าตัวเลือกใน KPIMain
             KPIMainSelect.innerHTML = '';
 
+            // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
             if (!selectedtacID) {
-                const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value = '';
-                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                KPIMainSelect.appendChild(noKPIMainOption);
+                KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));
                 KPIMainSelect.disabled = true;
+                countMainInput.value = 'ไม่มีหน่วยนับ';
+                targetInput.value = 'ไม่มีค่าเป้าหมาย';
                 return;
             }
 
-            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
+            // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
             const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.tacID == selectedtacID);
 
             if (filteredKPIMains.length === 0) {
-                const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value = '';
-                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                KPIMainSelect.appendChild(noKPIMainOption);
+                KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));
                 KPIMainSelect.disabled = true;
+                countMainInput.value = 'ไม่มีหน่วยนับ';
+                targetInput.value = 'ไม่มีค่าเป้าหมาย';
             } else {
+                // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
                 KPIMainSelect.disabled = false;
                 filteredKPIMains.forEach(KPIMain => {
-                    const option = document.createElement('option');
-                    option.value = KPIMain.KPIMainID;
-                    option.textContent = KPIMain.name;
-                    KPIMainSelect.appendChild(option);
+                    KPIMainSelect.appendChild(new Option(KPIMain.name, KPIMain.KPIMainID));
                 });
-            }
-            // แสดงกลยุทธ์ใน dropdown
 
+                // กำหนดค่าเริ่มต้นให้กับ input
+                const firstKPIMain = filteredKPIMains[0];
+                countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
+                targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+            }
         }
+
+        // Event listener สำหรับเลือก KPI
+        document.getElementById('KPIMain').addEventListener('change', function() {
+            const selectedKPIMainID = this.value;
+
+            // ค้นหาข้อมูล KPIMain ที่เลือก
+            const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+
+            // ถ้ามีตัวเลือกที่เลือก ก็อัพเดตค่า count และ target
+            if (selectedKPIMain) {
+                document.getElementById('countMain').value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+                document.getElementById('targetMain').value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+            }
+        });
+
 
         function KPIMainNone() {
             var select = document.getElementById("straID");

@@ -12,7 +12,7 @@
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
                 <th>สถานะ</th>
-                <th>สถานะการจัดซื้อจัดจ้าง</th>
+                {{-- <th>สถานะการจัดซื้อจัดจ้าง</th> --}}
                 <th>ไตรมาส 1</th>
                 <th>ไตรมาส 2</th>
                 <th>ไตรมาส 3</th>
@@ -30,7 +30,7 @@
                     <td>{{ $i }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                    <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td>
+                    {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
                         @if ($currentMonth >= 10 && $currentMonth <= 12  && $item->statusID !== 16)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->

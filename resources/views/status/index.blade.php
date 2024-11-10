@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                @include('status.create')
+                {{-- @include('status.create') --}}
 
                 <div class="row" style="display: block;">
                     <div class="col-md-3 col-sm-3  "></div>
@@ -69,9 +69,9 @@
                                                     <a
                                                             href="{{ route('status.edit', $status->statusID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('status.delete', $status->statusID) }}"
+                                                        {{-- <a href="{{ route('status.delete', $status->statusID) }}"
                                                             onclick="return confirm('ต้องการลบสถานะ {{ $status->name }} หรือไม่')"><i
-                                                                class="fa fa-times btn btn-danger"></i></a>
+                                                                class="fa fa-times btn btn-danger"></i></a> --}}
                                                 </td>
                                             </tr>
                                             @php

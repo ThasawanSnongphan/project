@@ -76,7 +76,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="affiliation" id="affiliation"
-                                required='required' data-validate-length-range="8,20" disabled />
+                                required='required' data-validate-length-range="8,20" disabled  value="{{ Auth::user()->faculty_name }}"/>
                             @error('affiliation')
                                 <div class="m-2">
                                     <span class="text text-danger">{{ $message }}</span>
