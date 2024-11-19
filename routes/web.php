@@ -46,7 +46,8 @@ Route::post('/logout', function () {
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::get('/projectcreate', [ProjectController::class,'create']);
-Route::post('/projectInsert', [ProjectController::class,'insert']);
+Route::post('/projectSave', [ProjectController::class,'save']);
+Route::post('/projectSend', [ProjectController::class,'send']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');
 Route::get('projectedit/{id}',[ProjectController::class,'edit'])->name('project.edit');
 Route::post('projectupdate/{id}',[ProjectController::class,'update'])->name('project.update');

@@ -3,10 +3,10 @@
 @section('content')
     {{-- @include('Project.create') --}}
 
-   
+
 
     <div class="field item form-group  d-flex justify-content-between ">
-        <label class="col-form-label col-md-1 col-sm-1 " for="heard" >ปีงบประมาณ*</label>
+        <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
         <div class="col-md-2 col-sm-2 m-2 ">
             <select name="year" id="yearID" class="form-control">
                 <option data-year="ทั้งหมด">ทั้งหมด</option>
@@ -19,7 +19,7 @@
         <div class="ml-auto">
             <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
         </div>
-       
+
     </div>
 
     <table id="example" class="display">
@@ -45,11 +45,17 @@
             @foreach ($project as $item)
                 <tr>
                     <td>{{ $i }}</td>
-                    <td data-project="{{ $item->proID }}"> <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }} </a> </td>
+                    <td data-project="{{ $item->proID }}">
+                        @if ($item->statusID == 7)
+                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
+                        @else
+                            {{ $item->name }}
+                        @endif
+                    </td>
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
-                        @if ($currentMonth >= 10 && $currentMonth <= 12  && $item->statusID !== 16)
+                        @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                             <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                         @else
@@ -58,8 +64,8 @@
                         @endif
                     </td>
                     <td>
-                        
-                        @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID !== 16)
+
+                        @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                             <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                         @else
@@ -68,7 +74,7 @@
                         @endif
                     </td>
                     <td>
-                        @if ($currentMonth >= 4 && $currentMonth <= 6  && $item->statusID !== 16)
+                        @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                             <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                         @else
@@ -77,7 +83,7 @@
                         @endif
                     </td>
                     <td>
-                        @if ($currentMonth >= 7 && $currentMonth <= 9  && $item->statusID == 7 )
+                        @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                             <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                         @else
@@ -86,11 +92,12 @@
                         @endif
                     </td>
                     <td>
-                        @if($item->statusID == 16)
-                        <a href="{{ route('project.edit', $item->proID) }}"><i class="fa fa-pencil btn btn-warning"></i></a>
-                        <a href="{{ route('project.delete', $item->proID) }}"
-                            onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                class="fa fa-times btn btn-danger"></i></a>
+                        @if ($item->statusID == 16)
+                            <a href="{{ route('project.edit', $item->proID) }}"><i
+                                    class="fa fa-pencil btn btn-warning"></i></a>
+                            <a href="{{ route('project.delete', $item->proID) }}"
+                                onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
+                                    class="fa fa-times btn btn-danger"></i></a>
                         @endif
                     </td>
                 </tr>
@@ -124,19 +131,19 @@
 
             tableRows.forEach(row => {
                 const cell = row.querySelector('td[data-project]');
-                if(cell){
-                const projectID = cell.getAttribute('data-project');
-                const project = projectYear.find(project => project.proID == projectID);
-                console.log(projectID);
-                console.log(project);
+                if (cell) {
+                    const projectID = cell.getAttribute('data-project');
+                    const project = projectYear.find(project => project.proID == projectID);
+                    console.log(projectID);
+                    console.log(project);
 
-                // Check if the row should be displayed
-                if (project &&(year === "" || year === "ทั้งหมด" || project.yearID == year)) {
-                    row.style.display = ""; // Show the row
-                } else {
-                    row.style.display = "none"; // Hide the row
+                    // Check if the row should be displayed
+                    if (project && (year === "" || year === "ทั้งหมด" || project.yearID == year)) {
+                        row.style.display = ""; // Show the row
+                    } else {
+                        row.style.display = "none"; // Hide the row
+                    }
                 }
-            }
             });
         });
     </script>

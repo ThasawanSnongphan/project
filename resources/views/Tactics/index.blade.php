@@ -69,24 +69,32 @@
                                             <th>แผนยุทธศาสตร์</th>
                                             <th>ประเด็นยุทธศาสตร์</th>
                                             <th>เป้าประสงค์</th>
+                                            <th>ตัวชี้วัด</th>
                                             <th>กลยุทธ์</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
-                                            $sortedTactics = $tactics->sortBy(function ($tactics) {
-                                                return $tactics->goal->SFA->strategic->year->name ?? 0; // กำหนดค่าปีที่ต้องการเรียง
-                                            });
+                                            // $sortedTactics = $tactics->sortBy(function ($tactics) {
+                                            //     return $tactics->goal->SFA->strategic->year->name ?? 0; // กำหนดค่าปีที่ต้องการเรียง
+                                            // });
                                             $i = 1;
                                         @endphp
-                                        @foreach ($sortedTactics as $item)
+                                        @foreach ($tactics as $item)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
                                                 <td>{{ $item->goal->SFA->strategic->year->name ?? 'ไม่พบปี' }}</td>
                                                 <td>{{ $item->goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
                                                 <td>{{ $item->goal->SFA->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
-                                                <td>{{ $goal->firstWhere('goalID',$item->goalID)->name ?? 'ไม่พบเป้าประสงค์' }}</td>
+                                                <td>{{ $goal->firstWhere('goalID', $item->goalID)->name ?? 'ไม่พบเป้าประสงค์' }}
+                                                </td>
+                                                <td>
+                                                    @foreach ($item->KPIMain as $kpi)
+                                                        {{ $kpi->name }}<br>
+                                                    @endforeach
+                                                </td>
+
                                                 <td>{{ $item->name }}</td>
                                                 <td>
                                                     <a href="{{ route('tactics.edit', $item->tacID) }}"><i
@@ -110,14 +118,14 @@
                                         var selectedOption = this.options[this.selectedIndex];
                                         var year = selectedOption.getAttribute('data-year');
                                         console.log(year);
-    
+
                                         const tableRows = document.querySelectorAll("table tbody tr");
-    
-    
+
+
                                         tableRows.forEach(row => {
                                             const yearCell = row.children[1]
                                                 .textContent; // Assuming year is in the second cell (index 1)
-    
+
                                             // Check if the row should be displayed
                                             if (year === "" || year === "ทั้งหมด" || yearCell.includes(year)) {
                                                 row.style.display = ""; // Show the row

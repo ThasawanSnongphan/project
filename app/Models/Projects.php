@@ -35,10 +35,10 @@ class Projects extends Model
     //     return $this->hasMany(ObjectiveProjects::class,'proID');
     // }
     // // กำหนดความสัมพันธ์กับ Objective
-    // public function objectives()
-    // {
-    //     return $this->belongsToMany(Objectives::class, 'objective_projects', 'proID', 'objID'); // เชื่อมโยงกับ objective_projects
-    // }
+    public function objectives()
+    {
+        return $this->belongsToMany(Objectives::class,  'objID', 'objID'); // เชื่อมโยงกับ objective_projects
+    }
 
     // public function strategics()
     // {

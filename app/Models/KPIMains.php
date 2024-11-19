@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class KPIMains extends Model
 {
     use HasFactory;
-    public function tactics()
+    protected $primaryKey = 'KPIMainID';
+    public function goal()
     {
-        return $this->belongsTo(Tactics::class, 'tacID','tacID');
+        return $this->belongsTo(Goals::class, 'goalID','goalID');
     }
 }

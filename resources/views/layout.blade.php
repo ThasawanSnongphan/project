@@ -96,8 +96,8 @@
                                             <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
                                             <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
                                             <li><a href="/goal">เป้าประสงค์</a></li>
-                                            <li><a href="/tactics">กลยุทธ์</a></li>
                                             <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
+                                            <li><a href="/tactics">กลยุทธ์</a></li>
                                             <li><a href="/plan">แผนงานมหาลัย</a></li>
                                             <li><a href="/fund">กองทุน</a></li>
                                             <li><a href="/Expense">งบรายจ่าย</a></li>

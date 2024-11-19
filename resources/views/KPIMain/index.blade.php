@@ -69,7 +69,6 @@
                                         <th>แผนยุทธศาสตร์</th>
                                         <th>ประเด็นยุทธศาสตร์</th>
                                         <th>เป้าประสงค์</th>
-                                        <th>กลยุทธ์</th>
                                         <th>KPI</th>
                                         <th>หน่วยนับ</th>
                                         <th>ค่าเป้าหมาย</th>
@@ -79,18 +78,17 @@
                                 <tbody>
                                     @php
                                         $sortedKPI = $KPIMain->sortBy(function ($KPIMain) {
-                                            return $KPIMain->tactics->goal->SFA->strategic->year->name ?? 0; // กำหนดค่าปีที่ต้องการเรียง
+                                            return $KPIMain->goal->SFA->strategic->year->name ?? 0; // กำหนดค่าปีที่ต้องการเรียง
                                         });
                                         $i=1;
                                     @endphp
                                     @foreach ($sortedKPI as $item )
                                         <tr>
                                             <th scope="row">{{$i}}</th>
-                                            <td>{{ $item->tactics->goal->SFA->strategic->year->name ?? 'ไม่พบปี' }}</td>
-                                            <td>{{ $item->tactics->goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
-                                            <td>{{ $item->tactics->goal->SFA->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
-                                            <td>{{ $item->tactics->goal->name ?? 'ไม่พบเป้าประสงค์' }}</td>
-                                            <td>{{ $tactics->firstWhere('tacID',$item->tacID)->name ?? 'ไม่พบกลยุทธ์' }}</td>
+                                            <td>{{ $item->goal->SFA->strategic->year->name ?? 'ไม่พบปี' }}</td>
+                                            <td>{{ $item->goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
+                                            <td>{{ $item->goal->SFA->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
+                                            <td>{{ $item->goal->name ?? 'ไม่พบเป้าประสงค์' }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->count }}</td>
                                             <td>{{ $item->target }}</td>

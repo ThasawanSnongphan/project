@@ -67,21 +67,12 @@
                         </div>
                     </div>
 
-                    <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <select id="tacID" name="tacID" class="form-control" required>
-                                <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                            </select>
-                        </div>
-                    </div>
+                   
 
                     <script>
                         const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
                         const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                         const goals = @json($goal); // ข้อมูลเป้าประสงค์
-                        const tactics = @json($tactics); // ข้อมูลกลยุทธ์
 
                         // ฟังก์ชันอัปเดต dropdown ของแผน
                         function updatePlanDropdown(selectedYearID) {
@@ -183,49 +174,11 @@
 
                             }
                         }
-
-                        // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-                        function updateTacticsDropdown(selectedGoalID) {
-                            const tacticsSelect = document.getElementById('tacID');
-                            tacticsSelect.innerHTML = '';
-
-                            if (!selectedGoalID) {
-                                const noTacticsOption = document.createElement('option');
-                                noTacticsOption.value = '';
-                                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                                tacticsSelect.appendChild(noTacticsOption);
-                                tacticsSelect.disabled = true;
-                                return;
-                            }
-
-                            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                            const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-                            if (filteredTactics.length === 0) {
-                                const noTacticsOption = document.createElement('option');
-                                noTacticsOption.value = '';
-                                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                                tacticsSelect.appendChild(noTacticsOption);
-                                tacticsSelect.disabled = true;
-                            } else {
-                                tacticsSelect.disabled = false;
-                                filteredTactics.forEach(tactic => {
-                                    const option = document.createElement('option');
-                                    option.value = tactic.tacID;
-                                    option.textContent = tactic.name;
-                                    tacticsSelect.appendChild(option);
-                                });
-                            }
-                            // แสดงกลยุทธ์ใน dropdown
-
-                        }
-
                         // Event listeners สำหรับ dropdown ต่าง ๆ
                         window.onload = function() {
                             const yearSelect = document.getElementById('year');
                             const planSelect = document.getElementById('straID');
                             const SFASelect = document.getElementById('SFAID');
-                            const goalSelect = document.getElementById('goalID');
 
 
                             // เมื่อเปลี่ยนปีงบประมาณ
@@ -246,10 +199,6 @@
                                 updateGoalDropdown(selectedSFAID);
                             });
 
-                            goalSelect.addEventListener('change', function() {
-                                const selectedGoalID = this.value;
-                                updateTacticsDropdown(selectedGoalID);
-                            });
 
                             // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
                             const defaultYearID = yearSelect.value;

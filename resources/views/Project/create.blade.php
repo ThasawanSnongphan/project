@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form method="POST" action="/projectInsert"novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="/projectSave"novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-md-3"></div>
                         <div class="col-md-9 border mb-2
-                          p-2"> 
+                          p-2">
                             <div class="row field item form-group align-items-center">
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
@@ -130,7 +130,8 @@
                                 </div>
                             </div>
                             <div class="row field item form-group align-items-center">
-                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                <label for="title"
+                                    class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
                                     <select id="goalID" name="goalID[]" class="form-control" required>
@@ -147,13 +148,13 @@
                                     </select>
                                 </div>
                             </div>
-    
-    
+
+
                         </div>
                         {{-- <div class="col-md-3"></div> --}}
-                        
-                       
-                        
+
+
+
 
                         <div id="insertStrategic"></div>
 
@@ -478,16 +479,20 @@
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu1[]" id="">
+                                        <input class="form-control costInput" type="text" name="costQu1[]"
+                                            id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu2[]" id="">
+                                        <input class="form-control costInput" type="text" name="costQu2[]"
+                                            id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu3[]" id="">
+                                        <input class="form-control costInput" type="text" name="costQu3[]"
+                                            id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu4[]" id="">
+                                        <input class="form-control costInput" type="text" name="costQu4[]"
+                                            id="">
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -512,7 +517,7 @@
 
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <input class="form-control" type="text" name="affiliation" id="affiliation"
+                                <input class="form-control" type="text" name="affiliationText" id="affiliationText"
                                     required='required' data-validate-length-range="8,20" disabled />
 
                             </div>
@@ -562,10 +567,10 @@
                         <div class="ln_solid">
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
-                                    <button type='submit' class="btn btn-primary" value="บันทึก">บันทึก</button>
-
-                                    <button type='submit' class="btn btn-secondary" value="ส่ง" disabled>ส่ง</button>
-
+                                    <button type='submit' class="btn btn-primary"
+                                        onclick="submitButton('save')">บันทึก</button>
+                                    <button type='button' class="btn btn-primary"
+                                        onclick="submitButton('send')">ส่ง</button>
                                 </div>
                             </div>
                         </div>
@@ -585,8 +590,19 @@
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
-
         const proIn = @json($projectIntegrat);
+
+        
+
+        function submitButton(action) {
+            var form = document.getElementById('actionForm');
+            if (action === 'save') {
+                form.action = "/projectSave";
+            } else if (action === 'send') {
+                form.action = "/projectSend";
+            }
+            form.submit();
+        }
 
         function insertStrategic() {
             const mainContainer = document.createElement('div');
@@ -595,18 +611,18 @@
             // สร้าง label
             const straLabel = document.createElement('label');
             straLabel.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
-            straLabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            straLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
             straLabel.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
 
             // เพิ่ม label ลงใน mainContainer
             mainContainer.appendChild(straLabel);
 
             const divstraID = document.createElement('div');
-            divstraID.classList.add('col-md-6','col-sm-6');
-            
+            divstraID.classList.add('col-md-6', 'col-sm-6');
+
             const straDropdown = document.createElement('select');
             straDropdown.classList.add('form-control');
-            straDropdown.id='straID';
+            straDropdown.id = 'straID';
             mainContainer.appendChild(divstraID);
             divstraID.appendChild(straDropdown);
             const selectedYearID = document.getElementById('year').value;
@@ -616,39 +632,39 @@
             mainContainer1.classList.add('col-md-3');
 
             const mainContainer2 = document.createElement('div');
-            mainContainer2.classList.add('col-md-9','border','mb-2','p-2');
+            mainContainer2.classList.add('col-md-9', 'border', 'mb-2', 'p-2');
 
             const mainContainerSFA = document.createElement('div');
-            mainContainerSFA.classList.add('row','field','item','form-group','align-items-center');
+            mainContainerSFA.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
             const SFALabel = document.createElement('label');
-            SFALabel.setAttribute('for','SFAInput');
-            SFALabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            SFALabel.setAttribute('for', 'SFAInput');
+            SFALabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
             SFALabel.textContent = 'ประเด็นยุทธศาสตร์';
             mainContainerSFA.appendChild(SFALabel);
 
             const divSFA = document.createElement('div');
-            divSFA.classList.add('col-md-6','col-sm-6');
+            divSFA.classList.add('col-md-6', 'col-sm-6');
 
             const SFADropdown = document.createElement('select');
             SFADropdown.classList.add('form-control');
-            SFADropdown.id='SFAID';
-            SFADropdown.innerHTML='';
+            SFADropdown.id = 'SFAID';
+            SFADropdown.innerHTML = '';
             mainContainer2.appendChild(mainContainerSFA);
             mainContainerSFA.appendChild(divSFA);
             divSFA.appendChild(SFADropdown);
 
             const mainContainerGoal = document.createElement('div');
-            mainContainerGoal.classList.add('row','field','item','form-group','align-items-center');
+            mainContainerGoal.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
             const goalLabel = document.createElement('label');
-            goalLabel.setAttribute('for','goalInput');
-            goalLabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            goalLabel.setAttribute('for', 'goalInput');
+            goalLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
             goalLabel.textContent = 'เป้าประสงค์';
             mainContainerGoal.appendChild(goalLabel);
 
             const divGoal = document.createElement('div');
-            divGoal.classList.add('col-md-6','col-sm-6');
+            divGoal.classList.add('col-md-6', 'col-sm-6');
 
             const goalDropdown = document.createElement('select');
             goalDropdown.classList.add('form-control');
@@ -657,14 +673,14 @@
             mainContainer2.appendChild(mainContainerGoal);
             mainContainerGoal.appendChild(divGoal);
             divGoal.appendChild(goalDropdown);
-            
+
 
             // ตอนนี้ mainContainer จะมีทั้ง label และ input
             const container = document.getElementById('insertStrategic');
             container.appendChild(mainContainer);
             container.appendChild(mainContainer1);
             container.appendChild(mainContainer2);
-             // หรือเพิ่มไปที่ container อื่น
+            // หรือเพิ่มไปที่ container อื่น
         }
 
         function insertObj() {
@@ -1154,6 +1170,7 @@
                 goalSelect.appendChild(noGoalOption);
                 goalSelect.disabled = true;
                 updateTacticsDropdown(null);
+                updateKPIMain(null);
                 return;
             }
 
@@ -1167,6 +1184,7 @@
                 goalSelect.appendChild(noGoalOption);
                 goalSelect.disabled = true;
                 updateTacticsDropdown(null);
+                updateKPIMain(null);
             } else {
                 goalSelect.disabled = false;
                 filteredGoals.forEach(goal => {
@@ -1176,6 +1194,7 @@
                     goalSelect.appendChild(option);
                 });
                 updateTacticsDropdown(filteredGoals[0].goalID);
+                updateKPIMain(filteredGoals[0].goalID);
 
             }
         }
@@ -1220,7 +1239,8 @@
         }
 
 
-        function updateKPIMain(selectedtacID) {
+        function updateKPIMain(selectedGoalID) {
+
             const KPIMainSelect = document.getElementById('KPIMain');
             const countMainInput = document.getElementById('countMain');
             const targetInput = document.getElementById('targetMain');
@@ -1229,7 +1249,7 @@
             KPIMainSelect.innerHTML = '';
 
             // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-            if (!selectedtacID) {
+            if (!selectedGoalID) {
                 KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));
                 KPIMainSelect.disabled = true;
                 countMainInput.value = 'ไม่มีหน่วยนับ';
@@ -1238,7 +1258,7 @@
             }
 
             // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
-            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.tacID == selectedtacID);
+            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
 
             if (filteredKPIMains.length === 0) {
                 KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));

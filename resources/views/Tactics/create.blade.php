@@ -64,10 +64,85 @@
                         </div>
                     </div>
 
+                    <div class="field item form-group">
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="textt" name="name" id="name" required='required'
+                                data-validate-length-range="8,20" />
+                            @error('name')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+
+                    </div>
+
+                    <div class="field item form-group">
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <select id="KPIMainID" name="KPIMainID" class="form-control" required>
+
+                            </select>
+                        </div>
+                        <div class="col-md-1 col-sm-1 ">
+                            <button type='button' class="btn btn-primary" id="addKPIButton"
+                                onclick="insertKPIMain()">เพิ่ม</button>
+                        </div>
+                    </div>
+                    <div id="insertKPIMain"></div>
+
+
                     <script>
                         const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
                         const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                         const goals = @json($goal); // ข้อมูลเป้าประสงค์
+                        const KPIMains = @json($KPIMain);
+
+                        function insertKPIMain() {
+                            const mainContainer = document.createElement('div');
+                            mainContainer.classList.add('field', 'item', 'form-group');
+
+                            const KPIMainLabel = document.createElement('label');
+                            KPIMainLabel.setAttribute('for', 'KPIIMainInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
+                            KPIMainLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
+                            KPIMainLabel.textContent = 'ตัวชี้วัด*'; // ตั้งข้อความใน label
+
+                            mainContainer.appendChild(KPIMainLabel);
+
+                            const colKPIMain = document.createElement('div');
+                            colKPIMain.classList.add('col-md-6', 'col-sm-6');
+
+                            const KPIMainDropdown = document.createElement('select');
+                            KPIMainDropdown.classList.add('form-control');
+                            // KPIMainDropdown.id = 'KPIMain1';
+                            KPIMainDropdown.name = 'KPIMain[]';
+
+                            // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
+                            // KPIMainDropdown.innerHTML = '';
+
+                            colKPIMain.appendChild(KPIMainDropdown);
+                            mainContainer.appendChild(colKPIMain);
+
+                            const deleteButton = document.createElement('button');
+                            deleteButton.type = 'button';
+                            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+                            deleteButton.textContent = 'ลบ';
+                            deleteButton.onclick = function() {
+                                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+                            };
+
+                            // เพิ่มปุ่มลบลงใน mainContainer
+                            mainContainer.appendChild(deleteButton);
+
+
+
+                            document.getElementById('insertKPIMain').appendChild(mainContainer);
+
+                        }
+
 
                         // ฟังก์ชันอัปเดต dropdown ของแผน
                         function updatePlanDropdown(selectedYearID) {
@@ -99,7 +174,7 @@
                         function updateIssueDropdown(selectedPlanID) {
                             const issueSelect = document.getElementById('SFAID');
                             issueSelect.innerHTML = '';
-                            
+
                             if (!selectedPlanID) {
                                 const noIssueOption = document.createElement('option');
                                 noIssueOption.value = '';
@@ -136,12 +211,13 @@
                             const goalSelect = document.getElementById('goalID');
                             goalSelect.innerHTML = '';
 
-                            if(!selectedSFAID){
+                            if (!selectedSFAID) {
                                 const noGoalOption = document.createElement('option');
-                                noGoalOption.value='';
-                                noGoalOption.textContent='ไม่มีเป้าประสงค์';
+                                noGoalOption.value = '';
+                                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                 goalSelect.appendChild(noGoalOption);
                                 goalSelect.disabled = true;
+                                updateKPIMainDropdown(null);
                                 return;
                             }
 
@@ -154,6 +230,7 @@
                                 noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                 goalSelect.appendChild(noGoalOption);
                                 goalSelect.disabled = true;
+                                updateKPIMainDropdown(null);
                             } else {
                                 goalSelect.disabled = false;
                                 filteredGoals.forEach(goal => {
@@ -162,16 +239,53 @@
                                     option.textContent = goal.name;
                                     goalSelect.appendChild(option);
                                 });
+                                updateKPIMainDropdown(filteredGoals[0].goalID);
                             }
 
                         }
+
+                        function updateKPIMainDropdown(selectedgoalID) {
+                            const KPIMainSelect = document.getElementById('KPIMainID');
+                            KPIMainSelect.innerHTML = '';
+
+                            if (!selectedgoalID) {
+                                const noKPIMainOption = document.createElement('option');
+                                noKPIMainOption.value = '';
+                                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                KPIMainSelect.appendChild(noKPIMainOption);
+                                KPIMainSelect.disabled = true;
+                                return;
+                            }
+
+                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+
+                            if (filteredKPIMain.length === 0) {
+                                const noKPIMainOption = document.createElement('option');
+                                noKPIMainOption.value = '';
+                                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                KPIMainSelect.appendChild(noKPIMainOption);
+                                KPIMainSelect.disabled = true;
+                            } else {
+                                KPIMainSelect.disabled = false;
+                                filteredKPIMain.forEach(KPIMain => {
+                                    const option = document.createElement('option');
+                                    option.value = KPIMain.KPIMainID;
+                                    option.textContent = KPIMain.name;
+                                    KPIMainSelect.appendChild(option);
+                                });
+                            }
+                        }
+
+
+
+
 
                         // Event listeners สำหรับ dropdown ต่าง ๆ
                         window.onload = function() {
                             const yearSelect = document.getElementById('year');
                             const planSelect = document.getElementById('straID');
                             const issueSelect = document.getElementById('SFAID');
-
+                            const goalSelect = document.getElementById('goalID');
 
                             // เมื่อเปลี่ยนปีงบประมาณ
                             yearSelect.addEventListener('change', function() {
@@ -190,6 +304,11 @@
                                 updateGoalDropdown(selectedSFAID);
                             });
 
+                            goalSelect.addEventListener('change', function() {
+                                const selectedgoalID = this.value;
+                                updateKPIMainDropdown(selectedgoalID);
+                            });
+
 
 
                             // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
@@ -200,20 +319,7 @@
                         };
                     </script>
 
-                    <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="textt" name="name" id="name" required='required'
-                                data-validate-length-range="8,20" />
-                            @error('name')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
 
-                    </div>
 
 
 

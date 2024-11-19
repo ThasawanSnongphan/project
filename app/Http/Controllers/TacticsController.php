@@ -7,6 +7,8 @@ use App\Models\Strategics;
 use App\Models\StrategicIssues;
 use App\Models\Goals;
 use App\Models\Tactics;
+use App\Models\KPIMains;
+use App\Models\KPIMainMapTactics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,12 +25,16 @@ class TacticsController extends Controller
         $strategic=Strategics::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
-        $tactics=Tactics::all();
-        return view('Tactics.index',compact('goal','tactics','SFA','strategic','year'));
+        $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->get();
+        $KPIMainMap=Tactics::with('KPIMain')->get();
+        $KPIMain=KPIMains::all();
+
+        return view('Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain','KPIMainMap'));
     }
 
     function insert(Request $request){
         $goal = Goals::where('goalID',$request->input('goalID'))->first();
+        $KPIMain = KPIMains::where('KPIMainID',$request->input('KPIMainID'))->first();
         $request->validate(
             [
                 'name'=>'required'
@@ -38,6 +44,15 @@ class TacticsController extends Controller
         $tactics->name = $request->input('name');
         $tactics->goalID = $goal->goalID;
         $tactics->save();
+
+        $tactics = $tactics->fresh();
+
+        // $KPIMainMap = $request->input('KPIMainID');
+        $Map = new KPIMainMapTactics();
+        $Map->KPIMainID = $KPIMain->KPIMainID;
+        $Map->tacId = $tactics->tacID;
+        $Map->save();
+
         return redirect('/tactics');
     }
 

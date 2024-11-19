@@ -33,7 +33,7 @@
                                 <select id="year" name="year" class="form-control" required>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
-                                            {{ $item->yearID == $KPIMain->tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
+                                            {{ $item->yearID == $KPIMain->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>
@@ -71,21 +71,11 @@
                             </div>
                         </div>
 
-                        <div class="field item form-group">
-                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="tacID" name="tacID" class="form-control" required>
-                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                </select>
-                            </div>
-                        </div>
 
                         <script>
                             const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
                             const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                             const goals = @json($goal); // ข้อมูลเป้าประสงค์
-                            const tactics = @json($tactics); // ข้อมูลกลยุทธ์
 
                             // ฟังก์ชันอัปเดต dropdown ของแผน
                             function updatePlanDropdown(selectedYearID) {
@@ -107,13 +97,13 @@
                                         const option = document.createElement('option');
                                         option.value = plan.straID;
                                         option.textContent = plan.name;
-                                        if (plan.straID == '{{ $KPIMain->tactics->goal->SFA->straID }}') {
+                                        if (plan.straID == '{{ $KPIMain->goal->SFA->straID }}') {
                                             option.selected = true;
                                             updateIssueDropdown(plan.straID);
                                         }
                                         planSelect.appendChild(option);
                                     });
-                                    if (!filteredPlans.some(plan => plan.straID == '{{ $KPIMain->tactics->goal->SFA->straID }}')) {
+                                    if (!filteredPlans.some(plan => plan.straID == '{{ $KPIMain->goal->SFA->straID }}')) {
                                         updateIssueDropdown(filteredPlans[0].straID);
                                     }
                                 }
@@ -149,13 +139,13 @@
                                         const option = document.createElement('option');
                                         option.value = issue.SFAID;
                                         option.textContent = issue.name;
-                                        if (issue.SFAID == '{{ $KPIMain->tactics->goal->SFAID }}') {
+                                        if (issue.SFAID == '{{ $KPIMain->goal->SFAID }}') {
                                             option.selected = true;
                                             updateGoalDropdown(issue.SFAID);
                                         }
                                         issueSelect.appendChild(option);
                                     });
-                                    if (!filteredIssues.some(issue => issue.SFAID == '{{ $KPIMain->tactics->goal->SFAID }}')) {
+                                    if (!filteredIssues.some(issue => issue.SFAID == '{{ $KPIMain->goal->SFAID }}')) {
                                         updateGoalDropdown(filteredIssues[0].SFAID);
                                     }
 
@@ -193,57 +183,14 @@
                                         const option = document.createElement('option');
                                         option.value = goal.goalID;
                                         option.textContent = goal.name;
-                                        if (goal.goalID == '{{ $KPIMain->tactics->goalID }}') {
+                                        if (goal.goalID == '{{ $KPIMain->goalID }}') {
                                             option.selected = true;
-                                            updateTacticsDropdown(goal.goalID);
                                         }
                                         goalSelect.appendChild(option);
                                     });
-                                    if (!filteredGoals.some(goal => goal.goalID == '{{ $KPIMain->tactics->goalID }}')) {
-                                        updateTacticsDropdown(filteredGoals[0].goalID);
-                                    }
 
 
                                 }
-                            }
-
-                            // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-                            function updateTacticsDropdown(selectedGoalID) {
-                                const tacticsSelect = document.getElementById('tacID');
-                                tacticsSelect.innerHTML = '';
-
-                                if (!selectedGoalID) {
-                                    const noTacticsOption = document.createElement('option');
-                                    noTacticsOption.value = '';
-                                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                                    tacticsSelect.appendChild(noTacticsOption);
-                                    tacticsSelect.disabled = true;
-                                    return;
-                                }
-
-                                // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                                const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-                                if (filteredTactics.length === 0) {
-                                    const noTacticsOption = document.createElement('option');
-                                    noTacticsOption.value = '';
-                                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                                    tacticsSelect.appendChild(noTacticsOption);
-                                    tacticsSelect.disabled = true;
-                                } else {
-                                    tacticsSelect.disabled = false;
-                                    filteredTactics.forEach(tactic => {
-                                        const option = document.createElement('option');
-                                        option.value = tactic.tacID;
-                                        option.textContent = tactic.name;
-                                        if(tactic.tacID == '{{$KPIMain->tacID}}'){
-                                            option.selected = true;
-                                        }
-                                        tacticsSelect.appendChild(option);
-                                    });
-                                }
-                                // แสดงกลยุทธ์ใน dropdown
-
                             }
 
                             // Event listeners สำหรับ dropdown ต่าง ๆ
@@ -251,7 +198,6 @@
                                 const yearSelect = document.getElementById('year');
                                 const planSelect = document.getElementById('straID');
                                 const SFASelect = document.getElementById('SFAID');
-                                const goalSelect = document.getElementById('goalID');
 
 
                                 // เมื่อเปลี่ยนปีงบประมาณ
@@ -270,11 +216,6 @@
                                 SFASelect.addEventListener('change', function() {
                                     const selectedSFAID = this.value;
                                     updateGoalDropdown(selectedSFAID);
-                                });
-
-                                goalSelect.addEventListener('change', function() {
-                                    const selectedGoalID = this.value;
-                                    updateTacticsDropdown(selectedGoalID);
                                 });
 
                                 // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
