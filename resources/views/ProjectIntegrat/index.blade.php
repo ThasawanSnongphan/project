@@ -26,8 +26,8 @@
                 @include('ProjectIntegrat.create')
 
                 <div class="row" style="display: block;">
-                    <div class="col-md-3 col-sm-3  "></div>
-                    <div class="col-md-6 col-sm-6  ">
+                    <div class="col-md-1 col-sm-1  "></div>
+                    <div class="col-md-10 col-sm-10  ">
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>การบูรณาการ</h2>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="x_content">
 
-                                <table class="table table-striped text-center">
+                                <table id="example" class="display">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-3  "></div>
+                    <div class="col-md-1 col-sm-1  "></div>
                 </div>
             </div>
         </div>

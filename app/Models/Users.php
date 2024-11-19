@@ -11,8 +11,5 @@ class Users extends Model
 {
     use HasFactory,Notifiable;
 
-    protected $fillable = [
-        'username',
-        ''
-    ];
+    protected $primaryKey = 'userID';
 }

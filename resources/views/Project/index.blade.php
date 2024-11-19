@@ -3,7 +3,24 @@
 @section('content')
     {{-- @include('Project.create') --}}
 
-    <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
+   
+
+    <div class="field item form-group  d-flex justify-content-between ">
+        <label class="col-form-label col-md-1 col-sm-1 " for="heard" >ปีงบประมาณ*</label>
+        <div class="col-md-2 col-sm-2 m-2 ">
+            <select name="year" id="yearID" class="form-control">
+                <option data-year="ทั้งหมด">ทั้งหมด</option>
+                @foreach ($year as $year)
+                    <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
+                        {{ $year->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="ml-auto">
+            <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
+        </div>
+       
+    </div>
 
     <table id="example" class="display">
         <thead>
@@ -28,7 +45,7 @@
             @foreach ($project as $item)
                 <tr>
                     <td>{{ $i }}</td>
-                    <td>{{ $item->name }}</td>
+                    <td data-project="{{ $item->proID }}">{{ $item->name }}</td>
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
@@ -92,5 +109,36 @@
         });
     </script> --}}
     {{-- <a type='submit' class="btn btn-primary" href="/projectcreate">สร้างโปรเจค</a> --}}
+    <script>
+        // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
+        document.getElementById('yearID').addEventListener('change', function() {
+            // ดึงค่า "data-year" จาก option ที่ถูกเลือก
+            var selectedOption = this.options[this.selectedIndex];
+            var year = selectedOption.getAttribute('data-year');
+            console.log(year);
+
+            const projectYear = @json($projectYear);
+            console.log(projectYear);
+            const tableRows = document.querySelectorAll("table tbody tr");
+
+
+            tableRows.forEach(row => {
+                const cell = row.querySelector('td[data-project]');
+                if(cell){
+                const projectID = cell.getAttribute('data-project');
+                const project = projectYear.find(project => project.proID == projectID);
+                console.log(projectID);
+                console.log(project);
+
+                // Check if the row should be displayed
+                if (project &&(year === "" || year === "ทั้งหมด" || project.yearID == year)) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+            });
+        });
+    </script>
 
 @endsection

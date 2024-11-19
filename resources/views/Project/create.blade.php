@@ -116,37 +116,44 @@
                                     onclick="insertStrategic()">เพิ่มความสอดคล้อง</button>
                             </div>
                         </div>
-
-                        <div class="row field item form-group align-items-center">
-                            <label for="title"
-                                class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="SFAID" name="SFAID[]" class="form-control" required>
-                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                </select>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9 border mb-2
+                          p-2"> 
+                            <div class="row field item form-group align-items-center">
+                                <label for="title"
+                                    class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="SFAID" name="SFAID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row field item form-group align-items-center">
-                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="goalID" name="goalID[]" class="form-control" required>
-                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                </select>
+                            <div class="row field item form-group align-items-center">
+                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="goalID" name="goalID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row field item form-group align-items-center">
-                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="tacID" name="tacID[]" class="form-control" required>
-                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                </select>
+                            <div class="row field item form-group align-items-center">
+                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="tacID" name="tacID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
                             </div>
+    
+    
                         </div>
+                        {{-- <div class="col-md-3"></div> --}}
+                        
+                       
+                        
 
                         <div id="insertStrategic"></div>
 
@@ -586,13 +593,13 @@
             mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
             // สร้าง label
-            const label = document.createElement('label');
-            label.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
-            label.classList.add('col-form-laabel','col-md-3','col-sm-3','label-align');
-            label.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
+            const straLabel = document.createElement('label');
+            straLabel.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
+            straLabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            straLabel.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
 
             // เพิ่ม label ลงใน mainContainer
-            mainContainer.appendChild(label);
+            mainContainer.appendChild(straLabel);
 
             const divstraID = document.createElement('div');
             divstraID.classList.add('col-md-6','col-sm-6');
@@ -600,13 +607,64 @@
             const straDropdown = document.createElement('select');
             straDropdown.classList.add('form-control');
             straDropdown.id='straID';
-            straDropdown.innerHTML='';
             mainContainer.appendChild(divstraID);
             divstraID.appendChild(straDropdown);
+            const selectedYearID = document.getElementById('year').value;
+            updatePlanDropdown(selectedYearID);
+
+            const mainContainer1 = document.createElement('div');
+            mainContainer1.classList.add('col-md-3');
+
+            const mainContainer2 = document.createElement('div');
+            mainContainer2.classList.add('col-md-9','border','mb-2','p-2');
+
+            const mainContainerSFA = document.createElement('div');
+            mainContainerSFA.classList.add('row','field','item','form-group','align-items-center');
+
+            const SFALabel = document.createElement('label');
+            SFALabel.setAttribute('for','SFAInput');
+            SFALabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            SFALabel.textContent = 'ประเด็นยุทธศาสตร์';
+            mainContainerSFA.appendChild(SFALabel);
+
+            const divSFA = document.createElement('div');
+            divSFA.classList.add('col-md-6','col-sm-6');
+
+            const SFADropdown = document.createElement('select');
+            SFADropdown.classList.add('form-control');
+            SFADropdown.id='SFAID';
+            SFADropdown.innerHTML='';
+            mainContainer2.appendChild(mainContainerSFA);
+            mainContainerSFA.appendChild(divSFA);
+            divSFA.appendChild(SFADropdown);
+
+            const mainContainerGoal = document.createElement('div');
+            mainContainerGoal.classList.add('row','field','item','form-group','align-items-center');
+
+            const goalLabel = document.createElement('label');
+            goalLabel.setAttribute('for','goalInput');
+            goalLabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+            goalLabel.textContent = 'เป้าประสงค์';
+            mainContainerGoal.appendChild(goalLabel);
+
+            const divGoal = document.createElement('div');
+            divGoal.classList.add('col-md-6','col-sm-6');
+
+            const goalDropdown = document.createElement('select');
+            goalDropdown.classList.add('form-control');
+            goalDropdown.id = 'goalID';
+            goalDropdown.innerHTML = '';
+            mainContainer2.appendChild(mainContainerGoal);
+            mainContainerGoal.appendChild(divGoal);
+            divGoal.appendChild(goalDropdown);
             
 
             // ตอนนี้ mainContainer จะมีทั้ง label และ input
-            document.getElementById('insertStrategic').appendChild(mainContainer); // หรือเพิ่มไปที่ container อื่น
+            const container = document.getElementById('insertStrategic');
+            container.appendChild(mainContainer);
+            container.appendChild(mainContainer1);
+            container.appendChild(mainContainer2);
+             // หรือเพิ่มไปที่ container อื่น
         }
 
         function insertObj() {
@@ -614,7 +672,7 @@
             mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
             const colMD3 = document.createElement('div');
-            colMD3.classList.add('col-md-3', 'col-ssm-3');
+            colMD3.classList.add('col-md-3', 'col-sm-3');
 
             const colMD6 = document.createElement('div');
             colMD6.classList.add('col-md-6', 'col-sm-6');
@@ -682,7 +740,7 @@
             mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
             const colMD3 = document.createElement('div');
-            colMD3.classList.add('col-md-3', 'col-ssm-3');
+            colMD3.classList.add('col-md-3', 'col-sm-3');
 
             const colMD6 = document.createElement('div');
             colMD6.classList.add('col-md-6', 'col-sm-6');

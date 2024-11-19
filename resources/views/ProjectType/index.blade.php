@@ -49,7 +49,7 @@
                             </div>
                             <div class="x_content">
 
-                                <table class="table table-striped text-center">
+                                <table id="example" class="display">
                                     <thead>
                                         <tr>
                                             <th>#</th>

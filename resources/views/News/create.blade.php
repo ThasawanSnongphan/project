@@ -42,7 +42,7 @@
                         <label for="content" class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดข่าว<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <textarea required="required" name="content" id="content" rows="5 "></textarea>
+                            <textarea required="required" name="content" id="content" rows="5" class="form-control" ></textarea>
                             @error('content')
                                 <div class="m-2">
                                     <span class="text text-danger">{{ $message }}</span>

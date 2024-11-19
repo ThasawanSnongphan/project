@@ -33,9 +33,11 @@ use Illuminate\Support\Facades\DB;
 class ProjectController extends Controller
 {
     function index(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
         $project=Projects::all();
         $status=Status::all();
-        return view('Project.index',compact('project','status'));
+        return view('Project.index',compact('project','status','year','projectYearๅ'));
     }
     function create(){
         $user = Users::all();

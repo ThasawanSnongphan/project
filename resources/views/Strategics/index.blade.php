@@ -80,7 +80,10 @@
                                             <td>{{ $year->firstWhere('yearID', $stra->yearID)->name ?? 'ไม่ปีงบประมาณ' }}
                                             </td>
                                             <td>{{ $stra->name }}</td>
-                                            <td></td>
+                                            <td>
+                                                <input type="checkbox" class="js-switch" id="status"
+                                                    name="status" checked {{ old('Supply_Analyst') ? 'checked' : '' }} />
+                                            </td>
                                             <td>
                                                 <a href="{{ route('strategic.edit', $stra->straID) }}">
                                                     <i class="fa fa-pencil btn btn-warning"></i>

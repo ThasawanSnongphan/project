@@ -48,7 +48,7 @@
                         </div>
                         <div class="x_content">
 
-                            <table class="table table-striped text-center">
+                            <table id="example" class="display">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -68,7 +68,7 @@
                                             <th scope="row">{{$i}}</th>
                                             <td>{{$plan->firstWhere('planID',$item->planID)->name ?? 'ไม่พบแผนงายมหาลัย' }}</td>
                                             <td>{{$item->name}}</td>
-                                            <td></td>
+                                           
                                             <td>
                                                 <a
                                                         href="{{ route('fund.edit', $item->fundID) }}"><i

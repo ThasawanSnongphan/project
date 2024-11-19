@@ -9,6 +9,12 @@ class Projects extends Model
 {
     use HasFactory;
     protected $primaryKey = 'proID';
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class, 'yearID', 'yearID'); 
+        // 'year_id' คือคอลัมน์ FK ในตาราง projects, 'id' คือ PK ในตาราง years
+    }
     public function strategicMap()
     {
         return $this->hasMany(StrategicMap::class,'proID'); // หรือ hasOne ตามความสัมพันธ์

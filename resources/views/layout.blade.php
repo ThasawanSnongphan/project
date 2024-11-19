@@ -79,8 +79,10 @@
                     <br />
 
                     <!-- sidebar menu -->
-
-
+                    {{-- @php
+                    dd(auth()->user());
+                    @endphp --}}
+                    
                     @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">

@@ -75,9 +75,27 @@ class NewsController extends Controller
                 'img.nullable'=>'กรุณาใส่รูปภาพ'
             ]
         );
+
+        $news = DB::table('news')->where('id', $id)->first();
+
+         if ($request->hasFile('img')) {
+        // ลบรูปเก่า ถ้ามี
+        if ($news->img && file_exists(public_path('images/News/' . $news->img))) {
+            unlink(public_path('images/News/' . $news->img));
+        }
+
+        // เก็บรูปใหม่
+        $filename = $request->file('img')->getClientOriginalName();
+        $request->file('img')->move(public_path('images/News'), $filename);
+        } else {
+            // ใช้รูปเดิม
+            $filename = $news->img;
+        }
+
         $news=[
             'title'=>$request->title,
-            'content'=>$request->content
+            'content'=>$request->content,
+            'img'=>$filename
         ];
         DB::table('news')->where('id',$id)->update($news);
         return redirect('/'); 
