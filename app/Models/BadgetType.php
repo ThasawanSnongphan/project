@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class BadgetType extends Model
 {
     use HasFactory;
+    public function project()
+    {
+        return $this->belongsTo(Projects::class, 'proID','proID');
+    }
 }

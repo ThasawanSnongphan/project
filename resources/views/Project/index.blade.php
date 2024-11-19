@@ -45,7 +45,7 @@
             @foreach ($project as $item)
                 <tr>
                     <td>{{ $i }}</td>
-                    <td data-project="{{ $item->proID }}">{{ $item->name }}</td>
+                    <td data-project="{{ $item->proID }}"> <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }} </a> </td>
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>

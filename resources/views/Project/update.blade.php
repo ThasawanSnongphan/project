@@ -24,7 +24,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/projectInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="{{ route('project.update', $project->proID) }}"novalidate enctype="multipart/form-data">
                     @csrf
                     <div class="row field item form-group align-items-center">
                         <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span

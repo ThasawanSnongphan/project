@@ -37,7 +37,7 @@ class ProjectController extends Controller
         $projectYear = Projects::with('year')->get();
         $project=Projects::all();
         $status=Status::all();
-        return view('Project.index',compact('project','status','year','projectYearๅ'));
+        return view('Project.index',compact('project','status','year','projectYear'));
     }
     function create(){
         $user = Users::all();
@@ -132,14 +132,8 @@ class ProjectController extends Controller
                 $KPIProject->name = $KPI;
                 $KPIProject->count =  $KPICount[$index] ?? null;
                 $KPIProject->target = $KPITarget[$index] ?? null;
+                $KPIProject->proID = $project->proID;
                 $KPIProject->save();
-
-                $KPIProject = $KPIProject->fresh();
-
-                $KPIProjectMap = new KPIProjectMap();
-                $KPIProjectMap->KPIProID = $KPIProject->KPIProID;
-                $KPIProjectMap->ProID = $project->proID;
-                $KPIProjectMap->save();
             }
         }
 
@@ -216,6 +210,11 @@ class ProjectController extends Controller
         $costTypes=CostTypes::all();
        
         return view('Project.update',compact('project','year','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+    }
+
+    function report($id){
+        $project=DB::table('projects')->where('proID',$id)->first();
+        return view('Project.report',compact('project'));
     }
 
    
