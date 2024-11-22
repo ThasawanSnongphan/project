@@ -50,7 +50,7 @@ class PDFController extends Controller
         $project_integrats = ProjectIntegrat::all();
         $project_charecs = ProjectCharec::all();
         $objects = Objectives::all();
-        $users = Users::all();
+
 
 
         $config = include(config_path('config_pdf.php'));       // ดึงการตั้งค่าฟอนต์จาก config
@@ -113,7 +113,7 @@ class PDFController extends Controller
             <img src="' . public_path('images/logo_kmutnb.png') . '" style="width: 60px; height: auto;">
         </div>
         <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $years->name . '
-        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
+        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนืออิอิ
         </p>';
 
         $htmlContent .= '
