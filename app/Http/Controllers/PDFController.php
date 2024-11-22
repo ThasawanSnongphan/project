@@ -142,16 +142,6 @@ class PDFController extends Controller
             }
         }
         
-        // foreach ($project_charecs as $project_charec) {
-        //     $isChecked = ($projects->proChaID == $project_charec->proChaID) ? ' ✓' : '';
-        //     $htmlContent .= '
-        //         <span class="checkbox"> ' . $isChecked . ' </span> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        //     ';
-        // }
-        // <span class="checkbox checked">✓</span> &nbsp;  ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <input type="checkbox">' . $isChecked . ' &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <input type="checkbox" ' . $isChecked . '> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <span class="checkbox">' . $isChecked . '✓</span> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
         $htmlContent .= '
         <br><b>5. การบูรณาการโครงการ </b> <br> 
         ';
