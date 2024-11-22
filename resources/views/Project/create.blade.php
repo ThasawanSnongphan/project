@@ -1210,7 +1210,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-                updateKPIMain(null);
+                
                 return;
             }
 
@@ -1223,7 +1223,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-                updateKPIMain(null);
+               
             } else {
                 tacticsSelect.disabled = false;
                 filteredTactics.forEach(tactic => {
@@ -1232,7 +1232,7 @@
                     option.textContent = tactic.name;
                     tacticsSelect.appendChild(option);
                 });
-                updateKPIMain(filteredTactics[0].tacID);
+                
             }
             // แสดงกลยุทธ์ใน dropdown
 
