@@ -33,7 +33,7 @@ class YearController extends Controller
     }
 
     function delete($id){
-        DB::table('years')->where('id',$id)->delete();
+        DB::table('years')->where('yearID',$id)->delete();
         return redirect('/year');
     }
 }

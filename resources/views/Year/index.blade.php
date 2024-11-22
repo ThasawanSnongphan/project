@@ -68,7 +68,7 @@
                                                     <td>{{ $year->name }}</td>
                                                     <td>
                                                             <a href="{{ route('years.delete', $year->yearID) }}"
-                                                                onclick="return confirm('ต้องการลบข่าว {{ $year->name }} หรือไม่')"><i
+                                                                onclick="return confirm('ต้องการลบปี {{ $year->name }} หรือไม่')"><i
                                                                     class="fa fa-times btn btn-danger"></i></a>
                                                     </td>
                                                 </tr>
