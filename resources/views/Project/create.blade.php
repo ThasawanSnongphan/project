@@ -117,8 +117,7 @@
                             </div>
                         </div>
                         <div class="col-md-3"></div>
-                        <div class="col-md-9 border mb-2
-                          p-2">
+                        <div class="col-md-9 border mb-2 p-2">
                             <div class="row field item form-group align-items-center">
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
@@ -463,7 +462,7 @@
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
                                         <select id="expID" name="expID" class="form-control" required>
-                                            <option value="" disabled selected>งบรายจ่าย</option>
+                                           
                                         </select>
                                     </div>
 
@@ -531,7 +530,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
                                     required='required' data-validate-length-range="8,20" />
-                                @error('object')
+                                @error('benefit')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
@@ -549,9 +548,9 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="file" name="file" id="object"
+                                <input class="form-control" type="file" name="file[]" id="file"
                                     required='required' data-validate-length-range="8,20" />
-                                @error('object')
+                                @error('file')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
@@ -1240,17 +1239,23 @@
 
 
         function updateKPIMain(selectedGoalID) {
-
+            console.log(selectedGoalID);
+            
             const KPIMainSelect = document.getElementById('KPIMain');
             const countMainInput = document.getElementById('countMain');
             const targetInput = document.getElementById('targetMain');
 
             // ล้างค่าตัวเลือกใน KPIMain
             KPIMainSelect.innerHTML = '';
+            countMainInput.innerHTML = '';
+            targetInput.innerHTML = '';
 
             // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
             if (!selectedGoalID) {
-                KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value='';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIMainSelect.appendChild(noKPIMainOption);
                 KPIMainSelect.disabled = true;
                 countMainInput.value = 'ไม่มีหน่วยนับ';
                 targetInput.value = 'ไม่มีค่าเป้าหมาย';
@@ -1259,9 +1264,13 @@
 
             // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
             const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-
+            // console.log(filteredKPIMains);
+            
             if (filteredKPIMains.length === 0) {
-                KPIMainSelect.appendChild(new Option('ไม่มีตัวชี้วัดของแผน', ''));
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value='';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIMainSelect.appendChild(noKPIMainOption);
                 KPIMainSelect.disabled = true;
                 countMainInput.value = 'ไม่มีหน่วยนับ';
                 targetInput.value = 'ไม่มีค่าเป้าหมาย';
@@ -1269,7 +1278,10 @@
                 // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
                 KPIMainSelect.disabled = false;
                 filteredKPIMains.forEach(KPIMain => {
-                    KPIMainSelect.appendChild(new Option(KPIMain.name, KPIMain.KPIMainID));
+                    const option = document.createElement('option');
+                    option.value = KPIMain.KPIMainID;
+                    option.textContent = KPIMain.name;
+                    KPIMainSelect.appendChild(option);
                 });
 
                 // กำหนดค่าเริ่มต้นให้กับ input
@@ -1366,7 +1378,6 @@
             const StrategicSelect = document.getElementById('straID');
             const SFASelect = document.getElementById('SFAID');
             const goalSelect = document.getElementById('goalID');
-            const tacSelect = document.getElementById('tacID');
 
             const planSelect = document.getElementById('planID');
             const EXPSelect = document.getElementById('expID');
@@ -1394,11 +1405,7 @@
             goalSelect.addEventListener('change', function() {
                 const selectedGoalID = this.value;
                 updateTacticsDropdown(selectedGoalID);
-            });
-
-            tacSelect.addEventListener('change', function() {
-                const selectedtacID = this.value;
-                updateKPIMain(selectedtacID);
+                updateKPIMain(selectedGoalID);
             });
 
 

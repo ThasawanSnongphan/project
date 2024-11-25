@@ -213,11 +213,6 @@ class ProjectController extends Controller
 
         $project = $project->fresh();
 
-        
-       
-            
-
-
         $objDetail = $request->input('obj');
         if(is_array($objDetail)) {
             foreach($objDetail as $index => $obj){
@@ -228,16 +223,16 @@ class ProjectController extends Controller
             }
         }
 
-        // $straMap = new StrategicMap();
-        // $straMap->proID = $project->proID;
-        // $straMap->straID = $strategic->straID;
-        // $straMap->SFAID = $SFA->SFAID;
-        // $straMap->goalID = $goal->goalID;
-        // $straMap->tacID = $tactics->tacID;
-        // if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
-        // $straMap->KPIMainID = $KPIMain->KPIMainID;
-        // }
-        // $straMap->save();
+        $straMap = new StrategicMap();
+        $straMap->proID = $project->proID;
+        $straMap->straID = $strategic->straID;
+        $straMap->SFAID = $SFA->SFAID;
+        $straMap->goalID = $goal->goalID;
+        $straMap->tacID = $tactics->tacID;
+        if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
+        $straMap->KPIMainID = $KPIMain->KPIMainID;
+        }
+        $straMap->save();
 
         $KPIName = $request->input('KPIProject') ;
         $KPICount =  $request->input('countProject') ;
@@ -307,6 +302,7 @@ class ProjectController extends Controller
     function edit($id){
         // $project = Projects::with('strategicMap')->find($proID);
         // $project=DB::table('projects')->where('proID',$id)->first();
+        $user = Users::all();
         $project=Projects::with('strategicMap')->where('proID',$id)->first();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
@@ -324,7 +320,22 @@ class ProjectController extends Controller
         $expanses = ExpenseBadgets::all();
         $costTypes=CostTypes::all();
        
-        return view('Project.update',compact('project','year','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+        return view('Project.update',compact('user','project','year','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+    }
+
+    function update(Request $request,$id){
+        $project=[
+            'name'=>$request->name,
+            'format'=>$request->format,
+            'princiDetail'=>$request->principle,
+            'proTypeID'=>$request->proTypeID,
+        ];
+        $straMap=[
+            'KPIMainID'=>$request->KPIMainID[0],
+        ];
+        DB::table('projects')->where('proID',$id)->update($project);
+        DB::table('strategic_maps')->where('proID',$id)->update($straMap);
+        return redirect('/project');
     }
 
     function report($id){
