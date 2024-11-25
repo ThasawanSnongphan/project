@@ -36,7 +36,7 @@ class PDFController extends Controller
 
     public function db_gen($id)
     {
-        
+
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
 
@@ -141,17 +141,7 @@ class PDFController extends Controller
                 ';
             }
         }
-        
-        // foreach ($project_charecs as $project_charec) {
-        //     $isChecked = ($projects->proChaID == $project_charec->proChaID) ? ' ✓' : '';
-        //     $htmlContent .= '
-        //         <span class="checkbox"> ' . $isChecked . ' </span> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        //     ';
-        // }
-        // <span class="checkbox checked">✓</span> &nbsp;  ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <input type="checkbox">' . $isChecked . ' &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <input type="checkbox" ' . $isChecked . '> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
-        // <span class="checkbox">' . $isChecked . '✓</span> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
+
         $htmlContent .= '
         <br><b>5. การบูรณาการโครงการ </b> <br> 
         ';
@@ -168,7 +158,7 @@ class PDFController extends Controller
             }
         }
 
-        
+
 
         $htmlContent .= '
         <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
@@ -196,7 +186,7 @@ class PDFController extends Controller
                 $htmlContent .= '
                     &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->name . ' <br>
                 ';
-            $counter++;
+                $counter++;
             }
         }
 
@@ -213,7 +203,7 @@ class PDFController extends Controller
             <tbody>';
 
 
-        if(DB::table('k_p_i_projects')->where('proID', $id)->exists()){
+        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
             foreach ($KPI_pros as $KPI_pro) {
                 $htmlContent .= '
@@ -224,7 +214,7 @@ class PDFController extends Controller
                     </tr>';
             }
         }
-        
+
         $htmlContent .= '
             </tbody>
         </table>';
@@ -274,11 +264,11 @@ class PDFController extends Controller
 
         if (DB::table('steps')->where('proID', $id)->exists()) {
             $pro_steps = DB::table('steps')->where('proID', $id)->get();
-        
+
             foreach ($pro_steps as $index => $step) {
                 $stepName = $step->name ?? 'N/A'; // ใช้ชื่อคอลัมน์ที่ถูกต้อง
                 $highlight = $step->highlight ?? ''; // ตรวจสอบว่ามี highlight หรือไม่
-        
+
                 $htmlContent .= '
                     <tr>
                         <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
@@ -298,7 +288,7 @@ class PDFController extends Controller
                 ';
             }
         }
-        
+
 
         $htmlContent .= '
                 </tbody>
@@ -313,10 +303,22 @@ class PDFController extends Controller
 
 
         // if ($projects->badID == $badget_types->badID) {
-        //     $htmlContent .= '
-        //         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $badget_types->name . '<br>
-        //     ';
-        // }
+        if ($projects && $badget_types && $projects->badID == $badget_types->badID) {
+            $htmlContent .= '
+                <div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $badget_types->name . '<br>
+                </div>
+                
+            ';
+        }
+        else{
+            $htmlContent .= '
+                <div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ไม่เข้า งง <br>
+                </div>
+                
+            ';
+        }
 
         // $htmlContent .= '
             
@@ -325,7 +327,7 @@ class PDFController extends Controller
         //     </div>
         // ';
 
-        
+
 
         $htmlContent .= '
             <b>13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท ) </b><br>
@@ -392,7 +394,7 @@ class PDFController extends Controller
 
         $htmlContent .= '';
 
-            if (DB::table('benefits')->where('proID', $id)->exists()) {
+        if (DB::table('benefits')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $bnfs = DB::table('benefits')->where('proID', $id)->get();
 
@@ -401,36 +403,10 @@ class PDFController extends Controller
                 $htmlContent .= '
                     &nbsp;&nbsp;&nbsp;&nbsp;15.' . $counter . ' ' . $bnf->detail . ' <br>
                 ';
-            $counter++;
+                $counter++;
             }
         }
 
-        // $pro_benes = Projects::with('benefits')->where('proID', 3)->get();
-        // $counter = 1;
-
-        // foreach ($pro_benes as $pro_bene) {
-        //     // ตรวจสอบว่ามี benefits หรือไม่
-        //     if ($pro_bene->benefits) { // ตรวจสอบว่า benefits ไม่ใช่ null
-        //         foreach ($pro_bene->benefits as $benefit) {
-        //             $beneDetail = $benefit->beneDetail;
-        //             $htmlContent .= '
-        //         &nbsp;&nbsp;&nbsp;&nbsp;15.' . $counter . ' ' . $beneDetail . ' <br>
-        //     ';
-        //             $counter++;
-        //         }
-        //     }
-        // }
-
-        // foreach ($pro_benes as $pro_bene) {
-        //     foreach ($pro_bene->benefits ?? [] as $benefit) {
-        //         $beneDetail = $benefit->beneDetail;
-        //         $htmlContent .= '
-        //             &nbsp;&nbsp;&nbsp;&nbsp;15.' . $counter . ' ' . $beneDetail . ' <br>
-        //         ';
-        //         $counter++;
-        //     }
-        // }
-        
 
         $htmlContent .= '
             <div style="width: 100%; height: 100px;"></div>
