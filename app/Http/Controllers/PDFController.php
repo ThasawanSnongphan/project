@@ -15,6 +15,8 @@ use App\Models\BadgetType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
+use DateTime;
+
 
 class PDFController extends Controller
 {
@@ -43,7 +45,7 @@ class PDFController extends Controller
         $username = Users::where('id', 10)->first();
         $years = Year::where('yearID', 9)->first();
         $projects = Projects::where('proID', $id)->first();
-        $badget_types = BadgetType::where('badID', $id)->first();
+        $badget_types = BadgetType::all();
         // $pro = Projects::where('proChaID');
         // $targets = Projects::with('target')->get();
         $KPI_pros = KPIProjects::all();
@@ -63,6 +65,7 @@ class PDFController extends Controller
         // $fileName = $username . '_report_' . '.pdf';
 
         $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $years->name);
+
 
         $stylesheet = "
         <style>
@@ -105,6 +108,11 @@ class PDFController extends Controller
             .checked {
                 background-color: #000;
                 color: white;
+
+            .highlight {
+                background-color: yellow; /* สีพื้นหลังสำหรับไฮไลต์ */
+            }
+
         </style>";
 
         // logo kmutnb
@@ -209,8 +217,8 @@ class PDFController extends Controller
                 $htmlContent .= '
                     <tr>
                         <td style="padding: 8px; text-align: left;">' . $KPI_pro->name . '</td>
-                        <td style="padding: 8px; text-align: left;">' . $KPI_pro->target . '</td>
                         <td style="padding: 8px; text-align: left;">' . $KPI_pro->count . '</td>
+                        <td style="padding: 8px; text-align: left;">' . $KPI_pro->target . '</td>
                     </tr>';
             }
         }
@@ -233,68 +241,147 @@ class PDFController extends Controller
 
         ';
 
+        // if (DB::table('steps')->where('proID', $id)->exists()) {
+        //     $pro_steps = DB::table('steps')->where('proID', $id)->get();
+
+        //     foreach ($pro_steps as $index => $step) {
+        //         $stepName = $step->name ?? 'N/A'; // ชื่อขั้นตอน
+        //         $startDate = $step->start ?? null; // วันที่เริ่มต้น
+        //         $endDate = $step->end ?? null; // วันที่สิ้นสุด
+
+        //         $highlightMonths = []; // เก็บเดือนที่ต้องไฮไลต์
+
+        //         if ($startDate && $endDate) {
+        //             // สร้างช่วงเดือนที่ต้องไฮไลต์
+        //             $start = new DateTime($startDate);
+        //             $end = new DateTime($endDate);
+        //             // แปลงปี ค.ศ. เป็น พ.ศ.
+        //             $startYear = $start->format('Y') + 543;
+        //             $endYear = $end->format('Y') + 543;
+
+
+        //             while ($start <= $end) {
+        //                 $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
+        //                 $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
+        //             }
+        //         }
+
+
+
+        //         // สร้าง HTML
+        //         $htmlContent .= '
+        //             <tr>
+        //                 <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
+        //                 <td' . (in_array(10, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ต.ค. -->
+        //                 <td' . (in_array(11, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ย. -->
+        //                 <td' . (in_array(12, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ธ.ค. -->
+        //                 <td' . (in_array(1, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ม.ค. -->
+        //                 <td' . (in_array(2, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.พ. -->
+        //                 <td' . (in_array(3, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มี.ค. -->
+        //                 <td' . (in_array(4, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- เม.ย. -->
+        //                 <td' . (in_array(5, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ค. -->
+        //                 <td' . (in_array(6, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มิ.ย. -->
+        //                 <td' . (in_array(7, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ค. -->
+        //                 <td' . (in_array(8, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ส.ค. -->
+        //                 <td' . (in_array(9, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ย. -->
+        //             </tr>
+        //         ';
+        //     }
+        // }
+
+        // $htmlContent .= '
+        //         </tbody>
+        //     </table>
+        // </body>
+        // ';
+
         $htmlContent .= '
-            <body>
-                <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
-                    <thead>
-                        <tr>
-                            <td rowspan="2">ขั้นตอนการดำเนินการ</td>
-                            <td colspan="3">พ.ศ. 2567</td>
-                            <td colspan="12">พ.ศ. 2568</td>
-                        </tr>
+        <body>
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+                <thead>
+                    <tr>
+                        <td rowspan="2">ขั้นตอนการดำเนินการ</td>
+                        <td colspan="3">พ.ศ. ' . ($startYear ?? 'N/A') . '</td>
+                        <td colspan="12">พ.ศ. ' . ($endYear ?? 'N/A') . '</td>
+                    </tr>
 
-                        <tr>
-                            <td>ต.ค.</td>
-                            <td>พ.ย.</td>
-                            <td>ธ.ค.</td>
-                            <td>ม.ค.</td>
-                            <td>ก.พ.</td>
-                            <td>มี.ค.</td>
-                            <td>เม.ย.</td>
-                            <td>พ.ค.</td>
-                            <td>มิ.ย.</th>
-                            <td>ก.ค.</td>
-                            <td>ส.ค.</td>
-                            <td>ก.ย.</td>
-                        </tr>
-                    </thead>
-                <tbody>
+                    <tr>
+                        <td>ต.ค.</td>
+                        <td>พ.ย.</td>
+                        <td>ธ.ค.</td>
+                        <td>ม.ค.</td>
+                        <td>ก.พ.</td>
+                        <td>มี.ค.</td>
+                        <td>เม.ย.</td>
+                        <td>พ.ค.</td>
+                        <td>มิ.ย.</td>
+                        <td>ก.ค.</td>
+                        <td>ส.ค.</td>
+                        <td>ก.ย.</td>
+                    </tr>
+                </thead>
+            <tbody>
         ';
-
 
         if (DB::table('steps')->where('proID', $id)->exists()) {
             $pro_steps = DB::table('steps')->where('proID', $id)->get();
 
             foreach ($pro_steps as $index => $step) {
-                $stepName = $step->name ?? 'N/A'; // ใช้ชื่อคอลัมน์ที่ถูกต้อง
-                $highlight = $step->highlight ?? ''; // ตรวจสอบว่ามี highlight หรือไม่
+                $stepName = $step->name ?? 'N/A'; // ชื่อขั้นตอน
+                $startDate = $step->start ?? null; // วันที่เริ่มต้น
+                $endDate = $step->end ?? null; // วันที่สิ้นสุด
+                // dd($step->start, $step->end);  // ใช้เพื่อดูค่าของ start และ end
 
+                // $startDate = date('Y-m-d', strtotime($step->start));  // ใช้ strtotime เพื่อแปลงรูปแบบ
+                // $endDate = date('Y-m-d', strtotime($step->end));      // ใช้ strtotime เพื่อแปลงรูปแบบ
+
+                $highlightMonths = []; // เก็บเดือนที่ต้องไฮไลต์
+
+                if ($startDate && $endDate) {
+                    // สร้างช่วงเดือนที่ต้องไฮไลต์
+                    $start = new DateTime($startDate);
+                    $end = new DateTime($endDate);
+                    // แปลงปี ค.ศ. เป็น พ.ศ.
+                    // $startYear = $start->format('Y') + 543;
+                    // $endYear = $end->format('Y') + 543;
+                    // ดึงแค่ปี ค.ศ. จาก startDate และ endDate
+                    $startYear = $startDate ? (new DateTime($startDate))->format('Y') : 'N/A'; // ดึงปีจาก startDate
+                    $endYear = $endDate ? (new DateTime($endDate))->format('Y') : 'N/A';     // ดึงปีจาก endDate
+
+                    while ($start <= $end) {
+                        $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
+                        $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
+                    }
+                }
+
+                // สร้าง HTML
                 $htmlContent .= '
-                    <tr>
-                        <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
-                        <td' . ($highlight === 'ต.ค.' ? ' class="highlight"' : '') . '></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                ';
+            <tr>
+                <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
+                <td' . (in_array(10, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ต.ค. -->
+                <td' . (in_array(11, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ย. -->
+                <td' . (in_array(12, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ธ.ค. -->
+                <td' . (in_array(1, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ม.ค. -->
+                <td' . (in_array(2, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.พ. -->
+                <td' . (in_array(3, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มี.ค. -->
+                <td' . (in_array(4, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- เม.ย. -->
+                <td' . (in_array(5, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ค. -->
+                <td' . (in_array(6, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มิ.ย. -->
+                <td' . (in_array(7, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ค. -->
+                <td' . (in_array(8, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ส.ค. -->
+                <td' . (in_array(9, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ย. -->
+            </tr>
+        ';
             }
         }
 
-
+        // ปิดตาราง
         $htmlContent .= '
-                </tbody>
-            </table>
-        </body>
-        ';
+        </tbody>
+    </table>
+</body>
+';
+
 
         $htmlContent .= '
             <b>11. ระยะเวลาดำเนินงาน : </b> เริ่มต้น 1 พฤษภาคม 2567 สิ้นสุด 30 กันยายน 2568 <br>
@@ -302,31 +389,18 @@ class PDFController extends Controller
         ';
 
 
-        // if ($projects->badID == $badget_types->badID) {
-        if ($projects && $badget_types && $projects->badID == $badget_types->badID) {
-            $htmlContent .= '
+
+        foreach ($badget_types as $badget_type) {
+            if ($projects->badID == $badget_type->badID) {
+                // if ($projects && $badget_types && $projects->badID == $badget_types->badID) {
+                $htmlContent .= '
                 <div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $badget_types->name . '<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $badget_type->name . '<br>
                 </div>
                 
             ';
+            }
         }
-        else{
-            $htmlContent .= '
-                <div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ไม่เข้า งง <br>
-                </div>
-                
-            ';
-        }
-
-        // $htmlContent .= '
-            
-        //     <div>
-        //         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" > &nbsp; ' . $project_integrat->name . '
-        //     </div>
-        // ';
-
 
 
         $htmlContent .= '
