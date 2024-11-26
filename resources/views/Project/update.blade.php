@@ -111,7 +111,7 @@
                             <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="straID" name="straID" class="form-control" required
+                                <select id="straID" name="straID[]" class="form-control" required
                                     onchange="KPIMainNone()">
 
                                     <!-- แผนจะถูกโหลดที่นี่ -->
@@ -129,7 +129,7 @@
                                     class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <select id="SFAID" name="SFAID" class="form-control" required>
+                                    <select id="SFAID" name="SFAID[]" class="form-control" required>
                                         <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                     </select>
                                 </div>
@@ -140,7 +140,7 @@
                                     class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <select id="goalID" name="goalID" class="form-control" required>
+                                    <select id="goalID" name="goalID[]" class="form-control" required>
                                         <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                     </select>
                                 </div>
@@ -150,7 +150,7 @@
                                 <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <select id="tacID" name="tacID" class="form-control" required>
+                                    <select id="tacID" name="tacID[]" class="form-control" required>
                                         <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
                                     </select>
                                 </div>
@@ -201,11 +201,12 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="row field item form-group align-items-center" id="otherTextContainer"
                             style="display: none;">
-                            <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                            <label for="proInDetail" class="col-form-label col-md-3 col-sm-3 label-align"></label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea id="otherText" name="otherText" class="form-control" placeholder="เรื่อง"></textarea>
+                                <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail }}</textarea>
                             </div>
                         </div>
 
@@ -231,14 +232,35 @@
                             <div class="col-md-6 col-sm-6">
 
                                 <input class="form-control" type="text" name="obj[]" id="obj"
-                                    required='required' data-validate-length-range="8,20" />
+                                    required='required' data-validate-length-range="8,20"
+                                    value="{{ $objProject->name ?? '' }}" />
+                                <input type="hidden" name="objID[]" value="{{ $objProject->objID }}">
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
                             </div>
                         </div>
 
+                        @foreach ($obj as $index => $item)
+                            @if ($index > 0 && $item->proID == $project->proID && $item->objID != $objProject->objID)
+                                <div class="row field item form-group align-items-center">
+                                    <div class="col-md-3 col-sm-3"></div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input class="form-control" type="text" name="obj[]"
+                                            value="{{ $item->name }}" required="required" />
+                                        <input type="hidden" name="objID[]" value="{{ $item->objID }}">
+
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" class="btn btn-danger "
+                                            onclick="this.closest('.row').remove()">ลบ</button>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+
                         <div id="insertObj"></div>
+
 
                         <div class="row field item form-group align-items-center" id="KPIMainNone"
                             style="display: flex;">
@@ -306,17 +328,21 @@
                                         <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="row col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="KPIProject[]" id="">
+                                        <input class="form-control" type="hidden" name="KPIProID[]" id=""
+                                            @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->KPIProID }}" @endif>
+                                        <input class="form-control" type="text" name="KPIProject[]" id=""
+                                            @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->name }}" @endif>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countProject[]" id="">
+                                        <input class="form-control" type="text" name="countProject[]" id=""
+                                        @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->count }}" @endif>
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetProject[]"
-                                            id="">
+                                        <input class="form-control" type="text" name="targetProject[]" id=""
+                                        @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->target }}" @endif>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -324,6 +350,37 @@
 
                                     </div>
                                 </div>
+                                @if (!empty($KPIProjects))
+
+
+                                    @foreach ($KPIProjects as $index => $item)
+                                        @if ($index > 0 && $item->proID == $project->proID && $item->KPIProID != $KPIProject->KPIProID)
+                                            {{-- <div class="row field item form-group align-items-center"> --}}
+                                            <div class="row col-md-12 col-sm-12">
+                                                <div class="row col-md-4 col-sm-4 m-1">
+                                                    <input class="form-control" type="hidden" name="KPIProID[]"
+                                                        id="" value="{{ $item->KPIProID }}">
+                                                    <input class="form-control" type="text" name="KPIProject[]"
+                                                        id="" value="{{ $item->name }}">
+                                                </div>
+                                                <div class="row col-md-3 col-sm-3 m-1">
+                                                    <input class="form-control" type="text" name="countProject[]"
+                                                        id="" value="{{ $item->count }}">
+
+                                                </div>
+                                                <div class="row col-md-3 col-sm-3 m-1">
+                                                    <input class="form-control" type="text" name="targetProject[]"
+                                                        id="" value="{{ $item->target }}">
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type="button" class="btn btn-danger "
+                                                        onclick="this.closest('.row').remove()">ลบ</button>
+                                                </div>
+                                            </div>
+                                            {{-- </div> --}}
+                                        @endif
+                                    @endforeach
+                                @endif
                                 <div id="insertKPIProject"></div>
                             </div>
                         </div>
@@ -364,16 +421,21 @@
                                         <label for="title" class="col-form-label label-align">สิ้นสุด</label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
+                                <div class="row col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="stepName[]" id="">
+                                        <input class="form-control" type="hidden" name="stepID[]" id=""
+                                            value="{{ $step->stepID }}">
+                                        <input class="form-control" type="text" name="stepName[]" id=""
+                                            value="{{ $step->name }}">
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="stepStart[]" id="">
+                                        <input class="form-control" type="date" name="stepStart[]" id=""
+                                            value="{{ $step->start }}">
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="stepEnd[]" id="">
+                                        <input class="form-control" type="date" name="stepEnd[]" id=""
+                                            value="{{ $step->end }}">
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -381,6 +443,31 @@
 
                                     </div>
                                 </div>
+                                @foreach ($steps as $index => $item)
+                                    @if ($index > 0 && $item->proID == $project->proID && $item->stepID != $step->stepID)
+                                        <div class="row col-md-12 col-sm-12">
+                                            <div class="row col-md-4 col-sm-4 m-1">
+                                                <input class="form-control" type="hidden" name="stepID[]"
+                                                    id="" value="{{ $item->stepID }}">
+                                                <input class="form-control" type="text" name="stepName[]"
+                                                    id="" value="{{ $item->name }}">
+                                            </div>
+                                            <div class="row col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="date" name="stepStart[]"
+                                                    id="" value="{{ $item->start }}">
+
+                                            </div>
+                                            <div class="row col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="date" name="stepEnd[]"
+                                                    id="" value="{{ $item->end }}">
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type="button" class="btn btn-danger "
+                                                    onclick="this.closest('.row').remove()">ลบ</button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
                                 <div id="insertStep"></div>
                             </div>
                         </div>
@@ -539,8 +626,12 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประโยชน์ที่คาดว่าจะได้รับ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
+                                <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
+                                    required='required' data-validate-length-range="8,20"
+                                    value="{{ $benefit->bnfID }}" />
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20" />
+                                    required='required' data-validate-length-range="8,20"
+                                    value="{{ $benefit->detail }}" />
                                 @error('benefit')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
@@ -552,6 +643,26 @@
 
                             </div>
                         </div>
+                        @foreach ($benefits as $index => $item)
+                            @if ($index > 0 && $item->proID == $project->proID && $item->bnfID != $step->bnfID)
+                                <div class="row field item form-group align-items-center">
+                                    <div class="col-md-3 col-sm-3"></div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
+                                            required='required' data-validate-length-range="8,20"
+                                            value="{{ $item->bnfID }}" />
+                                        <input class="form-control" type="text" name="benefit[]" id="benefit"
+                                            required='required' data-validate-length-range="8,20"
+                                            value="{{ $item->detail }}" />
+
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" class="btn btn-danger "
+                                            onclick="this.closest('.row').remove()">ลบ</button>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
                         <div id="insertBenefit"></div>
 
                         <div class="row field item form-group align-items-center">
@@ -828,7 +939,7 @@
 
         function insertKPIProject() {
             const mainContainer = document.createElement('div');
-            mainContainer.classList.add('col-md-12', 'col-sm-12');
+            mainContainer.classList.add('row', 'col-md-12', 'col-sm-12');
             mainContainer.style.display = "flex";
 
             const colKPI = document.createElement('div');
@@ -879,10 +990,10 @@
 
         function insertStep() {
             const mainContainer = document.createElement('div');
-            mainContainer.classList.add('col-md-12', 'col-sm-12');
+            mainContainer.classList.add('row', 'col-md-12', 'col-sm-12');
 
             const colName = document.createElement('div');
-            colName.classList.add('col-md-4', 'col-sm-4', 'm-1');
+            colName.classList.add('row', 'col-md-4', 'col-sm-4', 'm-1');
 
             const NameInput = document.createElement('input');
             NameInput.classList.add('form-control');
@@ -890,7 +1001,7 @@
             NameInput.name = 'stepName[]';
 
             const colStart = document.createElement('div');
-            colStart.classList.add('col-md-3', 'col-sm-3', 'm-1');
+            colStart.classList.add('row', 'col-md-3', 'col-sm-3', 'm-1');
 
             const startInput = document.createElement('input');
             startInput.classList.add('form-control');
@@ -898,7 +1009,7 @@
             startInput.name = 'stepStart[]';
 
             const colEnd = document.createElement('div');
-            colEnd.classList.add('col-md-3', 'col-sm-3', 'm-1');
+            colEnd.classList.add('row', 'col-md-3', 'col-sm-3', 'm-1');
 
             const EndInput = document.createElement('input');
             EndInput.classList.add('form-control');
@@ -1313,16 +1424,6 @@
                         option.selected = true;
                         countMainInput.value = KPIMain.count;
                         targetInput.value = KPIMain.target;
-                        // strategicMaps.forEach(map => {
-                        //     if (map.KPIMainID == KPIMain.KPIMainID) {
-                        //         option.selected = true;
-                        //         if (!selectedOptionFound) { // ถ้าไม่เคยเจอการเลือกมาก่อน
-                        //             countMainInput.value = KPIMain.count;
-                        //             targetInput.value = KPIMain.target;
-                        //             selectedOptionFound = true; // กำหนดว่าเลือกแล้ว
-                        //         }
-                        // }
-                        // });
                     }
                     KPIMainSelect.appendChild(option);
                 });
@@ -1332,13 +1433,6 @@
                     countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
                     targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
                 }
-
-                // กำหนดค่าเริ่มต้นให้กับ input
-                // if (!selectedOptionFound) {
-                //     const firstKPIMain = filteredKPIMains[0];
-                //     countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-                //     targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                // }
             }
         }
 
@@ -1430,6 +1524,14 @@
 
             const planSelect = document.getElementById('planID');
             const EXPSelect = document.getElementById('expID');
+            var select = document.getElementById("integrat");
+            var otherTextContainer = document.getElementById("otherTextContainer");
+
+            if (select.value === '6') {
+                otherTextContainer.style.display = "flex";
+            } else {
+                otherTextContainer.style.display = "none";
+            }
 
 
             // เมื่อเปลี่ยนปีงบประมาณ

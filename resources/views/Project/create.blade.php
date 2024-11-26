@@ -462,7 +462,7 @@
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
                                         <select id="expID" name="expID" class="form-control" required>
-                                           
+
                                         </select>
                                     </div>
 
@@ -555,6 +555,14 @@
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
                                 @enderror
+
+                            </div>
+                            <div class="col-md-1 col-sm-1">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"  name="TOR[]" value="TOR"> TOR
+                                    </label>
+                                </div>
                             </div>
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertFile()">เพิ่ม</button>
@@ -591,17 +599,55 @@
         const costTypes = @json($costTypes);
         const proIn = @json($projectIntegrat);
 
-        
 
-        function submitButton(action) {
-            var form = document.getElementById('actionForm');
-            if (action === 'save') {
-                form.action = "/projectSave";
-            } else if (action === 'send') {
-                form.action = "/projectSend";
-            }
-            form.submit();
+        const users = @json($user);
+        const currentUserId = {{ Auth::user()->id }};
+
+        function addNewUserDropdown() {
+            const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
+
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
+
+            const colMd3 = document.createElement('div');
+            colMd3.classList.add('col-md-3', 'col-sm-3');
+            // ใส่ข้อความหรือเนื้อหา
+
+            const dropdownCol = document.createElement('div');
+            dropdownCol.classList.add('col-md-6', 'col-sm-6');
+
+            const userDropdown = document.createElement('select');
+            userDropdown.classList.add('form-control', 'userDropdown'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
+            userDropdown.id = `userDropdown${dropdownCount}`;
+            userDropdown.innerHTML = '';
+
+            users.forEach(user => {
+                if (user.id != currentUserId) {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.firstname_th;
+                    userDropdown.appendChild(option);
+                }
+            });
+
+            dropdownCol.appendChild(userDropdown);
+            mainContainer.appendChild(colMd3);
+            mainContainer.appendChild(dropdownCol);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainContainer.appendChild(deleteButton);
+
+            document.getElementById('userDropdownContainer').appendChild(mainContainer);
         }
+
 
         function insertStrategic() {
             const mainContainer = document.createElement('div');
@@ -716,74 +762,6 @@
 
         }
 
-        function insertBenefit() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const colMD3 = document.createElement('div');
-            colMD3.classList.add('col-md-3', 'col-ssm-3');
-
-            const colMD6 = document.createElement('div');
-            colMD6.classList.add('col-md-6', 'col-sm-6');
-
-            const InputBenefit = document.createElement('input');
-            InputBenefit.classList.add('form-control');
-            InputBenefit.type = 'text';
-            InputBenefit.name = 'benefit[]';
-
-            mainContainer.appendChild(colMD3);
-            mainContainer.appendChild(colMD6);
-            colMD6.appendChild(InputBenefit);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
-            };
-
-            // เพิ่มปุ่มลบลงใน mainContainer
-            mainContainer.appendChild(deleteButton);
-
-            document.getElementById('insertBenefit').appendChild(mainContainer);
-
-        }
-
-        function insertFile() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const colMD3 = document.createElement('div');
-            colMD3.classList.add('col-md-3', 'col-sm-3');
-
-            const colMD6 = document.createElement('div');
-            colMD6.classList.add('col-md-6', 'col-sm-6');
-
-            const inputFile = document.createElement('input');
-            inputFile.classList.add('form-control');
-            inputFile.type = 'file';
-            inputFile.name = 'file[]';
-
-            mainContainer.appendChild(colMD3);
-            mainContainer.appendChild(colMD6);
-            colMD6.appendChild(inputFile);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
-            };
-
-            // เพิ่มปุ่มลบลงใน mainContainer
-            mainContainer.appendChild(deleteButton);
-
-            document.getElementById('insertFile').appendChild(mainContainer);
-
-        }
-
         function insertKPIMain() {
             const mainContainer = document.createElement('div');
             mainContainer.classList.add('col-md-12', 'col-sm-12');
@@ -833,6 +811,9 @@
             // เพิ่มปุ่มลบลงใน mainContainer
             document.getElementById('insertKPIMain').appendChild(mainContainer);
         }
+
+
+
 
 
         function insertKPIProject() {
@@ -1032,39 +1013,36 @@
             document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
         }
 
-        const users = @json($user);
-        const currentUserId = {{ Auth::user()->id }};
+        function toggleTextarea() {
+            var select = document.getElementById("integrat");
+            var otherTextContainer = document.getElementById("otherTextContainer");
 
-        function addNewUserDropdown() {
-            const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
+            if (select.value === '6') {
+                otherTextContainer.style.display = "flex";
+            } else {
+                otherTextContainer.style.display = "none";
+            }
+        }
 
+
+        function insertBenefit() {
             const mainContainer = document.createElement('div');
             mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
-            const colMd3 = document.createElement('div');
-            colMd3.classList.add('col-md-3', 'col-sm-3');
-            // ใส่ข้อความหรือเนื้อหา
+            const colMD3 = document.createElement('div');
+            colMD3.classList.add('col-md-3', 'col-ssm-3');
 
-            const dropdownCol = document.createElement('div');
-            dropdownCol.classList.add('col-md-6', 'col-sm-6');
+            const colMD6 = document.createElement('div');
+            colMD6.classList.add('col-md-6', 'col-sm-6');
 
-            const userDropdown = document.createElement('select');
-            userDropdown.classList.add('form-control', 'userDropdown'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            userDropdown.id = `userDropdown${dropdownCount}`;
-            userDropdown.innerHTML = '';
+            const InputBenefit = document.createElement('input');
+            InputBenefit.classList.add('form-control');
+            InputBenefit.type = 'text';
+            InputBenefit.name = 'benefit[]';
 
-            users.forEach(user => {
-                if (user.id != currentUserId) {
-                    const option = document.createElement('option');
-                    option.value = user.id;
-                    option.textContent = user.firstname_th;
-                    userDropdown.appendChild(option);
-                }
-            });
-
-            dropdownCol.appendChild(userDropdown);
-            mainContainer.appendChild(colMd3);
-            mainContainer.appendChild(dropdownCol);
+            mainContainer.appendChild(colMD3);
+            mainContainer.appendChild(colMD6);
+            colMD6.appendChild(InputBenefit);
 
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';
@@ -1077,19 +1055,60 @@
             // เพิ่มปุ่มลบลงใน mainContainer
             mainContainer.appendChild(deleteButton);
 
-            document.getElementById('userDropdownContainer').appendChild(mainContainer);
+            document.getElementById('insertBenefit').appendChild(mainContainer);
+
         }
 
+        function insertFile() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
-        function toggleTextarea() {
-            var select = document.getElementById("integrat");
-            var otherTextContainer = document.getElementById("otherTextContainer");
+            const colMD3 = document.createElement('div');
+            colMD3.classList.add('col-md-3', 'col-sm-3');
 
-            if (select.value === '6') {
-                otherTextContainer.style.display = "flex";
-            } else {
-                otherTextContainer.style.display = "none";
-            }
+            const colMD6 = document.createElement('div');
+            colMD6.classList.add('col-md-6', 'col-sm-6');
+
+            const inputFile = document.createElement('input');
+            inputFile.classList.add('form-control');
+            inputFile.type = 'file';
+            inputFile.name = 'file[]';
+
+            mainContainer.appendChild(colMD3);
+            mainContainer.appendChild(colMD6);
+            colMD6.appendChild(inputFile);
+
+            const colMD1 = document.createElement('div');
+            colMD1.classList.add('col-md-1', 'col-sm-1');
+
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.classList.add('checkbox');
+
+            const checkboxLabel = document.createElement('label');
+            const checkboxInput = document.createElement('input');
+            checkboxInput.type = 'checkbox';
+            checkboxInput.name = 'TOR[]';
+            checkboxInput.value = 'TOR';
+
+            mainContainer.appendChild(colMD1);
+            colMD1.appendChild(checkboxDiv);
+            checkboxDiv.appendChild(checkboxLabel);
+            checkboxLabel.appendChild(checkboxInput);
+            checkboxLabel.appendChild(document.createTextNode(' TOR'));
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+            // เพิ่มปุ่มลบลงใน mainContainer
+            mainContainer.appendChild(deleteButton);
+
+            document.getElementById('insertFile').appendChild(mainContainer);
+
         }
 
 
@@ -1209,7 +1228,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-                
+
                 return;
             }
 
@@ -1222,7 +1241,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-               
+
             } else {
                 tacticsSelect.disabled = false;
                 filteredTactics.forEach(tactic => {
@@ -1231,7 +1250,7 @@
                     option.textContent = tactic.name;
                     tacticsSelect.appendChild(option);
                 });
-                
+
             }
             // แสดงกลยุทธ์ใน dropdown
 
@@ -1240,7 +1259,7 @@
 
         function updateKPIMain(selectedGoalID) {
             console.log(selectedGoalID);
-            
+
             const KPIMainSelect = document.getElementById('KPIMain');
             const countMainInput = document.getElementById('countMain');
             const targetInput = document.getElementById('targetMain');
@@ -1253,7 +1272,7 @@
             // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
             if (!selectedGoalID) {
                 const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value='';
+                noKPIMainOption.value = '';
                 noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
                 KPIMainSelect.appendChild(noKPIMainOption);
                 KPIMainSelect.disabled = true;
@@ -1265,10 +1284,10 @@
             // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
             const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
             // console.log(filteredKPIMains);
-            
+
             if (filteredKPIMains.length === 0) {
                 const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value='';
+                noKPIMainOption.value = '';
                 noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
                 KPIMainSelect.appendChild(noKPIMainOption);
                 KPIMainSelect.disabled = true;
@@ -1370,6 +1389,16 @@
                     costTypeSelect.appendChild(option);
                 });
             }
+        }
+
+        function submitButton(action) {
+            var form = document.getElementById('actionForm');
+            if (action === 'save') {
+                form.action = "/projectSave";
+            } else if (action === 'send') {
+                form.action = "/projectSend";
+            }
+            form.submit();
         }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ

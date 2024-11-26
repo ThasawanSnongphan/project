@@ -17,6 +17,7 @@
             </select>
         </div>
         <div class="ml-auto">
+
             <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
         </div>
 
@@ -43,10 +44,13 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
+                @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1 && $item->statusID != 1)
+                    @continue
+                @endif
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 7)
+                        @if ($item->statusID == 7 || $item->statusID == 1)
                             <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
                         @else
                             {{ $item->name }}
