@@ -29,7 +29,7 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
 
 Route::get('/gen-word', [WordController::class, 'createWordDoc']); //แบบไม่ db
-Route::get('/gen-word-db', [WordController::class, 'createWordDocFromDB']); //db
+Route::get('/gen-word-db/{$id}', [WordController::class, 'createWordDocFromDB']); //db
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']); //แบบไม่ db
 Route::get('/generate-pdf-db', [PDFController::class, 'db_gen']); //db
@@ -59,7 +59,10 @@ Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('proj
 Route::get('projectedit/{id}',[ProjectController::class,'edit'])->name('project.edit');
 Route::post('projectupdate/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
-Route::get('projecPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
+
+Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
+Route::get('projectWord/{id}',[WordController::class,'createWordDocFromDB'])->name('project.Word');
+
 
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);

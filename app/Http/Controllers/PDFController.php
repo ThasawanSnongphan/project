@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
 use DateTime;
+use Carbon\Carbon;
+
+Carbon::setLocale('th');
 
 
 class PDFController extends Controller
@@ -38,16 +41,11 @@ class PDFController extends Controller
 
     public function db_gen($id)
     {
-
-
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
-
         $username = Users::where('id', 10)->first();
-        $years = Year::where('yearID', 9)->first();
+        $years = Year::all();
         $projects = Projects::where('proID', $id)->first();
         $badget_types = BadgetType::all();
-        // $pro = Projects::where('proChaID');
-        // $targets = Projects::with('target')->get();
         $KPI_pros = KPIProjects::all();
         $project_integrats = ProjectIntegrat::all();
         $project_charecs = ProjectCharec::all();
@@ -63,9 +61,6 @@ class PDFController extends Controller
         // $currentDate = date('Y-m-d');
         // ตั้งชื่อไฟล์ PDF
         // $fileName = $username . '_report_' . '.pdf';
-
-        $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $years->name);
-
 
         $stylesheet = "
         <style>
@@ -115,14 +110,29 @@ class PDFController extends Controller
 
         </style>";
 
+        
+
         // logo kmutnb
         $htmlContent = '
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="' . public_path('images/logo_kmutnb.png') . '" style="width: 60px; height: auto;">
         </div>
-        <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $years->name . '
-        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนืออิอิ
-        </p>';
+        ';
+
+        foreach ($years as $year) {
+            if ($projects->yearID == $year->yearID) {
+                $htmlContent .= '
+                    <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->name . '
+                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
+                    </p>
+                ';
+                $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $year->name);
+            }
+        }
+        
+        
+
+        
 
         $htmlContent .= '
         <b>1. ชื่อโครงการ : </b>' . $projects->name . '<br>
@@ -241,150 +251,158 @@ class PDFController extends Controller
 
         ';
 
-        // if (DB::table('steps')->where('proID', $id)->exists()) {
-        //     $pro_steps = DB::table('steps')->where('proID', $id)->get();
-
-        //     foreach ($pro_steps as $index => $step) {
-        //         $stepName = $step->name ?? 'N/A'; // ชื่อขั้นตอน
-        //         $startDate = $step->start ?? null; // วันที่เริ่มต้น
-        //         $endDate = $step->end ?? null; // วันที่สิ้นสุด
-
-        //         $highlightMonths = []; // เก็บเดือนที่ต้องไฮไลต์
-
-        //         if ($startDate && $endDate) {
-        //             // สร้างช่วงเดือนที่ต้องไฮไลต์
-        //             $start = new DateTime($startDate);
-        //             $end = new DateTime($endDate);
-        //             // แปลงปี ค.ศ. เป็น พ.ศ.
-        //             $startYear = $start->format('Y') + 543;
-        //             $endYear = $end->format('Y') + 543;
-
-
-        //             while ($start <= $end) {
-        //                 $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
-        //                 $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
-        //             }
-        //         }
-
-
-
-        //         // สร้าง HTML
-        //         $htmlContent .= '
-        //             <tr>
-        //                 <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
-        //                 <td' . (in_array(10, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ต.ค. -->
-        //                 <td' . (in_array(11, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ย. -->
-        //                 <td' . (in_array(12, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ธ.ค. -->
-        //                 <td' . (in_array(1, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ม.ค. -->
-        //                 <td' . (in_array(2, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.พ. -->
-        //                 <td' . (in_array(3, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มี.ค. -->
-        //                 <td' . (in_array(4, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- เม.ย. -->
-        //                 <td' . (in_array(5, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ค. -->
-        //                 <td' . (in_array(6, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มิ.ย. -->
-        //                 <td' . (in_array(7, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ค. -->
-        //                 <td' . (in_array(8, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ส.ค. -->
-        //                 <td' . (in_array(9, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ย. -->
-        //             </tr>
-        //         ';
-        //     }
-        // }
-
-        // $htmlContent .= '
-        //         </tbody>
-        //     </table>
-        // </body>
-        // ';
-
-        $htmlContent .= '
-        <body>
-            <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
-                <thead>
-                    <tr>
-                        <td rowspan="2">ขั้นตอนการดำเนินการ</td>
-                        <td colspan="3">พ.ศ. ' . ($startYear ?? 'N/A') . '</td>
-                        <td colspan="12">พ.ศ. ' . ($endYear ?? 'N/A') . '</td>
-                    </tr>
-
-                    <tr>
-                        <td>ต.ค.</td>
-                        <td>พ.ย.</td>
-                        <td>ธ.ค.</td>
-                        <td>ม.ค.</td>
-                        <td>ก.พ.</td>
-                        <td>มี.ค.</td>
-                        <td>เม.ย.</td>
-                        <td>พ.ค.</td>
-                        <td>มิ.ย.</td>
-                        <td>ก.ค.</td>
-                        <td>ส.ค.</td>
-                        <td>ก.ย.</td>
-                    </tr>
-                </thead>
-            <tbody>
-        ';
 
         if (DB::table('steps')->where('proID', $id)->exists()) {
             $pro_steps = DB::table('steps')->where('proID', $id)->get();
 
+            $minYear = PHP_INT_MAX; // ค่าเริ่มต้นของปีที่น้อยที่สุด
+            $maxYear = PHP_INT_MIN; // ค่าเริ่มต้นของปีที่มากที่สุด
+
             foreach ($pro_steps as $index => $step) {
-                $stepName = $step->name ?? 'N/A'; // ชื่อขั้นตอน
                 $startDate = $step->start ?? null; // วันที่เริ่มต้น
                 $endDate = $step->end ?? null; // วันที่สิ้นสุด
-                // dd($step->start, $step->end);  // ใช้เพื่อดูค่าของ start และ end
+                $startYear = $startDate ? (new DateTime($startDate))->format('Y') + 543 : null;
+                $endYear = $endDate ? (new DateTime($endDate))->format('Y') + 543 : null;
 
-                // $startDate = date('Y-m-d', strtotime($step->start));  // ใช้ strtotime เพื่อแปลงรูปแบบ
-                // $endDate = date('Y-m-d', strtotime($step->end));      // ใช้ strtotime เพื่อแปลงรูปแบบ
+                // อัปเดตค่า $minYear และ $maxYear
+                if ($startYear) {
+                    $minYear = min($minYear, $startYear);
+                }
+                if ($endYear) {
+                    $maxYear = max($maxYear, $endYear);
+                }
+            }
 
+            // ตรวจสอบค่า $minYear และ $maxYear หลังจากประมวลผลเสร็จ
+            if ($minYear === PHP_INT_MAX) {
+                $minYear = 'N/A'; // ถ้าไม่มีข้อมูลใด ๆ
+            }
+            if ($maxYear === PHP_INT_MIN) {
+                $maxYear = 'N/A'; // ถ้าไม่มีข้อมูลใด ๆ
+            }
+
+            // สร้าง HTML ของส่วนหัวตารางหลังคำนวณเสร็จ
+            $htmlContent .= '
+            <body>
+                <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+                    <thead>
+                        <tr>
+                            <td rowspan="2">ขั้นตอนการดำเนินการ</td>
+                            <td colspan="3">พ.ศ. ' . $minYear . '</td>
+                            <td colspan="12">พ.ศ. ' . $maxYear . '</td>
+                        </tr>
+                        <tr>
+                            <td>ต.ค.</td>
+                            <td>พ.ย.</td>
+                            <td>ธ.ค.</td>
+                            <td>ม.ค.</td>
+                            <td>ก.พ.</td>
+                            <td>มี.ค.</td>
+                            <td>เม.ย.</td>
+                            <td>พ.ค.</td>
+                            <td>มิ.ย.</td>
+                            <td>ก.ค.</td>
+                            <td>ส.ค.</td>
+                            <td>ก.ย.</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+            ';
+
+            foreach ($pro_steps as $index => $step) {
+                $stepName = $step->name ?? 'N/A';
                 $highlightMonths = []; // เก็บเดือนที่ต้องไฮไลต์
+                $startDate = $step->start ?? null;
+                $endDate = $step->end ?? null;
 
                 if ($startDate && $endDate) {
-                    // สร้างช่วงเดือนที่ต้องไฮไลต์
                     $start = new DateTime($startDate);
                     $end = new DateTime($endDate);
-                    // แปลงปี ค.ศ. เป็น พ.ศ.
-                    // $startYear = $start->format('Y') + 543;
-                    // $endYear = $end->format('Y') + 543;
-                    // ดึงแค่ปี ค.ศ. จาก startDate และ endDate
-                    $startYear = $startDate ? (new DateTime($startDate))->format('Y') : 'N/A'; // ดึงปีจาก startDate
-                    $endYear = $endDate ? (new DateTime($endDate))->format('Y') : 'N/A';     // ดึงปีจาก endDate
 
                     while ($start <= $end) {
                         $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
                         $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
                     }
                 }
+                // dd($highlightMonths);
 
-                // สร้าง HTML
+
                 $htmlContent .= '
-            <tr>
-                <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
-                <td' . (in_array(10, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ต.ค. -->
-                <td' . (in_array(11, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ย. -->
-                <td' . (in_array(12, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ธ.ค. -->
-                <td' . (in_array(1, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ม.ค. -->
-                <td' . (in_array(2, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.พ. -->
-                <td' . (in_array(3, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มี.ค. -->
-                <td' . (in_array(4, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- เม.ย. -->
-                <td' . (in_array(5, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- พ.ค. -->
-                <td' . (in_array(6, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- มิ.ย. -->
-                <td' . (in_array(7, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ค. -->
-                <td' . (in_array(8, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ส.ค. -->
-                <td' . (in_array(9, $highlightMonths) ? ' class="highlight"' : '') . '></td> <!-- ก.ย. -->
-            </tr>
-        ';
+                <tr>
+                    <td style="text-align: left;">' . ($index + 1) . '. ' . $stepName . '</td>
+                    <td' . (in_array(10, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(11, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(12, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(1, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(2, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(3, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(4, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(5, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(6, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(7, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(8, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                    <td' . (in_array(9, $highlightMonths) ? ' class="highlight"' : '') . '></td>
+                </tr>
+                ';
+            }
+
+            $htmlContent .= '
+                    </tbody>
+                </table>
+            </body>
+            ';
+        }
+
+        $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
+        $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
+
+        foreach ($pro_steps as $step) {
+            $startDate = $step->start ?? null; // วันที่เริ่มต้น
+            $endDate = $step->end ?? null;    // วันที่สิ้นสุด
+
+            if ($startDate) {
+                $start = Carbon::parse($startDate);
+                // อัปเดต $minStartDate ถ้า $start น้อยกว่า หรือ $minStartDate ยังเป็น null
+                if (!$minStartDate || $start->lessThan($minStartDate)) {
+                    $minStartDate = $start;
+                }
+            }
+
+            if ($endDate) {
+                $end = Carbon::parse($endDate);
+                // อัปเดต $maxEndDate ถ้า $end มากกว่า หรือ $maxEndDate ยังเป็น null
+                if (!$maxEndDate || $end->greaterThan($maxEndDate)) {
+                    $maxEndDate = $end;
+                }
             }
         }
 
-        // ปิดตาราง
+        // ตรวจสอบผลลัพธ์
+        if ($minStartDate) {
+            $startDay = $minStartDate->day;
+            $startMonth = $minStartDate->translatedFormat('F');
+            $startYear = $minStartDate->year + 543;
+            $formattedStartDate = "{$startDay} {$startMonth} {$startYear}";
+        } else {
+            $formattedStartDate = 'ไม่มีวันที่เริ่มต้น';
+        }
+
+        if ($maxEndDate) {
+            $endDay = $maxEndDate->day;
+            $endMonth = $maxEndDate->translatedFormat('F');
+            $endYear = $maxEndDate->year + 543;
+            $formattedEndDate = "{$endDay} {$endMonth} {$endYear}";
+        } else {
+            $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
+        }
+
+        // สร้างข้อความแสดงผล
         $htmlContent .= '
-        </tbody>
-    </table>
-</body>
-';
+        <b>11. ระยะเวลาดำเนินงาน : </b> เริ่มต้น ' . $formattedStartDate .
+            ' สิ้นสุด ' . $formattedEndDate . ' <br>';
 
 
         $htmlContent .= '
-            <b>11. ระยะเวลาดำเนินงาน : </b> เริ่มต้น 1 พฤษภาคม 2567 สิ้นสุด 30 กันยายน 2568 <br>
             <b>12. แหล่งเงิน / ประเภทงบประมาณที่ใช้ / แผนงาน </b><br>
         ';
 

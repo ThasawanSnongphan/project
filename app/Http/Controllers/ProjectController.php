@@ -622,5 +622,6 @@ class ProjectController extends Controller
         return view('Project.report',compact('project'));
     }
 
+
    
 }
