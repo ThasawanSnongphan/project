@@ -4,7 +4,7 @@ return [
     // การตั้งค่าฟอนต์เริ่มต้น
     'default_font' => [
         'name' => 'TH SarabunPSK',
-        'size' => 16,
+        'size' => 16, // ขนาด 16 สำหรับตัวอักษรทั้งหมด
     ],
 
     // การตั้งค่าหน้ากระดาษ
@@ -21,9 +21,9 @@ return [
 
     // รูปแบบข้อความ
     'styles' => [
-        'header' => ['bold' => true, 'size' => 18],
-        'bold_text' => ['bold' => true],
-        'normal_text' => ['size' => 16],
+        'header' => ['bold' => true, 'size' => 18], // ไม่ได้กำหนดฟอนต์ใน header
+        'bold_text' => ['bold' => true], // การตั้งค่าตัวหนา
+        'normal_text' => ['size' => 16], // ฟอนต์ปกติที่ขนาด 16
     ],
 
     // การตั้งค่าตาราง
