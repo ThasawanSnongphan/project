@@ -270,6 +270,36 @@
 
                         </div>
 
+                        <div class="field item form-group">
+                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับ<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <select id="director" name="director" class="form-control" required>
+                                    <option value="">---เลือกผู้กำกับ---</option>
+                                    @foreach ($user as $item)
+                                        <option value="{{ $item->yearID }}"
+                                            {{ $item->id == $KPIMain->directorID ? 'selected' : '' }}>
+                                            {{ $item->firstname_en }} {{$item->lastname_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+    
+                        <div class="field item form-group">
+                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้บันทึกข้อมูล<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <select id="recorder" name="recorder" class="form-control" required>
+                                    <option value="">---เลือกผู้บันทึกข้อมูล---</option>
+                                    @foreach ($user as $item)
+                                        <option value="{{ $item->yearID }}"
+                                            {{ $item->id == $KPIMain->recorderID ? 'selected' : '' }}>
+                                            {{ $item->firstname_en }} {{$item->lastname_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
 
 
                         <div class="ln_solid">

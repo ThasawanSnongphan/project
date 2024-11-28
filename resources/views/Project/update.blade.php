@@ -336,13 +336,18 @@
                                             @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->name }}" @endif>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countProject[]" id=""
-                                        @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->count }}" @endif>
-
+                                        <select id="countKPIProject" name="countKPIProject[]" class="form-control"
+                                            required>
+                                            @foreach ($CountKPIProjects as $item)
+                                                <option value="{{ $item->countKPIProID }}"
+                                                    <?php if (!empty($KPIProject->KPIProID) && $item->countKPIProID == $KPIProject->KPIProID) { echo 'selected'; } ?>>
+                                                    {{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="text" name="targetProject[]" id=""
-                                        @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->target }}" @endif>
+                                            @if (!empty($KPIProject->KPIProID)) value="{{ $KPIProject->target }}" @endif>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -351,8 +356,6 @@
                                     </div>
                                 </div>
                                 @if (!empty($KPIProjects))
-
-
                                     @foreach ($KPIProjects as $index => $item)
                                         @if ($index > 0 && $item->proID == $project->proID && $item->KPIProID != $KPIProject->KPIProID)
                                             {{-- <div class="row field item form-group align-items-center"> --}}
@@ -364,8 +367,13 @@
                                                         id="" value="{{ $item->name }}">
                                                 </div>
                                                 <div class="row col-md-3 col-sm-3 m-1">
-                                                    <input class="form-control" type="text" name="countProject[]"
-                                                        id="" value="{{ $item->count }}">
+                                                    <select id="countKPIProject" name="countKPIProject[]"
+                                                        class="form-control" required>
+                                                        @foreach ($CountKPIProjects as $count)
+                                                            <option value="{{ $count->countKPIProID }}">
+                                                                {{ $count->name }}</option>
+                                                        @endforeach
+                                                    </select>
 
                                                 </div>
                                                 <div class="row col-md-3 col-sm-3 m-1">
@@ -424,18 +432,18 @@
                                 <div class="row col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
                                         <input class="form-control" type="hidden" name="stepID[]" id=""
-                                            value="{{ $step->stepID }}">
+                                            @if (!empty($step->stepID)) value="{{ $step->stepID }}" @endif>
                                         <input class="form-control" type="text" name="stepName[]" id=""
-                                            value="{{ $step->name }}">
+                                            @if (!empty($step->stepID)) value="{{ $step->name }}" @endif>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="date" name="stepStart[]" id=""
-                                            value="{{ $step->start }}">
+                                            @if (!empty($step->stepID)) value="{{ $step->start }}" @endif>
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="date" name="stepEnd[]" id=""
-                                            value="{{ $step->end }}">
+                                            @if (!empty($step->stepID)) value="{{ $step->end }}" @endif>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -443,31 +451,33 @@
 
                                     </div>
                                 </div>
-                                @foreach ($steps as $index => $item)
-                                    @if ($index > 0 && $item->proID == $project->proID && $item->stepID != $step->stepID)
-                                        <div class="row col-md-12 col-sm-12">
-                                            <div class="row col-md-4 col-sm-4 m-1">
-                                                <input class="form-control" type="hidden" name="stepID[]"
-                                                    id="" value="{{ $item->stepID }}">
-                                                <input class="form-control" type="text" name="stepName[]"
-                                                    id="" value="{{ $item->name }}">
-                                            </div>
-                                            <div class="row col-md-3 col-sm-3 m-1">
-                                                <input class="form-control" type="date" name="stepStart[]"
-                                                    id="" value="{{ $item->start }}">
+                                @if (!empty($step))
+                                    @foreach ($steps as $index => $item)
+                                        @if ($index > 0 && $item->proID == $project->proID && $item->stepID != $step->stepID)
+                                            <div class="row col-md-12 col-sm-12">
+                                                <div class="row col-md-4 col-sm-4 m-1">
+                                                    <input class="form-control" type="hidden" name="stepID[]"
+                                                        id="" value="{{ $item->stepID }}">
+                                                    <input class="form-control" type="text" name="stepName[]"
+                                                        id="" value="{{ $item->name }}">
+                                                </div>
+                                                <div class="row col-md-3 col-sm-3 m-1">
+                                                    <input class="form-control" type="date" name="stepStart[]"
+                                                        id="" value="{{ $item->start }}">
 
+                                                </div>
+                                                <div class="row col-md-3 col-sm-3 m-1">
+                                                    <input class="form-control" type="date" name="stepEnd[]"
+                                                        id="" value="{{ $item->end }}">
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type="button" class="btn btn-danger "
+                                                        onclick="this.closest('.row').remove()">ลบ</button>
+                                                </div>
                                             </div>
-                                            <div class="row col-md-3 col-sm-3 m-1">
-                                                <input class="form-control" type="date" name="stepEnd[]"
-                                                    id="" value="{{ $item->end }}">
-                                            </div>
-                                            <div class="col-md-1 col-sm-1 m-1">
-                                                <button type="button" class="btn btn-danger "
-                                                    onclick="this.closest('.row').remove()">ลบ</button>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
                                 <div id="insertStep"></div>
                             </div>
                         </div>
@@ -566,11 +576,6 @@
 
                                         </select>
                                     </div>
-
-                                    {{-- <div class="col-md-1 col-sm-1">
-                                        <button type='submit' class="btn btn-primary" value="บันทึก">เพิ่ม</button>
-
-                                    </div> --}}
                                 </div>
                                 <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
@@ -579,16 +584,22 @@
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu1[]" id="">
+                                        <input class="form-control" type="hidden" name="costQuID[]" id=""
+                                            @if (!empty($costQuarter->costQuID)) value="{{ $costQuarter->costQuID }}" @endif>
+                                        <input class="form-control" type="text" name="costQu1[]" id=""
+                                            @if (!empty($costQuarter->costQu1)) value="{{ $costQuarter->costQu1 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu2[]" id="">
+                                        <input class="form-control" type="text" name="costQu2[]" id=""
+                                            @if (!empty($costQuarter->costQu2)) value="{{ $costQuarter->costQu2 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu3[]" id="">
+                                        <input class="form-control" type="text" name="costQu3[]" id=""
+                                            @if (!empty($costQuarter->costQu3)) value="{{ $costQuarter->costQu3 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu4[]" id="">
+                                        <input class="form-control" type="text" name="costQu4[]" id=""
+                                            @if (!empty($costQuarter->costQu4)) value="{{ $costQuarter->costQu4 }}" @endif>
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -596,6 +607,49 @@
 
                                     </div>
                                 </div>
+                                @if (!empty($costQuarters))
+                                    @foreach ($costQuarters as $index => $item)
+                                        @if ($index > 0 && $item->proID == $project->proID && $item->costQuID != $costQuarter->costQuID)
+                                            <div class="row col-md-12 col-sm-12">
+
+                                                <div class="row col-md-3 col-sm-3 mr-1">
+                                                    <select id="expID" name="expID" class="form-control" required>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12 col-sm-12 mt-2">
+                                                <div class="row col-md-3 col-sm-3 mr-1">
+                                                    <select id="costType" name="costID" class="form-control" required>
+
+                                                    </select>
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="hidden" name="costQuID[]"
+                                                        id="" value="{{ $item->costQuID }}">
+                                                    <input class="form-control" type="text" name="costQu1[]"
+                                                        id="" value="{{ $item->costQu1 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu2[]"
+                                                        id="" value="{{ $item->costQu2 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu3[]"
+                                                        id="" value="{{ $item->costQu3 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu4[]"
+                                                        id="" value="{{ $item->costQu4 }}">
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type="button" class="btn btn-danger "
+                                                        onclick="this.closest('.row').remove()">ลบ</button>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endif
                                 <div id="insertExpense"></div>
                                 <div id="insertCostType"></div>
                             </div>
@@ -628,10 +682,10 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
                                     required='required' data-validate-length-range="8,20"
-                                    value="{{ $benefit->bnfID }}" />
+                                    @if (!empty($benefit->bnfID)) value="{{ $benefit->bnfID }}" @endif>
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
                                     required='required' data-validate-length-range="8,20"
-                                    value="{{ $benefit->detail }}" />
+                                    @if (!empty($benefit->bnfID)) value="{{ $benefit->detail }}" @endif>
                                 @error('benefit')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
@@ -643,26 +697,28 @@
 
                             </div>
                         </div>
-                        @foreach ($benefits as $index => $item)
-                            @if ($index > 0 && $item->proID == $project->proID && $item->bnfID != $step->bnfID)
-                                <div class="row field item form-group align-items-center">
-                                    <div class="col-md-3 col-sm-3"></div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
-                                            required='required' data-validate-length-range="8,20"
-                                            value="{{ $item->bnfID }}" />
-                                        <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                            required='required' data-validate-length-range="8,20"
-                                            value="{{ $item->detail }}" />
+                        @if (!empty($benefits))
+                            @foreach ($benefits as $index => $item)
+                                @if ($index > 0 && $item->proID == $project->proID && $item->bnfID != $benefit->bnfID)
+                                    <div class="row field item form-group align-items-center">
+                                        <div class="col-md-3 col-sm-3"></div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
+                                                required='required' data-validate-length-range="8,20"
+                                                value="{{ $item->bnfID }}" />
+                                            <input class="form-control" type="text" name="benefit[]" id="benefit"
+                                                required='required' data-validate-length-range="8,20"
+                                                value="{{ $item->detail }}" />
 
+                                        </div>
+                                        <div class="col-md-3 col-sm-3">
+                                            <button type="button" class="btn btn-danger "
+                                                onclick="this.closest('.row').remove()">ลบ</button>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-3">
-                                        <button type="button" class="btn btn-danger "
-                                            onclick="this.closest('.row').remove()">ลบ</button>
-                                    </div>
-                                </div>
-                            @endif
-                        @endforeach
+                                @endif
+                            @endforeach
+                        @endif
                         <div id="insertBenefit"></div>
 
                         <div class="row field item form-group align-items-center">
@@ -1474,7 +1530,8 @@
                     const option = document.createElement('option');
                     option.value = expense.expID;
                     option.textContent = expense.exname;
-                    expenseSelect.appendChild(option);
+                    const map =
+                        expenseSelect.appendChild(option);
                 });
                 updateCostTypeDropdown(filteredExpenses[0].expID);
             }

@@ -27,6 +27,7 @@ use App\Models\Steps;
 use App\Models\CostQuarters;
 use App\Models\Benefits;
 use App\Models\Files;
+use App\Models\CountKPIProjects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,7 +58,8 @@ class ProjectController extends Controller
         $fund=Funds::all();
         $expanses = ExpenseBadgets::all();
         $costTypes=CostTypes::all();
-        return view('Project.create',compact('year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+        $CountKPIProjects = CountKPIProjects::all();
+        return view('Project.create',compact('CountKPIProjects','year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
     }
     function send(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
@@ -119,7 +121,7 @@ class ProjectController extends Controller
         }
 
         $KPIName = $request->input('KPIProject') ;
-        $KPICount =  $request->input('countProject') ;
+        $KPICount =  $request->input('countKPIProject') ;
         $KPITarget =  $request->input('targetProject') ;
         if(is_array($KPIName) && is_array($KPICount) && is_array($KPITarget)){
             foreach ($KPIName as $index => $KPI){
@@ -236,13 +238,13 @@ class ProjectController extends Controller
         $straMap->save();
 
         $KPIName = $request->input('KPIProject') ;
-        $KPICount =  $request->input('countProject') ;
+        $KPICount =  $request->input('countKPIProject') ;
         $KPITarget =  $request->input('targetProject') ;
         if(!empty($KPIMain) && is_array($KPIName) && is_array($KPICount) && is_array($KPITarget)){
             foreach ($KPIName as $index => $KPI){
                 $KPIProject = new KPIProjects();
                 $KPIProject->name = $KPI;
-                $KPIProject->count =  $KPICount[$index] ?? null;
+                $KPIProject->countKPIProID =  $KPICount[$index] ?? null;
                 $KPIProject->target = $KPITarget[$index] ?? null;
                 $KPIProject->proID = $project->proID;
                 $KPIProject->save();
@@ -351,11 +353,14 @@ class ProjectController extends Controller
         $objProject = $obj->where('proID',$project->proID)->first();
         $KPIProjects = KPIProjects::all();
         $KPIProject = $KPIProjects->where('proID',$project->proID)->first();
+        $CountKPIProjects = CountKPIProjects::all();
         $steps = Steps::all();
         $step = $steps->where('proID',$project->proID)->first();
+        $costQuarters = CostQuarters::all();
+        $costQuarter = $costQuarters->where('proID',$project->proID)->first();
         $benefits = Benefits::all();
         $benefit = $benefits->where('proID',$project->proID)->first();
-        return view('Project.update',compact('user','project','year','strategic','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','steps','step','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
+        return view('Project.update',compact('user','project','year','strategic','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','CountKPIProjects','steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
     }
 
     function update(Request $request,$id){
@@ -390,7 +395,7 @@ class ProjectController extends Controller
         $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
         $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
         $KPIProject = $request->KPIProject;
-        $countProject = $request->countProject;
+        $countProject = $request->countKPIProject;
         $targetProject = $request->targetProject;
         $KPIProID = $request->KPIProID;
         // dd($KPIProID);
@@ -470,7 +475,7 @@ class ProjectController extends Controller
                         [
                             'proID' => $id,
                             'name' => $KPI,
-                            'count' => $countProject[$index],
+                            'countKPIProID' => $countProject[$index],
                             'target' => $targetProject[$index],
                             'updated_at'=>now()
                         ]
@@ -480,7 +485,7 @@ class ProjectController extends Controller
                         [
                             'proID' => $id,
                             'name' => $KPI,
-                            'count' => $countProject[$index],
+                            'countKPIProID' => $countProject[$index],
                             'target' => $targetProject[$index],
                             'updated_at'=>now(),
                             'created_at' => now()
@@ -492,7 +497,7 @@ class ProjectController extends Controller
                     [
                         'proID' => $id,
                         'name' => $KPI,
-                        'count' => $countProject[$index],
+                        'countKPIProID' => $countProject[$index],
                         'target' => $targetProject[$index],
                         'updated_at'=>now(),
                         'created_at' => now()

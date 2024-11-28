@@ -108,6 +108,7 @@
                                             <li><a href="/status">สถานะ</a></li>
                                             <li><a href="/projectType">ประเภทโครงการ</a></li>
                                             <li><a href="/target">กลุ่มเป้าหมาย</a></li>
+                                            <li><a href="/countKPI">หน่วยนับKPI</a></li>
 
                                             @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                                                 <li><a href="/project">โครงการ</a></li>

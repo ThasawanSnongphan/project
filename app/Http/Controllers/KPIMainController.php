@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Users;
 use App\Models\Year;
 use App\Models\Strategics;
 use App\Models\StrategicIssues;
@@ -14,12 +15,13 @@ use Illuminate\Support\Facades\DB;
 class KPIMainController extends Controller
 {
     function index(){
+        $user=Users::all();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
         $KPIMain=KPIMains::with('goal.SFA.strategic.year')->get();
-        return view('KPIMain.index',compact('year','strategic','SFA','goal','KPIMain'));
+        return view('KPIMain.index',compact('user','year','strategic','SFA','goal','KPIMain'));
     }
 
     function insert(Request $request){
@@ -45,9 +47,10 @@ class KPIMainController extends Controller
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
+        $user=Users::all();
         
         $KPIMain=KPIMains::with(['goal.SFA.strategic.year'])->where('KPIMainID',$id)->first();
-        return view('KPIMain.update',compact('year','strategic','SFA','goal','KPIMain'));
+        return view('KPIMain.update',compact('year','strategic','SFA','goal','KPIMain','user'));
     }
     function update(Request $request,$id){
         // $tacID = Tactics::where('tacID',$request->input('tacID'))->first();
@@ -55,7 +58,9 @@ class KPIMainController extends Controller
             'goalID'=>$request->goalID,
             'name'=>$request->name,
             'count'=>$request->count,
-            'target'=>$request->target
+            'target'=>$request->target,
+            'directorID'=>$request->director,
+            'recorderID'=>$request->recorder
         ];
         DB::table('k_p_i_mains')->where('KPIMainID',$id)->update($KPIMain);
         return redirect('/KPIMain'); 

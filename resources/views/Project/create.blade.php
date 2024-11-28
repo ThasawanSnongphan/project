@@ -304,7 +304,13 @@
                                         <input class="form-control" type="text" name="KPIProject[]" id="">
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countProject[]" id="">
+                                        <select id="countKPIProject" name="countKPIProject[]" class="form-control"
+                                            required>
+                                            @foreach ($CountKPIProjects as $item)
+                                                <option value="{{ $item->countKPIProID }}">
+                                                    {{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
@@ -560,7 +566,7 @@
                             <div class="col-md-1 col-sm-1">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox"  name="TOR[]" value="TOR"> TOR
+                                        <input type="checkbox" name="TOR[]" value="TOR"> TOR
                                     </label>
                                 </div>
                             </div>
@@ -832,10 +838,13 @@
             const colCount = document.createElement('div');
             colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
 
-            const countInput = document.createElement('input');
+            const countInput = document.createElement('select');
             countInput.classList.add('form-control');
-            countInput.type = 'text';
-            countInput.name = 'countProject[]';
+            countInput.id = 'countKPIProject';
+            countInput.name = 'countKPIProject[]';
+
+            const originalOptions = document.querySelector('#countKPIProject').innerHTML;
+            countInput.innerHTML = originalOptions;
 
             const colTarget = document.createElement('div');
             colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');

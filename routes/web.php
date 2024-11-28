@@ -24,6 +24,7 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\TacticsController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\KPIMainController;
+use App\Http\Controllers\CountKPIProject;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
 
@@ -43,6 +44,10 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken(); // ป้องกัน CSRF attacks
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
+
+Route::get('/countKPI', [CountKPIProject::class,'index']);
+Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('countKPI.delete');
+Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::get('/projectcreate', [ProjectController::class,'create']);
