@@ -104,6 +104,7 @@ class ProjectController extends Controller
         $project->proInDetail = $request->input('proInDetail');
         $project->tarID = $target->tarID;
         $project->badID = $badget->badID;
+        $project->badgetTotal = $request->input('badgetTotal');
         $project->planID = $UniPlan->planID;
         $project->statusID =  1;
         $project->save();

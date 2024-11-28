@@ -46,8 +46,10 @@ Route::post('/logout', function () {
 });
 
 Route::get('/countKPI', [CountKPIProject::class,'index']);
+Route::post('/countKPIInsert',[CountKPIProject::class,'insert']);
 Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('countKPI.delete');
 Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
+Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('countKPI.update');
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::get('/projectcreate', [ProjectController::class,'create']);

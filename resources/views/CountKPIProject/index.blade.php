@@ -70,7 +70,7 @@
                                                             <i class="fa fa-pencil btn btn-warning
                                                             "></i></a>
                                                         <a href="{{ route('countKPI.delete', $item->countKPIProID) }}"
-                                                            onclick="return confirm('ต้องการลบปี {{ $item->name }} หรือไม่')">
+                                                            onclick="return confirm('ต้องการลบหน่วยนับ {{ $item->name }} หรือไม่')">
                                                             <i class="fa fa-times btn btn-danger"></i></a>
                                                     </td>
                                                 </tr>

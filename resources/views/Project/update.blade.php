@@ -338,11 +338,20 @@
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <select id="countKPIProject" name="countKPIProject[]" class="form-control"
                                             required>
-                                            @foreach ($CountKPIProjects as $item)
-                                                <option value="{{ $item->countKPIProID }}"
-                                                    <?php if (!empty($KPIProject->KPIProID) && $item->countKPIProID == $KPIProject->KPIProID) { echo 'selected'; } ?>>
-                                                    {{ $item->name }}</option>
-                                            @endforeach
+                                            @if (!empty($KPIProject->KPIProID))
+                                                @foreach ($CountKPIProjects as $item)
+                                                    <option value="{{ $item->countKPIProID }}" <?php if ($item->countKPIProID == $KPIProject->countKPIProID) {
+                                                        echo 'selected';
+                                                    } ?>>
+                                                        {{ $item->name }}</option>
+                                                @endforeach
+                                            @else
+                                                <option value="">--</option>
+                                                @foreach ($CountKPIProjects as $item)
+                                                    <option value="{{ $item->countKPIProID }}">
+                                                        {{ $item->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
@@ -663,12 +672,12 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประมาณการงบประมาณที่ใช้<span
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
-                                <input class="form-control" type="text" name="affiliation" id="affiliation"
-                                    required='required' data-validate-length-range="8,20" disabled />
+                                <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
+                                    required='required' data-validate-length-range="8,20" disabled value="{{$project->badgetTotal}}" />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <input class="form-control" type="text" name="affiliation" id="affiliation"
+                                <input class="form-control" type="text" name="badgetTotalText" id="badgetTotalText"
                                     required='required' data-validate-length-range="8,20" disabled />
 
                             </div>

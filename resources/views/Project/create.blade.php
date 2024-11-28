@@ -306,6 +306,7 @@
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <select id="countKPIProject" name="countKPIProject[]" class="form-control"
                                             required>
+                                            <option value="">--</option>
                                             @foreach ($CountKPIProjects as $item)
                                                 <option value="{{ $item->countKPIProID }}">
                                                     {{ $item->name }}</option>
@@ -517,12 +518,12 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประมาณการงบประมาณที่ใช้<span
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
-                                <input class="form-control" type="text" name="affiliation" id="affiliation"
+                                <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
                                     required='required' data-validate-length-range="8,20" disabled />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <input class="form-control" type="text" name="affiliationText" id="affiliationText"
+                                <input class="form-control" type="text" name="badgetTotalText" id="badgetTotalText"
                                     required='required' data-validate-length-range="8,20" disabled />
 
                             </div>
