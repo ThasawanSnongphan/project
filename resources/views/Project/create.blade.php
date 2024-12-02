@@ -57,13 +57,10 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เจ้าของโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
+                                <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
                                 <input class="form-control" type="text" name="user" id="user" required='required'
-                                    value="{{ Auth::user()->username }}" data-validate-length-range="8,20" disabled />
-                                @error('user')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                    value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
+                                
                             </div>
 
                             <div class="col-md-3 col-sm-3">
@@ -80,14 +77,9 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สังกัด<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="affiliation" id="affiliation"
+                                <input class="form-control" type="text" name="faculty" id="faculty"
                                     required='required' data-validate-length-range="8,20" disabled
                                     value="{{ Auth::user()->faculty_name }}" />
-                                @error('affiliation')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
                             </div>
 
                         </div>
@@ -608,7 +600,7 @@
 
 
         const users = @json($user);
-        const currentUserId = {{ Auth::user()->id }};
+        const currentUserId = {{ Auth::user()->userID }};
 
         function addNewUserDropdown() {
             const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
@@ -625,13 +617,14 @@
 
             const userDropdown = document.createElement('select');
             userDropdown.classList.add('form-control', 'userDropdown'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            userDropdown.id = `userDropdown${dropdownCount}`;
+            userDropdown.id = `userID${dropdownCount}`;
             userDropdown.innerHTML = '';
+            userDropdown.name = 'userID[]';
 
             users.forEach(user => {
-                if (user.id != currentUserId) {
+                if (user.userID != currentUserId) {
                     const option = document.createElement('option');
-                    option.value = user.id;
+                    option.value = user.userID;
                     option.textContent = user.firstname_th;
                     userDropdown.appendChild(option);
                 }

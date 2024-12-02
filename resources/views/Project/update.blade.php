@@ -59,6 +59,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เจ้าของโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
+                                <input type="hidden" name="userID[]" id="userID" value="{{ Auth::user()->userID}}">
                                 <input class="form-control" type="text" name="user" id="user" required='required'
                                     value="{{ Auth::user()->username }}" data-validate-length-range="8,20" disabled />
                                 @error('user')
@@ -73,6 +74,28 @@
                                     onclick="addNewUserDropdown()">เพิ่มผู้รับผิดชอบ</button>
                             </div>
                         </div>
+                        @foreach ($userMap as $index => $item)
+                            @if ($index > 0 && $item->proID == $project->proID)
+                                <div class="row field item form-group align-items-center">
+                                    <div class="col-md-3 col-sm-3"></div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <select name="userID[]" id="userID" class="form-control">
+                                            @foreach ($user as $users)
+                                                @if ($users->userID !== Auth::user()->userID)
+                                                    <option value="{{ $users->userID }}"
+                                                        @if ($users->userID === $item->userID) selected @endif>
+                                                        {{ $users->firstname_en }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" class="btn btn-danger "
+                                            onclick="this.closest('.row').remove()">ลบ</button>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
 
                         <div id="userDropdownContainer"></div>
 
@@ -673,7 +696,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
                                 <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
-                                    required='required' data-validate-length-range="8,20" disabled value="{{$project->badgetTotal}}" />
+                                    required='required' data-validate-length-range="8,20" disabled
+                                    value="{{ $project->badgetTotal }}" />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
@@ -781,7 +805,7 @@
         const proIn = @json($projectIntegrat);
 
         const users = @json($user);
-        const currentUserId = {{ Auth::user()->id }};
+        const currentUserId = {{ Auth::user()->userID }};
 
         function addNewUserDropdown() {
             const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
@@ -798,13 +822,14 @@
 
             const userDropdown = document.createElement('select');
             userDropdown.classList.add('form-control', 'userDropdown'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            userDropdown.id = `userDropdown${dropdownCount}`;
+            userDropdown.id = `userID${dropdownCount}`;
             userDropdown.innerHTML = '';
+            userDropdown.name = 'userID[]';
 
             users.forEach(user => {
-                if (user.id != currentUserId) {
+                if (user.userID != currentUserId) {
                     const option = document.createElement('option');
-                    option.value = user.id;
+                    option.value = user.userID;
                     option.textContent = user.firstname_th;
                     userDropdown.appendChild(option);
                 }

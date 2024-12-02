@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Year;
 use App\Models\Users;
+use App\Models\UsersMapProject;
 use App\Models\Status;
 use App\Models\Strategics;
 use App\Models\StrategicMap;
@@ -111,6 +112,16 @@ class ProjectController extends Controller
 
         $project = $project->fresh();
 
+        $users = $request->input('userID');
+        if(!empty($users) && is_array($users)){
+            foreach($users as $index => $user){
+                $userMap = new UsersMapProject();
+                $userMap->userID = $user;
+                $userMap->proID = $project->proID;
+                $userMap->save();
+            }
+        }
+
         $objDetail = $request->input('obj');
         if(is_array($objDetail)) {
             foreach($objDetail as $index => $obj){
@@ -216,6 +227,16 @@ class ProjectController extends Controller
         $project->save();
 
         $project = $project->fresh();
+
+        $users = $request->input('userID');
+        if(!empty($users) && is_array($users)){
+            foreach($users as $index => $user){
+                $userMap = new UsersMapProject();
+                $userMap->userID = $user;
+                $userMap->proID = $project->proID;
+                $userMap->save();
+            }
+        }
 
         $objDetail = $request->input('obj');
         if(!empty($objDetail) && is_array($objDetail)) {
@@ -334,6 +355,7 @@ class ProjectController extends Controller
         // $project = Projects::with('strategicMap')->find($proID);
         // $project=DB::table('projects')->where('proID',$id)->first();
         $user = Users::all();
+        $userMap = UsersMapProject::with('users')->get();
         $project=Projects::with('strategicMap')->where('proID',$id)->first();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
@@ -361,7 +383,7 @@ class ProjectController extends Controller
         $costQuarter = $costQuarters->where('proID',$project->proID)->first();
         $benefits = Benefits::all();
         $benefit = $benefits->where('proID',$project->proID)->first();
-        return view('Project.update',compact('user','project','year','strategic','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','CountKPIProjects','steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
+        return view('Project.update',compact('userMap','user','project','year','strategic','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','CountKPIProjects','steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
     }
 
     function update(Request $request,$id){
@@ -379,6 +401,8 @@ class ProjectController extends Controller
             'planID'=>$request->planID,
             'updated_at' => now()
         ];
+        
+        
         $straMap=[
             // 'straID'=>$request->StraID[0],
             // 'SFAID'=>$request->SFAID[0],
@@ -387,6 +411,13 @@ class ProjectController extends Controller
             'KPIMainID'=>$request->KPIMainID[0],
             'updated_at' => now()
         ];
+
+        $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
+        $userMapIDs = $userMaps->pluck('userMapID')->toArray();
+        // dd($userMapIDs);
+        $userMap = $request->userID;
+        dd($userMap);
+
 
         $objs = DB::table('objectives')->where('proID',$id)->get();
         $objIDs = $objs->pluck('objID')->toArray();
@@ -414,6 +445,7 @@ class ProjectController extends Controller
         $bnfID = $request->bnfID;
 
         DB::table('projects')->where('proID',$id)->update($project);
+        
         DB::table('strategic_maps')->where('proID',$id)->update($straMap);
         foreach ($obj as $index => $obj) {
             

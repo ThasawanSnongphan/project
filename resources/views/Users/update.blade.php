@@ -45,7 +45,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="{{route('users.update',$users->id)}}" method="post" novalidate>
+                                <form action="{{route('users.update',$users->userID)}}" method="post" novalidate>
                                     @csrf
                                     <div class="field item form-group">
                                         <label for="username" class="col-form-label col-md-3 col-sm-3  label-align">UserName<span class="required">*</span></label>

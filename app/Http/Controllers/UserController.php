@@ -80,12 +80,12 @@ class UserController extends Controller
     }
 
     function delete($id){
-        DB::table('users')->where('id',$id)->delete();
+        DB::table('users')->where('userID',$id)->delete();
         return redirect('/users');
     }
 
     function edit($id){
-        $users=DB::table('users')->where('id',$id)->first();
+        $users=DB::table('users')->where('userID',$id)->first();
         return view('Users.update',compact('users'));
     }
     function update(Request $request,$id){
@@ -127,7 +127,7 @@ class UserController extends Controller
                 'Admin'=>$request->has('Admin') ? true : false,
                 'flag'=>$request->has('flag') ? true : false
         ];
-        DB::table('users')->where('id',$id)->update($users);
+        DB::table('users')->where('userID',$id)->update($users);
         return redirect('/users'); 
     }
 }

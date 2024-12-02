@@ -11,5 +11,5 @@ class Users extends Model
 {
     use HasFactory,Notifiable;
 
-    protected $primaryKey = 'userID';
+   
 }
