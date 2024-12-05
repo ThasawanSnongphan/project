@@ -60,7 +60,7 @@
                                 <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
                                 <input class="form-control" type="text" name="user" id="user" required='required'
                                     value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
-                                
+
                             </div>
 
                             <div class="col-md-3 col-sm-3">
@@ -77,9 +77,8 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สังกัด<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="faculty" id="faculty"
-                                    required='required' data-validate-length-range="8,20" disabled
-                                    value="{{ Auth::user()->faculty_name }}" />
+                                <input class="form-control" type="text" name="faculty" id="faculty" required='required'
+                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->faculty_name }}" />
                             </div>
 
                         </div>
@@ -667,11 +666,37 @@
 
             const straDropdown = document.createElement('select');
             straDropdown.classList.add('form-control');
-            straDropdown.id = 'straID';
+            // straDropdown.id = 'straID1';
+            const uniqueID = `straID_${Date.now()}`;
+            straDropdown.id = uniqueID;
+            straDropdown.name = 'straID[]';
+
+            const selectedYearID = document.getElementById('year').value;
+            // const planSelect = document.getElementById('straID1');
+            // planSelect.innerHTML = '';
+
+            const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
+
+            if (filteredPlans.length === 0) {
+                const noPlanOption = document.createElement('option');
+                noPlanOption.value = '';
+                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
+                straDropdown.appendChild(noPlanOption);
+                straDropdown.disabled = true;
+                // updateIssueDropdown(null);
+            } else {
+                // planSelect.disabled = false;
+                filteredPlans.forEach(plan => {
+                    const option = document.createElement('option');
+                    option.value = plan.straID;
+                    option.textContent = plan.name;
+                    straDropdown.appendChild(option);
+                });
+                //     // updateIssueDropdown(filteredPlans[0].straID);
+            }
+
             mainContainer.appendChild(divstraID);
             divstraID.appendChild(straDropdown);
-            const selectedYearID = document.getElementById('year').value;
-            updatePlanDropdown(selectedYearID);
 
             const mainContainer1 = document.createElement('div');
             mainContainer1.classList.add('col-md-3');
@@ -693,8 +718,53 @@
 
             const SFADropdown = document.createElement('select');
             SFADropdown.classList.add('form-control');
-            SFADropdown.id = 'SFAID';
+            SFADropdown.id = `SFA_${Date.now()}`;
+            SFADropdown.name = 'SFAID[]';
             SFADropdown.innerHTML = '';
+
+            // ฟังก์ชันสำหรับอัปเดต SFADropdown
+            const updateSFADropdown = () => {
+                const selectedPlanID = straDropdown.value;
+
+                // ลบตัวเลือกเก่าใน SFADropdown
+                SFADropdown.innerHTML = '';
+
+                if (!selectedPlanID) {
+                    const noIssueOption = document.createElement('option');
+                    noIssueOption.value = '';
+                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                    SFADropdown.appendChild(noIssueOption);
+                    SFADropdown.disabled = true;
+                    updateGoalDropdown();
+                    return;
+                }
+
+                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+
+                if (filteredIssues.length === 0) {
+                    const noIssueOption = document.createElement('option');
+                    noIssueOption.value = '';
+                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
+                    SFADropdown.appendChild(noIssueOption);
+                    SFADropdown.disabled = true;
+                    updateGoalDropdown();
+                } else {
+                    filteredIssues.forEach(issue => {
+                        const option = document.createElement('option');
+                        option.value = issue.SFAID;
+                        option.textContent = issue.name;
+                        SFADropdown.appendChild(option);
+                    });
+                    SFADropdown.disabled = false;
+                   
+                }
+               
+            };
+
+            // เพิ่ม event listener ให้ straDropdown
+            straDropdown.addEventListener('change', updateSFADropdown);
+            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
+            updateSFADropdown();
             mainContainer2.appendChild(mainContainerSFA);
             mainContainerSFA.appendChild(divSFA);
             divSFA.appendChild(SFADropdown);
@@ -713,11 +783,82 @@
 
             const goalDropdown = document.createElement('select');
             goalDropdown.classList.add('form-control');
-            goalDropdown.id = 'goalID';
+            goalDropdown.id = `goal_${Date.now()}`;
+            goalDropdown.name = 'goalID[]';
             goalDropdown.innerHTML = '';
+
+            const updateGoalDropdown = () => {
+                const selectedSFAID = SFADropdown.value;
+
+                // ลบตัวเลือกเก่าใน SFADropdown
+                goalDropdown.innerHTML = '';
+
+                if (!selectedSFAID) {
+                    const noGoalOption = document.createElement('option');
+                    noGoalOption.value = '';
+                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                    goalDropdown.appendChild(noGoalOption);
+                    goalDropdown.disabled = true;
+                    return;
+                }
+
+                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+
+                if (filteredGoals.length === 0) {
+                const noGoalOption = document.createElement('option');
+                noGoalOption.value = '';
+                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                goalDropdown.appendChild(noGoalOption);
+                goalDropdown.disabled = true;
+            } else {
+                goalDropdown.disabled = false;
+                filteredGoals.forEach(goal => {
+                    const option = document.createElement('option');
+                    option.value = goal.goalID;
+                    option.textContent = goal.name;
+                    goalDropdown.appendChild(option);
+                });
+            }
+            };
+
+            // เพิ่ม event listener ให้ straDropdown
+            SFADropdown.addEventListener('change', updateGoalDropdown);
+            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
+            updateGoalDropdown();
             mainContainer2.appendChild(mainContainerGoal);
             mainContainerGoal.appendChild(divGoal);
             divGoal.appendChild(goalDropdown);
+
+            const mainContainerTactics = document.createElement('div');
+            mainContainerTactics.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
+
+            const tacticsLabel = document.createElement('label');
+            tacticsLabel.setAttribute('for', 'tacticsInput');
+            tacticsLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
+            tacticsLabel.textContent = 'กลยุทธ์';
+            mainContainerTactics.appendChild(tacticsLabel);
+
+            const divTactics = document.createElement('div');
+            divTactics.classList.add('col-md-6', 'col-sm-6');
+
+            const tacticsDropdown = document.createElement('select');
+            tacticsDropdown.classList.add('form-control');
+            tacticsDropdown.id = 'tacID';
+            tacticsDropdown.innerHTML = '';
+            mainContainer2.appendChild(mainContainerTactics);
+            mainContainerTactics.appendChild(divTactics);
+            divTactics.appendChild(tacticsDropdown);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+                mainContainer1.remove();
+                mainContainer2.remove();
+            };
+            mainContainer.appendChild(deleteButton);
 
 
             // ตอนนี้ mainContainer จะมีทั้ง label และ input
