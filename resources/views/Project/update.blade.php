@@ -59,7 +59,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เจ้าของโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="hidden" name="userID[]" id="userID" value="{{ Auth::user()->userID}}">
+                                <input type="hidden" name="userID[]" id="userID" value="{{ Auth::user()->userID }}">
                                 <input class="form-control" type="text" name="user" id="user" required='required'
                                     value="{{ Auth::user()->username }}" data-validate-length-range="8,20" disabled />
                                 @error('user')
@@ -74,8 +74,9 @@
                                     onclick="addNewUserDropdown()">เพิ่มผู้รับผิดชอบ</button>
                             </div>
                         </div>
+
                         @foreach ($userMap as $index => $item)
-                            @if ($index > 0 && $item->proID == $project->proID)
+                            @if ($item->proID === $project->proID && $item->userID !== Auth::user()->userID)
                                 <div class="row field item form-group align-items-center">
                                     <div class="col-md-3 col-sm-3"></div>
                                     <div class="col-md-6 col-sm-6">
@@ -616,24 +617,27 @@
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="hidden" name="costQuID[]" id=""
+                                        <input class="form-control" type="hidden" name="costQuID[]" id="costQuID"
                                             @if (!empty($costQuarter->costQuID)) value="{{ $costQuarter->costQuID }}" @endif>
-                                        <input class="form-control" type="text" name="costQu1[]" id=""
+                                        <input class="form-control cost-input" type="text" name="costQu1[]" id=""
                                             @if (!empty($costQuarter->costQu1)) value="{{ $costQuarter->costQu1 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu2[]" id=""
+                                        <input class="form-control cost-input" type="text" name="costQu2[]"
+                                            id=""
                                             @if (!empty($costQuarter->costQu2)) value="{{ $costQuarter->costQu2 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu3[]" id=""
+                                        <input class="form-control cost-input" type="text" name="costQu3[]"
+                                            id=""
                                             @if (!empty($costQuarter->costQu3)) value="{{ $costQuarter->costQu3 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control" type="text" name="costQu4[]" id=""
+                                        <input class="form-control cost-input" type="text" name="costQu4[]"
+                                            id=""
                                             @if (!empty($costQuarter->costQu4)) value="{{ $costQuarter->costQu4 }}" @endif>
                                     </div>
-                                    <div class="col-md-1 col-sm-1 ">
+                                    <div class="col-md-1 col-sm-1">
                                         <button type='button' class="btn btn-primary"
                                             onclick="insertCostType()">เพิ่ม</button>
 
@@ -659,19 +663,19 @@
                                                 <div class="row col-md-2 col-sm-2 mr-1">
                                                     <input class="form-control" type="hidden" name="costQuID[]"
                                                         id="" value="{{ $item->costQuID }}">
-                                                    <input class="form-control" type="text" name="costQu1[]"
+                                                    <input class="form-control cost-input" type="text" name="costQu1[]"
                                                         id="" value="{{ $item->costQu1 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu2[]"
+                                                    <input class="form-control cost-input" type="text" name="costQu2[]"
                                                         id="" value="{{ $item->costQu2 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu3[]"
+                                                    <input class="form-control cost-input" type="text" name="costQu3[]"
                                                         id="" value="{{ $item->costQu3 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu4[]"
+                                                    <input class="form-control cost-input" type="text" name="costQu4[]"
                                                         id="" value="{{ $item->costQu4 }}">
                                                 </div>
                                                 <div class="col-md-1 col-sm-1 m-1">
@@ -806,6 +810,29 @@
 
         const users = @json($user);
         const currentUserId = {{ Auth::user()->userID }};
+
+        function calculateTotal() {
+            // ดึงค่าจากช่อง input ที่มี class "cost-input"
+            const inputs = document.querySelectorAll('.cost-input');
+            let total = 0;
+
+            // รวมค่าของแต่ละช่อง
+            inputs.forEach(input => {
+                const value = parseFloat(input.value) || 0; // แปลงค่าเป็นตัวเลข ถ้าไม่มีให้ใช้ 0
+                total += value;
+            });
+
+            // แสดงผลรวมในช่อง badgetTotal
+            document.getElementById('badgetTotal').value = total.toFixed(2); // แสดงผลแบบทศนิยม 2 ตำแหน่ง
+        }
+
+        // เพิ่ม event listener ให้ช่อง input ที่มี class "cost-input"
+        document.querySelectorAll('.cost-input').forEach(input => {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        // เรียกคำนวณครั้งแรก (กรณีมีค่าเริ่มต้นในช่อง input)
+        calculateTotal();
 
         function addNewUserDropdown() {
             const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
@@ -1164,9 +1191,10 @@
             colCostQu1.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu1Input = document.createElement('input');
-            CostQu1Input.classList.add('form-control');
+            CostQu1Input.classList.add('form-control','cost-input');
             CostQu1Input.type = 'text';
             CostQu1Input.name = 'CostQu1[]';
+            CostQu1Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
 
             colCostQu1.appendChild(CostQu1Input);
             mainCostTypeContainer.appendChild(colCostQu1);
@@ -1175,9 +1203,10 @@
             colCostQu2.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu2Input = document.createElement('input');
-            CostQu2Input.classList.add('form-control');
+            CostQu2Input.classList.add('form-control','cost-input');
             CostQu2Input.type = 'text';
             CostQu2Input.name = 'CostQu2[]';
+            CostQu2Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
 
             colCostQu2.appendChild(CostQu2Input);
             mainCostTypeContainer.appendChild(colCostQu2);
@@ -1186,9 +1215,10 @@
             colCostQu3.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu3Input = document.createElement('input');
-            CostQu3Input.classList.add('form-control');
+            CostQu3Input.classList.add('form-control','cost-input');
             CostQu3Input.type = 'text';
             CostQu3Input.name = 'CostQu3[]';
+            CostQu3Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
 
             colCostQu3.appendChild(CostQu3Input);
             mainCostTypeContainer.appendChild(colCostQu3);
@@ -1198,9 +1228,10 @@
             colCostQu4.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu4Input = document.createElement('input');
-            CostQu4Input.classList.add('form-control');
+            CostQu4Input.classList.add('form-control','cost-input');
             CostQu4Input.type = 'text';
             CostQu4Input.name = 'CostQu4[]';
+            CostQu4Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
 
             colCostQu4.appendChild(CostQu4Input);
             mainCostTypeContainer.appendChild(colCostQu4);
@@ -1213,6 +1244,7 @@
             deleteButton.onclick = function() {
                 mainExpenseContainer.remove();
                 mainCostTypeContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+                calculateTotal();
             };
 
             // เพิ่มปุ่มลบลงใน mainContainer

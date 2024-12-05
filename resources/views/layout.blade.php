@@ -109,7 +109,7 @@
                                             <li><a href="/projectType">ประเภทโครงการ</a></li>
                                             <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                             <li><a href="/countKPI">หน่วยนับKPI</a></li>
-
+                                            
                                             @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                                                 <li><a href="/project">โครงการ</a></li>
                                             @endif
@@ -126,9 +126,7 @@
                                     <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                                             <li><a href="/project">โครงการ</a></li>
-                                        @endif
 
                                         </ul>
                                     </li>

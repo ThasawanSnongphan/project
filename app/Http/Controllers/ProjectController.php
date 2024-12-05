@@ -413,16 +413,18 @@ class ProjectController extends Controller
         ];
 
         $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
-        $userMapIDs = $userMaps->pluck('userMapID')->toArray();
+        $userMapIDs = $userMaps->pluck('userID')->toArray();
         // dd($userMapIDs);
-        $userMap = $request->userID;
-        dd($userMap);
+        $userMapID = $request->userID;
+        //  dd($userMapIDs,$userMapID);
 
 
         $objs = DB::table('objectives')->where('proID',$id)->get();
         $objIDs = $objs->pluck('objID')->toArray();
+        // dd($objIDs);
         $obj = $request->obj;
         $objID = $request->objID;
+        // dd($objIDs,$objID);
         
         $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
         $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
@@ -445,14 +447,55 @@ class ProjectController extends Controller
         $bnfID = $request->bnfID;
 
         DB::table('projects')->where('proID',$id)->update($project);
-        
+        foreach ($userMapID as $index => $userMap){
+            if(isset($userMap)){
+                $currentuserMapID = $userMap;
+                // dd($currentuserMapID);
+                if(in_array($currentuserMapID,$userMapIDs)){
+                    DB::table('users_map_projects')->updateOrInsert(
+                        [
+                            'userID' => $currentuserMapID
+                        ],
+                        [
+                            'proID' => $id,
+                            'updated_at' => now()
+                        ]
+                        );
+                }else{
+                    DB::table('users_map_projects')->insert(
+                        [
+                            'userID' => $userMap,
+                            'proID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]);
+                }
+            }else{
+                DB::table('users_map_projects')->insert(
+                    [
+                        'userID'=>$userMap,
+                        'proID'=>$id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]);
+            }
+        }
+
+        $userMapToDelete = array_diff($userMapIDs,$userMapID);
+        if(!empty($userMapToDelete)){
+            DB::table('users_map_projects')
+            ->where('proID',$id)
+            ->whereIn('userID',$userMapToDelete)
+            ->delete();
+        }
+
         DB::table('strategic_maps')->where('proID',$id)->update($straMap);
         foreach ($obj as $index => $obj) {
             
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
             if (isset($objID[$index])) {
                 $currentObjID = $objID[$index];  // ดึง objID จาก array objID[]
-                
+                // dd($currentObjID);
                 // ตรวจสอบว่า objID นี้มีอยู่ในฐานข้อมูลหรือไม่
                 if (in_array($currentObjID, $objIDs)) {
                     // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update

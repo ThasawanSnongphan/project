@@ -29,13 +29,15 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                <th>สถานะ</th>
-                {{-- <th>สถานะการจัดซื้อจัดจ้าง</th> --}}
-                <th>ไตรมาส 1</th>
-                <th>ไตรมาส 2</th>
-                <th>ไตรมาส 3</th>
-                <th>ไตรมาส 4</th>
-                <th></th>
+                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                    <th>สถานะ</th>
+                    <th>ไตรมาส 1</th>
+                    <th>ไตรมาส 2</th>
+                    <th>ไตรมาส 3</th>
+                    <th>ไตรมาส 4</th>
+                    <th></th>
+                @endif
+
             </tr>
         </thead>
         <tbody>
@@ -56,6 +58,9 @@
                             {{ $item->name }}
                         @endif
                     </td>
+                    @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                        
+                  
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
@@ -104,6 +109,7 @@
                                     class="fa fa-times btn btn-danger"></i></a>
                         @endif
                     </td>
+                    @endif
                 </tr>
                 @php
                     $i++;
