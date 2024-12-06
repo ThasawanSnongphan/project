@@ -180,6 +180,54 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row field item form-group align-items-center">
+                            <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <select id="straID" name="straID[]" class="form-control" required
+                                    onchange="KPIMainNone()">
+
+                                    <!-- แผนจะถูกโหลดที่นี่ -->
+                                </select>
+                            </div>
+                           
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9 border mb-2 p-2">
+                            <div class="row field item form-group align-items-center">
+                                <label for="title"
+                                    class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="SFAID" name="SFAID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row field item form-group align-items-center">
+                                <label for="title"
+                                    class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="goalID" name="goalID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row field item form-group align-items-center">
+                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                        class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <select id="tacID" name="tacID[]" class="form-control" required>
+                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="insertStrategic"></div>
 
 

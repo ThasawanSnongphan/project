@@ -24,8 +24,8 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-3 col-sm-3"></div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-10 col-sm-10">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>กลยุทธ์ </h2>
@@ -56,8 +56,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="year" name="year" class="form-control" required>
                                                     @foreach ($year as $item)
-                                                        <option value="{{ $item->yearID }}" 
-                                                            {{ $item->yearID == $tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}> 
+                                                        <option value="{{ $item->yearID }}"
+                                                            {{ $item->yearID == $tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
                                                             {{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -110,10 +110,99 @@
                                             </div>
                                         </div>
 
+                                        <div class="field item form-group">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="KPIMainID" name="KPIMainID" class="form-control" required>
+
+                                                </select>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 ">
+                                                <button type='button' class="btn btn-primary" id="addKPIButton"
+                                                    onclick="insertKPIMain()">เพิ่ม</button>
+                                            </div>
+                                        </div>
+                                        <div id="insertKPIMain"></div>
+
                                         <script>
                                             const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
                                             const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                                             const goals = @json($goal); // ข้อมูลเป้าประสงค์
+                                            const KPIMains = @json($KPIMain);
+
+                                            function insertKPIMain() {
+                                                const mainContainer = document.createElement('div');
+                                                mainContainer.classList.add('field', 'item', 'form-group');
+
+                                                const KPIMainLabel = document.createElement('label');
+                                                KPIMainLabel.setAttribute('for', 'KPIIMainInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
+                                                KPIMainLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
+                                                KPIMainLabel.textContent = 'ตัวชี้วัด*'; // ตั้งข้อความใน label
+
+                                                mainContainer.appendChild(KPIMainLabel);
+
+                                                const colKPIMain = document.createElement('div');
+                                                colKPIMain.classList.add('col-md-6', 'col-sm-6');
+
+                                                const KPIMainDropdown = document.createElement('select');
+                                                KPIMainDropdown.classList.add('form-control');
+                                                KPIMainDropdown.id = `KPIMainID_${Date.now()}`;
+                                                KPIMainDropdown.name = 'KPIMain[]';
+
+                                                // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
+                                                // KPIMainDropdown.innerHTML = '';
+
+                                                const selectedgoalID = document.getElementById('goalID').value;
+                                                KPIMainDropdown.innerHTML = '';
+
+                                                if (!selectedgoalID) {
+                                                    const noKPIMainOption = document.createElement('option');
+                                                    noKPIMainOption.value = '';
+                                                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                                    KPIMainDropdown.appendChild(noKPIMainOption);
+                                                    KPIMainDropdown.disabled = true;
+                                                    return;
+                                                }
+
+                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+
+                                                if (filteredKPIMain.length === 0) {
+                                                    const noKPIMainOption = document.createElement('option');
+                                                    noKPIMainOption.value = '';
+                                                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                                    KPIMainDropdown.appendChild(noKPIMainOption);
+                                                    KPIMainDropdown.disabled = true;
+                                                } else {
+                                                    KPIMainDropdown.disabled = false;
+                                                    filteredKPIMain.forEach(KPIMain => {
+                                                        const option = document.createElement('option');
+                                                        option.value = KPIMain.KPIMainID;
+                                                        option.textContent = KPIMain.name;
+                                                        KPIMainDropdown.appendChild(option);
+                                                    });
+                                                }
+
+                                                colKPIMain.appendChild(KPIMainDropdown);
+                                                mainContainer.appendChild(colKPIMain);
+
+                                                const deleteButton = document.createElement('button');
+                                                deleteButton.type = 'button';
+                                                deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
+                                                deleteButton.textContent = 'ลบ';
+                                                deleteButton.onclick = function() {
+                                                    mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+                                                };
+
+                                                // เพิ่มปุ่มลบลงใน mainContainer
+                                                mainContainer.appendChild(deleteButton);
+
+
+
+                                                document.getElementById('insertKPIMain').appendChild(mainContainer);
+
+                                            }
 
                                             // ฟังก์ชันอัปเดต dropdown ของแผน
                                             function updatePlanDropdown(selectedYearID) {
@@ -142,7 +231,7 @@
                                                         }
                                                         planSelect.appendChild(option);
                                                     });
-                                                    if(!filteredPlans.some(plan => plan.straID == '{{ $tactics->goal->SFA->straID }}')) {
+                                                    if (!filteredPlans.some(plan => plan.straID == '{{ $tactics->goal->SFA->straID }}')) {
                                                         updateIssueDropdown(filteredPlans[0].straID);
                                                     }
                                                 }
@@ -150,7 +239,7 @@
 
                                             // ฟังก์ชันอัปเดต dropdown ของประเด็นยุทธศาสตร์
                                             function updateIssueDropdown(selectedPlanID) {
-                                                console.log(selectedPlanID);
+                                                // console.log(selectedPlanID);
                                                 const issueSelect = document.getElementById('SFAID');
                                                 issueSelect.innerHTML = '';
 
@@ -180,15 +269,15 @@
                                                         option.value = issue.SFAID;
                                                         option.textContent = issue.name;
                                                         // console.log(issue.SFAID , '$tactics->goal->SFAID' );
-                                                        
+
                                                         if (issue.SFAID == '{{ $tactics->goal->SFAID }}') {
                                                             option.selected = true;
                                                             updateGoalDropdown(issue.SFAID);
-                                                        } 
-               
+                                                        }
+
                                                         issueSelect.appendChild(option);
                                                     });
-                                                    if(!filteredIssues.some(issue => issue.SFAID == '{{$tactics->goal->SFAID}}')){
+                                                    if (!filteredIssues.some(issue => issue.SFAID == '{{ $tactics->goal->SFAID }}')) {
                                                         updateGoalDropdown(filteredIssues[0].SFAID);
                                                     }
                                                 }
@@ -205,6 +294,7 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
+                                                    updateKPIMainDropdown(null);
                                                     return;
                                                 }
 
@@ -217,19 +307,59 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
+                                                    updateKPIMainDropdown(null);
                                                 } else {
                                                     goalSelect.disabled = false;
                                                     filteredGoals.forEach(goal => {
                                                         const option = document.createElement('option');
                                                         option.value = goal.goalID;
                                                         option.textContent = goal.name;
-                                                        if(goal.goalID == '{{$tactics->goalID}}'){
+                                                        if (goal.goalID == '{{ $tactics->goalID }}') {
                                                             option.selected = true;
+                                                            updateKPIMainDropdown(goal.goalID);
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
+                                                    if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goal }}')) {
+                                                        updateKPIMainDropdown(filteredGoals[0].goalID);
+                                                    }
                                                 }
 
+                                            }
+
+                                            function updateKPIMainDropdown(selectedgoalID) {
+                                                const KPIMainSelect = document.getElementById('KPIMainID');
+                                                KPIMainSelect.innerHTML = '';
+
+                                                if (!selectedgoalID) {
+                                                    const noKPIMainOption = document.createElement('option');
+                                                    noKPIMainOption.value = '';
+                                                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                                    KPIMainSelect.appendChild(noKPIMainOption);
+                                                    KPIMainSelect.disabled = true;
+                                                    return;
+                                                }
+
+                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+
+                                                if (filteredKPIMain.length === 0) {
+                                                    const noKPIMainOption = document.createElement('option');
+                                                    noKPIMainOption.value = '';
+                                                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                                    KPIMainSelect.appendChild(noKPIMainOption);
+                                                    KPIMainSelect.disabled = true;
+                                                } else {
+                                                    KPIMainSelect.disabled = false;
+                                                    filteredKPIMain.forEach(KPIMain => {
+                                                        const option = document.createElement('option');
+                                                        option.value = KPIMain.KPIMainID;
+                                                        option.textContent = KPIMain.name;
+                                                        if(KPIMain.KPIMainID == '{{$tactics->KPIMain}}'){
+                                                            option.selected = true;
+                                                        }
+                                                        KPIMainSelect.appendChild(option);
+                                                    });
+                                                }
                                             }
 
                                             // Event listeners สำหรับ dropdown ต่าง ๆ
@@ -237,7 +367,7 @@
                                                 const yearSelect = document.getElementById('year');
                                                 const planSelect = document.getElementById('straID');
                                                 const issueSelect = document.getElementById('SFAID');
-
+                                                const goalSelect = document.getElementById('goalID');
 
                                                 // เมื่อเปลี่ยนปีงบประมาณ
                                                 yearSelect.addEventListener('change', function() {
@@ -254,6 +384,11 @@
                                                 issueSelect.addEventListener('change', function() {
                                                     const selectedSFAID = this.value;
                                                     updateGoalDropdown(selectedSFAID);
+                                                });
+
+                                                goalSelect.addEventListener('change', function() {
+                                                    const selectedgoalID = this.value;
+                                                    updateKPIMainDropdown(selectedgoalID);
                                                 });
 
 
@@ -281,7 +416,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-1 col-sm-1"></div>
                     </div>
                 </div>
             </div>

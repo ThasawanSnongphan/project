@@ -683,16 +683,16 @@
                 noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
                 straDropdown.appendChild(noPlanOption);
                 straDropdown.disabled = true;
-                // updateIssueDropdown(null);
+                // updateSFADropdown();
             } else {
-                // planSelect.disabled = false;
+                straDropdown.disabled = false;
                 filteredPlans.forEach(plan => {
                     const option = document.createElement('option');
                     option.value = plan.straID;
                     option.textContent = plan.name;
                     straDropdown.appendChild(option);
                 });
-                //     // updateIssueDropdown(filteredPlans[0].straID);
+                // updateSFADropdown();
             }
 
             mainContainer.appendChild(divstraID);
@@ -749,22 +749,22 @@
                     SFADropdown.disabled = true;
                     updateGoalDropdown();
                 } else {
+                    SFADropdown.disabled = false;
                     filteredIssues.forEach(issue => {
                         const option = document.createElement('option');
                         option.value = issue.SFAID;
                         option.textContent = issue.name;
                         SFADropdown.appendChild(option);
                     });
-                    SFADropdown.disabled = false;
-                   
+                    // updateGoalDropdown();
                 }
-               
-            };
 
+            };
             // เพิ่ม event listener ให้ straDropdown
             straDropdown.addEventListener('change', updateSFADropdown);
             // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
             updateSFADropdown();
+
             mainContainer2.appendChild(mainContainerSFA);
             mainContainerSFA.appendChild(divSFA);
             divSFA.appendChild(SFADropdown);
@@ -799,32 +799,35 @@
                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                     goalDropdown.appendChild(noGoalOption);
                     goalDropdown.disabled = true;
+                    updateTacticsDropdown();
                     return;
                 }
 
                 const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
 
                 if (filteredGoals.length === 0) {
-                const noGoalOption = document.createElement('option');
-                noGoalOption.value = '';
-                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                goalDropdown.appendChild(noGoalOption);
-                goalDropdown.disabled = true;
-            } else {
-                goalDropdown.disabled = false;
-                filteredGoals.forEach(goal => {
-                    const option = document.createElement('option');
-                    option.value = goal.goalID;
-                    option.textContent = goal.name;
-                    goalDropdown.appendChild(option);
-                });
-            }
+                    const noGoalOption = document.createElement('option');
+                    noGoalOption.value = '';
+                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                    goalDropdown.appendChild(noGoalOption);
+                    goalDropdown.disabled = true;
+                    updateTacticsDropdown();
+                } else {
+                    goalDropdown.disabled = false;
+                    filteredGoals.forEach(goal => {
+                        const option = document.createElement('option');
+                        option.value = goal.goalID;
+                        option.textContent = goal.name;
+                        goalDropdown.appendChild(option);
+                    });
+                }
             };
 
             // เพิ่ม event listener ให้ straDropdown
             SFADropdown.addEventListener('change', updateGoalDropdown);
             // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
             updateGoalDropdown();
+
             mainContainer2.appendChild(mainContainerGoal);
             mainContainerGoal.appendChild(divGoal);
             divGoal.appendChild(goalDropdown);
@@ -843,8 +846,51 @@
 
             const tacticsDropdown = document.createElement('select');
             tacticsDropdown.classList.add('form-control');
-            tacticsDropdown.id = 'tacID';
+            tacticsDropdown.id = `tacID_${Date.now()}`;
+            tacticsDropdown.name = 'tacID[]';
             tacticsDropdown.innerHTML = '';
+
+            const updateTacticsDropdown = () => {
+                const selectedGoalID = goalDropdown.value;
+                tacticsDropdown.innerHTML = '';
+
+                if (!selectedGoalID) {
+                    const noTacticsOption = document.createElement('option');
+                    noTacticsOption.value = '';
+                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
+                    tacticsDropdown.appendChild(noTacticsOption);
+                    tacticsDropdown.disabled = true;
+                    return;
+                }
+
+                // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
+                const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
+
+                if (filteredTactics.length === 0) {
+                    const noTacticsOption = document.createElement('option');
+                    noTacticsOption.value = '';
+                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
+                    tacticsDropdown.appendChild(noTacticsOption);
+                    tacticsDropdown.disabled = true;
+
+                } else {
+                    tacticsDropdown.disabled = false;
+                    filteredTactics.forEach(tactic => {
+                        const option = document.createElement('option');
+                        option.value = tactic.tacID;
+                        option.textContent = tactic.name;
+                        tacticsDropdown.appendChild(option);
+                    });
+
+                }
+            };
+
+            // เพิ่ม event listener ให้ straDropdown
+            goalDropdown.addEventListener('change', updateTacticsDropdown);
+            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
+            updateTacticsDropdown();
+
+
             mainContainer2.appendChild(mainContainerTactics);
             mainContainerTactics.appendChild(divTactics);
             divTactics.appendChild(tacticsDropdown);

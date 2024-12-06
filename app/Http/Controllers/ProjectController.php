@@ -248,16 +248,27 @@ class ProjectController extends Controller
             }
         }
 
-        $straMap = new StrategicMap();
-        $straMap->proID = $project->proID;
-        $straMap->straID = $strategic->straID;
-        $straMap->SFAID = $SFA->SFAID;
-        $straMap->goalID = $goal->goalID;
-        $straMap->tacID = $tactics->tacID;
-        if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
-        $straMap->KPIMainID = $KPIMain->KPIMainID;
+        $straID = $request->input('straID');
+        $SFAID = $request->input('SFAID');
+        $goalID = $request->input('goalID');
+        $tacID = $request->input('tacID');
+        $KPIMainID = $request->input('KPIMainID');
+        if(is_array($straID) && is_array($SFAID) && is_array($goalID) && is_array($tacID) && is_array($KPIMainID)){
+            foreach($straID as $index => $stra){
+                $straMap = new StrategicMap();
+                $straMap->proID = $project->proID;
+                $straMap->straID = $stra;
+                $straMap->SFAID = $SFAID[$index] ?? null;
+                $straMap->goalID = $goalID[$index] ?? null;
+                $straMap->tacID = $tacID[$index] ?? null;
+                if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
+                    $straMap->KPIMainID = $KPIMainID[$index] ?? null;
+                }
+                $straMap->save();
+            }
         }
-        $straMap->save();
+
+        
 
         $KPIName = $request->input('KPIProject') ;
         $KPICount =  $request->input('countKPIProject') ;

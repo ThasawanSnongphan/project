@@ -62,14 +62,14 @@ class TacticsController extends Controller
     }
 
     function edit($id){
-        $tactics=Tactics::with('goal.SFA.strategic.year')->where('tacID',$id)->first();
+        $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->where('tacID',$id)->first();
         $year=Year::all();
         $strategic=Strategics::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
-        
-        $goal = Goals::all(); 
-        return view('tactics.update',compact('year','strategic','SFA','goal','tactics'));
+        $KPIMainMap=Tactics::with('KPIMain')->get();
+        $KPIMain=KPIMains::all();
+        return view('tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMap','KPIMain'));
     }
     function update(Request $request,$id){
         $tactics=[

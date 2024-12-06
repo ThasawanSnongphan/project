@@ -117,11 +117,41 @@
 
                             const KPIMainDropdown = document.createElement('select');
                             KPIMainDropdown.classList.add('form-control');
-                            // KPIMainDropdown.id = 'KPIMain1';
+                            KPIMainDropdown.id = `KPIMainID_${Date.now()}`;
                             KPIMainDropdown.name = 'KPIMain[]';
 
                             // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
                             // KPIMainDropdown.innerHTML = '';
+
+                            // const selectedgoalID = document.getElementById('goalID').value;
+                            // KPIMainDropdown.innerHTML = '';
+
+                            // if (!selectedgoalID) {
+                            //     const noKPIMainOption = document.createElement('option');
+                            //     noKPIMainOption.value = '';
+                            //     noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                            //     KPIMainDropdown.appendChild(noKPIMainOption);
+                            //     KPIMainDropdown.disabled = true;
+                            //     return;
+                            // }
+
+                            // const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+
+                            // if (filteredKPIMain.length === 0) {
+                            //     const noKPIMainOption = document.createElement('option');
+                            //     noKPIMainOption.value = '';
+                            //     noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                            //     KPIMainDropdown.appendChild(noKPIMainOption);
+                            //     KPIMainDropdown.disabled = true;
+                            // } else {
+                            //     KPIMainDropdown.disabled = false;
+                            //     filteredKPIMain.forEach(KPIMain => {
+                            //         const option = document.createElement('option');
+                            //         option.value = KPIMain.KPIMainID;
+                            //         option.textContent = KPIMain.name;
+                            //         KPIMainDropdown.appendChild(option);
+                            //     });
+                            // }
 
                             colKPIMain.appendChild(KPIMainDropdown);
                             mainContainer.appendChild(colKPIMain);
