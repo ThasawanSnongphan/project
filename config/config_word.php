@@ -30,7 +30,10 @@ return [
     'table_styles' => [
         'borderSize' => 6,
         'borderColor' => '000000',
-        'alignment' => 'center',
+        // 'align' => 'center',
+        // 'valign' => 'center',
+        'align' => ['align' => 'center'], // สำหรับการจัดข้อความแนวนอน
+        'cell' => ['valign' => 'center'], // สำหรับการจัดข้อความแนวตั้งในเซลล์
     ],
 
     // การตั้งค่าการจัดย่อหน้า
@@ -40,4 +43,11 @@ return [
         'left' => ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::LEFT],
         'indentation' => ['indentation' => ['left' => 920]],
     ],
+
+    // กำหนดค่าการตั้งค่าหลายรูปแบบ
+    'space_style' => [
+        'default' => ['spaceAfter' => 240], // ระยะห่าง 12pt หลังข้อความ
+        'doubleSpacing' => ['lineHeight' => 2.0], // บรรทัดห่าง 2 เท่า
+    ],
+    
 ];
