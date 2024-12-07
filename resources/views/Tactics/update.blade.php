@@ -124,6 +124,7 @@
                                                     onclick="insertKPIMain()">เพิ่ม</button>
                                             </div>
                                         </div>
+                                        
                                         <div id="insertKPIMain"></div>
 
                                         <script>
@@ -131,6 +132,7 @@
                                             const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                                             const goals = @json($goal); // ข้อมูลเป้าประสงค์
                                             const KPIMains = @json($KPIMain);
+                                            const tacticMap = @json($tactics->KPIMain);
 
                                             function insertKPIMain() {
                                                 const mainContainer = document.createElement('div');
@@ -320,7 +322,7 @@
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
-                                                    if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goal }}')) {
+                                                    if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goalID }}')) {
                                                         updateKPIMainDropdown(filteredGoals[0].goalID);
                                                     }
                                                 }
@@ -354,9 +356,11 @@
                                                         const option = document.createElement('option');
                                                         option.value = KPIMain.KPIMainID;
                                                         option.textContent = KPIMain.name;
-                                                        if(KPIMain.KPIMainID == '{{$tactics->KPIMain}}'){
-                                                            option.selected = true;
-                                                        }
+                                                        tacticMap.forEach(map => {
+                                                            if (map.KPIMainID == KPIMain.KPIMainID) {
+                                                                option.selected = true;
+                                                            }
+                                                        })
                                                         KPIMainSelect.appendChild(option);
                                                     });
                                                 }

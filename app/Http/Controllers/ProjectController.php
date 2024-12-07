@@ -139,7 +139,7 @@ class ProjectController extends Controller
             foreach ($KPIName as $index => $KPI){
                 $KPIProject = new KPIProjects();
                 $KPIProject->name = $KPI;
-                $KPIProject->count =  $KPICount[$index] ?? null;
+                $KPIProject->countKPIProID =  $KPICount[$index] ?? null;
                 $KPIProject->target = $KPITarget[$index] ?? null;
                 $KPIProject->proID = $project->proID;
                 $KPIProject->save();
@@ -303,13 +303,13 @@ class ProjectController extends Controller
         $costQu2= $request->input('costQu2');
         $costQu3= $request->input('costQu3');
         $costQu4= $request->input('costQu4');
-        if(!empty($costQu1) && is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
+        if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
             foreach($costQu1 as $index => $cost1){
                 $costQu = new CostQuarters();
                 $costQu->costQu1 = $cost1;
-                $costQu->costQu2 = $costQu2[$index];
-                $costQu->costQu3 = $costQu3[$index];
-                $costQu->costQu4 = $costQu4[$index];
+                $costQu->costQu2 = $costQu2[$index] ?? null;
+                $costQu->costQu3 = $costQu3[$index] ?? null;
+                $costQu->costQu4 = $costQu4[$index] ?? null;
                 $costQu->proID = $project->proID;
                 $costQu->expID = $expID->expID;
                 $costQu->costID = $costID->costID;
@@ -705,7 +705,15 @@ class ProjectController extends Controller
 
     function report($id){
         $project=DB::table('projects')->where('proID',$id)->first();
-        return view('Project.report',compact('project'));
+        $projectYear=Year::all();
+        $projectType=ProjectType::all();
+        $projectCharector=ProjectCharec::all();
+        $projectIntegrat=ProjectIntegrat::all();
+        $projectOBJ=Objectives::all();
+        $projectTarget=Targets::all();
+        $projectBadgetType=BadgetType::all();
+        $projectUniPlan=UniPlan::all();
+        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectBadgetType','projectUniPlan'));
     }
 
 

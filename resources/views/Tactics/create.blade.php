@@ -83,7 +83,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="KPIMainID" name="KPIMainID" class="form-control" required>
+                            <select id="KPIMainID" name="KPIMain[]" class="form-control" required>
 
                             </select>
                         </div>
@@ -120,38 +120,35 @@
                             KPIMainDropdown.id = `KPIMainID_${Date.now()}`;
                             KPIMainDropdown.name = 'KPIMain[]';
 
-                            // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
-                            // KPIMainDropdown.innerHTML = '';
+                            const selectedgoalID = document.getElementById('goalID').value;
+                            KPIMainDropdown.innerHTML = '';
 
-                            // const selectedgoalID = document.getElementById('goalID').value;
-                            // KPIMainDropdown.innerHTML = '';
+                            if (!selectedgoalID) {
+                                const noKPIMainOption = document.createElement('option');
+                                noKPIMainOption.value = '';
+                                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                KPIMainDropdown.appendChild(noKPIMainOption);
+                                KPIMainDropdown.disabled = true;
+                                return;
+                            }
 
-                            // if (!selectedgoalID) {
-                            //     const noKPIMainOption = document.createElement('option');
-                            //     noKPIMainOption.value = '';
-                            //     noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
-                            //     KPIMainDropdown.appendChild(noKPIMainOption);
-                            //     KPIMainDropdown.disabled = true;
-                            //     return;
-                            // }
+                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
 
-                            // const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
-
-                            // if (filteredKPIMain.length === 0) {
-                            //     const noKPIMainOption = document.createElement('option');
-                            //     noKPIMainOption.value = '';
-                            //     noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
-                            //     KPIMainDropdown.appendChild(noKPIMainOption);
-                            //     KPIMainDropdown.disabled = true;
-                            // } else {
-                            //     KPIMainDropdown.disabled = false;
-                            //     filteredKPIMain.forEach(KPIMain => {
-                            //         const option = document.createElement('option');
-                            //         option.value = KPIMain.KPIMainID;
-                            //         option.textContent = KPIMain.name;
-                            //         KPIMainDropdown.appendChild(option);
-                            //     });
-                            // }
+                            if (filteredKPIMain.length === 0) {
+                                const noKPIMainOption = document.createElement('option');
+                                noKPIMainOption.value = '';
+                                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัด';
+                                KPIMainDropdown.appendChild(noKPIMainOption);
+                                KPIMainDropdown.disabled = true;
+                            } else {
+                                KPIMainDropdown.disabled = false;
+                                filteredKPIMain.forEach(KPIMain => {
+                                    const option = document.createElement('option');
+                                    option.value = KPIMain.KPIMainID;
+                                    option.textContent = KPIMain.name;
+                                    KPIMainDropdown.appendChild(option);
+                                });
+                            }
 
                             colKPIMain.appendChild(KPIMainDropdown);
                             mainContainer.appendChild(colKPIMain);

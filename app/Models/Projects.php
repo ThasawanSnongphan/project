@@ -15,7 +15,7 @@ class Projects extends Model
         return $this->belongsTo(Year::class, 'yearID', 'yearID'); 
         // 'year_id' คือคอลัมน์ FK ในตาราง projects, 'id' คือ PK ในตาราง years
     }
-
+    
     public function target()
     {
         return $this->belongsTo(Targets::class, 'tarID','tarID');

@@ -65,4 +65,8 @@ class KPIMainController extends Controller
         DB::table('k_p_i_mains')->where('KPIMainID',$id)->update($KPIMain);
         return redirect('/KPIMain'); 
     }
+    function delete($id){
+        DB::table('k_p_i_mains')->where('KPIMainID',$id)->delete();
+        return redirect('/KPIMain');
+    }
 }

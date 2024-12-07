@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-md-2 col-sm-2"></div>
-    <div class="col-md-8 col-sm-8">
+    <div class="col-md-1 col-sm-1"></div>
+    <div class="col-md-10 col-sm-10">
         <div class="x_panel">
             <div class="x_title">
                 <h2>เพิ่มตัวชี้วัดของแผน</h2>
@@ -297,5 +297,5 @@
             </div>
         </div>
     </div>
-    <div class="col-md-2 col-sm-2"></div>
+    <div class="col-md-1 col-sm-1"></div>
 </div>

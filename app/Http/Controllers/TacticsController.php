@@ -26,10 +26,10 @@ class TacticsController extends Controller
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
         $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->get();
-        $KPIMainMap=Tactics::with('KPIMain')->get();
+        // $KPIMainMap=Tactics::with('KPIMain')->get();
         $KPIMain=KPIMains::all();
 
-        return view('Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain','KPIMainMap'));
+        return view('Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain'));
     }
 
     function insert(Request $request){
@@ -47,12 +47,15 @@ class TacticsController extends Controller
 
         $tactics = $tactics->fresh();
 
-        // $KPIMainMap = $request->input('KPIMainID');
-        $Map = new KPIMainMapTactics();
-        $Map->KPIMainID = $KPIMain->KPIMainID;
-        $Map->tacId = $tactics->tacID;
-        $Map->save();
-
+        $KPIMainMap = $request->input('KPIMain');
+        if(is_array($KPIMainMap)){
+            foreach($KPIMainMap as $index => $KPIMain ){
+                $Map = new KPIMainMapTactics();
+                $Map->KPIMainID = $KPIMain ?? null;
+                $Map->tacId = $tactics->tacID;
+                $Map->save();
+            }
+        }
         return redirect('/tactics');
     }
 
@@ -67,7 +70,7 @@ class TacticsController extends Controller
         $strategic=Strategics::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
-        $KPIMainMap=Tactics::with('KPIMain')->get();
+        $KPIMainMap=KPIMainMapTactics::all();
         $KPIMain=KPIMains::all();
         return view('tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMap','KPIMain'));
     }
