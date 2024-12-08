@@ -91,15 +91,17 @@
                 <th>วัตถุประสงค์</th>
                 @foreach ($projectOBJ as $item)
                     @if ($project->proID === $item->proID)
-                    <td colspan="3">{{ $item->name }}</td>
-                      
+                        <td colspan="3">{{ $item->name }}</td>
+                        <tr></tr>
+                        {{-- <td></td> --}}
                     @endif
                 @endforeach
             </tr>
             <tr>
-                <th colspan="3">ตัวชี้วัดของแผน</th>
+                <th colspan="4">ตัวชี้วัดของแผน</th>
             </tr>
             <tr>
+                <td></td>
                 <th>ตัวชี้วัดความสำเร็จ</th>
                 <th>หน่วยนับ</th>
                 <th>ค่าเป้าหมาย</th>
@@ -116,9 +118,22 @@
                 <th colspan="3">ขั้นตอนการดำเนินการ</th>
             </tr>
             <tr>
+                <td></td>
                 <th>รายการกิจกรรม</th>
                 <th>เริ่มต้น</th>
                 <th>สิ้นสุด</th>
+            </tr>
+            <tr>
+                {{-- <td></td> --}}
+                @foreach ($projectStep as $item)
+                    @if ($project->proID === $item->proID)
+                        <td></td>
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->start }}</td>
+                        <td>{{ $item->end }}</td>
+                        <tr></tr>
+                    @endif
+                @endforeach
             </tr>
             <tr>
                 <th>แหล่งเงินประเภทงบประมาณที่ใช้</th>
@@ -137,22 +152,30 @@
                 @endforeach
             </tr>
             <tr>
-                <th colspan="4">ประมาณการค่าใช้จ่าย</th>
+                <th colspan="4">ประเภทค่าใช้จ่าย</th>
             </tr>
             <tr>
                 <th>งบรายจ่าย</th>
+
             </tr>
             <tr>
                 <th>หมวดรายจ่าย</th>
             </tr>
             <tr>
                 <th>ไตรมาส 1 (ต.ค.-ธ.ค.)</th>
-
-                <th>ไตรมาส 1 (ม.ค.-มี.ค.)</th>
-
-                <th>ไตรมาส 1 (เม.ย.-มิ.ย.)</th>
-
-                <th>ไตรมาส 1 (ก.ค.-ก.ย.)</th>
+                <th>ไตรมาส 2 (ม.ค.-มี.ค.)</th>
+                <th>ไตรมาส 3 (เม.ย.-มิ.ย.)</th>
+                <th>ไตรมาส 4 (ก.ค.-ก.ย.)</th>
+            </tr>
+            <tr>
+                @foreach ($projectCostQuarter as $item)
+                    @if ($project->proID === $item->proID)
+                        <td>{{ $item->costQu1 }}</td>
+                        <td>{{ $item->costQu2 }}</td>
+                        <td>{{ $item->costQu3 }}</td>
+                        <td>{{ $item->costQu4 }}</td>
+                    @endif
+                @endforeach
             </tr>
             <tr>
                 <th>ประมาณการงบประมาณที่ใช้</th>
@@ -160,6 +183,14 @@
             </tr>
             <tr>
                 <th>ประโยชน์ที่คาดว่าจะได้รับ</th>
+
+                @foreach ($projectBenefit as $item)
+                    @if ($project->proID === $item->proID)
+                        <td colspan="3">{{ $item->detail }}</td>
+                        <tr></tr>
+                        {{-- <td></td> --}}
+                    @endif
+                @endforeach
             </tr>
             <tr>
                 <th>ไฟล์เอกสารประกอบโครงการ</th>

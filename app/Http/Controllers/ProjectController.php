@@ -711,9 +711,12 @@ class ProjectController extends Controller
         $projectIntegrat=ProjectIntegrat::all();
         $projectOBJ=Objectives::all();
         $projectTarget=Targets::all();
+        $projectStep=Steps::all();
         $projectBadgetType=BadgetType::all();
         $projectUniPlan=UniPlan::all();
-        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectBadgetType','projectUniPlan'));
+        $projectCostQuarter=CostQuarters::all();
+        $projectBenefit=Benefits::all();
+        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','projectBenefit'));
     }
 
 
