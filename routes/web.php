@@ -59,6 +59,8 @@ Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('proj
 Route::get('projectedit/{id}',[ProjectController::class,'edit'])->name('project.edit');
 Route::post('projectupdate/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
+Route::post('departmentPass/{id}', [ProjectController::class,'departmentPass'])->name('departmentPass');
+Route::post('/departmentEdit', [ProjectController::class,'departmentEdit']);
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
 Route::get('projectWord/{id}',[WordController::class,'createWordDocFromDB'])->name('project.Word');

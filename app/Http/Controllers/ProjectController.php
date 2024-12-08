@@ -704,6 +704,7 @@ class ProjectController extends Controller
     }
 
     function report($id){
+        $user=Users::all();
         $project=DB::table('projects')->where('proID',$id)->first();
         $projectYear=Year::all();
         $projectType=ProjectType::all();
@@ -718,7 +719,13 @@ class ProjectController extends Controller
         $peojectEXP=ExpenseBadgets::all();
         $projectCostType=CostTypes::all();
         $projectBenefit=Benefits::all();
-        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
+        return view('Project.report',compact('user','project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
+    }
+
+    function departmentPass($id){
+       
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '5']);
+        return redirect('/project');
     }
 
 

@@ -92,10 +92,10 @@
                 @foreach ($projectOBJ as $item)
                     @if ($project->proID === $item->proID)
                         <td colspan="3">{{ $item->name }}</td>
-                        <tr></tr>
-                        {{-- <td></td> --}}
-                    @endif
-                @endforeach
+            <tr></tr>
+            {{-- <td></td> --}}
+            @endif
+            @endforeach
             </tr>
             <tr>
                 <th colspan="4">ตัวชี้วัดของแผน</th>
@@ -131,9 +131,9 @@
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->start }}</td>
                         <td>{{ $item->end }}</td>
-                        <tr></tr>
-                    @endif
-                @endforeach
+            <tr></tr>
+            @endif
+            @endforeach
             </tr>
             <tr>
                 <th>แหล่งเงินประเภทงบประมาณที่ใช้</th>
@@ -157,16 +157,15 @@
             <tr>
                 <th>งบรายจ่าย</th>
                 @foreach ($projectCostQuarter as $item)
-                    @if ($project->proID === $item->proID )
+                    @if ($project->proID === $item->proID)
                         @foreach ($peojectEXP as $exp)
                             @if ($item->expID === $exp->expID)
-                                <td colspan="3">{{$exp->exname}}</td>
-                                <tr></tr>
-                            @endif
-                            
-                        @endforeach
-                    @endif
-                @endforeach
+                                <td colspan="3">{{ $exp->exname }}</td>
+            <tr></tr>
+            @endif
+            @endforeach
+            @endif
+            @endforeach
 
             </tr>
             <tr>
@@ -175,12 +174,12 @@
                     @if ($project->proID === $item->proID)
                         @foreach ($projectCostType as $cost)
                             @if ($item->costID === $cost->costID)
-                                <td colspan="3">{{$cost->costname}}</td>
-                                <tr></tr>
-                            @endif
-                        @endforeach
-                    @endif
-                @endforeach
+                                <td colspan="3">{{ $cost->costname }}</td>
+            <tr></tr>
+            @endif
+            @endforeach
+            @endif
+            @endforeach
             </tr>
             <tr>
                 <th>ไตรมาส 1 (ต.ค.-ธ.ค.)</th>
@@ -195,9 +194,9 @@
                         <td>{{ $item->costQu2 }}</td>
                         <td>{{ $item->costQu3 }}</td>
                         <td>{{ $item->costQu4 }}</td>
-                        <tr></tr>
-                    @endif
-                @endforeach
+            <tr></tr>
+            @endif
+            @endforeach
             </tr>
             <tr>
                 <th>ประมาณการงบประมาณที่ใช้</th>
@@ -209,18 +208,50 @@
                 @foreach ($projectBenefit as $item)
                     @if ($project->proID === $item->proID)
                         <td colspan="3">{{ $item->detail }}</td>
-                        <tr></tr>
-                        {{-- <td></td> --}}
-                    @endif
-                @endforeach
+            <tr></tr>
+            {{-- <td></td> --}}
+            @endif
+            @endforeach
             </tr>
             <tr>
                 <th>ไฟล์เอกสารประกอบโครงการ</th>
             </tr>
         </table>
+        @if (auth()->user()->Department_head === 1)
+            <div class="">
+                <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+                <div class="col-md-6 col-sm-6">
+                    <textarea name="comment" id="comment" class="form-control"></textarea>
+                </div>
+            </div>
+
+            {{-- <div class="ln_solid"> --}}
+            <form id="actionForm" method="POST">
+                @csrf
+                <div class="form-group mt-2">
+                    <div class="col-md-6 offset-md-3">
+
+                        <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
+                        <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+
+                    </div>
+                </div>
+            </form>
+        @endif
+        {{-- </div> --}}
     </div>
     <div class="col-md-1 col-sm-1"></div>
 
-
+    <script>
+        function submitButton(action) {
+            var form = document.getElementById('actionForm');
+            if (action === 'pass') {
+                form.action = "{{ route('departmentPass', $project->proID) }}";
+            } else if (action === 'edit') {
+                form.action = "/departmentEdit";
+            }
+            form.submit();
+        }
+    </script>
 
 @endsection

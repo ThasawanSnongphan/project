@@ -46,69 +46,69 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1 && $item->statusID != 1)
+                @if (
+                    (Auth::check() && auth()->user() && auth()->user()->Department_head == 1 && $item->statusID != 1) ||
+                        $item->userID === Auth::user()->userID)
                     @continue
                 @endif
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 7 || $item->statusID == 1)
-                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
-                        @else
+                        @if ($item->statusID == 16)
                             {{ $item->name }}
+                        @else
+                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
                         @endif
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                        
-                  
-                    <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                    {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
-                    <td>
-                        @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
-                        @endif
-                    </td>
-                    <td>
+                        <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
+                        {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
+                        <td>
+                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
+                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            @else
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
+                            @endif
+                        </td>
+                        <td>
 
-                        @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
-                        @endif
-                    </td>
-                    <td>
-                        @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
-                        @endif
-                    </td>
-                    <td>
-                        @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
-                        @endif
-                    </td>
-                    <td>
-                        @if ($item->statusID == 16)
-                            <a href="{{ route('project.edit', $item->proID) }}"><i
-                                    class="fa fa-pencil btn btn-warning"></i></a>
-                            <a href="{{ route('project.delete', $item->proID) }}"
-                                onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                    class="fa fa-times btn btn-danger"></i></a>
-                        @endif
-                    </td>
+                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
+                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            @else
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
+                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            @else
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
+                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            @else
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($item->statusID == 16)
+                                <a href="{{ route('project.edit', $item->proID) }}"><i
+                                        class="fa fa-pencil btn btn-warning"></i></a>
+                                <a href="{{ route('project.delete', $item->proID) }}"
+                                    onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
+                                        class="fa fa-times btn btn-danger"></i></a>
+                            @endif
+                        </td>
                     @endif
                 </tr>
                 @php
