@@ -715,8 +715,10 @@ class ProjectController extends Controller
         $projectBadgetType=BadgetType::all();
         $projectUniPlan=UniPlan::all();
         $projectCostQuarter=CostQuarters::all();
+        $peojectEXP=ExpenseBadgets::all();
+        $projectCostType=CostTypes::all();
         $projectBenefit=Benefits::all();
-        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','projectBenefit'));
+        return view('Project.report',compact('project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
     }
 
 

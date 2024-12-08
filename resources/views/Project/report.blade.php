@@ -156,10 +156,31 @@
             </tr>
             <tr>
                 <th>งบรายจ่าย</th>
+                @foreach ($projectCostQuarter as $item)
+                    @if ($project->proID === $item->proID )
+                        @foreach ($peojectEXP as $exp)
+                            @if ($item->expID === $exp->expID)
+                                <td colspan="3">{{$exp->exname}}</td>
+                                <tr></tr>
+                            @endif
+                            
+                        @endforeach
+                    @endif
+                @endforeach
 
             </tr>
             <tr>
                 <th>หมวดรายจ่าย</th>
+                @foreach ($projectCostQuarter as $item)
+                    @if ($project->proID === $item->proID)
+                        @foreach ($projectCostType as $cost)
+                            @if ($item->costID === $cost->costID)
+                                <td colspan="3">{{$cost->costname}}</td>
+                                <tr></tr>
+                            @endif
+                        @endforeach
+                    @endif
+                @endforeach
             </tr>
             <tr>
                 <th>ไตรมาส 1 (ต.ค.-ธ.ค.)</th>
@@ -174,6 +195,7 @@
                         <td>{{ $item->costQu2 }}</td>
                         <td>{{ $item->costQu3 }}</td>
                         <td>{{ $item->costQu4 }}</td>
+                        <tr></tr>
                     @endif
                 @endforeach
             </tr>
