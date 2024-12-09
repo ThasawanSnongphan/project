@@ -30,7 +30,7 @@
                             <select id="year" name="year" class="form-control" required>
                                 @foreach ($year as $item)
                                     <option value="{{ $item->yearID }}">
-                                        {{ $item->name }}</option>
+                                        {{ $item->year }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -259,10 +259,10 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="user" name="user" class="form-control" required>
+                            <select id="directorID" name="directorID" class="form-control" required>
                                 <option value="">---เลือกผู้กำกับ---</option>
                                 @foreach ($user as $item)
-                                    <option value="{{ $item->yearID }}">
+                                    <option value="{{ $item->userID }}">
                                         {{ $item->firstname_en }} {{$item->lastname_en }}</option>
                                 @endforeach
                             </select>
@@ -273,10 +273,10 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้บันทึกข้อมูล<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="usersave" name="usersave" class="form-control" required>
+                            <select id="recorderID" name="recorderID" class="form-control" required>
                                 <option value="">---เลือกผู้บันทึกข้อมูล---</option>
                                 @foreach ($user as $item)
-                                    <option value="{{ $item->yearID }}">
+                                    <option value="{{ $item->userID }}">
                                         {{ $item->firstname_en }} {{$item->lastname_en }}</option>
                                 @endforeach
                             </select>

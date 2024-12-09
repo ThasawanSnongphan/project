@@ -54,8 +54,8 @@
                                         <select name="year" id="yearID" class="form-control">
                                             <option data-year="ทั้งหมด">ทั้งหมด</option>
                                             @foreach ($year as $year)
-                                                <option value="{{ $year->yearID }}" data-year="{{ $year->name }}">
-                                                    {{ $year->name }}</option>
+                                                <option value="{{ $year->yearID }}" data-year="{{ $year->year }}">
+                                                    {{ $year->year }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -84,7 +84,7 @@
                                         @foreach ($tactics as $item)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
-                                                <td>{{ $item->goal->SFA->strategic->year->name ?? 'ไม่พบปี' }}</td>
+                                                <td>{{ $item->goal->SFA->strategic->year->year ?? 'ไม่พบปี' }}</td>
                                                 <td>{{ $item->goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
                                                 <td>{{ $item->goal->SFA->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
                                                 <td>{{ $goal->firstWhere('goalID', $item->goalID)->name ?? 'ไม่พบเป้าประสงค์' }}

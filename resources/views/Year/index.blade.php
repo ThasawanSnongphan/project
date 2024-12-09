@@ -65,10 +65,10 @@
                                             @foreach ($year as $year )
                                                 <tr>
                                                     <th scope="row">{{$i}}</th>
-                                                    <td>{{ $year->name }}</td>
+                                                    <td>{{ $year->year }}</td>
                                                     <td>
                                                             <a href="{{ route('years.delete', $year->yearID) }}"
-                                                                onclick="return confirm('ต้องการลบปี {{ $year->name }} หรือไม่')"><i
+                                                                onclick="return confirm('ต้องการลบปี {{ $year->year }} หรือไม่')"><i
                                                                     class="fa fa-times btn btn-danger"></i></a>
                                                     </td>
                                                 </tr>

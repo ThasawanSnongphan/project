@@ -46,9 +46,7 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                @if (
-                    (Auth::check() && auth()->user() && auth()->user()->Department_head == 1 && $item->statusID != 1) ||
-                        $item->userID === Auth::user()->userID)
+                @if  (Auth::check() && auth()->user() && auth()->user()->Department_head == 1 && $item->statusID != 1)
                     @continue
                 @endif
                 <tr>

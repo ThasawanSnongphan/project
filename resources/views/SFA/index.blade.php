@@ -54,8 +54,8 @@
                                         <select name="year" id="year" class="form-control">
                                             <option data-year="ทั้งหมด">ทั้งหมด</option>
                                             @foreach ($year as $year)
-                                                <option value="{{ $year->yearID }}" data-year="{{ $year->name }}">
-                                                    {{ $year->name }}</option>
+                                                <option value="{{ $year->yearID }}" data-year="{{ $year->year }}">
+                                                    {{ $year->year }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -81,7 +81,7 @@
                                         @foreach ($sortedSFAs as $item)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
-                                                <td>{{ $item->strategic->year->name ?? 'ไม่พบปีงบประมาณ' }}</td>
+                                                <td>{{ $item->strategic->year->year ?? 'ไม่พบปีงบประมาณ' }}</td>
                                                 <td>{{ $strategic->firstWhere('straID', $item->straID)->name ?? 'ไม่พบแผนยุทธศาสตร์' }}
                                                 </td>
                                                 <td>{{ $item->name }}</td>
@@ -103,7 +103,7 @@
                                         // ดึงค่า "data-year" จาก option ที่ถูกเลือก
                                         var selectedOption = this.options[this.selectedIndex];
                                         var year = selectedOption.getAttribute('data-year');
-                                        console.log(year);
+                                        // console.log(year);
     
                                         const tableRows = document.querySelectorAll("table tbody tr");
     

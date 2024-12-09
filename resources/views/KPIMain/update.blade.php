@@ -34,7 +34,7 @@
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
                                             {{ $item->yearID == $KPIMain->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                            {{ $item->year }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -277,8 +277,8 @@
                                 <select id="director" name="director" class="form-control" required>
                                     <option value="">---เลือกผู้กำกับ---</option>
                                     @foreach ($user as $item)
-                                        <option value="{{ $item->yearID }}"
-                                            {{ $item->id == $KPIMain->directorID ? 'selected' : '' }}>
+                                        <option value="{{ $item->userID }}"
+                                            {{ $item->userID == $KPIMain->directorID ? 'selected' : '' }}>
                                             {{ $item->firstname_en }} {{$item->lastname_en }}</option>
                                     @endforeach
                                 </select>
@@ -292,8 +292,8 @@
                                 <select id="recorder" name="recorder" class="form-control" required>
                                     <option value="">---เลือกผู้บันทึกข้อมูล---</option>
                                     @foreach ($user as $item)
-                                        <option value="{{ $item->yearID }}"
-                                            {{ $item->id == $KPIMain->recorderID ? 'selected' : '' }}>
+                                        <option value="{{ $item->userID }}"
+                                            {{ $item->userID == $KPIMain->recorderID ? 'selected' : '' }}>
                                             {{ $item->firstname_en }} {{$item->lastname_en }}</option>
                                     @endforeach
                                 </select>

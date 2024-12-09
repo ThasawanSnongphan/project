@@ -58,7 +58,7 @@
                                                     @foreach ($year as $item)
                                                         <option value="{{ $item->yearID }}"
                                                             {{ $item->yearID == $tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
-                                                            {{ $item->name }}</option>
+                                                            {{ $item->year}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -68,13 +68,13 @@
                                                 <th scope="row">{{$i}}</th>
                                                 <td>{{$ex->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
                                                 <td>{{ $fund->firstWhere('fundID',$ex->fundID)->name ?? 'ไม่พบกองทุน' }}</td>
-                                                <td>{{ $ex->exname }}</td>
+                                                <td>{{ $ex->name ?? 'ไม่พบงบรายจ่าย' }}</td>
                                                 <td>
                                                     <a
                                                             href="{{ route('ex.edit', $ex->expID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
                                                         <a href="{{ route('ex.delete', $ex->expID) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $ex->exname }} หรือไม่')"><i
+                                                            onclick="return confirm('ต้องการลบข่าว {{ $ex->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

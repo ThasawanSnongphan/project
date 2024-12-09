@@ -56,7 +56,7 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="yearID" name="yearID" class="form-control" required>
                                                     @foreach ($year as $year)
-                                                        <option value="{{ $year->yearID }}"  @if ($year->yearID == $strategic->yearID) selected @endif > {{ $year->name }}</option>
+                                                        <option value="{{ $year->yearID }}"  @if ($year->yearID == $strategic->yearID) selected @endif > {{ $year->year }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

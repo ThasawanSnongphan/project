@@ -52,8 +52,8 @@
                                     <select name="year" id="year" class="form-control">
                                         <option data-year="ทั้งหมด">ทั้งหมด</option>
                                         @foreach ($year as $year)
-                                            <option value="{{ $year->yearID }}" data-year="{{ $year->name }}">
-                                                {{ $year->name }}</option>
+                                            <option value="{{ $year->yearID }}" data-year="{{ $year->year }}">
+                                                {{ $year->year }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -77,7 +77,7 @@
                                     @foreach ($sortedStrategic as $stra)
                                         <tr>
                                             <th scope="row">{{ $i }}</th>
-                                            <td>{{ $year->firstWhere('yearID', $stra->yearID)->name ?? 'ไม่ปีงบประมาณ' }}
+                                            <td>{{ $year->firstWhere('yearID', $stra->yearID)->year ?? 'ไม่ปีงบประมาณ' }}
                                             </td>
                                             <td>{{ $stra->name }}</td>
                                             <td>

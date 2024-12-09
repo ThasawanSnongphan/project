@@ -20,14 +20,14 @@ class YearController extends Controller
     function insert(Request $request ){
         $request->validate(
             [
-                'name'=>'required'
+                'year'=>'required'
             ],
             [
-                'name.required'=>'กรุณากรอกปีงบประมาณ'
+                'year.required'=>'กรุณากรอกปีงบประมาณ'
             ]
         );
         $year = new Year();
-        $year->name = $request->input('name');
+        $year->year = $request->input('year');
         $year->save();
         return redirect('/year');
     }

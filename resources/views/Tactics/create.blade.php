@@ -30,7 +30,7 @@
                             <select id="year" name="year" class="form-control" required>
                                 @foreach ($year as $item)
                                     <option value="{{ $item->yearID }}">
-                                        {{ $item->name }}</option>
+                                        {{ $item->year }}</option>
                                 @endforeach
                             </select>
                         </div>
