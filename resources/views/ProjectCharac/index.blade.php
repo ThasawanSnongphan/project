@@ -64,13 +64,13 @@
                                         @foreach ($pro_char as $pro )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td>{{ $pro->pro_cha_name }}</td>
+                                                <td>{{ $pro->name }}</td>
                                                 <td>
                                                     <a
                                                             href="{{ route('pro.edit', $pro->proChaID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
                                                         <a href="{{ route('pro.delete', $pro->proChaID) }}"
-                                                            onclick="return confirm('ต้องการลบลักษณะโครงการ {{ $pro->pro_cha_name }} หรือไม่')"><i
+                                                            onclick="return confirm('ต้องการลบลักษณะโครงการ {{ $pro->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

@@ -56,7 +56,9 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="planID" name="planID" class="form-control" required>
                                                     @foreach ($plan as $item)
-                                                        <option value="{{ $item->planID }}"  @if ($item->planID == $cost_types->expense->fund->uniplan->planID) selected @endif>{{ $item->name }}</option>
+                                                        <option value="{{ $item->planID }}"
+                                                            @if ($item->planID == $cost_types->expense->fund->uniplan->planID) selected @endif>
+                                                            {{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -108,12 +110,14 @@
                                                         option.textContent = fund.name;
                                                         if (fund.fundID == '{{ $cost_types->expense->fundID }}') {
                                                             option.selected = true;
+                                                            updateExpenseDropdown(fund.fundID);
                                                         }
                                                         fundSelect.appendChild(option);
                                                     });
                                                     if (!filteredFunds.some(fund => fund.fundID == '{{ $cost_types->expense->fundID }}')) {
-                                                        updateExpenseDropdown(filteredFunds[0].fundID); // Update expenses for the first fund
+                                                        updateExpenseDropdown(filteredFunds[0].fundID);
                                                     }
+
                                                 }
                                             }
 
@@ -144,7 +148,7 @@
                                                         const option = document.createElement('option');
                                                         option.value = expense.expID;
                                                         option.textContent = expense.name;
-                                                        if (expense.expID == '{{ $cost_types->expID }}') {
+                                                        if (expense.expID == '{{ $cost_types->expID}}') {
                                                             option.selected = true;
                                                         }
                                                         expenseSelect.appendChild(option);
@@ -175,13 +179,13 @@
                                         </script>
                                         <div class="field item form-group">
                                             <label for="title"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">หมวดรายจ่าย<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <input class="form-control" type="textt" name="costname" id="name"
+                                                <input class="form-control" type="text" name="name" id="name"
                                                     required='required' data-validate-length-range="8,20"
                                                     value="{{ $cost_types->name }}" />
-                                                @error('costname')
+                                                @error('name')
                                                     <div class="m-2">
                                                         <span class="text text-danger">{{ $message }}</span>
                                                     </div>
