@@ -69,14 +69,14 @@
                                                 <th scope="row">{{$i}}</th>
                                                 <td>{{$cost->expense->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
                                                 <td>{{$cost->expense->fund->name ?? 'ไม่พบกองทุน'}}</td>
-                                                <td>{{$expanses->firstWhere('expID',$cost->expID)->exname ?? 'ไม่พบงบรายจ่าย'}}</td>
-                                                <td>{{ $cost->costname }}</td>
+                                                <td>{{$expanses->firstWhere('expID',$cost->expID)->name ?? 'ไม่พบงบรายจ่าย'}}</td>
+                                                <td>{{ $cost->name }}</td>
                                                 <td>
                                                     <a
                                                             href="{{ route('costs.edit', $cost->costID) }}"><i
                                                                 class="fa fa-pencil btn btn-warning"></i></a>
                                                         <a href="{{ route('costs.delete', $cost->costID) }}"
-                                                            onclick="return confirm('ต้องการลบข่าว {{ $cost->costname }} หรือไม่')"><i
+                                                            onclick="return confirm('ต้องการลบข่าว {{ $cost->name }} หรือไม่')"><i
                                                                 class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

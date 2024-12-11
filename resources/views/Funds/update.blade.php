@@ -56,7 +56,7 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="planID" name="planID" class="form-control" required>
                                                     @foreach ($plan as $item)
-                                                        <option value="{{ $item->planID }}"  >{{ $item->name }}</option>
+                                                        <option  value="{{ $item->planID }}" @if ($item->planID == $fund->planID) selected @endif >{{ $item->name }}</option>
                                                     @endforeach
                                                     
                                                 </select>

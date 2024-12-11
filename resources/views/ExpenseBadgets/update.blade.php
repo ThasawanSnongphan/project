@@ -56,7 +56,9 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <select id="planID" name="planID" class="form-control" required>
                                                     @foreach ($plan as $item)
-                                                        <option value="{{ $item->planID }}">{{ $item->name }}</option>
+                                                        <option value="{{ $item->planID }}"
+                                                            @if ($item->planID == $expanse->fund->uniplan->planID) selected @endif>
+                                                            {{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -128,6 +130,9 @@
                     const option = document.createElement('option');
                     option.value = fund.fundID;
                     option.textContent = fund.name;
+                    if (fund.fundID == '{{ $expanse->fundID }}') {
+                        option.selected = true;
+                    }
                     fundSelect.appendChild(option);
                 });
             }

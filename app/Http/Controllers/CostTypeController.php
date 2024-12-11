@@ -38,7 +38,7 @@ class CostTypeController extends Controller
         );
        
         $cost_types = new CostTypes();
-        $cost_types->costname = $request->input('name');
+        $cost_types->name = $request->input('name');
         $cost_types->expID = $expanses->expID;
         $cost_types->save();
         return redirect('/cost_type');
@@ -50,20 +50,25 @@ class CostTypeController extends Controller
     }
 
     function edit($id){
-        $cost_types=DB::table('cost_types')->where('costID',$id)->first();
-        return view('CostTypes.update',compact('cost_types'));
+        $plan=UniPlan::all();
+        $fund=Funds::all();
+        $expanses = ExpenseBadgets::all();
+        $cost_types=CostTypes::with('expense.fund.uniplan')->where('costID',$id)->first();
+        return view('CostTypes.update',compact('plan','fund','expanses','cost_types'));
     }
     function update(Request $request,$id){
         $request->validate(
             [
-                'costname'=>'required'
+                'name'=>'required'
             ],
             [
-                'costname.required'=>'กรุณากรอกหมวดรายจ่าย'
+                'name.required'=>'กรุณากรอกหมวดรายจ่าย'
             ]
         );
         $cost_types=[
-            'costname'=>$request->costname
+            'name'=>$request->name,
+            'expID'=>$request->expID
+
         ];
         DB::table('cost_types')->where('costID',$id)->update($cost_types);
         return redirect('/cost_type'); 

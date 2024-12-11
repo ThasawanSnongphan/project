@@ -109,7 +109,7 @@
                                 filteredExpense.forEach(expense => {
                                     const option = document.createElement('option');
                                     option.value = expense.expID;
-                                    option.textContent = expense.exname;
+                                    option.textContent = expense.name;
                                     expenseSelect.appendChild(option);
                                 });
                             }

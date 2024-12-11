@@ -57,7 +57,7 @@
                                                 <select id="yearID" name="yearID" class="form-control" required>
                                                     @foreach ($year as $year)
                                                         <option value="{{ $year->yearID }}"
-                                                            {{ $year->yearID == $goal->SFA->strategic->year->yearID ? 'selected' : '///' }}>
+                                                            {{ $year->yearID == $goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
                                                             {{ $year->year }}</option>
                                                     @endforeach
                                                 </select>

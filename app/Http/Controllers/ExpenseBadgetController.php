@@ -52,7 +52,7 @@ class ExpenseBadgetController extends Controller
     }
 
     function edit($id){
-        $expanse=DB::table('expense_badgets')->where('expID',$id)->first();
+        $expanse=ExpenseBadgets::with('fund.uniplan')->where('expID',$id)->first();
         $plan=UniPlan::all();
         $fund=Funds::all();
         return view('ExpenseBadgets.update',compact('expanse','plan','fund'));
@@ -67,7 +67,8 @@ class ExpenseBadgetController extends Controller
             ]
         );
         $expanse=[
-            'name'=>$request->name
+            'name'=>$request->name,
+            'fundID'=>$request->fundID
         ];
         DB::table('expense_badgets')->where('expID',$id)->update($expanse);
         return redirect('/Expense'); 
