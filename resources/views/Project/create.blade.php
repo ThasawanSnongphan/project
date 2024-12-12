@@ -33,7 +33,7 @@
                                 <select id="year" name="yearID" class="form-control" required>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}">
-                                            {{ $item->name }}</option>
+                                            {{ $item->year }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -167,7 +167,7 @@
                                 <select id="charecter" name="proChaID" class="form-control" required>
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}">
-                                            {{ $item->pro_cha_name }}</option>
+                                            {{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -999,10 +999,6 @@
             document.getElementById('insertKPIMain').appendChild(mainContainer);
         }
 
-
-
-
-
         function insertKPIProject() {
             const mainContainer = document.createElement('div');
             mainContainer.classList.add('col-md-12', 'col-sm-12');
@@ -1550,7 +1546,7 @@
                 filteredExpenses.forEach(expense => {
                     const option = document.createElement('option');
                     option.value = expense.expID;
-                    option.textContent = expense.exname;
+                    option.textContent = expense.name;
                     expenseSelect.appendChild(option);
                 });
                 updateCostTypeDropdown(filteredExpenses[0].expID);
@@ -1575,7 +1571,7 @@
                 filteredCostType.forEach(costType => {
                     const option = document.createElement('option');
                     option.value = costType.costID;
-                    option.textContent = costType.costname;
+                    option.textContent = costType.name;
                     costTypeSelect.appendChild(option);
                 });
             }

@@ -27,7 +27,7 @@ class ProCharecController extends Controller
             ]
         );
         $pro_char = new ProjectCharec();
-        $pro_char->pro_cha_name = $request->input('name');
+        $pro_char->name = $request->input('name');
         $pro_char->save();
         return redirect('/proChar');
     }
@@ -52,7 +52,7 @@ class ProCharecController extends Controller
             ]
         );
         $pro_char=[
-            'pro_cha_name'=>$request->name
+            'name'=>$request->name
         ];
         DB::table('project_charecs')->where('proChaID',$id)->update($pro_char);
         return redirect('/ProjectCharac.index'); 

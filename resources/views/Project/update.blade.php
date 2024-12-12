@@ -35,7 +35,7 @@
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}" <?php if ($item->yearID == $project->yearID) {
                                             echo 'selected';
-                                        } ?>>{{ $item->name }}</option>
+                                        } ?>>{{ $item->year }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -252,7 +252,7 @@
                                         <option value="{{ $item->proChaID }}" <?php if ($item->proChaID == $project->proChaID) {
                                             echo 'selected';
                                         } ?>>
-                                            {{ $item->pro_cha_name }}</option>
+                                            {{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -305,7 +305,7 @@
 
                                 <input class="form-control" type="text" name="obj[]" id="obj"
                                     required='required' data-validate-length-range="8,20"
-                                    value="{{ $objProject->name ?? '' }}" />
+                                    value="{{ $objProject->detail ?? '' }}" />
                                 <input type="hidden" name="objID[]" value="{{ $objProject->objID }}">
                             </div>
                             <div class="col-md-3 col-sm-3">
@@ -319,7 +319,7 @@
                                     <div class="col-md-3 col-sm-3"></div>
                                     <div class="col-md-6 col-sm-6">
                                         <input class="form-control" type="text" name="obj[]"
-                                            value="{{ $item->name }}" required="required" />
+                                            value="{{ $item->detail }}" required="required" />
                                         <input type="hidden" name="objID[]" value="{{ $item->objID }}">
 
                                     </div>
@@ -1835,7 +1835,7 @@
                 filteredExpenses.forEach(expense => {
                     const option = document.createElement('option');
                     option.value = expense.expID;
-                    option.textContent = expense.exname;
+                    option.textContent = expense.name;
                     const map =
                         expenseSelect.appendChild(option);
                 });
@@ -1861,7 +1861,7 @@
                 filteredCostType.forEach(costType => {
                     const option = document.createElement('option');
                     option.value = costType.id;
-                    option.textContent = costType.costname;
+                    option.textContent = costType.name;
                     costTypeSelect.appendChild(option);
                 });
             }

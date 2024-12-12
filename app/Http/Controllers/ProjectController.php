@@ -126,7 +126,7 @@ class ProjectController extends Controller
         if(is_array($objDetail)) {
             foreach($objDetail as $index => $obj){
                 $objs = new Objectives();
-                $objs->name = $obj;
+                $objs->detail = $obj;
                 $objs->proID = $project->proID;
                 $objs->save();
             }
@@ -242,7 +242,7 @@ class ProjectController extends Controller
         if(!empty($objDetail) && is_array($objDetail)) {
             foreach($objDetail as $index => $obj){
                 $objs = new Objectives();
-                $objs->name = $obj;
+                $objs->detail = $obj;
                 $objs->proID = $project->proID;
                 $objs->save();
             }
