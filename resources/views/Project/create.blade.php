@@ -459,7 +459,7 @@
                                 <div class="col-md-12 col-sm-12 ">
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="expID" name="expID" class="form-control" required>
+                                        <select id="expID" name="expID[]" class="form-control" required>
 
                                         </select>
                                     </div>
@@ -471,7 +471,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="costType" name="costID" class="form-control" required>
+                                        <select id="costType" name="costID[]" class="form-control" required>
 
                                         </select>
                                     </div>
@@ -987,6 +987,8 @@
             deleteButton.onclick = function() {
                 mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
             };
+
+
             mainContainer.appendChild(colKPI);
             mainContainer.appendChild(colCount);
             mainContainer.appendChild(colTarget);
@@ -1117,9 +1119,35 @@
 
             const ExpenseDropdown = document.createElement('select');
             ExpenseDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            ExpenseDropdown.id = 'expID';
-            ExpenseDropdown.innerHTML = '';
+            ExpenseDropdown.id = `expID_${Date.now()}`;
+            ExpenseDropdown.name = 'expID[]';
+            // ExpenseDropdown.innerHTML = '';
 
+            const selectedPlanID = document.getElementById('planID').value;
+
+            const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
+
+            const filteredExpenses = expenses.filter(expense =>
+                relatedFunds.some(fund => fund.fundID == expense.fundID)
+            );
+
+            if (filteredExpenses.length === 0) {
+                const noExpenseOption = document.createElement('option');
+                noExpenseOption.value = '';
+                noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
+                ExpenseDropdown.appendChild(noExpenseOption);
+                ExpenseDropdown.disabled = true; // Disable expense dropdown
+            } else {
+                ExpenseDropdown.disabled = false; // Enable expense dropdown
+                filteredExpenses.forEach(expense => {
+                    const option = document.createElement('option');
+                    option.value = expense.expID;
+                    option.textContent = expense.name;
+                    ExpenseDropdown.appendChild(option);
+                });
+
+            }
+            //
             colExpense.appendChild(ExpenseDropdown);
             mainExpenseContainer.appendChild(colExpense);
 
@@ -1131,8 +1159,36 @@
 
             const costTypeDropdown = document.createElement('select');
             costTypeDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            costTypeDropdown.id = 'costType';
+            costTypeDropdown.id = `costType_${Date.now()}`;
+            costTypeDropdown.name = 'costID[]';
             costTypeDropdown.innerHTML = '';
+
+            const updateCostTypeDropdown = () => {
+                const selectedEXPID = ExpenseDropdown.value;
+                costTypeDropdown.innerHTML = '';
+
+                // กรองกองทุนที่เชื่อมกับแผน
+                const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
+
+                if (filteredCostType.length === 0) {
+                    const noCostTypeOption = document.createElement('option');
+                    noCostTypeOption.value = '';
+                    noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
+                    costTypeDropdown.appendChild(noCostTypeOption);
+                    costTypeDropdown.disabled = true; // Disable expense dropdown
+                } else {
+                    costTypeDropdown.disabled = false; // Enable expense dropdown
+                    filteredCostType.forEach(costType => {
+                        const option = document.createElement('option');
+                        option.value = costType.costID;
+                        option.textContent = costType.name;
+                        costTypeDropdown.appendChild(option);
+                    });
+                }
+            };
+
+            ExpenseDropdown.addEventListener('change',updateCostTypeDropdown);
+            updateCostTypeDropdown();
 
             colCostType.appendChild(costTypeDropdown);
             mainCostTypeContainer.appendChild(colCostType);
@@ -1414,7 +1470,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-
+                // updateKPIMain(null);
                 return;
             }
 
@@ -1427,7 +1483,7 @@
                 noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
                 tacticsSelect.appendChild(noTacticsOption);
                 tacticsSelect.disabled = true;
-
+                // updateKPIMain(null);
             } else {
                 tacticsSelect.disabled = false;
                 filteredTactics.forEach(tactic => {
@@ -1436,7 +1492,7 @@
                     option.textContent = tactic.name;
                     tacticsSelect.appendChild(option);
                 });
-
+                // updateKPIMain(filteredTactics[0].tacID);
             }
             // แสดงกลยุทธ์ใน dropdown
 
@@ -1444,7 +1500,7 @@
 
 
         function updateKPIMain(selectedGoalID) {
-            console.log(selectedGoalID);
+            // console.log(selectedGoalID);
 
             const KPIMainSelect = document.getElementById('KPIMain');
             const countMainInput = document.getElementById('countMain');
@@ -1470,6 +1526,7 @@
             // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
             const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
             // console.log(filteredKPIMains);
+            // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedTacID);
 
             if (filteredKPIMains.length === 0) {
                 const noKPIMainOption = document.createElement('option');
@@ -1593,7 +1650,7 @@
             const StrategicSelect = document.getElementById('straID');
             const SFASelect = document.getElementById('SFAID');
             const goalSelect = document.getElementById('goalID');
-
+            const tacSelect = document.getElementById('tacID');
             const planSelect = document.getElementById('planID');
             const EXPSelect = document.getElementById('expID');
 
@@ -1622,6 +1679,10 @@
                 updateTacticsDropdown(selectedGoalID);
                 updateKPIMain(selectedGoalID);
             });
+            // tacSelect.addEventListener('change',function(){
+            //     const selectedTacID = this.value;
+            //     updateKPIMain(selectedTacID);
+            // });
 
 
 
