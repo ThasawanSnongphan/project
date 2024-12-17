@@ -20,7 +20,7 @@
                 <th style="width: 25%;">ปีงบประมาณ</th>
                 @foreach ($projectYear as $item)
                     @if ($item->yearID === $project->yearID)
-                        <td colspan="3">{{ $item->name }}</td>
+                        <td colspan="3">{{ $item->year }}</td>
                     @endif
                 @endforeach
 

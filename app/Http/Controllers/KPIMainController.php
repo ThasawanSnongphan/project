@@ -37,7 +37,10 @@ class KPIMainController extends Controller
         $KPIMain->name = $request->input('name');
         $KPIMain->count = $request->input('count');
         $KPIMain->target = $request->input('target');
-        $KPIMain->goalID = $goal->goalID;
+        if(!empty($goal->goalID)){
+            $KPIMain->goalID = $goal->goalID;
+        }
+        
         $KPIMain->directorID = $request->input('directorID');
         $KPIMain->recorderID = $request->input('recorderID');
         $KPIMain->save();

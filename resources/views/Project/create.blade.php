@@ -52,7 +52,7 @@
                                 @enderror
                             </div>
                         </div>
-
+                        {{-- ถ้ามีหลายคนก็เเก้ไขได้ --}}
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เจ้าของโครงการ<span
                                     class="required">*</span></label>
@@ -272,7 +272,8 @@
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
-                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดความสำเร็จโครงการ</label>
+                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดความสำเร็จโครงการ<span
+                                class="required">*</span></label>
                             <div class="row col-md-9 col-sm-9 border m-1">
                                 <div class="col-md-12 col-sm-12">
                                     <div
@@ -540,11 +541,10 @@
                             </div>
                         </div>
                         <div id="insertBenefit"></div>
-                        {{-- เพิ่มประเภทของไฟล์ --}}
+                        {{-- ยังไม่ต้องฟิก ถ้าเลือกครุภัณฑ์ต้องแนบไฟล์ --}}
                         <div class="row field item form-group align-items-center">
                             <label for="title"
-                                class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ<span
-                                    class="required">*</span></label>
+                                class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="file" name="file[]" id="file"
                                     required='required' data-validate-length-range="8,20" />
@@ -555,16 +555,9 @@
                                 @enderror
 
                             </div>
-                            <div class="col-md-1 col-sm-1">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="TOR[]" value="TOR"> TOR
-                                    </label>
-                                </div>
-                            </div>
+                            {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertFile()">เพิ่ม</button>
-
                             </div>
                         </div>
                         <div id="insertFile"></div>
@@ -1320,23 +1313,23 @@
             mainContainer.appendChild(colMD6);
             colMD6.appendChild(inputFile);
 
-            const colMD1 = document.createElement('div');
-            colMD1.classList.add('col-md-1', 'col-sm-1');
+            // const colMD1 = document.createElement('div');
+            // colMD1.classList.add('col-md-1', 'col-sm-1');
 
-            const checkboxDiv = document.createElement('div');
-            checkboxDiv.classList.add('checkbox');
+            // const checkboxDiv = document.createElement('div');
+            // checkboxDiv.classList.add('checkbox');
 
-            const checkboxLabel = document.createElement('label');
-            const checkboxInput = document.createElement('input');
-            checkboxInput.type = 'checkbox';
-            checkboxInput.name = 'TOR[]';
-            checkboxInput.value = 'TOR';
+            // const checkboxLabel = document.createElement('label');
+            // const checkboxInput = document.createElement('input');
+            // checkboxInput.type = 'checkbox';
+            // checkboxInput.name = 'TOR[]';
+            // checkboxInput.value = 'TOR';
 
-            mainContainer.appendChild(colMD1);
-            colMD1.appendChild(checkboxDiv);
-            checkboxDiv.appendChild(checkboxLabel);
-            checkboxLabel.appendChild(checkboxInput);
-            checkboxLabel.appendChild(document.createTextNode(' TOR'));
+            // mainContainer.appendChild(colMD1);
+            // colMD1.appendChild(checkboxDiv);
+            // checkboxDiv.appendChild(checkboxLabel);
+            // checkboxLabel.appendChild(checkboxInput);
+            // checkboxLabel.appendChild(document.createTextNode(' TOR'));
 
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';

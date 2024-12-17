@@ -115,6 +115,60 @@
                                             @endif
                                         </ul>
                                     </li>
+                                    {{-- สิทธิ์ผู้เขียนโครงการ --}}
+                                    <li><a><i class="fa fa-home"></i> ผู้รับผิดชอบโครงการ <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                {{-- โครงการที่ไม่อนุมัติ --}}
+                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li> 
+                                                <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
+
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                {{-- โครงการที่ไม่อนุมัติ --}}
+                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li> 
+                                                <li><a href="/project">รายชื่อโครงการนอกแผน</a></li> 
+
+                                                <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
+
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href="/project">จัดการข้อมูลโครงการ</a></li>
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-home"></i> ผู้บริหาร <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                
+                                               
+                                            @endif
+                                        </ul>
+                                    </li>
+                                    <li><a><i class="fa fa-home"></i> เจ้าหน้าที่พัสดุ <span class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                            @endif
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
