@@ -82,94 +82,108 @@
                     {{-- @php
                     dd(auth()->user());
                     @endphp --}}
-                    
-                    @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
+                    @if (Auth::check())
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
-                                <h3>General</h3>
-                                <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-home"></i> Admin <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
-                                            <li><a href="/users">Users</a></li>
-                                            <li><a href="/year">ปีงบประมาณ</a></li>
-                                            <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
-                                            <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
-                                            <li><a href="/goal">เป้าประสงค์</a></li>
-                                            <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
-                                            <li><a href="/tactics">กลยุทธ์</a></li>
-                                            <li><a href="/plan">แผนงานมหาลัย</a></li>
-                                            <li><a href="/fund">กองทุน</a></li>
-                                            <li><a href="/Expense">งบรายจ่าย</a></li>
-                                            <li><a href="/cost_type">หมวดรายจ่าย</a></li>
-                                            <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
-                                            <li><a href="/proChar">ลักษณะโครงการ</a></li>
-                                            <li><a href="/projectIntegrat">การบูรณาการ</a></li>
-                                            <li><a href="/status">สถานะ</a></li>
-                                            <li><a href="/projectType">ประเภทโครงการ</a></li>
-                                            <li><a href="/target">กลุ่มเป้าหมาย</a></li>
-                                            <li><a href="/countKPI">หน่วยนับKPI</a></li>
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
+                                    {{-- <h3>General</h3> --}}
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> Admin <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                                                <li><a href="/users">Users</a></li>
+                                                <li><a href="/year">ปีงบประมาณ</a></li>
+                                                <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
+                                                <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
+                                                <li><a href="/goal">เป้าประสงค์</a></li>
+                                                <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
+                                                <li><a href="/tactics">กลยุทธ์</a></li>
+                                                <li><a href="/plan">แผนงานมหาลัย</a></li>
+                                                <li><a href="/fund">กองทุน</a></li>
+                                                <li><a href="/Expense">งบรายจ่าย</a></li>
+                                                <li><a href="/cost_type">หมวดรายจ่าย</a></li>
+                                                <li><a href="/BadgetType">ประเภทงบประมาณ</a></li>
+                                                <li><a href="/proChar">ลักษณะโครงการ</a></li>
+                                                <li><a href="/projectIntegrat">การบูรณาการ</a></li>
+                                                <li><a href="/status">สถานะ</a></li>
+                                                <li><a href="/projectType">ประเภทโครงการ</a></li>
+                                                <li><a href="/target">กลุ่มเป้าหมาย</a></li>
+                                                <li><a href="/countKPI">หน่วยนับKPI</a></li>
                                                 <li><a href="/project">โครงการ</a></li>
-                                            @endif
-                                        </ul>
-                                    </li>
-                                    {{-- สิทธิ์ผู้เขียนโครงการ --}}
-                                    <li><a><i class="fa fa-home"></i> ผู้รับผิดชอบโครงการ <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                    <ul class="nav side-menu">
+                                        {{-- สิทธิ์ผู้เขียนโครงการ --}}
+                                        <li><a><i class="fa fa-home"></i> ผู้รับผิดชอบโครงการ <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
-                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li> 
+                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                                 <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
 
-                                            @endif
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
-                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li> 
-                                                <li><a href="/project">รายชื่อโครงการนอกแผน</a></li> 
+                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="/project">รายชื่อโครงการนอกแผน</a></li>
 
                                                 <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
 
-                                            @endif
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+
                                                 <li><a href="/project">จัดการข้อมูลโครงการ</a></li>
-                                            @endif
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-home"></i> ผู้บริหาร <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> ผู้บริหาร <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
                                                 <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
-                                                
-                                               
-                                            @endif
-                                        </ul>
-                                    </li>
-                                    <li><a><i class="fa fa-home"></i> เจ้าหน้าที่พัสดุ <span class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> เจ้าหน้าที่พัสดุ <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
-                                            @endif
-                                        </ul>
-                                    </li>
-                                </ul>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
                             </div>
                         </div>
                     @else
@@ -177,7 +191,8 @@
                             <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                    <li><a><i class="fa fa-home"></i> Home <span
+                                                class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
                                             <li><a href="/project">โครงการ</a></li>
@@ -218,12 +233,9 @@
                     <nav class="nav navbar-nav ">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="navbar-left m-2">
-                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                               
-
-                               
-                            @endif
-                        </div>
+                                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                @endif
+                            </div>
                             <ul class=" navbar-right">
                                 @auth
                                     <li class="nav-item dropdown open" style="padding-left: 15px;">
