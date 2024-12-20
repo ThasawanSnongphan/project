@@ -75,10 +75,8 @@ class WordController extends Controller
         $center = config('config_word.paragraph_styles.center');
         $indentation = config('config_word.paragraph_styles.indentation');
         $table_center = config('config_word.table_styles.align');
-        $textAlignCenter = config('config_word.table_styles.cell.valign');
-        $cellStyleCenter = config('config_word.paragraph_styles.center.alignment');
-        $monthCellStyle = ['valign' => 'center']; // ตั้งค่ากึ่งกลางในแนวตั้ง
-        $monthTextStyle = ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]; // ตั้งค่ากึ่งกลางในแนวนอน
+        $textAlignCenter = config('config_word.table_styles.align');
+        $cellStyleCenter = config('config_word.table_styles.cell');
 
         Carbon::setLocale('th');
 
@@ -358,7 +356,7 @@ class WordController extends Controller
             $tableStyle = [
                 'borderSize' => 6,
                 'borderColor' => '000000',
-                'cellMargin' => 80
+                'cellMargin' => 50
             ];
             $phpWord->addTableStyle('myTable', $tableStyle);
 
@@ -367,22 +365,27 @@ class WordController extends Controller
 
             // เพิ่มหัวตาราง
             $table->addRow();
-            $table->addCell(4000, array_merge(['vMerge' => 'restart', 'gridSpan' => 1], $monthCellStyle))
-                  ->addText('ขั้นตอนการดำเนินการ', null, $monthTextStyle); // จัดข้อความให้อยู่กึ่งกลาง
-            $table->addCell(null, array_merge(['gridSpan' => 3], $monthCellStyle))
-                  ->addText('พ.ศ. ' . $minYear, null, $monthTextStyle); // จัดข้อความให้อยู่กึ่งกลาง
-            $table->addCell(null, array_merge(['gridSpan' => 9], $monthCellStyle))
-                  ->addText('พ.ศ. ' . $maxYear, null, $monthTextStyle); // จัดข้อความให้อยู่กึ่งกลาง
+            $table->addCell(null, ['vMerge' => 'restart', 'valign' => 'center', 'gridSpan' => 1])
+                ->addText('ขั้นตอนการดำเนินการ');
+            $table->addCell(null, ['gridSpan' => 3, 'valign' => 'center'])
+                ->addText('พ.ศ. ' . $minYear);
+            $table->addCell(null, ['gridSpan' => 9, 'valign' => 'center'])
+                ->addText('พ.ศ. ' . $maxYear);
 
             $table->addRow();
-            $table->addCell(null, ['vMerge' => 'continue']); // เว้น cell ว่าง
-            $cellWidth = 800; // ความกว้างของเซลล์
-            $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.']; // ชื่อเดือน
-
-            foreach ($months as $month) {
-                $table->addCell($cellWidth, $monthCellStyle)->addText($month, null, $monthTextStyle);
-            }
-
+            $table->addCell(); // เว้น cell ว่าง
+            $table->addCell()->addText('ต.ค.');
+            $table->addCell()->addText('พ.ย.');
+            $table->addCell()->addText('ธ.ค.');
+            $table->addCell()->addText('ม.ค.');
+            $table->addCell()->addText('ก.พ.');
+            $table->addCell()->addText('มี.ค.');
+            $table->addCell()->addText('เม.ย.');
+            $table->addCell()->addText('พ.ค.');
+            $table->addCell()->addText('มิ.ย.');
+            $table->addCell()->addText('ก.ค.');
+            $table->addCell()->addText('ส.ค.');
+            $table->addCell()->addText('ก.ย.');
 
             // เพิ่มข้อมูลในตาราง
             foreach ($pro_steps as $index => $step) {
@@ -406,13 +409,11 @@ class WordController extends Controller
 
                 for ($month = 1; $month <= 12; $month++) {
                     $cellStyle = in_array($month, $highlightMonths) ? ['bgColor' => 'FFFF00'] : []; // ไฮไลต์เซลล์
-                    $table->addCell($cellWidth, $cellStyle);
+                    $table->addCell(null, $cellStyle);
                 }
             }
         }
 
-        // $section->addTextBreak();
-        
 
         $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
         $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
@@ -456,8 +457,6 @@ class WordController extends Controller
         } else {
             $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
         }
-        
-        $section->addText('', null, ['spaceAfter' => 5]);
 
         $textRun = $section->addTextRun();
 

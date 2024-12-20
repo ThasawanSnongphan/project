@@ -12,6 +12,8 @@ use App\Models\ProjectIntegrat;
 use App\Models\Projects;
 use App\Models\Targets;
 use App\Models\BadgetType;
+use App\Models\CountKPIProjects;
+use App\Models\UsersMapProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mpdf\Mpdf;
@@ -42,14 +44,18 @@ class PDFController extends Controller
     public function db_gen($id)
     {
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
-        $username = Users::where('id', 10)->first();
-        $years = Year::all();
         $projects = Projects::where('proID', $id)->first();
+        $years = Year::all();
+        $users_map = UsersMapProject::all();
+        $users = Users::all();
+
         $badget_types = BadgetType::all();
         $KPI_pros = KPIProjects::all();
+        $countKPI_pros = CountKPIProjects::all();
         $project_integrats = ProjectIntegrat::all();
         $project_charecs = ProjectCharec::all();
         $objects = Objectives::all();
+
 
 
 
@@ -110,7 +116,7 @@ class PDFController extends Controller
 
         </style>";
 
-        
+
 
         // logo kmutnb
         $htmlContent = '
@@ -122,40 +128,53 @@ class PDFController extends Controller
         foreach ($years as $year) {
             if ($projects->yearID == $year->yearID) {
                 $htmlContent .= '
-                    <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->name . '
+                    <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->year . '
                         <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
                     </p>
                 ';
-                $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $year->name);
+                $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $year->year);
             }
         }
-        
-        
 
-        
+
+
 
         $htmlContent .= '
         <b>1. ชื่อโครงการ : </b>' . $projects->name . '<br>
-        <b>2. สังกัด : </b>
-        <b>' . $username->department_name . '</b> <br>
-        <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;สำนักงานผู้อำนวยการ</b> <br>
-        <b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ : </b>' . $username->username . '<br>
-        <b>3. ความเชื่อมโยงสอดคล้องกับ แผนปฏิบัติการดิจิทัล มจพ. ระยะ 3 ปี พ.ศ. 2567-2569</b> <br>
-        <b>4. ลักษณะโครงการ / กิจกรรม</b> <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;
+        ';
 
-        
+
+        foreach ($users_map as $user_map) {
+            if ($projects->proID == $user_map->proID) {
+                foreach ($users as $user) {
+                    if ($user->userID == $user_map->userID) {
+                        $htmlContent .= '
+                            <b>2. สังกัด :  </b><br>
+                            <b>&nbsp;&nbsp;&nbsp;&nbsp;' . $user->department_name . ' </b><br>
+                            <b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ : </b>' . $user->username . ' <br>
+                        ';
+                        $name = $user->username;
+                        // dd($name);
+                    }
+                }
+            }
+        }
+
+        $htmlContent .= '
+            <b>3. ความเชื่อมโยงสอดคล้องกับ แผนปฏิบัติการดิจิทัล มจพ. ระยะ 3 ปี พ.ศ. 2567-2569</b> <br>
+            <b>4. ลักษณะโครงการ / กิจกรรม</b> <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;
         ';
 
 
         foreach ($project_charecs as $project_charec) {
             if ($projects->proChaID == $project_charec->proChaID) {
                 $htmlContent .= '
-                    <span class="checkbox">  ✓ </span> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
+                    <span style="font-family: DejaVu Sans, Arial, sans-serif;">☑</span> &nbsp; ' . $project_charec->name . ' &nbsp;
                 ';
             } else {
                 $htmlContent .= '
-                    <input type="checkbox"> &nbsp; ' . $project_charec->pro_cha_name . ' &nbsp;
+                    <span style="font-family: DejaVu Sans, Arial, sans-serif;">☐</span> &nbsp; ' . $project_charec->name . ' &nbsp;
                 ';
             }
         }
@@ -167,11 +186,11 @@ class PDFController extends Controller
         foreach ($project_integrats as $project_integrat) {
             if ($projects->proInID == $project_integrat->proInID) {
                 $htmlContent .= '
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $project_integrat->name . '<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: DejaVu Sans, Arial, sans-serif;">☑</span> &nbsp; ' . $project_integrat->name . '<br>
                 ';
             } else {
                 $htmlContent .= '
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"> &nbsp; ' . $project_integrat->name . '<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: DejaVu Sans, Arial, sans-serif;">☐</span> &nbsp; ' . $project_integrat->name . '<br>
                 ';
             }
         }
@@ -180,21 +199,11 @@ class PDFController extends Controller
 
         $htmlContent .= '
         <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
-        &nbsp;&nbsp;&nbsp;' . $projects->princiDetail . '  <br>
-        <b>7. วัตถุประสงค์ </b> <br> 
+        &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
+        <b><br>7. วัตถุประสงค์ </b> <br> 
         ';
 
-
-        // $counter = 1;           // ตัวแปรสำหรับเก็บลำดับ
-        // foreach ($objects as $object) {
-        //     $htmlContent .= '
-        //         &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->name . ' <br>
-        //     ';
-        //     $counter++;         // เพิ่มค่าลำดับหลังจากแสดงผลแต่ละครั้ง
-        // }
-
         $htmlContent .= '';
-
         if (DB::table('objectives')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $objects = DB::table('objectives')->where('proID', $id)->get();
@@ -202,40 +211,61 @@ class PDFController extends Controller
             $counter = 1; // ตัวแปรเก็บลำดับ
             foreach ($objects as $object) {
                 $htmlContent .= '
-                    &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->name . ' <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->detail . ' <br>
                 ';
                 $counter++;
             }
         }
 
         $htmlContent .= '
-        <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ </b> <br>
-        <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
-            <thead>
-                <tr>
-                    <td style="padding: 8px; width: 60% ">ตัวชี้วัดความสำเร็จ</td>
-                    <td style="padding: 8px; width: 20% ">หน่วยนับ</td>
-                    <td style="padding: 8px; width: 20% ">ค่าเป้าหมาย</td>
-                </tr>
-            </thead>
-            <tbody>';
-
+        <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ </b> <br>';
 
         if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+            // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
+
+            // ดึงข้อมูลจากตารางหน่วยนับ 
+            $countKPI_pros = DB::table('count_k_p_i_projects')->get();
+
+            // เริ่มสร้าง HTML ตาราง
+            $htmlContent .= '
+                <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 8px; width: 60%; ">ตัวชี้วัดความสำเร็จ</th>
+                            <th style="padding: 8px; width: 20%; ">หน่วยนับ</th>
+                            <th style="padding: 8px; width: 20%; ">ค่าเป้าหมาย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            ';
+
             foreach ($KPI_pros as $KPI_pro) {
+                // เริ่มต้นค่าเริ่มต้นของหน่วยนับ
+                $unitName = '-';
+
+                // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่
+                foreach ($countKPI_pros as $countKPI_pro) {
+                    if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
+                        $unitName = $countKPI_pro->name; // ดึงชื่อหน่วยนับ
+                        break; // ออกจาก loop เมื่อเจอข้อมูลที่ตรงกัน
+                    }
+                }
+
+                // เพิ่มแถวในตาราง
                 $htmlContent .= '
                     <tr>
                         <td style="padding: 8px; text-align: left;">' . $KPI_pro->name . '</td>
-                        <td style="padding: 8px; text-align: left;">' . $KPI_pro->count . '</td>
+                        <td style="padding: 8px; text-align: left;">' . $unitName . '</td>
                         <td style="padding: 8px; text-align: left;">' . $KPI_pro->target . '</td>
                     </tr>';
             }
+
+            $htmlContent .= '
+                    </tbody>
+                </table>';
         }
 
-        $htmlContent .= '
-            </tbody>
-        </table>';
 
         $pro_tars = Projects::with('target')->get();
 
@@ -413,7 +443,7 @@ class PDFController extends Controller
                 // if ($projects && $badget_types && $projects->badID == $badget_types->badID) {
                 $htmlContent .= '
                 <div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="checkbox"> ✓ </span> &nbsp; ' . $badget_type->name . '<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-family: DejaVu Sans, Arial, sans-serif;">☑</span> &nbsp; ' . $badget_type->name . '<br>
                 </div>
                 
             ';
@@ -510,7 +540,7 @@ class PDFController extends Controller
         <div style="text-align: right;">
             <div style="width: 300px; text-align: center; float: right;">
                 ลงชื่อ ................................................. <br>
-                ( ' . $username->username . ' ) <br>
+                ( ' . $name . ' ) <br>
                 ผู้รับผิดชอบโครงการ <br>
                 วันที่ ........../......................./..........
             </div>
