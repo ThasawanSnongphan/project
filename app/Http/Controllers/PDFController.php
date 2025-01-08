@@ -2,9 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use Mpdf\Mpdf;
+use DateTime;
+use Carbon\Carbon;
+
 use App\Models\Benefits;
+use App\Models\CostQuarters;
+use App\Models\CostTypes;
+use App\Models\ExpenseBadgets;
+use App\Models\Funds;
+use App\Models\Goals;
 use App\Models\KPIProjects;
 use App\Models\Objectives;
+use App\Models\StrategicIssues;
+use App\Models\StrategicMap;
+use App\Models\Strategics;
+use App\Models\Tactics;
+use App\Models\UniPlan;
 use App\Models\Users;
 use App\Models\Year;
 use App\Models\ProjectCharec;
@@ -14,14 +31,8 @@ use App\Models\Targets;
 use App\Models\BadgetType;
 use App\Models\CountKPIProjects;
 use App\Models\UsersMapProject;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Mpdf\Mpdf;
-use DateTime;
-use Carbon\Carbon;
 
 Carbon::setLocale('th');
-
 
 class PDFController extends Controller
 {
@@ -48,6 +59,17 @@ class PDFController extends Controller
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
+        $strategic_maps = StrategicMap::all();
+        $strategic_issues = StrategicIssues::all();
+        $strategics = Strategics::all();
+        $goals = Goals::all();
+        $tactics = Tactics::all();
+        $plans = UniPlan::all();
+        $funds = Funds::all();
+        $badget_types = BadgetType::all();
+        $expense_badgets = ExpenseBadgets::all();
+        $cost_quarters = CostQuarters::all();
+        $cost_types = CostTypes::all();
 
         $badget_types = BadgetType::all();
         $KPI_pros = KPIProjects::all();
@@ -93,25 +115,11 @@ class PDFController extends Controller
             .highlight {
                 background-color: yellow;
             }
-           
-            .checkbox {
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                border: 1px solid #000;
-                text-align: center;
-                vertical-align: middle;
-                line-height: 24px;
-                font-size: 13px;
-                font-family: DejaVu Sans, sans-serif;
 
-            }
-            .checked {
-                background-color: #000;
-                color: white;
-
-            .highlight {
-                background-color: yellow; /* สีพื้นหลังสำหรับไฮไลต์ */
+            .justified-text {
+                text-align: justify;
+                line-height: 1.5; /* กำหนดระยะห่างบรรทัดให้ดูอ่านง่าย */
+                font-size: 14px; /* ขนาดตัวอักษร */
             }
 
         </style>";
@@ -137,31 +145,136 @@ class PDFController extends Controller
         }
 
 
-
-
         $htmlContent .= '
         <b>1. ชื่อโครงการ : </b>' . $projects->name . '<br>
         ';
 
 
+        // foreach ($users_map as $user_map) {
+        //     if ($projects->proID == $user_map->proID) {
+        //         foreach ($users as $user) {
+        //             if ($user->userID == $user_map->userID) {
+        //                 $htmlContent .= '
+        //                     <b>2. สังกัด :  </b><br>
+        //                     <b>&nbsp;&nbsp;&nbsp;&nbsp;' . $user->department_name . ' </b><br>
+        //                     <b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ : </b>' . $user->username . ' <br>
+        //                 ';
+        //                 $name = $user->username;
+        //                 // dd($name);
+        //             }
+        //         }
+        //     }
+        // }
+
+        // $htmlContent .= '<b>2. สังกัด :</b><br>';
+
+        // // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
+        // $departments = [];
+        // $responsibleNames = [];
+
+        // // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
+        // foreach ($users_map as $user_map) {
+        //     if ($projects->proID == $user_map->proID) {
+        //         foreach ($users as $user) {
+        //             if ($user->userID == $user_map->userID) {
+        //                 // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
+        //                 if (!in_array($user->department_name, $departments)) {
+        //                     $departments[] = $user->department_name;
+        //                 }
+        //                 // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
+        //                 $responsibleNames[] = $user->username;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // แสดงข้อมูลสังกัด
+        // foreach ($departments as $department) {
+        //     $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;' . $department . '</b><br>';
+        // }
+
+        // // แสดงข้อมูลผู้รับผิดชอบ
+        // $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ :</b>';
+        // foreach ($responsibleNames as $name) {
+        //     $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;' . $name . '<br>';
+        // }
+
+        $htmlContent .= '<b>2. สังกัด :</b><br>';
+
+        // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
+        $departments = [];
+        $responsibleNames = [];
+
+        // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
         foreach ($users_map as $user_map) {
             if ($projects->proID == $user_map->proID) {
                 foreach ($users as $user) {
                     if ($user->userID == $user_map->userID) {
-                        $htmlContent .= '
-                            <b>2. สังกัด :  </b><br>
-                            <b>&nbsp;&nbsp;&nbsp;&nbsp;' . $user->department_name . ' </b><br>
-                            <b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ : </b>' . $user->username . ' <br>
-                        ';
+                        // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
+                        if (!in_array($user->department_name, $departments)) {
+                            $departments[] = $user->department_name;
+                        }
+                        // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
+                        $responsibleNames[] = $user->username;
                         $name = $user->username;
-                        // dd($name);
                     }
                 }
             }
         }
 
+        // แสดงข้อมูลสังกัด
+        foreach ($departments as $department) {
+            $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;' . $department . '</b><br>';
+        }
+
+        // แสดงข้อมูลผู้รับผิดชอบในรูปแบบชื่อคั่นด้วย ","
+        if (!empty($responsibleNames)) {
+            $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ :</b> ' . implode(', ', $responsibleNames) . '<br>';
+        }
+
+
+
+
+        foreach ($strategic_maps as $strategic_map) {
+            if ($projects->proID == $strategic_map->proID) {
+                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+                // เช็คชื่อจาก straID
+                foreach ($strategics as $strategic) {
+                    if ($strategic->straID == $strategic_map->straID) {
+                        $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ ' . $strategic->name . '</b> <br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // เช็คชื่อจาก SFAID
+                foreach ($strategic_issues as $strategic_issue) {
+                    if ($strategic_issue->SFAID == $strategic_map->SFAID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // เช็คชื่อจาก goalID
+                foreach ($goals as $goal) {
+                    if ($goal->goalID == $strategic_map->goalID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // เช็คชื่อจาก tacID
+                foreach ($tactics as $tactic) {
+                    if ($tactic->tacID == $strategic_map->tacID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+            }
+        }
+
+
         $htmlContent .= '
-            <b>3. ความเชื่อมโยงสอดคล้องกับ แผนปฏิบัติการดิจิทัล มจพ. ระยะ 3 ปี พ.ศ. 2567-2569</b> <br>
             <b>4. ลักษณะโครงการ / กิจกรรม</b> <br>
             &nbsp;&nbsp;&nbsp;&nbsp;
         ';
@@ -195,12 +308,12 @@ class PDFController extends Controller
             }
         }
 
-
+        // &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
 
         $htmlContent .= '
-        <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
-        &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
-        <b><br>7. วัตถุประสงค์ </b> <br> 
+            <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
+            &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
+            <b>7. วัตถุประสงค์ </b> <br> 
         ';
 
         $htmlContent .= '';
@@ -455,31 +568,63 @@ class PDFController extends Controller
             <b>13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท ) </b><br>
         ';
 
+        // foreach($plans as $plan){
+        //     if($project->planID == $plan->planID)
+        //     foreach($funds as $fund){
+
+        //     }
+        // }
+
         $htmlContent .= '
-        <body>
-            <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;">
-                <thead>
+            <body>
+                <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;">
+                    <thead>
+                        <tr>
+                            <td rowspan="3">ประเภทการจ่าย</td>
+                            <td rowspan="2">รวม</td>
+                        </tr>
+                        <tr>
+                            <td>ไตรมาส 1</td>
+                            <td>ไตรมาส 2</td>
+                            <td>ไตรมาส 3</td>
+                            <td>ไตรมาส 4</td>
+                        </tr>
+                        <tr>
+                            <td>แผนการใช้จ่าย</td>
+                            <td>แผนการใช้จ่าย</td>
+                            <td>แผนการใช้จ่าย</td>
+                            <td>แผนการใช้จ่าย</td>
+                            <td>แผนการใช้จ่าย</td>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+        // สมมติว่ามีข้อมูลจากตาราง cost_types และ expense_badgets
+        $totalCost = 0;
+        $sumTotal = 0;
+        $sumQu1 = 0;
+        $sumQu2 = 0;
+        $sumQu3 = 0;
+        $sumQu4 = 0;
+
+        foreach ($cost_quarters as $cost_quarter) {
+            if ($projects->proID == $cost_quarter->proID) {
+
+                $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+
+                // สะสมค่าในตัวแปรผลรวม
+                $sumTotal += $totalCost;
+                $sumQu1 += $cost_quarter->costQu1;
+                $sumQu2 += $cost_quarter->costQu2;
+                $sumQu3 += $cost_quarter->costQu3;
+                $sumQu4 += $cost_quarter->costQu4;
+
+                foreach ($expense_badgets as $expense_badget) {
+                    if ($cost_quarter->expID == $expense_badget->expID) {
+
+                        $htmlContent .= '
                     <tr>
-                        <td rowspan="3">ประเภทการจ่าย</td>
-                        <td rowspan="2">รวม</td>
-                    </tr>
-                    <tr>
-                        <td>ไตรมาส 1</td>
-                        <td>ไตรมาส 2</td>
-                        <td>ไตรมาส 3</td>
-                        <td>ไตรมาส 4</td>
-                    </tr>
-                    <tr>
-                        <td>แผนการใช้จ่าย</td>
-                        <td>แผนการใช้จ่าย</td>
-                        <td>แผนการใช้จ่าย</td>
-                        <td>แผนการใช้จ่าย</td>
-                        <td>แผนการใช้จ่าย</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>-</td>
+                        <td style="text-align: left;">' . $expense_badget->name . '</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -487,29 +632,46 @@ class PDFController extends Controller
                         <td></td>
                     </tr>
 
-                    <tr>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>รวมเงินงบประมาณ</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                    </tr>
-                </tbody>
-            </table>
+                    
+                ';
+                    }
+                }
+
+                foreach ($cost_types as $cost_type) {
+                    if ($cost_quarter->costID == $cost_type->costID) {
+                        $htmlContent .= '
+                            <tr>
+                                <td style="text-align: left;">' .  $cost_type->name . '</td>
+                                <td>' . number_format($totalCost, 2) . '</td>
+                                <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
+                                <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
+                                <td>' . number_format($cost_quarter->costQu3, 2) . '</td>
+                                <td>' . number_format($cost_quarter->costQu4, 2) . '</td>
+                            </tr>
+                        ';
+                    }
+                }
+            }
+        }
+
+        // รวมเงินงบประมาณทั้งหมด
+        $htmlContent .= '
+            <tr>
+                <td>รวมเงินงบประมาณ</td>
+                <td>' . number_format($sumTotal, 2) . '</td>
+                <td>' . number_format($sumQu1, 2) . '</td>
+                <td>' . number_format($sumQu2, 2) . '</td>
+                <td>' . number_format($sumQu3, 2) . '</td>
+                <td>' . number_format($sumQu4, 2) . '</td>
+            </tr>
+            </tbody>
+        </table>
         </body>
         ';
 
+
         $htmlContent .= '
-            <b>14. ประมาณการงบประมาณที่ใช้ : </b> - <br>
+            <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท<br>
             <b>15. ประโยชน์ที่คาดว่าจะได้รับ </b><br>
         
         ';
