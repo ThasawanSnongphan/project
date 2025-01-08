@@ -25,6 +25,9 @@ use App\Http\Controllers\TacticsController;
 use App\Http\Controllers\FundController;
 use App\Http\Controllers\KPIMainController;
 use App\Http\Controllers\CountKPIProject;
+use App\Http\Controllers\PlanningAnalyst;
+use App\Http\Controllers\Department_Head;
+use App\Http\Controllers\Executive;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
 
@@ -51,6 +54,23 @@ Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('count
 Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
 Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('countKPI.update');
 
+Route::get('/ExecutiveProjectlist', [Executive::class,'index']);
+Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
+Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'report'])->name('Executive.detail');
+Route::post('ExecutivePass/{id}', [Executive::class,'ExecutivePass'])->name('ExecutivePass');
+Route::post('/ExecutiveEdit/{id}', [Executive::class,'ExecutiveEdit'])->name('ExecutiveEdit');
+Route::post('/ExecutiveDenied/{id}', [Executive::class,'ExecutiveDenied'])->name('ExecutiveDenied');
+
+Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
+Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'report'])->name('PlanningAnalyst.detail');
+Route::post('planningPass/{id}', [PlanningAnalyst::class,'planningPass'])->name('planningPass');
+Route::post('/planningEdit/{id}', [PlanningAnalyst::class,'planningEdit'])->name('planningEdit');
+
+Route::get('/DepartmentHeadProject', [Department_Head::class,'index']);
+Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'report'])->name('Department.detail');
+Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->name('departmentPass');
+Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->name('departmentEdit');
+
 Route::get('/project', [ProjectController::class,'index']);
 Route::get('/projectcreate', [ProjectController::class,'create']);
 Route::post('/projectSave', [ProjectController::class,'save']);
@@ -59,8 +79,8 @@ Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('proj
 Route::get('projectedit/{id}',[ProjectController::class,'edit'])->name('project.edit');
 Route::post('projectupdate/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
-Route::post('departmentPass/{id}', [ProjectController::class,'departmentPass'])->name('departmentPass');
-Route::post('/departmentEdit', [ProjectController::class,'departmentEdit']);
+
+
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
 Route::get('projectWord/{id}',[WordController::class,'createWordDocFromDB'])->name('project.Word');

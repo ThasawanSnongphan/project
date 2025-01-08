@@ -143,9 +143,6 @@
                         </div>
                         {{-- <div class="col-md-3"></div> --}}
 
-
-
-
                         <div id="insertStrategic"></div>
 
 
@@ -227,7 +224,7 @@
                         <div class="row field item form-group align-items-center" id="KPIMainNone"
                             style="display: flex;">
                             <label for="title"
-                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผน</label>
+                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผนฉบับที่ 13</label>
                             <div class="row col-md-9 col-sm-9 border m-1">
                                 <div class="col-md-12 col-sm-12">
                                     <div
@@ -247,33 +244,78 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="col-md-4 col-sm-4 m-1">
-                                        <select id="KPIMain" name="KPIMainID[]" class="form-control" required>
+                                        <select id="KPIMain_1" name="KPIMainID[]" class="form-control" required>
                                             <!-- KPIจะถูกโหลดที่นี่ -->
                                         </select>
                                     </div>
                                     <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countMain[]" id="countMain"
+                                        <input class="form-control" type="text" name="countMain[]" id="countMain_1"
                                             disabled>
 
                                     </div>
                                     <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain"
+                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain_1"
                                             disabled>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
-                                        <button type='button' class="btn btn-primary"
-                                            onclick="insertKPIMain()">เพิ่ม</button>
+                                        <button type='button' class="btn btn-primary" onclick="insertKPIMain()">เพิ่ม
+                                        </button>
 
                                     </div>
                                 </div>
                                 <div id="insertKPIMain"></div>
                             </div>
                         </div>
+                        <div class="row field item form-group align-items-center" id="KPIMainDigitalNone"
+                            style="display: none;">
+                            <label for="title"
+                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผนดิจิทัล</label>
+                            <div class="row col-md-9 col-sm-9 border m-1">
+                                <div class="col-md-12 col-sm-12">
+                                    <div
+                                        class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
+                                        <label for="title"
+                                            class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
+                                    </div>
+                                    <div
+                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                        <label class="col-form-label label-align ">หน่วยนับ</label>
+
+                                    </div>
+                                    <div
+                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                        <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="col-md-4 col-sm-4 m-1">
+                                        <select id="KPIMain_2" name="KPIMainID[]" class="form-control" required>
+                                            <!-- KPIจะถูกโหลดที่นี่ -->
+                                        </select>
+                                    </div>
+                                    <div class=" col-md-3 col-sm-3 m-1">
+                                        <input class="form-control" type="text" name="countMain[]" id="countMain_2"
+                                            disabled>
+
+                                    </div>
+                                    <div class=" col-md-3 col-sm-3 m-1">
+                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain_2"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 m-1">
+                                        <button type='button' class="btn btn-primary"
+                                            onclick="insertKPIMain2()">เพิ่ม</button>
+
+                                    </div>
+                                </div>
+                                <div id="insertKPIMain2"></div>
+                            </div>
+                        </div>
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดความสำเร็จโครงการ<span
-                                class="required">*</span></label>
+                                    class="required">*</span></label>
                             <div class="row col-md-9 col-sm-9 border m-1">
                                 <div class="col-md-12 col-sm-12">
                                     <div
@@ -477,19 +519,19 @@
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control costInput" type="text" name="costQu1[]"
+                                        <input class="form-control cost-input" type="text" name="costQu1[]"
                                             id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control costInput" type="text" name="costQu2[]"
+                                        <input class="form-control cost-input" type="text" name="costQu2[]"
                                             id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control costInput" type="text" name="costQu3[]"
+                                        <input class="form-control cost-input" type="text" name="costQu3[]"
                                             id="">
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control costInput" type="text" name="costQu4[]"
+                                        <input class="form-control cost-input" type="text" name="costQu4[]"
                                             id="">
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
@@ -511,7 +553,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
                                 <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
-                                    required='required' data-validate-length-range="8,20" disabled />
+                                    required='required' data-validate-length-range="8,20" disabled
+                                    oninput="updateText()" />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
@@ -593,6 +636,74 @@
 
         const users = @json($user);
         const currentUserId = {{ Auth::user()->userID }};
+
+        function calculateTotal() {
+            // ดึงค่าจากช่อง input ที่มี class "cost-input"
+            const inputs = document.querySelectorAll('.cost-input');
+            let total = 0;
+
+            // รวมค่าของแต่ละช่อง
+            inputs.forEach(input => {
+                const value = parseFloat(input.value) || 0; // แปลงค่าเป็นตัวเลข ถ้าไม่มีให้ใช้ 0
+                total += value;
+            });
+
+            // แสดงผลรวมในช่อง badgetTotal
+            document.getElementById('badgetTotal').value = total.toFixed(2); // แสดงผลแบบทศนิยม 2 ตำแหน่ง
+            updateText();
+        }
+
+        // เพิ่ม event listener ให้ช่อง input ที่มี class "cost-input"
+        document.querySelectorAll('.cost-input').forEach(input => {
+            input.addEventListener('input', calculateTotal);
+        });
+
+        // เรียกคำนวณครั้งแรก (กรณีมีค่าเริ่มต้นในช่อง input)
+        calculateTotal();
+
+        function updateText() {
+            const numberInput = document.getElementById("badgetTotal").value;
+            const textOutput = document.getElementById("badgetTotalText");
+            textOutput.value = convertNumberToThaiText(numberInput);
+        }
+
+        function convertNumberToThaiText(num) {
+            if (!num || isNaN(num)) return '';
+            const thaiNumbers = ['ศูนย์', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
+            const thaiUnits = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
+
+            num = parseFloat(num).toFixed(2); // ทำให้เป็นทศนิยม 2 ตำแหน่ง
+            const [integerPart, decimalPart] = num.split('.'); // แยกส่วนจำนวนเต็มและทศนิยม
+
+            let result = '';
+            const len = integerPart.length;
+
+            // แปลงส่วนจำนวนเต็ม
+            for (let i = 0; i < len; i++) {
+                const digit = parseInt(integerPart[i]);
+                const position = len - i - 1;
+
+                if (digit === 0) continue;
+                if (position === 1 && digit === 1) result += 'สิบ';
+                else if (position === 1 && digit === 2) result += 'ยี่สิบ';
+                else if (position === 0 && digit === 1 && len > 1) result += 'เอ็ด';
+                else result += thaiNumbers[digit] + thaiUnits[position % 6];
+            }
+
+            // แปลงส่วนทศนิยม
+            if (decimalPart && decimalPart !== '00') {
+                result += 'บาท' + ' ' + 'จุด';
+                for (let digit of decimalPart) {
+                    result += thaiNumbers[parseInt(digit)];
+                }
+                result += 'สตางค์';
+            } else {
+                result += 'บาทถ้วน';
+            }
+
+            return result;
+        }
+
 
         function addNewUserDropdown() {
             const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
@@ -951,7 +1062,8 @@
 
             const KPIDropdown = document.createElement('select');
             KPIDropdown.classList.add('form-control');
-            KPIDropdown.id = 'KPIMainID';
+            KPIDropdown.id = `KPIMainID_${Date.now()}`;
+            KPIDropdown.name = 'KPIMainID[]';
             KPIDropdown.innerHTML = '';
 
             const colCount = document.createElement('div');
@@ -960,7 +1072,8 @@
             const countInput = document.createElement('input');
             countInput.classList.add('form-control');
             countInput.type = 'text';
-            countInput.name = 'countProject[]';
+            countInput.id = `countMain_${Date.now()}`;
+            countInput.name = 'countMain[]';
 
             const colTarget = document.createElement('div');
             colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
@@ -968,7 +1081,42 @@
             const targetInput = document.createElement('input');
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
-            targetInput.name = 'targetProject[]';
+            targetInput.id = `targetMain_${Date.now()}`;
+            targetInput.name = 'targetMain[]';
+
+            const selectedGoalID = document.getElementById('goalID').value;
+            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
+            if (filteredKPIMains.length === 0) {
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value = '';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIDropdown.appendChild(noKPIMainOption);
+                KPIDropdown.disabled = true;
+                countInput.value = 'ไม่มีหน่วยนับ';
+                targetInput.value = 'ไม่มีค่าเป้าหมาย';
+            } else {
+                // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
+                KPIDropdown.disabled = false;
+                filteredKPIMains.forEach(KPIMain => {
+                    const option = document.createElement('option');
+                    option.value = KPIMain.KPIMainID;
+                    option.textContent = KPIMain.name;
+                    KPIDropdown.appendChild(option);
+                });
+
+                // กำหนดค่าเริ่มต้นให้กับ input
+                const firstKPIMain = filteredKPIMains[0];
+                countInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
+                targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+            }
+            KPIDropdown.addEventListener('change', function() {
+                const selectedKPIMainID = this.value;
+                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+                if (selectedKPIMain) {
+                    countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                }
+            });
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
@@ -992,6 +1140,95 @@
             colDelete.appendChild(deleteButton);
             // เพิ่มปุ่มลบลงใน mainContainer
             document.getElementById('insertKPIMain').appendChild(mainContainer);
+        }
+
+        function insertKPIMain2() {
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('col-md-12', 'col-sm-12');
+
+            const colKPI = document.createElement('div');
+            colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
+
+            const KPIDropdown = document.createElement('select');
+            KPIDropdown.classList.add('form-control');
+            KPIDropdown.id = `KPIMainID_${Date.now()}`;
+            KPIDropdown.name = 'KPIMainID[]';
+            KPIDropdown.innerHTML = '';
+
+            const colCount = document.createElement('div');
+            colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const countInput = document.createElement('input');
+            countInput.classList.add('form-control');
+            countInput.type = 'text';
+            countInput.id = `countMain_${Date.now()}`;
+            countInput.name = 'countMain[]';
+
+            const colTarget = document.createElement('div');
+            colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const targetInput = document.createElement('input');
+            targetInput.classList.add('form-control');
+            targetInput.type = 'text';
+            targetInput.id = `targetMain_${Date.now()}`;
+            targetInput.name = 'targetMain[]';
+
+            const selectedGoalID = document.getElementById('goalID').value;
+            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
+            if (filteredKPIMains.length === 0) {
+                const noKPIMainOption = document.createElement('option');
+                noKPIMainOption.value = '';
+                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                KPIDropdown.appendChild(noKPIMainOption);
+                KPIDropdown.disabled = true;
+                countInput.value = 'ไม่มีหน่วยนับ';
+                targetInput.value = 'ไม่มีค่าเป้าหมาย';
+            } else {
+                // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
+                KPIDropdown.disabled = false;
+                filteredKPIMains.forEach(KPIMain => {
+                    const option = document.createElement('option');
+                    option.value = KPIMain.KPIMainID;
+                    option.textContent = KPIMain.name;
+                    KPIDropdown.appendChild(option);
+                });
+
+                // กำหนดค่าเริ่มต้นให้กับ input
+                const firstKPIMain = filteredKPIMains[0];
+                countInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
+                targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+            }
+            KPIDropdown.addEventListener('change', function() {
+                const selectedKPIMainID = this.value;
+                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+                if (selectedKPIMain) {
+                    countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                }
+            });
+
+            const colDelete = document.createElement('div');
+            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+
+            mainContainer.appendChild(colKPI);
+            mainContainer.appendChild(colCount);
+            mainContainer.appendChild(colTarget);
+            mainContainer.appendChild(colDelete);
+            colKPI.appendChild(KPIDropdown);
+            colCount.appendChild(countInput);
+            colTarget.appendChild(targetInput);
+            colDelete.appendChild(deleteButton);
+            // เพิ่มปุ่มลบลงใน mainContainer
+            document.getElementById('insertKPIMain2').appendChild(mainContainer);
         }
 
         function insertKPIProject() {
@@ -1180,7 +1417,7 @@
                 }
             };
 
-            ExpenseDropdown.addEventListener('change',updateCostTypeDropdown);
+            ExpenseDropdown.addEventListener('change', updateCostTypeDropdown);
             updateCostTypeDropdown();
 
             colCostType.appendChild(costTypeDropdown);
@@ -1190,9 +1427,10 @@
             colCostQu1.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu1Input = document.createElement('input');
-            CostQu1Input.classList.add('form-control');
+            CostQu1Input.classList.add('form-control', 'cost-input');
             CostQu1Input.type = 'text';
-            CostQu1Input.name = 'CostQu1[]';
+            CostQu1Input.name = 'costQu1[]';
+            CostQu1Input.addEventListener('input', calculateTotal);
 
             colCostQu1.appendChild(CostQu1Input);
             mainCostTypeContainer.appendChild(colCostQu1);
@@ -1201,9 +1439,10 @@
             colCostQu2.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu2Input = document.createElement('input');
-            CostQu2Input.classList.add('form-control');
+            CostQu2Input.classList.add('form-control', 'cost-input');
             CostQu2Input.type = 'text';
-            CostQu2Input.name = 'CostQu2[]';
+            CostQu2Input.name = 'costQu2[]';
+            CostQu2Input.addEventListener('input', calculateTotal);
 
             colCostQu2.appendChild(CostQu2Input);
             mainCostTypeContainer.appendChild(colCostQu2);
@@ -1212,9 +1451,10 @@
             colCostQu3.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu3Input = document.createElement('input');
-            CostQu3Input.classList.add('form-control');
+            CostQu3Input.classList.add('form-control', 'cost-input');
             CostQu3Input.type = 'text';
-            CostQu3Input.name = 'CostQu3[]';
+            CostQu3Input.name = 'costQu3[]';
+            CostQu3Input.addEventListener('input', calculateTotal);
 
             colCostQu3.appendChild(CostQu3Input);
             mainCostTypeContainer.appendChild(colCostQu3);
@@ -1224,9 +1464,10 @@
             colCostQu4.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu4Input = document.createElement('input');
-            CostQu4Input.classList.add('form-control');
+            CostQu4Input.classList.add('form-control', 'cost-input');
             CostQu4Input.type = 'text';
-            CostQu4Input.name = 'CostQu4[]';
+            CostQu4Input.name = 'costQu4[]';
+            CostQu4Input.addEventListener('input', calculateTotal);
 
             colCostQu4.appendChild(CostQu4Input);
             mainCostTypeContainer.appendChild(colCostQu4);
@@ -1495,82 +1736,159 @@
         function updateKPIMain(selectedGoalID) {
             // console.log(selectedGoalID);
 
-            const KPIMainSelect = document.getElementById('KPIMain');
-            const countMainInput = document.getElementById('countMain');
-            const targetInput = document.getElementById('targetMain');
+            // const KPIMainSelect = document.getElementById('KPIMain');
+            // const countMainInput = document.getElementById('countMain');
+            // const targetInput = document.getElementById('targetMain');
+
 
             // ล้างค่าตัวเลือกใน KPIMain
-            KPIMainSelect.innerHTML = '';
-            countMainInput.innerHTML = '';
-            targetInput.innerHTML = '';
+            // KPIMainSelect.innerHTML = '';
+            // countMainInput.innerHTML = '';
+            // targetInput.innerHTML = '';
 
             // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-            if (!selectedGoalID) {
-                const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value = '';
-                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                KPIMainSelect.appendChild(noKPIMainOption);
-                KPIMainSelect.disabled = true;
-                countMainInput.value = 'ไม่มีหน่วยนับ';
-                targetInput.value = 'ไม่มีค่าเป้าหมาย';
-                return;
-            }
+            //     if (!selectedGoalID) {
+            //         const noKPIMainOption = document.createElement('option');
+            //         noKPIMainOption.value = '';
+            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+            //         KPIMainSelect.appendChild(noKPIMainOption);
+            //         KPIMainSelect.disabled = true;
+            //         countMainInput.value = 'ไม่มีหน่วยนับ';
+            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
+            //         return;
+            //     }
 
-            // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
-            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-            // console.log(filteredKPIMains);
-            // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedTacID);
+            //     // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
+            //     const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
+            //     // console.log(filteredKPIMains);
+            //     // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedTacID);
 
-            if (filteredKPIMains.length === 0) {
-                const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value = '';
-                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                KPIMainSelect.appendChild(noKPIMainOption);
-                KPIMainSelect.disabled = true;
-                countMainInput.value = 'ไม่มีหน่วยนับ';
-                targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            } else {
-                // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
-                KPIMainSelect.disabled = false;
-                filteredKPIMains.forEach(KPIMain => {
-                    const option = document.createElement('option');
-                    option.value = KPIMain.KPIMainID;
-                    option.textContent = KPIMain.name;
-                    KPIMainSelect.appendChild(option);
-                });
+            //     if (filteredKPIMains.length === 0) {
+            //         const noKPIMainOption = document.createElement('option');
+            //         noKPIMainOption.value = '';
+            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+            //         KPIMainSelect.appendChild(noKPIMainOption);
+            //         KPIMainSelect.disabled = true;
+            //         countMainInput.value = 'ไม่มีหน่วยนับ';
+            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
+            //     } else {
+            //         // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
+            //         KPIMainSelect.disabled = false;
+            //         filteredKPIMains.forEach(KPIMain => {
+            //             const option = document.createElement('option');
+            //             option.value = KPIMain.KPIMainID;
+            //             option.textContent = KPIMain.name;
+            //             KPIMainSelect.appendChild(option);
+            //         });
 
-                // กำหนดค่าเริ่มต้นให้กับ input
-                const firstKPIMain = filteredKPIMains[0];
-                countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-                targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            }
+            //         // กำหนดค่าเริ่มต้นให้กับ input
+            //         const firstKPIMain = filteredKPIMains[0];
+            //         countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
+            //         targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+            //     }
+            // }
+            const KPIMainSelects = document.querySelectorAll(
+                '[id^="KPIMain_"]'); // เลือก <select> ที่มี ID เริ่มต้นด้วย "KPIMain_"
+            const countMainInputs = document.querySelectorAll('[id^="countMain_"]'); // เลือก input count
+            const targetInputs = document.querySelectorAll('[id^="targetMain_"]'); // เลือก input target
+
+            // ล้างค่าตัวเลือกในแต่ละ KPIMainSelect
+            KPIMainSelects.forEach((KPIMainSelect, index) => {
+                KPIMainSelect.innerHTML = ''; // ลบตัวเลือกเก่าใน <select>
+                const countMainInput = countMainInputs[index];
+                const targetInput = targetInputs[index];
+
+                // ตรวจสอบ selectedGoalID
+                if (!selectedGoalID) {
+                    // ถ้าไม่มี selectedGoalID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
+                    const noKPIMainOption = document.createElement('option');
+                    noKPIMainOption.value = '';
+                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                    KPIMainSelect.appendChild(noKPIMainOption);
+                    KPIMainSelect.disabled = true;
+                    countMainInput.value = 'ไม่มีหน่วยนับ';
+                    targetInput.value = 'ไม่มีค่าเป้าหมาย';
+                } else {
+                    // กรอง KPI ที่ตรงกับ selectedGoalID และเพิ่มเข้าไปใน dropdown
+                    const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
+
+                    if (filteredKPIMains.length === 0) {
+                        const noKPIMainOption = document.createElement('option');
+                        noKPIMainOption.value = '';
+                        noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
+                        KPIMainSelect.appendChild(noKPIMainOption);
+                        KPIMainSelect.disabled = true;
+                        countMainInput.value = 'ไม่มีหน่วยนับ';
+                        targetInput.value = 'ไม่มีค่าเป้าหมาย';
+                    } else {
+                        KPIMainSelect.disabled = false;
+                        filteredKPIMains.forEach(KPIMain => {
+                            const option = document.createElement('option');
+                            option.value = KPIMain.KPIMainID;
+                            option.textContent = KPIMain.name;
+                            KPIMainSelect.appendChild(option);
+                        });
+
+                        // กำหนดค่าเริ่มต้นให้กับ input
+                        const firstKPIMain = filteredKPIMains[0];
+                        countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
+                        targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                    }
+                }
+            });
         }
 
         // Event listener สำหรับเลือก KPI
-        document.getElementById('KPIMain').addEventListener('change', function() {
-            const selectedKPIMainID = this.value;
+        // document.getElementById('KPIMain').addEventListener('change', function() {
+        //     const selectedKPIMainID = this.value;
 
-            // ค้นหาข้อมูล KPIMain ที่เลือก
-            const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+        //     // ค้นหาข้อมูล KPIMain ที่เลือก
+        //     const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
 
-            // ถ้ามีตัวเลือกที่เลือก ก็อัพเดตค่า count และ target
-            if (selectedKPIMain) {
-                document.getElementById('countMain').value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-                document.getElementById('targetMain').value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            }
+        //     // ถ้ามีตัวเลือกที่เลือก ก็อัพเดตค่า count และ target
+        //     if (selectedKPIMain) {
+        //         document.getElementById('countMain13').value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+        //         document.getElementById('targetMain13').value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+        //     }
+        // });
+
+        document.querySelectorAll('[id^="KPIMain_"]').forEach(selectElement => {
+            selectElement.addEventListener('change', function() {
+                const selectedKPIMainID = this.value;
+                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+
+                if (selectedKPIMain) {
+                    // ค้นหาจาก id ของ <input> ที่ตรงกับ <select> ปัจจุบัน
+                    const countMainInput = document.getElementById(`countMain_${this.id.split('_')[1]}`);
+                    const targetInput = document.getElementById(`targetMain_${this.id.split('_')[1]}`);
+
+                    countMainInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                }
+            });
         });
 
 
         function KPIMainNone() {
+            // var select = document.querySelectorAll('[id^="straID_"]');
             var select = document.getElementById("straID");
-            var otherTextContainer = document.getElementById("KPIMainNone");
+            var KPIMainNone = document.getElementById("KPIMainNone");
+            var KPIMainDigitalNone = document.getElementById("KPIMainDigitalNone");
 
-            if (select.value !== '1' || select.value !== '2') {
-                otherTextContainer.style.display = "none";
+            if (select.value === '1') {
+                KPIMainNone.style.display = "flex";
+                KPIMainDigitalNone.style.display = "none";
+
+            } else if (select.value === '4') {
+                KPIMainDigitalNone.style.display = "flex";
+                KPIMainNone.style.display = "none";
             } else {
-                otherTextContainer.style.display = "flex";
+                KPIMainNone.style.display = "none";
+                KPIMainDigitalNone.style.display = "none";
             }
         }
+
+
 
         function updateExpenseDropdown(selectedPlanID) {
             const expenseSelect = document.getElementById('expID');

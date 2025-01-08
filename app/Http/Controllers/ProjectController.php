@@ -261,9 +261,9 @@ class ProjectController extends Controller
                 $straMap->SFAID = $SFAID[$index] ?? null;
                 $straMap->goalID = $goalID[$index] ?? null;
                 $straMap->tacID = $tacID[$index] ?? null;
-                if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
+                // if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
                     $straMap->KPIMainID = $KPIMainID[$index] ?? null;
-                }
+                // }
                 $straMap->save();
             }
         }
@@ -303,6 +303,10 @@ class ProjectController extends Controller
         $costQu2= $request->input('costQu2');
         $costQu3= $request->input('costQu3');
         $costQu4= $request->input('costQu4');
+        $expID = $request->input('expID');
+        $costID = $request->input('costID');
+        // dd($expID);
+        // dd($costQu1,$costQu2,$costQu3,$costQu4);
         if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
             foreach($costQu1 as $index => $cost1){
                 $costQu = new CostQuarters();
@@ -311,8 +315,8 @@ class ProjectController extends Controller
                 $costQu->costQu3 = $costQu3[$index] ?? null;
                 $costQu->costQu4 = $costQu4[$index] ?? null;
                 $costQu->proID = $project->proID;
-                $costQu->expID = $expID->expID;
-                $costQu->costID = $costID->costID;
+                $costQu->expID = $expID[$index];
+                $costQu->costID = $costID[$index];
                 $costQu->save();
             }
         }
@@ -370,6 +374,8 @@ class ProjectController extends Controller
         $project=Projects::with('strategicMap')->where('proID',$id)->first();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
+        $strategicMap = StrategicMap::all();
+        $straMap = $strategicMap->where('proID',$project->proID)->first();
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
         $tactics = Tactics::all();
@@ -394,7 +400,7 @@ class ProjectController extends Controller
         $costQuarter = $costQuarters->where('proID',$project->proID)->first();
         $benefits = Benefits::all();
         $benefit = $benefits->where('proID',$project->proID)->first();
-        return view('Project.update',compact('userMap','user','project','year','strategic','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','CountKPIProjects','steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
+        return view('Project.update',compact('userMap','user','project','year','strategic','strategicMap','straMap','SFA','goal','tactics','obj','objProject','KPIMain','KPIProjects','KPIProject','CountKPIProjects','steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit'));
     }
 
     function update(Request $request,$id){
@@ -414,16 +420,77 @@ class ProjectController extends Controller
         ];
         
         
-        $straMap=[
-            // 'straID'=>$request->StraID[0],
-            // 'SFAID'=>$request->SFAID[0],
-            // 'goalID'=>$request->goalID[0],
-            // 'tacID'=>$request->tacID[0],
-            'KPIMainID'=>$request->KPIMainID[0],
-            'updated_at' => now()
-        ];
+        // $straMap=[
+        //     'straMapID'=>$request->straMapID,
+        //     'straID' => $request->straID,
+        //     'SFAID' => $request->SFAID,
+        //     'goalID' => $request->goalID,
+        //     'tacID' => $request->tacID,
+        //     'KPIMainID' =>  $request->KPIMainID,
+        //     'updated_at' => now()
+        // ];
+        // dd($straMap);
+        $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
+        $straMapIDs = $strategicMap->pluck('straMapID')->toArray();
+        $straIDs = $strategicMap->pluck('straID')->toArray();
+        $SFAIDs = $strategicMap->pluck('SFAID')->toArray();
+        $goalIDs = $strategicMap->pluck('goalID')->toArray();
+        $tacIDs = $strategicMap->pluck('tacID')->toArray();
+        // dd($straMapIDs,$straIDs);
+        $straMapID = $request->straMapID;
+        $straID = $request->straID;
+        $SFAID = $request->SFAID;
+        $goalID = $request->goalID;
+        $tacID = $request->tacID;
+        // dd($straMapIDs,$straMapID,$straIDs,$straID,$SFAIDs,$SFAID,$goalIDs,$goalID,$tacIDs,$tacID);
+
+        foreach($straMapID as $index => $straMap){
+            if(isset($straMap)){
+                $currentstraMapID = $straMap;
+                if(in_array($currentstraMapID,$straMapIDs)){
+                    DB::table('strategic_maps')->updateOrInsert(
+                        [
+                            'straMapID' => $currentstraMapID
+                        ],
+                        [
+                            'proID' => $id,
+                            'updated_at' => now()
+                        ]
+                    );
+                }else{
+                    DB::table('strategic_maps')->insert(
+                        [
+                            'straMapID' => $straMap,
+                            'proID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                
+                }    
+            }else{
+                DB::table('strategic_maps')->insert(
+                    [
+                        'straMapID' => $straMap,
+                        'proID' => $id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        
+        }
+        $straMapToDelete = array_diff($straMapIDs,$straMapID);
+        if(!empty($straMapToDelete)){
+            DB::table('strategic_maps')
+            ->where('proID',$id)
+            ->whereIn('straMapID',$straMapToDelete)
+            ->delete();
+        }
+
 
         $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
+        //ดึงuserIDทัั้งหมดในuserMap
         $userMapIDs = $userMaps->pluck('userID')->toArray();
         // dd($userMapIDs);
         $userMapID = $request->userID;
@@ -500,7 +567,11 @@ class ProjectController extends Controller
             ->delete();
         }
 
-        DB::table('strategic_maps')->where('proID',$id)->update($straMap);
+        // DB::table('strategic_maps')->where('proID',$id)->update($straMap);
+
+
+
+
         foreach ($obj as $index => $obj) {
             
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
@@ -516,7 +587,7 @@ class ProjectController extends Controller
                         ],  // เช็คด้วย objID
                         [
                             'proID' => $id,
-                            'name' => $obj,  // อัปเดตชื่อ
+                            'detail' => $obj,  // อัปเดตชื่อ
                             'updated_at'=>now()
                         ]
                     );
@@ -705,7 +776,13 @@ class ProjectController extends Controller
 
     function report($id){
         $user=Users::all();
+        $userMap = UsersMapProject::with('users')->get();
         $project=DB::table('projects')->where('proID',$id)->first();
+        $strategicMap=StrategicMap::all();
+        $strategic = Strategics::all();
+        $SFA = StrategicIssues::all();
+        $goal = Goals::all();
+        $tactics = Tactics::all();
         $projectYear=Year::all();
         $projectType=ProjectType::all();
         $projectCharector=ProjectCharec::all();
@@ -719,14 +796,9 @@ class ProjectController extends Controller
         $peojectEXP=ExpenseBadgets::all();
         $projectCostType=CostTypes::all();
         $projectBenefit=Benefits::all();
-        return view('Project.report',compact('user','project','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
+        return view('Project.report',compact('user','userMap','project','strategicMap','strategic','SFA','goal','tactics','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
     }
 
-    function departmentPass($id){
-       
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '5']);
-        return redirect('/project');
-    }
 
 
    

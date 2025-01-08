@@ -31,23 +31,9 @@
             </tr>
             <tr>
                 <th>เจ้าของโครงการ</th>
-                @foreach ($userMap as $item)
-                    @if ($item->proID == $project->proID)
-                        <td colspan="3" value="{{ $item->userID }}">{{ $item->users->firstname_en }}
-                            {{ $item->users->lastname_en }}</td>
-
-            <tr></tr>
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>สังกัด</th>
-                @foreach ($userMap as $item)
-                    @if ($item->proID == $project->proID)
-                        <td colspan="3" value="{{ $item->userID }}">{{ $item->users->position_name }}</td>
-            <tr></tr>
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>format</th>
@@ -55,59 +41,15 @@
             </tr>
             <tr>
                 <th>แผนยุทธศาสตร์</th>
-                @foreach ($strategicMap as $item)
-                    @if ($item->proID == $project->proID)
-                        @foreach ($strategic as $stra)
-                            @if ($item->straID == $stra->straID)
-                                <td colspan="3">{{ $stra->name }}</td>
-             <tr></tr>
-           
-            @endif
-            @endforeach
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>ประเด็นยุทธศาสตร์</th>
-                @foreach ($strategicMap as $item)
-                    @if ($item->proID == $project->proID)
-                        @foreach ($SFA as $sfa)
-                            @if ($item->SFAID === $sfa->SFAID)
-                            <td colspan="3">{{ $sfa->name }}</td>
-                            <tr></tr>
-                            @endif
-                        @endforeach
-                        
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>เป้าประสงค์</th>
-                @foreach ($strategicMap as $item)
-                    @if ($item->proID == $project->proID)
-                        @foreach ($goal as $goalname)
-                            @if ($item->goalID === $goalname->goalID)
-                            <td colspan="3">{{ $goalname->name }}</td>
-                            <tr></tr>
-                            @endif
-                        @endforeach
-                        
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>กลยุทธ์</th>
-                @foreach ($strategicMap as $item)
-                    @if ($item->proID == $project->proID)
-                        @foreach ($tactics as $tactic)
-                            @if ($item->tacID === $tactic->tacID)
-                            <td colspan="3">{{ $tactic->name }}</td>
-                            <tr></tr>
-                            @endif
-                        @endforeach
-                        
-            @endif
-            @endforeach
             </tr>
             <tr>
                 <th>ประเภทโครงการ</th>
@@ -123,7 +65,7 @@
                 <th>ลักษณะโครงการ</th>
                 @foreach ($projectCharector as $item)
                     @if ($project->proChaID === $item->proChaID)
-                        <td colspan="3">{{ $item->name }}</td>
+                        <td colspan="3">{{ $item->pro_cha_name }}</td>
                     @endif
                 @endforeach
             </tr>
@@ -149,7 +91,7 @@
                 <th>วัตถุประสงค์</th>
                 @foreach ($projectOBJ as $item)
                     @if ($project->proID === $item->proID)
-                        <td colspan="3">{{ $item->detail }}</td>
+                        <td colspan="3">{{ $item->name }}</td>
             <tr></tr>
             {{-- <td></td> --}}
             @endif
@@ -218,7 +160,7 @@
                     @if ($project->proID === $item->proID)
                         @foreach ($peojectEXP as $exp)
                             @if ($item->expID === $exp->expID)
-                                <td colspan="3">{{ $exp->name }}</td>
+                                <td colspan="3">{{ $exp->exname }}</td>
             <tr></tr>
             @endif
             @endforeach
@@ -232,7 +174,7 @@
                     @if ($project->proID === $item->proID)
                         @foreach ($projectCostType as $cost)
                             @if ($item->costID === $cost->costID)
-                                <td colspan="3">{{ $cost->name }}</td>
+                                <td colspan="3">{{ $cost->costname }}</td>
             <tr></tr>
             @endif
             @endforeach
@@ -275,11 +217,46 @@
                 <th>ไฟล์เอกสารประกอบโครงการ</th>
             </tr>
         </table>
+        
+      
+           
 
-        {{-- </div> --}}
+            {{-- <div class="ln_solid"> --}}
+            <form id="actionForm" method="POST" >
+                @csrf
+                <div class="">
+                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+                    <div class="col-md-6 col-sm-6">
+                        <textarea name="comment" id="comment" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group mt-2">
+                    <div class="col-md-6 offset-md-3">
+
+                        <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
+                        <button type="submit" class="btn btn-warning" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+                        <button type="submit" class="btn btn-danger" onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+
+                    </div>
+                </div>
+            </form>
+    
+        
     </div>
     <div class="col-md-1 col-sm-1"></div>
 
-
+    <script>
+        function submitButton(action) {
+            var form = document.getElementById('actionForm');
+            if (action === 'pass') {
+                form.action = "{{ route('ExecutivePass', $project->proID) }}";
+            } else if (action === 'edit') {
+                form.action = "{{ route('ExecutiveEdit', $project->proID) }}";
+            }else{
+                form.action = "{{ route('ExecutiveDenied', $project->proID) }}";
+            }
+            form.submit();
+        }
+    </script>
 
 @endsection

@@ -135,6 +135,7 @@
                             <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
+                                <input type="hidden" name="straMapID[]" value="{{ $straMap->straMapID }}">
                                 <select id="straID" name="straID[]" class="form-control" required
                                     onchange="KPIMainNone()">
 
@@ -181,52 +182,64 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row field item form-group align-items-center">
-                            <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="straID" name="straID[]" class="form-control" required
-                                    onchange="KPIMainNone()">
+                        @foreach ($strategicMap as $index => $item)
+                            @if ($index > 0 && $item->proID == $project->proID && $item->straMapID != $straMap->straMapID)
+                                <div class="strategic-group">
+                                    <input type="hidden" name="straMapID[]" value="{{ $item->straMapID }}">
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="plan"
+                                            class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <select id="straID" name="straID[]" class="form-control" required
+                                                onchange="KPIMainNone()">
 
-                                    <!-- แผนจะถูกโหลดที่นี่ -->
-                                </select>
-                            </div>
-                           
-                        </div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-9 border mb-2 p-2">
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="SFAID" name="SFAID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
-                                </div>
-                            </div>
+                                                <!-- แผนจะถูกโหลดที่นี่ -->
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3">
+                                            <button type="button" class="btn btn-danger "
+                                                onclick="removeStrategicGroup(this)">ลบ</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3"></div>
+                                    <div class="col-md-9 border mb-2 p-2 ">
+                                        <div class="row field item form-group align-items-center">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="SFAID" name="SFAID[]" class="form-control" required>
+                                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                </select>
+                                            </div>
+                                        </div>
 
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="goalID" name="goalID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
-                                </div>
-                            </div>
+                                        <div class="row field item form-group align-items-center">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="goalID" name="goalID[]" class="form-control" required>
+                                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                </select>
+                                            </div>
+                                        </div>
 
-                            <div class="row field item form-group align-items-center">
-                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="tacID" name="tacID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
+                                        <div class="row field item form-group align-items-center">
+                                            <label for="title"
+                                                class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                                    class="required">*</span></label>
+                                            <div class="col-md-6 col-sm-6">
+                                                <select id="tacID" name="tacID[]" class="form-control" required>
+                                                    <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div> --}}
+                            @endif
+                        @endforeach
 
                         <div id="insertStrategic"></div>
 
@@ -668,7 +681,8 @@
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control" type="hidden" name="costQuID[]" id="costQuID"
                                             @if (!empty($costQuarter->costQuID)) value="{{ $costQuarter->costQuID }}" @endif>
-                                        <input class="form-control cost-input" type="text" name="costQu1[]" id=""
+                                        <input class="form-control cost-input" type="text" name="costQu1[]"
+                                            id=""
                                             @if (!empty($costQuarter->costQu1)) value="{{ $costQuarter->costQu1 }}" @endif>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
@@ -712,20 +726,20 @@
                                                 <div class="row col-md-2 col-sm-2 mr-1">
                                                     <input class="form-control" type="hidden" name="costQuID[]"
                                                         id="" value="{{ $item->costQuID }}">
-                                                    <input class="form-control cost-input" type="text" name="costQu1[]"
-                                                        id="" value="{{ $item->costQu1 }}">
+                                                    <input class="form-control cost-input" type="text"
+                                                        name="costQu1[]" id="" value="{{ $item->costQu1 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control cost-input" type="text" name="costQu2[]"
-                                                        id="" value="{{ $item->costQu2 }}">
+                                                    <input class="form-control cost-input" type="text"
+                                                        name="costQu2[]" id="" value="{{ $item->costQu2 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control cost-input" type="text" name="costQu3[]"
-                                                        id="" value="{{ $item->costQu3 }}">
+                                                    <input class="form-control cost-input" type="text"
+                                                        name="costQu3[]" id="" value="{{ $item->costQu3 }}">
                                                 </div>
                                                 <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control cost-input" type="text" name="costQu4[]"
-                                                        id="" value="{{ $item->costQu4 }}">
+                                                    <input class="form-control cost-input" type="text"
+                                                        name="costQu4[]" id="" value="{{ $item->costQu4 }}">
                                                 </div>
                                                 <div class="col-md-1 col-sm-1 m-1">
                                                     <button type="button" class="btn btn-danger "
@@ -882,6 +896,7 @@
 
         // เรียกคำนวณครั้งแรก (กรณีมีค่าเริ่มต้นในช่อง input)
         calculateTotal();
+        
 
         function addNewUserDropdown() {
             const dropdownCount = document.querySelectorAll('.userDropdown').length + 1;
@@ -1196,6 +1211,13 @@
             // หรือเพิ่มไปที่ container อื่น
         }
 
+        function removeStrategicGroup(button) {
+            const group = button.closest('.strategic-group'); // ค้นหา div .strategic-group ที่ใกล้ที่สุด
+            if (group) {
+                group.remove(); // ลบกลุ่มออก
+            }
+        }
+
         function toggleTextarea() {
             var select = document.getElementById("integrat");
             var otherTextContainer = document.getElementById("otherTextContainer");
@@ -1396,7 +1418,7 @@
         }
 
         function insertCostType() {
-            const dropdownCount = document.querySelectorAll('.Expense').length + 1;
+            // const dropdownCount = document.querySelectorAll('.Expense').length + 1;
 
             const mainExpenseContainer = document.createElement('div');
             mainExpenseContainer.classList.add('col-md-12', 'col-sm-12');
@@ -1407,8 +1429,34 @@
 
             const ExpenseDropdown = document.createElement('select');
             ExpenseDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            ExpenseDropdown.id = 'expID';
-            ExpenseDropdown.innerHTML = '';
+            ExpenseDropdown.id = `expID_${Date.now()}`;
+            ExpenseDropdown.name = 'expID[]';
+
+            const selectedPlanID = document.getElementById('planID').value;
+
+            const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
+
+            const filteredExpenses = expenses.filter(expense =>
+                relatedFunds.some(fund => fund.fundID == expense.fundID)
+            );
+
+            if (filteredExpenses.length === 0) {
+                const noExpenseOption = document.createElement('option');
+                noExpenseOption.value = '';
+                noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
+                ExpenseDropdown.appendChild(noExpenseOption);
+                ExpenseDropdown.disabled = true; // Disable expense dropdown
+            } else {
+                ExpenseDropdown.disabled = false; // Enable expense dropdown
+                filteredExpenses.forEach(expense => {
+                    const option = document.createElement('option');
+                    option.value = expense.expID;
+                    option.textContent = expense.name;
+                    ExpenseDropdown.appendChild(option);
+                });
+
+            }
+            //
 
             colExpense.appendChild(ExpenseDropdown);
             mainExpenseContainer.appendChild(colExpense);
@@ -1421,8 +1469,36 @@
 
             const costTypeDropdown = document.createElement('select');
             costTypeDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            costTypeDropdown.id = 'costType';
+            costTypeDropdown.id = `costType_${Date.now()}`;
+            costTypeDropdown.name = 'costID[]';
             costTypeDropdown.innerHTML = '';
+
+            const updateCostTypeDropdown = () => {
+                const selectedEXPID = ExpenseDropdown.value;
+                costTypeDropdown.innerHTML = '';
+
+                // กรองกองทุนที่เชื่อมกับแผน
+                const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
+
+                if (filteredCostType.length === 0) {
+                    const noCostTypeOption = document.createElement('option');
+                    noCostTypeOption.value = '';
+                    noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
+                    costTypeDropdown.appendChild(noCostTypeOption);
+                    costTypeDropdown.disabled = true; // Disable expense dropdown
+                } else {
+                    costTypeDropdown.disabled = false; // Enable expense dropdown
+                    filteredCostType.forEach(costType => {
+                        const option = document.createElement('option');
+                        option.value = costType.costID;
+                        option.textContent = costType.name;
+                        costTypeDropdown.appendChild(option);
+                    });
+                }
+            };
+            ExpenseDropdown.addEventListener('change',updateCostTypeDropdown);
+            updateCostTypeDropdown();
+
 
             colCostType.appendChild(costTypeDropdown);
             mainCostTypeContainer.appendChild(colCostType);
@@ -1431,7 +1507,7 @@
             colCostQu1.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu1Input = document.createElement('input');
-            CostQu1Input.classList.add('form-control','cost-input');
+            CostQu1Input.classList.add('form-control', 'cost-input');
             CostQu1Input.type = 'text';
             CostQu1Input.name = 'CostQu1[]';
             CostQu1Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
@@ -1443,7 +1519,7 @@
             colCostQu2.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu2Input = document.createElement('input');
-            CostQu2Input.classList.add('form-control','cost-input');
+            CostQu2Input.classList.add('form-control', 'cost-input');
             CostQu2Input.type = 'text';
             CostQu2Input.name = 'CostQu2[]';
             CostQu2Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
@@ -1455,7 +1531,7 @@
             colCostQu3.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu3Input = document.createElement('input');
-            CostQu3Input.classList.add('form-control','cost-input');
+            CostQu3Input.classList.add('form-control', 'cost-input');
             CostQu3Input.type = 'text';
             CostQu3Input.name = 'CostQu3[]';
             CostQu3Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener
@@ -1468,7 +1544,7 @@
             colCostQu4.classList.add('row', 'col-md-2', 'col-sm-2', 'mr-1');
 
             const CostQu4Input = document.createElement('input');
-            CostQu4Input.classList.add('form-control','cost-input');
+            CostQu4Input.classList.add('form-control', 'cost-input');
             CostQu4Input.type = 'text';
             CostQu4Input.name = 'CostQu4[]';
             CostQu4Input.addEventListener('input', calculateTotal); // เพิ่ม Event Listener

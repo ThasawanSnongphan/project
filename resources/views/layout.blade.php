@@ -137,7 +137,7 @@
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
-                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการ</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                                 <li><a href="/project">รายชื่อโครงการนอกแผน</a></li>
@@ -154,7 +154,7 @@
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
-                                                <li><a href="/project">จัดการข้อมูลโครงการ</a></li>
+                                                <li><a href="/DepartmentHeadProject">จัดการข้อมูลโครงการ</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -165,8 +165,8 @@
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
-                                                <li><a href="/project">รายชื่อโครงการ</a></li>
-                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="/ExecutiveProjectlist">รายชื่อโครงการ</a></li>
+                                                <li><a href="/ExecutiveProjectDenied">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
 
 
                                             </ul>

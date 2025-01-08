@@ -4,7 +4,6 @@
     {{-- @include('Project.create') --}}
 
 
-    <h3>โครงการประจำปี</h3>
 
     <div class="field item form-group ">
         <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
@@ -36,7 +35,7 @@
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
                     <th>ไตรมาส 4</th>
-                    <th></th>
+                   
                 @endif
 
             </tr>
@@ -47,14 +46,17 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
+                @if  (Auth::check() && auth()->user() && auth()->user()->Executive == 1 && $item->statusID != 17)
+                    @continue
+                @endif
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 16 || $item->statusID == 14  )
+                        {{-- @if ($item->statusID == 5)
                             {{ $item->name }}
-                        @else
-                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
-                        @endif
+                        @else --}}
+                            <a href="{{ route('Executive.detail', $item->proID) }}">{{ $item->name }}</a>
+                        {{-- @endif --}}
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
@@ -96,15 +98,7 @@
                                         เขียน</i></a>
                             @endif
                         </td>
-                        <td>
-                            @if ($item->statusID == 16 || $item->statusID == 14  )
-                                <a href="{{ route('project.edit', $item->proID) }}"><i
-                                        class="fa fa-pencil btn btn-warning"></i></a>
-                                <a href="{{ route('project.delete', $item->proID) }}"
-                                    onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                        class="fa fa-times btn btn-danger"></i></a>
-                            @endif
-                        </td>
+                        
                     @endif
                 </tr>
                 @php
@@ -113,15 +107,7 @@
             @endforeach
         </tbody>
     </table>
-    {{-- <script>
-        import DataTable from 'datatables.net-dt';
-        import 'datatables.net-responsive-dt';
-
-        let table = new DataTable('#myTable', {
-            responsive: true
-        });
-    </script> --}}
-    {{-- <a type='submit' class="btn btn-primary" href="/projectcreate">สร้างโปรเจค</a> --}}
+   
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
         document.getElementById('yearID').addEventListener('change', function() {
