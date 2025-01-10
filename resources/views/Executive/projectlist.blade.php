@@ -64,10 +64,10 @@
                         <td>
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> ดูรายงาน</i></a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        เขียน</i></a>
+                                        ดูรายงาน</i></a>
                             @endif
                         </td>
                         <td>

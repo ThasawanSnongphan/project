@@ -18,6 +18,11 @@ use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Strategic2LevelController;
+use App\Http\Controllers\SFA2LevelController;
+use App\Http\Controllers\KPIMain2LevelController;
+use App\Http\Controllers\Tactics2LevelController;
+
 use App\Http\Controllers\StrategicController;
 use App\Http\Controllers\SFAController;
 use App\Http\Controllers\GoalController;
@@ -165,11 +170,38 @@ Route::get('targetDelete/{id}',[TargetController::class,'delete'])->name('target
 Route::get('targetEdit/{id}',[TargetController::class,'edit'])->name('target.edit');
 Route::post('targetUpdate/{id}',[TargetController::class,'update'])->name('target.update');
 
+
 Route::get('strategic',[StrategicController::class,'index']);
 Route::post('strategicInsert',[StrategicController::class,'insert']);
 Route::get('strategicDelete/{id}',[StrategicController::class,'delete'])->name('strategic.delete');
 Route::get('strategicEdit/{id}',[StrategicController::class,'edit'])->name('strategic.edit');
 Route::post('strategicUpdate/{id}',[StrategicController::class,'update'])->name('strategic.update');
+
+//Strategic2Level
+Route::get('strategic2LV',[Strategic2LevelController::class,'index']);
+Route::post('strategic2LVInsert',[Strategic2LevelController::class,'insert']);
+Route::get('strategic2LVEdit/{id}',[Strategic2LevelController::class,'edit'])->name('strategic2LV.edit');
+Route::post('strategic2LVUpdate/{id}',[Strategic2LevelController::class,'update'])->name('strategic2LV.update');
+Route::get('strategic2LVDelete/{id}',[Strategic2LevelController::class,'delete'])->name('strategic2LV.delete');
+//SFA2Level
+Route::get('SFA2LV',[SFA2LevelController::class,'index']);
+Route::post('SFA2LVInsert',[SFA2LevelController::class,'insert']);
+Route::get('SFA2LVEdit/{id}',[SFA2LevelController::class,'edit'])->name('SFA2LV.edit');
+Route::post('SFA2LVUpdate/{id}',[SFA2LevelController::class,'update'])->name('SFA2LV.update');
+Route::get('SFA2LVDelete/{id}',[SFA2LevelController::class,'delete'])->name('SFA2LV.delete');
+//KPIMain2Level
+Route::get('KPIMain2LV',[KPIMain2LevelController::class,'index']);
+Route::post('KPIMain2LVInsert',[KPIMain2LevelController::class,'insert']);
+Route::get('KPIMain2LVEdit/{id}',[KPIMain2LevelController::class,'edit'])->name('KPIMain2LV.edit');
+Route::post('KPIMain2LVUpdate/{id}',[KPIMain2LevelController::class,'update'])->name('KPIMain2LV.update');
+Route::get('KPIMain2LVDelete/{id}',[KPIMain2LevelController::class,'delete'])->name('KPIMain2LV.delete');
+//KPIMain2Level
+Route::get('tactic2LV',[Tactics2LevelController::class,'index']);
+Route::post('tactic2LVInsert',[Tactics2LevelController::class,'insert']);
+Route::get('tactic2LVEdit/{id}',[Tactics2LevelController::class,'edit'])->name('tactic2LV.edit');
+Route::post('tactic2LVUpdate/{id}',[Tactics2LevelController::class,'update'])->name('tactic2LV.update');
+Route::get('tactic2LVDelete/{id}',[Tactic2ssLevelController::class,'delete'])->name('tactic2LV.delete');
+
 
 Route::get('SFA',[SFAController::class,'index']);
 Route::post('SFAInsert',[SFAController::class,'insert']);

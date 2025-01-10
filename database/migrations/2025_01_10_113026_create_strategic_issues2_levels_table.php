@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('strategics', function (Blueprint $table) {
-            $table->id();
+        Schema::create('strategic_issues2_levels', function (Blueprint $table) {
+            $table->id('SFA2LVID');
             $table->string('name');
-            $table->unsignedBigInteger('yearID');
-            $table->foreign('yearID')->references('yearID')->on('years')->onDelete('cascade');
+            $table->unsignedBigInteger('stra2LVID');
+            $table->foreign('stra2LVID')->references('stra2LVID')->on('strategic2_levels')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('strategics');
+        Schema::dropIfExists('strategic_issues2_levels');
     }
 };

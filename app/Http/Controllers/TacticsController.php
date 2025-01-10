@@ -15,20 +15,13 @@ use Illuminate\Support\Facades\DB;
 class TacticsController extends Controller
 {
     function index(){
-        // $goal=DB::table('goals')->get()->keyBy('goalID');
-        // $tactics=DB::table('tactics')->get();
-        // $SFA=DB::table('strategic_issues')->get()->keyBy('SFAID');
-        // $strategic=DB::table('strategics')->get()->keyBy('straID');
-        // $year=DB::table('years')->get()->keyBy('yearID');
-        // $tactics=Tactics::with('goal.SFA.strategic.year')->get();
+        
         $year=Year::all();
         $strategic=Strategics::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
         $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->get();
-        // $KPIMainMap=Tactics::with('KPIMain')->get();
         $KPIMain=KPIMains::all();
-
         return view('Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain'));
     }
 

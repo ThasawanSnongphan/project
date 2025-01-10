@@ -85,6 +85,19 @@
                     @if (Auth::check())
                         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
+                                <ul class="nav side-menu">
+                                    {{-- สิทธิ์ผู้เขียนโครงการ --}}
+                                    <li><a><i class="fa fa-home"></i> Home <span
+                                                class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                                            {{-- ดูได้แค่ชื่อกับสถานะ --}}
+
+                                            <li><a href="/project">รายชื่อโครงการทั้งหมด</a></li> 
+
+                                        </ul>
+                                    </li>
+                                </ul>
                                 @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                     {{-- <h3>General</h3> --}}
                                     <ul class="nav side-menu">
@@ -93,12 +106,22 @@
                                             <ul class="nav child_menu">
                                                 <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
                                                 <li><a href="/users">Users</a></li>
-                                                <li><a href="/year">ปีงบประมาณ</a></li>
+                                                <li><a href="/year">ปีงบประมาณ</a></li><hr>
+                                                <p>รูปแบบของแผน 3 ระดับ</p>
                                                 <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
                                                 <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
                                                 <li><a href="/goal">เป้าประสงค์</a></li>
                                                 <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
-                                                <li><a href="/tactics">กลยุทธ์</a></li>
+                                                <li><a href="/tactics">กลยุทธ์</a></li><hr>
+                                                <p>รูปแบบของแผน 2 ระดับ</p>
+                                                <li><a href="/strategic2LV">แผนยุทธศาสตร์ </a></li>
+                                                <li><a href="/SFA2LV">ประเด็นยุทธศาสตร์</a></li>
+                                                <li><a href="/KPIMain2LV">ตัวชี้วัดของแผน</a></li>
+                                                <li><a href="/tactic2LV">กลยุทธ์</a></li><hr>
+                                                <p>รูปแบบของแผน 1 ระดับ</p>
+                                                <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
+                                                <li><a href="/SFA">เป้าหมาย</a></li><hr>
+
                                                 <li><a href="/plan">แผนงานมหาลัย</a></li>
                                                 <li><a href="/fund">กองทุน</a></li>
                                                 <li><a href="/Expense">งบรายจ่าย</a></li>
@@ -142,7 +165,7 @@
                                                 <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                                 <li><a href="/project">รายชื่อโครงการนอกแผน</a></li>
 
-                                                <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
+                                                
 
                                             </ul>
                                         </li>

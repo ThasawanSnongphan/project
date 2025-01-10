@@ -553,7 +553,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
                                 <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
-                                    required='required' data-validate-length-range="8,20" disabled
+                                    required='required' data-validate-length-range="8,20" readonly
                                     oninput="updateText()" />
 
                             </div>

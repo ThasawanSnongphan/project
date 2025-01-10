@@ -17,6 +17,11 @@
     <div class="col-md-10 col-sm-10">
         <table class="table table-bordered">
             <tr>
+                <th style="width: 25%;">สถานะ</th>
+                
+
+            </tr>
+            <tr>
                 <th style="width: 25%;">ปีงบประมาณ</th>
                 @foreach ($projectYear as $item)
                     @if ($item->yearID === $project->yearID)

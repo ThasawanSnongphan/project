@@ -106,6 +106,7 @@ class ProjectController extends Controller
         $project->tarID = $target->tarID;
         $project->badID = $badget->badID;
         $project->badgetTotal = $request->input('badgetTotal');
+    
         $project->planID = $UniPlan->planID;
         $project->statusID =  1;
         $project->save();
@@ -129,6 +130,26 @@ class ProjectController extends Controller
                 $objs->detail = $obj;
                 $objs->proID = $project->proID;
                 $objs->save();
+            }
+        }
+
+        $straID = $request->input('straID');
+        $SFAID = $request->input('SFAID');
+        $goalID = $request->input('goalID');
+        $tacID = $request->input('tacID');
+        $KPIMainID = $request->input('KPIMainID');
+        if(is_array($straID) && is_array($SFAID) && is_array($goalID) && is_array($tacID) && is_array($KPIMainID)){
+            foreach($straID as $index => $stra){
+                $straMap = new StrategicMap();
+                $straMap->proID = $project->proID;
+                $straMap->straID = $stra;
+                $straMap->SFAID = $SFAID[$index] ?? null;
+                $straMap->goalID = $goalID[$index] ?? null;
+                $straMap->tacID = $tacID[$index] ?? null;
+                // if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
+                    $straMap->KPIMainID = $KPIMainID[$index] ?? null;
+                // }
+                $straMap->save();
             }
         }
 
@@ -164,6 +185,8 @@ class ProjectController extends Controller
         $costQu2= $request->input('costQu2');
         $costQu3= $request->input('costQu3');
         $costQu4= $request->input('costQu4');
+        $expID = $request->input('expID');
+        $costID = $request->input('costID');
         if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
             foreach($costQu1 as $index => $cost1){
                 $costQu = new CostQuarters();
@@ -172,8 +195,8 @@ class ProjectController extends Controller
                 $costQu->costQu3 = $costQu3[$index];
                 $costQu->costQu4 = $costQu4[$index];
                 $costQu->proID = $project->proID;
-                $costQu->expID = $expID->expID;
-                $costQu->costID = $costID->costID;
+                $costQu->expID = $expID[$index];
+                $costQu->costID = $costID[$index];
                 $costQu->save();
             }
         }
@@ -222,6 +245,7 @@ class ProjectController extends Controller
         $project->proInDetail = $request->input('proInDetail');
         $project->tarID = $target->tarID;
         $project->badID = $badget->badID;
+        $project->badgetTotal = $request->input('badgetTotal');
         $project->planID = $UniPlan->planID;
         $project->statusID =  16;
         $project->save();

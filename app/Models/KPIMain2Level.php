@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class KPIMain2Level extends Model
+{
+    protected $primaryKey = 'KPIMain2LVID';
+    public function SFA()
+    {
+        return $this->belongsTo(StrategicIssues2Level::class, 'SFA2LVID','SFA2LVID');
+    }
+}

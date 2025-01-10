@@ -234,7 +234,7 @@
                     <div class="col-md-6 offset-md-3">
 
                         <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
-                        <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+                        {{-- <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button> --}}
 
                     </div>
                 </div>

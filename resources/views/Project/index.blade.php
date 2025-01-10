@@ -30,8 +30,8 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                    <th>สถานะ</th>
+                <th>สถานะ</th>
+                @if (Auth::check() && auth()->user())
                     <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
@@ -50,16 +50,17 @@
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 16 || $item->statusID == 14  )
+                        @if ($item->statusID == 16 || $item->statusID == 14)
                             {{ $item->name }}
                         @else
                             <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
                         @endif
                     </td>
-                    @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                    
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                        {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
+                        @if (Auth::check() && auth()->user() )
                         <td>
+                            
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
@@ -97,7 +98,7 @@
                             @endif
                         </td>
                         <td>
-                            @if ($item->statusID == 16 || $item->statusID == 14  )
+                            @if ($item->statusID == 16 || $item->statusID == 14)
                                 <a href="{{ route('project.edit', $item->proID) }}"><i
                                         class="fa fa-pencil btn btn-warning"></i></a>
                                 <a href="{{ route('project.delete', $item->proID) }}"
