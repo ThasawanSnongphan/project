@@ -22,7 +22,7 @@ class TacticsController extends Controller
         $goal=Goals::all();
         $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->get();
         $KPIMain=KPIMains::all();
-        return view('Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain'));
+        return view('Strategic3Level.Tactics.index',compact('goal','tactics','SFA','strategic','year','KPIMain'));
     }
 
     function insert(Request $request){
@@ -63,9 +63,10 @@ class TacticsController extends Controller
         $strategic=Strategics::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
-        $KPIMainMap=KPIMainMapTactics::all();
+        $KPIMainMaps=KPIMainMapTactics::all();
+        $KPIMainMap = $KPIMainMaps->where('tacID',$tactics->tacID)->first();
         $KPIMain=KPIMains::all();
-        return view('tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMap','KPIMain'));
+        return view('Strategic3Level.Tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMaps','KPIMainMap','KPIMain'));
     }
     function update(Request $request,$id){
         $tactics=[

@@ -75,6 +75,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <select id="KPIMain2LVID" name="KPIMain[]" class="form-control" required>
+                                <option value="">--เลือกตัวชี้วัด--</option>
                             </select>
                         </div>
                         <div class="col-md-1 col-sm-1 ">
@@ -225,7 +226,7 @@
 
                         function updateKPIMainDropdown(selectedSFAID) {
                             const KPIMainSelect = document.getElementById('KPIMain2LVID');
-                            KPIMainSelect.innerHTML = '';
+                            // KPIMainSelect.innerHTML = '';
 
                             if (!selectedSFAID) {
                                 const noKPIMainOption = document.createElement('option');

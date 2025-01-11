@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            @include('KPIMain.create')
+            @include('Strategic3Level.KPIMain.create')
 
             <div class="row" style="display: block;">
                 <div class="col-md-1 col-sm-1  "></div>
@@ -72,6 +72,8 @@
                                         <th>KPI</th>
                                         <th>หน่วยนับ</th>
                                         <th>ค่าเป้าหมาย</th>
+                                        <th>ผู้กำกับ</th>
+                                        <th>ผู้บันทึกข้อมูล</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -92,6 +94,20 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->count }}</td>
                                             <td>{{ $item->target }}</td>
+                                            <td> 
+                                                @if($item->director)
+                                                    {{ $item->director->firstname_en }} {{ $item->director->lastname_en }}
+                                                @else
+                                                    null
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->recorder)
+                                                    {{ $item->recorder->firstname_en }} {{ $item->recorder->lastname_en }}
+                                                @else
+                                                    null
+                                                @endif
+                                            </td>
                                             <td>
                                                 <a
                                                         href="{{route('KPIMain.edit',$item->KPIMainID)}}"><i

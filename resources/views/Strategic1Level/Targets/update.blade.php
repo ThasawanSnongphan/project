@@ -7,7 +7,7 @@
                 <div class="">
                     <div class="page-title">
                         <div class="title_left">
-                            <h3>แก้ไขประเด็นยุทธศาสตร์</h3>
+                            <h3>แก้ไขเป้าหมาย</h3>
                         </div>
 
                         <div class="title_right">
@@ -28,7 +28,7 @@
                         <div class="col-md-10 col-sm-10">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>ประเด็นยุทธศาสตร์ </h2>
+                                    <h2>เป้าหมาย </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('SFA2LV.update', $SFA->SFA2LVID) }}"novalidate
+                                    <form method="POST" action="{{ route('target1LV.update', $target->tar1LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -57,7 +57,7 @@
                                                 <select id="yearID" name="yearID" class="form-control" required>
                                                     @foreach ($year as $year)
                                                         <option value="{{ $year->yearID }}"
-                                                            {{ $year->yearID == $SFA->strategic->year->yearID ? 'selected' : '' }}>
+                                                            {{ $year->yearID == $target->strategic->year->yearID ? 'selected' : '' }}>
                                                             {{ $year->year }}</option>
                                                     @endforeach
                                                 </select>
@@ -68,19 +68,19 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="stra2LVID" name="stra2LVID" class="form-control" required>
+                                                <select id="stra1LVID" name="stra1LVID" class="form-control" required>
 
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="field item form-group">
                                             <label for="title"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"
                                                     required='required' data-validate-length-range="8,20"
-                                                    value="{{ $SFA->name }}" />
+                                                    value="{{ $target->name }}" />
                                                 @error('name')
                                                     <div class="m-2">
                                                         <span class="text text-danger">{{ $message }}</span>
@@ -93,7 +93,7 @@
                                             const strategic = @json($strategic);
 
                                             function updateStrategicDropdown(selectedYearID) {
-                                                const planSelect = document.getElementById('stra2LVID');
+                                                const planSelect = document.getElementById('stra1LVID');
                                                 planSelect.innerHTML = '';
 
                                                 const filteredPlans = strategic.filter(stra => stra.yearID == selectedYearID);
@@ -108,9 +108,9 @@
                                                     planSelect.disabled = false;
                                                     filteredPlans.forEach(stra => {
                                                         const option = document.createElement('option');
-                                                        option.value = stra.stra2LVID;
+                                                        option.value = stra.stra1LVID;
                                                         option.textContent = stra.name;
-                                                        if (stra.stra2LVID == '{{ $SFA->stra2LVID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
+                                                        if (stra.stra1LVID == '{{ $target->stra1LVID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
                                                             option.selected = true;
                                                         }
                                                         planSelect.appendChild(option);

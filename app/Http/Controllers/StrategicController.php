@@ -12,12 +12,9 @@ class StrategicController extends Controller
     function index(){
         $year=Year::all();
         $strategic=Strategics::all();
-        return view('Strategics.index',compact('year','strategic'));
+        return view('Strategic3Level.Strategics.index',compact('year','strategic'));
     }
-    function create(){
-        $year = Year::all();
-        return view('Strategics.create', compact('year'));
-    }
+   
     
     function insert(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
@@ -44,7 +41,7 @@ class StrategicController extends Controller
         $strategic=DB::table('strategics')->where('straID',$id)->first();
         
         $year = Year::all(); 
-        return view('Strategics.update',compact('strategic','year'));
+        return view('Strategic3Level.Strategics.update',compact('strategic','year'));
     }
     function update(Request $request,$id){
         $year = Year::where('yearID',$request->input('yearID'))->first();

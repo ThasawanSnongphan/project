@@ -58,7 +58,7 @@
                                                     @foreach ($year as $item)
                                                         <option value="{{ $item->yearID }}"
                                                             {{ $item->yearID == $tactics->goal->SFA->strategic->year->yearID ? 'selected' : '' }}>
-                                                            {{ $item->year}}</option>
+                                                            {{ $item->year }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -114,8 +114,9 @@
                                             <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                                     class="required">*</span></label>
+                                            <input type="text" value="{{ $KPIMainMap->KPIMainID }}">
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="KPIMainID" name="KPIMainID" class="form-control" required>
+                                                <select id="KPIMainID_1" name="KPIMainID" class="form-control" required>
 
                                                 </select>
                                             </div>
@@ -124,7 +125,27 @@
                                                     onclick="insertKPIMain()">เพิ่ม</button>
                                             </div>
                                         </div>
-                                        
+
+                                        @foreach ($KPIMainMaps as $item)
+                                            @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
+                                                <div class="i field item form-group ">
+                                                    <div class="col-md-3 col-sm-3"></div>
+                                                    <input type="text" value="{{ $item->KPIMainID }}">
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <select id="KPIMainID_{{ $item->KPIMainID }}" name="KPIMainID"
+                                                            class="form-control" required>
+                                                           
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3">
+                                                        <button type="button" class="btn btn-danger "
+                                                            onclick="this.closest('.i').remove()">ลบ</button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+
                                         <div id="insertKPIMain"></div>
 
                                         <script>
@@ -133,6 +154,7 @@
                                             const goals = @json($goal); // ข้อมูลเป้าประสงค์
                                             const KPIMains = @json($KPIMain);
                                             const tacticMap = @json($tactics->KPIMain);
+                                            console.log(tacticMap);
 
                                             function insertKPIMain() {
                                                 const mainContainer = document.createElement('div');
@@ -296,7 +318,7 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
-                                                    updateKPIMainDropdown(null);
+                                                    updateKPIMainDropdown(null, 'KPIMainID_1');
                                                     return;
                                                 }
 
@@ -309,7 +331,7 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
-                                                    updateKPIMainDropdown(null);
+                                                    updateKPIMainDropdown(null, 'KPIMainID_1');
                                                 } else {
                                                     goalSelect.disabled = false;
                                                     filteredGoals.forEach(goal => {
@@ -318,19 +340,29 @@
                                                         option.textContent = goal.name;
                                                         if (goal.goalID == '{{ $tactics->goalID }}') {
                                                             option.selected = true;
-                                                            updateKPIMainDropdown(goal.goalID);
+                                                            updateKPIMainDropdown(goal.goalID, 'KPIMainID_1');
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
                                                     if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goalID }}')) {
-                                                        updateKPIMainDropdown(filteredGoals[0].goalID);
+                                                        updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_1');
                                                     }
                                                 }
 
                                             }
 
-                                            function updateKPIMainDropdown(selectedgoalID) {
-                                                const KPIMainSelect = document.getElementById('KPIMainID');
+
+                                            // document.addEventListener('DOMContentLoaded', function() {
+                                            @foreach ($KPIMainMaps as $item)
+                                                @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
+                                                    updateKPIMainDropdown('{{ $tactics->goalID }}', 'KPIMainID_{{ $item->KPIMainID }}');
+                                                @endif
+                                            @endforeach
+                                            // });
+
+                                            function updateKPIMainDropdown(selectedgoalID, selectID) {
+                                                const KPIMainSelect = document.getElementById(selectID);
+                                                // console.log(KPIMainSelect);
                                                 KPIMainSelect.innerHTML = '';
 
                                                 if (!selectedgoalID) {
@@ -342,7 +374,8 @@
                                                     return;
                                                 }
 
-                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID ==
+                                                    selectedgoalID);
 
                                                 if (filteredKPIMain.length === 0) {
                                                     const noKPIMainOption = document.createElement('option');
@@ -352,15 +385,17 @@
                                                     KPIMainSelect.disabled = true;
                                                 } else {
                                                     KPIMainSelect.disabled = false;
+                                                    
                                                     filteredKPIMain.forEach(KPIMain => {
                                                         const option = document.createElement('option');
                                                         option.value = KPIMain.KPIMainID;
                                                         option.textContent = KPIMain.name;
-                                                        tacticMap.forEach(map => {
-                                                            if (map.KPIMainID == KPIMain.KPIMainID) {
-                                                                option.selected = true;
-                                                            }
-                                                        })
+                                                        const map = tacticMap.find(map => map.KPIMainID == KPIMain.KPIMainID);
+                                        
+                                                        if(map){
+                                                            option.selected = true;
+                                                            console.log(map);
+                                                        }
                                                         KPIMainSelect.appendChild(option);
                                                     });
                                                 }
@@ -372,6 +407,7 @@
                                                 const planSelect = document.getElementById('straID');
                                                 const issueSelect = document.getElementById('SFAID');
                                                 const goalSelect = document.getElementById('goalID');
+                                                
 
                                                 // เมื่อเปลี่ยนปีงบประมาณ
                                                 yearSelect.addEventListener('change', function() {
@@ -392,7 +428,12 @@
 
                                                 goalSelect.addEventListener('change', function() {
                                                     const selectedgoalID = this.value;
-                                                    updateKPIMainDropdown(selectedgoalID);
+                                                  
+                                                    const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
+                                                    kpiMainElements.forEach(function(kpiMainElement) {
+                                                        updateKPIMainDropdown(selectedgoalID, kpiMainElement.id);
+                                                    });
+                                                    
                                                 });
 
 

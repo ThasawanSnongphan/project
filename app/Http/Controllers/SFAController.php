@@ -15,7 +15,7 @@ class SFAController extends Controller
         $strategic=Strategics::all();
         $SFA=StrategicIssues::with(['strategic.year']) // ดึงข้อมูลสัมพันธ์
         ->get();
-        return view('SFA.index',compact('strategic','year','SFA'));
+        return view('Strategic3Level.SFA.index',compact('strategic','year','SFA'));
     }
 
     function insert(Request $request){
@@ -43,7 +43,7 @@ class SFAController extends Controller
         $SFA = StrategicIssues::with('strategic.year')->where('SFAID', $id)->first();
         $strategic = Strategics::all();
         $year = Year::all(); 
-        return view('SFA.update',compact('SFA','strategic','year'));
+        return view('Strategic3Level.SFA.update',compact('SFA','strategic','year'));
     }
     function update(Request $request,$id){
         $strategic = Strategics::where('straID',$request->input('straID'))->first();

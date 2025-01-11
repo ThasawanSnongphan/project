@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            @include('Goal.create')
+            @include('Strategic3Level.Goal.create')
 
             <div class="row" style="display: block;">
                 <div class="col-md-1 col-sm-1  "></div>

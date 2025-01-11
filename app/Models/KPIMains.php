@@ -13,4 +13,14 @@ class KPIMains extends Model
     {
         return $this->belongsTo(Goals::class, 'goalID','goalID');
     }
+
+    public function director()
+    {
+        return $this->belongsTo(Users::class, 'directorID','userID');
+    }
+
+    public function recorder()
+    {
+        return $this->belongsTo(Users::class, 'recorderID','userID');
+    }
 }

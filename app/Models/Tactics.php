@@ -17,4 +17,6 @@ class Tactics extends Model
     {
         return $this->belongsToMany(KPIMains::class, 'k_p_i_main_map_tactics', 'tacID', 'KPIMainID');
     }
+    
+    
 }

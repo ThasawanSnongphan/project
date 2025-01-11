@@ -20,7 +20,7 @@ class GoalController extends Controller
         $SFA=StrategicIssues::all();
         $goal=DB::table('goals')->get();
         $goals=Goals::with('SFA.strategic.year')->get();
-        return  view('Goal.index',compact('SFA','goal','goals','year','strategic'));
+        return  view('Strategic3Level.Goal.index',compact('SFA','goal','goals','year','strategic'));
     }
 
     function insert(Request $request){
@@ -47,7 +47,7 @@ class GoalController extends Controller
         $year=Year::all();
         $SFA = StrategicIssues::all(); 
         $strategic=Strategics::all();
-        return view('Goal.update',compact('goal','year','SFA','strategic'));
+        return view('Strategic3Level.Goal.update',compact('goal','year','SFA','strategic'));
     }
     function update(Request $request,$id){
         $goal=[

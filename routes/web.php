@@ -18,10 +18,14 @@ use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+
 use App\Http\Controllers\Strategic2LevelController;
 use App\Http\Controllers\SFA2LevelController;
 use App\Http\Controllers\KPIMain2LevelController;
 use App\Http\Controllers\Tactics2LevelController;
+
+use App\Http\Controllers\Strategic1LevelController;
+use App\Http\Controllers\Target1LevelController;
 
 use App\Http\Controllers\StrategicController;
 use App\Http\Controllers\SFAController;
@@ -200,7 +204,19 @@ Route::get('tactic2LV',[Tactics2LevelController::class,'index']);
 Route::post('tactic2LVInsert',[Tactics2LevelController::class,'insert']);
 Route::get('tactic2LVEdit/{id}',[Tactics2LevelController::class,'edit'])->name('tactic2LV.edit');
 Route::post('tactic2LVUpdate/{id}',[Tactics2LevelController::class,'update'])->name('tactic2LV.update');
-Route::get('tactic2LVDelete/{id}',[Tactic2ssLevelController::class,'delete'])->name('tactic2LV.delete');
+Route::get('tactic2LVDelete/{id}',[Tactics2LevelController::class,'delete'])->name('tactic2LV.delete');
+
+Route::get('strategic1LV',[Strategic1LevelController::class,'index']);
+Route::post('strategic1LVInsert',[Strategic1LevelController::class,'insert']);
+Route::get('strategic1LVEdit/{id}',[Strategic1LevelController::class,'edit'])->name('strategic1LV.edit');
+Route::post('strategic1LVUpdate/{id}',[Strategic1LevelController::class,'update'])->name('strategic1LV.update');
+Route::get('strategic1LVDelete/{id}',[Strategic1LevelController::class,'delete'])->name('strategic1LV.delete');
+
+Route::get('target1LV',[Target1LevelController::class,'index']);
+Route::post('target1LVInsert',[Target1LevelController::class,'insert']);
+Route::get('target1LVEdit/{id}',[Target1LevelController::class,'edit'])->name('target1LV.edit');
+Route::post('target1LVUpdate/{id}',[Target1LevelController::class,'update'])->name('target1LV.update');
+Route::get('target1LVDelete/{id}',[Target1LevelController::class,'delete'])->name('target1LV.delete');
 
 
 Route::get('SFA',[SFAController::class,'index']);

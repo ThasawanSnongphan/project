@@ -1852,7 +1852,7 @@
             } else {
                 // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
                 KPIMainSelect.disabled = false;
-                let selectedOptionFound = false;
+                // let selectedOptionFound = false;
                 filteredKPIMains.forEach(KPIMain => {
                     const option = document.createElement('option');
                     option.value = KPIMain.KPIMainID;

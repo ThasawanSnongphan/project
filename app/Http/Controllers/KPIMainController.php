@@ -20,8 +20,8 @@ class KPIMainController extends Controller
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
-        $KPIMain=KPIMains::with('goal.SFA.strategic.year')->get();
-        return view('KPIMain.index',compact('user','year','strategic','SFA','goal','KPIMain'));
+        $KPIMain=KPIMains::with('goal.SFA.strategic.year','director','recorder')->get();
+        return view('Strategic3Level.KPIMain.index',compact('user','year','strategic','SFA','goal','KPIMain'));
     }
 
     function insert(Request $request){
@@ -55,7 +55,7 @@ class KPIMainController extends Controller
         $user=Users::all();
         
         $KPIMain=KPIMains::with(['goal.SFA.strategic.year'])->where('KPIMainID',$id)->first();
-        return view('KPIMain.update',compact('year','strategic','SFA','goal','KPIMain','user'));
+        return view('Strategic3Level.KPIMain.update',compact('year','strategic','SFA','goal','KPIMain','user'));
     }
     function update(Request $request,$id){
         // $tacID = Tactics::where('tacID',$request->input('tacID'))->first();

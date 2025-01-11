@@ -119,8 +119,8 @@
                                                 <li><a href="/KPIMain2LV">ตัวชี้วัดของแผน</a></li>
                                                 <li><a href="/tactic2LV">กลยุทธ์</a></li><hr>
                                                 <p>รูปแบบของแผน 1 ระดับ</p>
-                                                <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
-                                                <li><a href="/SFA">เป้าหมาย</a></li><hr>
+                                                <li><a href="/strategic1LV">แผนยุทธศาสตร์ </a></li>
+                                                <li><a href="/target1LV">เป้าหมาย</a></li><hr>
 
                                                 <li><a href="/plan">แผนงานมหาลัย</a></li>
                                                 <li><a href="/fund">กองทุน</a></li>
