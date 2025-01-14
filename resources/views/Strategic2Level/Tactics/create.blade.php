@@ -74,7 +74,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="KPIMain2LVID" name="KPIMain[]" class="form-control" required>
+                            <select id="KPIMain2LVID_1" name="KPIMain[]" class="form-control" required>
                                 <option value="">--เลือกตัวชี้วัด--</option>
                             </select>
                         </div>
@@ -90,6 +90,7 @@
                         const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
                         const issues = @json($SFA); // ข้อมูลเป้าประสงค์
                         const KPIMains = @json($KPIMain);
+                        let index = 2;
 
                         function insertKPIMain() {
                             const mainContainer = document.createElement('div');
@@ -107,8 +108,9 @@
 
                             const KPIMainDropdown = document.createElement('select');
                             KPIMainDropdown.classList.add('form-control');
-                            KPIMainDropdown.id = `KPIMain2LVID_${Date.now()}`;
+                            KPIMainDropdown.id = `KPIMain2LVID_${index+=1}`;
                             KPIMainDropdown.name = 'KPIMain[]';
+
 
                             const selectedSFA2LVID = document.getElementById('SFA2LVID').value;
                             KPIMainDropdown.innerHTML = '';
@@ -191,6 +193,7 @@
                         function updateIssueDropdown(selectedPlanID) {
                             const issueSelect = document.getElementById('SFA2LVID');
                             issueSelect.innerHTML = '';
+                            const kpiMains = document.querySelectorAll('[id^="KPIMain2LVID_"]');
 
                             if (!selectedPlanID) {
                                 const noIssueOption = document.createElement('option');
@@ -198,7 +201,10 @@
                                 noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                 issueSelect.appendChild(noIssueOption);
                                 issueSelect.disabled = true;
-                                updateKPIMainDropdown(null);
+                                // updateKPIMainDropdown(null, 'KPIMain2LVID_1');
+                                kpiMains.forEach(function(kpiMain) {
+                                    updateKPIMainDropdown(null, kpiMain.id);
+                                })
                                 return;
                             }
 
@@ -210,7 +216,10 @@
                                 noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                 issueSelect.appendChild(noIssueOption);
                                 issueSelect.disabled = true;
-                                updateKPIMainDropdown(null);
+                                // updateKPIMainDropdown(null, 'KPIMain2LVID_1');
+                                kpiMains.forEach(function(kpiMain) {
+                                    updateKPIMainDropdown(null, kpiMain.id);
+                                })
                             } else {
                                 issueSelect.disabled = false;
                                 filteredIssues.forEach(issue => {
@@ -219,14 +228,27 @@
                                     option.textContent = issue.name;
                                     issueSelect.appendChild(option);
                                 });
-                                updateKPIMainDropdown(filteredIssues[0].SFA2LVID);
+                                // updateKPIMainDropdown(filteredIssues[0].SFA2LVID, 'KPIMain2LVID_1');
+                                kpiMains.forEach(function(kpiMain) {
+                                    updateKPIMainDropdown(filteredIssues[0].SFA2LVID, kpiMain.id);
+                                })
                             }
                         }
 
 
-                        function updateKPIMainDropdown(selectedSFAID) {
-                            const KPIMainSelect = document.getElementById('KPIMain2LVID');
-                            // KPIMainSelect.innerHTML = '';
+                        function updateKPIMainDropdown(selectedSFAID, selectID) {
+                            const KPIMainSelect = document.getElementById(selectID);
+                            KPIMainSelect.innerHTML = '';
+                            if(selectID === 'KPIMain2LVID_1'){
+                                 const defaultOption = document.createElement('option');
+                            defaultOption.value = '';
+                            defaultOption.textContent = '--เลือกตัวชี้วัด--'; // ข้อความ "เลือก"
+                            defaultOption.selected = true; // ตั้งให้เป็นตัวเลือกเริ่มต้น
+                            defaultOption.disabled = true; // ปิดการเลือกตัวเลือกนี้
+                            KPIMainSelect.appendChild(defaultOption);
+                            }
+                           
+
 
                             if (!selectedSFAID) {
                                 const noKPIMainOption = document.createElement('option');
@@ -280,7 +302,11 @@
 
                             issueSelect.addEventListener('change', function() {
                                 const selectedSFAID = this.value;
-                                updateKPIMainDropdown(selectedSFAID);
+                                const kpiMains = document.querySelectorAll('[id^="KPIMain2LVID_"]');
+                                kpiMains.forEach(function(kpiMain) {
+                                    updateKPIMainDropdown(selectedSFAID, kpiMain.id);
+                                })
+
                             });
 
 

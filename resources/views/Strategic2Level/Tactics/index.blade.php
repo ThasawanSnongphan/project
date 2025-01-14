@@ -89,7 +89,7 @@
                                                 </td>
                                                 <td>
                                                     @foreach ($item->KPIMain as $kpi)
-                                                        {{ $kpi->name }}<br>
+                                                        {{ $kpi->name }} <br>
                                                     @endforeach
                                                 </td>
 

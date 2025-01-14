@@ -65,6 +65,7 @@ class TacticsController extends Controller
         $goal=Goals::all();
         $KPIMainMaps=KPIMainMapTactics::all();
         $KPIMainMap = $KPIMainMaps->where('tacID',$tactics->tacID)->first();
+      
         $KPIMain=KPIMains::all();
         return view('Strategic3Level.Tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMaps','KPIMainMap','KPIMain'));
     }
@@ -74,6 +75,54 @@ class TacticsController extends Controller
             'name'=>$request->name
         ];
         DB::table('tactics')->where('tacID',$id)->update($tactics);
+
+        
+        $KPIMainMaps = Db::table('k_p_i_main_map_tactics')->where('tacID',$id)->get();
+        $KPIMainIDs =$KPIMainMaps->pluck('KPIMainID')->toArray();
+        $KPIMain = $request->KPIMain;
+        // dd($KPIMainMaps,$KPIMainIDs,$KPIMain);
+        foreach($KPIMain as $index => $kpi){
+            if(isset($kpi)){
+                $currentKPIMainID = $kpi;
+                if(in_array($currentKPIMainID,$KPIMainIDs)){
+                    DB::table('k_p_i_main_map_tactics')->updateOrInsert(
+                    [
+                        'KPIMainID' => $currentKPIMainID,
+                        'tacID' => $id
+                    ],
+                    [
+                        'tacID' => $id,
+                        'updated_at' => now()
+                    ]
+                    );
+                }else{
+                    Db::table('k_p_i_main_map_tactics')->insert(
+                        [
+                            'KPIMainID' => $kpi,
+                            'tacID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                }
+            }else{
+                DB::table('k_p_i_main_map_tactics')->insert(
+                    [
+                        'KPIMainID' => $kpi,
+                        'tacID' => $id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+        $KPIMainMapToDelete = array_diff($KPIMainIDs,$KPIMain);
+        if(!empty($KPIMainMapToDelete)){
+            DB::table('k_p_i_main_map_tactics')
+            ->where('tacID',$id)
+            ->whereIn('KPIMainID',$KPIMainMapToDelete)
+            ->delete();
+        }
         return redirect('/tactics'); 
     }
 

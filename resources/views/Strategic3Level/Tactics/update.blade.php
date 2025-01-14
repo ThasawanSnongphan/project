@@ -114,9 +114,11 @@
                                             <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                                     class="required">*</span></label>
-                                            <input type="text" value="{{ $KPIMainMap->KPIMainID }}">
+                                            @if (!empty($KPIMainMap->KPiMainID))
+                                                <input type="hidden" value="{{ $KPIMainMap->KPIMainID }}">
+                                            @endif
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="KPIMainID_1" name="KPIMainID" class="form-control" required>
+                                                <select id="KPIMainID_{{ $KPIMainMap->KPIMainID }}" name="KPIMain[]" class="form-control" required>
 
                                                 </select>
                                             </div>
@@ -127,15 +129,13 @@
                                         </div>
 
                                         @foreach ($KPIMainMaps as $item)
-                                            @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
+                                            @if (!empty($item->KPIMainID) && $item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
                                                 <div class="i field item form-group ">
                                                     <div class="col-md-3 col-sm-3"></div>
-                                                    <input type="text" value="{{ $item->KPIMainID }}">
+                                                    <input type="hidden" value="{{ $item->KPIMainID }}">
                                                     <div class="col-md-6 col-sm-6">
-                                                        <select id="KPIMainID_{{ $item->KPIMainID }}" name="KPIMainID"
+                                                        <select id="KPIMainID_{{ $item->KPIMainID }}" name="KPIMain[]"
                                                             class="form-control" required>
-                                                           
-
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3">
@@ -154,7 +154,7 @@
                                             const goals = @json($goal); // ข้อมูลเป้าประสงค์
                                             const KPIMains = @json($KPIMain);
                                             const tacticMap = @json($tactics->KPIMain);
-                                            console.log(tacticMap);
+                                            let index = 2;
 
                                             function insertKPIMain() {
                                                 const mainContainer = document.createElement('div');
@@ -163,7 +163,7 @@
                                                 const KPIMainLabel = document.createElement('label');
                                                 KPIMainLabel.setAttribute('for', 'KPIIMainInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
                                                 KPIMainLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-                                                KPIMainLabel.textContent = 'ตัวชี้วัด*'; // ตั้งข้อความใน label
+                                                KPIMainLabel.textContent = ''; // ตั้งข้อความใน label
 
                                                 mainContainer.appendChild(KPIMainLabel);
 
@@ -172,7 +172,7 @@
 
                                                 const KPIMainDropdown = document.createElement('select');
                                                 KPIMainDropdown.classList.add('form-control');
-                                                KPIMainDropdown.id = `KPIMainID_${Date.now()}`;
+                                                KPIMainDropdown.id = `KPIMainID_${index+=1}`;
                                                 KPIMainDropdown.name = 'KPIMain[]';
 
                                                 // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
@@ -218,14 +218,9 @@
                                                 deleteButton.onclick = function() {
                                                     mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
                                                 };
-
                                                 // เพิ่มปุ่มลบลงใน mainContainer
                                                 mainContainer.appendChild(deleteButton);
-
-
-
                                                 document.getElementById('insertKPIMain').appendChild(mainContainer);
-
                                             }
 
                                             // ฟังก์ชันอัปเดต dropdown ของแผน
@@ -311,6 +306,8 @@
                                             function updateGoalDropdown(selectedSFAID) {
                                                 const goalSelect = document.getElementById('goalID');
                                                 goalSelect.innerHTML = '';
+                                                
+
 
                                                 if (!selectedSFAID) {
                                                     const noGoalOption = document.createElement('option');
@@ -318,7 +315,8 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
-                                                    updateKPIMainDropdown(null, 'KPIMainID_1');
+
+                                                    updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                     return;
                                                 }
 
@@ -331,7 +329,7 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
-                                                    updateKPIMainDropdown(null, 'KPIMainID_1');
+                                                    updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                 } else {
                                                     goalSelect.disabled = false;
                                                     filteredGoals.forEach(goal => {
@@ -340,29 +338,29 @@
                                                         option.textContent = goal.name;
                                                         if (goal.goalID == '{{ $tactics->goalID }}') {
                                                             option.selected = true;
-                                                            updateKPIMainDropdown(goal.goalID, 'KPIMainID_1');
+                                                            updateKPIMainDropdown(goal.goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
                                                     if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goalID }}')) {
-                                                        updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_1');
+                                                        updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                     }
                                                 }
 
                                             }
 
 
-                                            // document.addEventListener('DOMContentLoaded', function() {
-                                            @foreach ($KPIMainMaps as $item)
-                                                @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
-                                                    updateKPIMainDropdown('{{ $tactics->goalID }}', 'KPIMainID_{{ $item->KPIMainID }}');
-                                                @endif
-                                            @endforeach
-                                            // });
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                @foreach ($KPIMainMaps as $item)
+                                                    @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
+                                                        updateKPIMainDropdown('{{ $tactics->goalID }}', 'KPIMainID_{{ $item->KPIMainID }}');
+                                                    @endif
+                                                @endforeach
+                                            });
 
                                             function updateKPIMainDropdown(selectedgoalID, selectID) {
                                                 const KPIMainSelect = document.getElementById(selectID);
-                                                // console.log(KPIMainSelect);
+                                                console.log(selectID);
                                                 KPIMainSelect.innerHTML = '';
 
                                                 if (!selectedgoalID) {
@@ -377,6 +375,8 @@
                                                 const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID ==
                                                     selectedgoalID);
 
+
+
                                                 if (filteredKPIMain.length === 0) {
                                                     const noKPIMainOption = document.createElement('option');
                                                     noKPIMainOption.value = '';
@@ -385,16 +385,17 @@
                                                     KPIMainSelect.disabled = true;
                                                 } else {
                                                     KPIMainSelect.disabled = false;
-                                                    
+
                                                     filteredKPIMain.forEach(KPIMain => {
                                                         const option = document.createElement('option');
                                                         option.value = KPIMain.KPIMainID;
                                                         option.textContent = KPIMain.name;
                                                         const map = tacticMap.find(map => map.KPIMainID == KPIMain.KPIMainID);
-                                        
-                                                        if(map){
-                                                            option.selected = true;
-                                                            console.log(map);
+                                                        
+                                                        if ((map && selectID === 'KPIMainID_' + map.KPIMainID) ) {
+
+                                                            option.selected = true; // Set the option selected if matched
+                                                            // console.log('Selected option for', selectID, map , 'KPIMainID_'+map.KPIMainID);
                                                         }
                                                         KPIMainSelect.appendChild(option);
                                                     });
@@ -407,7 +408,7 @@
                                                 const planSelect = document.getElementById('straID');
                                                 const issueSelect = document.getElementById('SFAID');
                                                 const goalSelect = document.getElementById('goalID');
-                                                
+
 
                                                 // เมื่อเปลี่ยนปีงบประมาณ
                                                 yearSelect.addEventListener('change', function() {
@@ -428,12 +429,12 @@
 
                                                 goalSelect.addEventListener('change', function() {
                                                     const selectedgoalID = this.value;
-                                                  
+
                                                     const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
                                                     kpiMainElements.forEach(function(kpiMainElement) {
                                                         updateKPIMainDropdown(selectedgoalID, kpiMainElement.id);
                                                     });
-                                                    
+
                                                 });
 
 

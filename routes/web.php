@@ -81,7 +81,8 @@ Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->n
 Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->name('departmentEdit');
 
 Route::get('/project', [ProjectController::class,'index']);
-Route::get('/projectcreate', [ProjectController::class,'create']);
+Route::get('/projectcreate', [ProjectController::class,'create1']);
+Route::post('/projectCreate2', [ProjectController::class,'create2']);
 Route::post('/projectSave', [ProjectController::class,'save']);
 Route::post('/projectSend', [ProjectController::class,'send']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');

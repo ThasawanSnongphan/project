@@ -46,7 +46,8 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('tactic2LV.update', $tactics->tac2LVID) }}"novalidate
+                                    <form method="POST"
+                                        action="{{ route('tactic2LV.update', $tactics->tac2LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -58,7 +59,7 @@
                                                     @foreach ($year as $item)
                                                         <option value="{{ $item->yearID }}"
                                                             {{ $item->yearID == $tactics->SFA->strategic->year->yearID ? 'selected' : '' }}>
-                                                            {{ $item->year}}</option>
+                                                            {{ $item->year }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -83,7 +84,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                       
+
 
                                         <div class="field item form-group">
                                             <label for="title"
@@ -106,7 +107,9 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="KPIMain2LVID" name="KPIMain2LVID" class="form-control" required>
+                                                <input type="hidden" value="{{ $KPIMainMap->KPIMain2LVID ?? '0' }}">
+                                                <select id="KPIMain2LVID_{{ $KPIMainMap->KPIMain2LVID ?? '0' }}"
+                                                    name="KPIMain2LVID[]" class="form-control" required>
 
                                                 </select>
                                             </div>
@@ -115,7 +118,26 @@
                                                     onclick="insertKPIMain()">เพิ่ม</button>
                                             </div>
                                         </div>
-                                        
+
+                                        @foreach ($KPIMainMaps as $item)
+                                            @if (!empty($item->KPIMain2LVID) && $item->KPIMain2LVID != $KPIMainMap->KPIMain2LVID && $item->tac2LVID == $tactics->tac2LVID)
+                                                <div class="i field item form-group">
+                                                    <label for="title"
+                                                        class="col-form-label col-md-3 col-sm-3  label-align"></label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <input type="hidden" value="{{ $item->KPIMain2LVID  }}">
+                                                        <select id="KPIMain2LVID_{{ $item->KPIMain2LVID }}"
+                                                            name="KPIMain2LVID[]" class="form-control" required>
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3">
+                                                        <button type="button" class="btn btn-danger "
+                                                            onclick="this.closest('.i').remove()">ลบ</button>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
                                         <div id="insertKPIMain"></div>
 
                                         <script>
@@ -123,6 +145,7 @@
                                             const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                                             const KPIMains = @json($KPIMain);
                                             const tacticMap = @json($tactics->KPIMain);
+                                            let index = 2;
 
                                             function insertKPIMain() {
                                                 const mainContainer = document.createElement('div');
@@ -131,7 +154,7 @@
                                                 const KPIMainLabel = document.createElement('label');
                                                 KPIMainLabel.setAttribute('for', 'KPIIMainInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
                                                 KPIMainLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-                                                KPIMainLabel.textContent = 'ตัวชี้วัด*'; // ตั้งข้อความใน label
+                                                KPIMainLabel.textContent = ''; // ตั้งข้อความใน label
 
                                                 mainContainer.appendChild(KPIMainLabel);
 
@@ -140,8 +163,8 @@
 
                                                 const KPIMainDropdown = document.createElement('select');
                                                 KPIMainDropdown.classList.add('form-control');
-                                                KPIMainDropdown.id = `KPIMain2LVID_${Date.now()}`;
-                                                KPIMainDropdown.name = 'KPIMain[]';
+                                                KPIMainDropdown.id = `KPIMain2LVID_${index+=1}`;
+                                                KPIMainDropdown.name = 'KPIMain2LVID[]';
 
                                                 // updateKPIMainDropdown(selectedgoalID, KPIMainDropdown);
                                                 // KPIMainDropdown.innerHTML = '';
@@ -240,7 +263,7 @@
                                                     noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                                     issueSelect.appendChild(noIssueOption);
                                                     issueSelect.disabled = true;
-                                                    updateKPIMainDropdown(null);
+                                                    updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
                                                     return;
                                                 }
 
@@ -252,7 +275,7 @@
                                                     noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                                     issueSelect.appendChild(noIssueOption);
                                                     issueSelect.disabled = true;
-                                                    updateKPIMainDropdown(null);
+                                                    updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0'}});
                                                 } else {
                                                     issueSelect.disabled = false;
                                                     filteredIssues.forEach(issue => {
@@ -263,21 +286,37 @@
 
                                                         if (issue.SFA2LVID == '{{ $tactics->SFA2LVID }}') {
                                                             option.selected = true;
-                                                            updateKPIMainDropdown(issue.SFA2LVID);
+                                                            updateKPIMainDropdown(issue.SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
                                                         }
 
                                                         issueSelect.appendChild(option);
                                                     });
                                                     if (!filteredIssues.some(issue => issue.SFA2LVID == '{{ $tactics->SFA2LVID }}')) {
-                                                        updateKPIMainDropdown(filteredIssues[0].SFA2LVID);
+                                                        updateKPIMainDropdown(filteredIssues[0].SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID  ?? '0'}});
                                                     }
                                                 }
                                             }
 
-                                           
-                                            function updateKPIMainDropdown(selectedgoalID) {
-                                                const KPIMainSelect = document.getElementById('KPIMain2LVID');
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                @foreach ($KPIMainMaps as $item)
+                                                    @if ($item->tac2LVID === $tactics->tac2LVID && $item->KPIMain2LVID != $KPIMainMap->KPIMain2LVID)
+                                                        updateKPIMainDropdown('{{ $tactics->SFA2LVID }}', 'KPIMain2LVID_{{ $item->KPIMain2LVID }}');
+                                                    @endif
+                                                @endforeach
+                                            });
+
+                                            function updateKPIMainDropdown(selectedgoalID, selectID) {
+                                                const KPIMainSelect = document.getElementById(selectID);
                                                 KPIMainSelect.innerHTML = '';
+
+                                                if (selectID === 'KPIMain2LVID_0') {
+                                                    const defaultOption = document.createElement('option');
+                                                    defaultOption.value = '';
+                                                    defaultOption.textContent = '--เลือกตัวชี้วัด--'; // ข้อความ "เลือก"
+                                                    defaultOption.selected = true; // ตั้งให้เป็นตัวเลือกเริ่มต้น
+                                                    defaultOption.disabled = true; // ปิดการเลือกตัวเลือกนี้
+                                                    KPIMainSelect.appendChild(defaultOption);
+                                                }
 
                                                 if (!selectedgoalID) {
                                                     const noKPIMainOption = document.createElement('option');
@@ -302,11 +341,10 @@
                                                         const option = document.createElement('option');
                                                         option.value = KPIMain.KPIMain2LVID;
                                                         option.textContent = KPIMain.name;
-                                                        tacticMap.forEach(map => {
-                                                            if (map.KPIMain2LVID == KPIMain.KPIMain2LVID) {
-                                                                option.selected = true;
-                                                            }
-                                                        })
+                                                        const map = tacticMap.find(map => map.KPIMain2LVID == KPIMain.KPIMain2LVID);
+                                                        if (map && selectID === 'KPIMain2LVID_' + map.KPIMain2LVID) {
+                                                            option.selected = true;
+                                                        }
                                                         KPIMainSelect.appendChild(option);
                                                     });
                                                 }
@@ -332,7 +370,11 @@
 
                                                 issueSelect.addEventListener('change', function() {
                                                     const selectedSFAID = this.value;
-                                                    updateKPIMainDropdown(selectedSFAID);
+                                                    const kpiMains = document.querySelectorAll('[id^="KPIMain2LVID_"]');
+                                                    kpiMains.forEach(function(KPIMain) {
+                                                        updateKPIMainDropdown(selectedSFAID, KPIMain.id);
+                                                    });
+
                                                 });
 
 

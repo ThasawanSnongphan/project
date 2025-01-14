@@ -83,7 +83,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="KPIMainID" name="KPIMain[]" class="form-control" required>
+                            <select id="KPIMainID_1" name="KPIMain[]" class="form-control" required>
 
                             </select>
                         </div>
@@ -100,6 +100,7 @@
                         const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
                         const goals = @json($goal); // ข้อมูลเป้าประสงค์
                         const KPIMains = @json($KPIMain);
+                        let index = 1;
 
                         function insertKPIMain() {
                             const mainContainer = document.createElement('div');
@@ -108,7 +109,7 @@
                             const KPIMainLabel = document.createElement('label');
                             KPIMainLabel.setAttribute('for', 'KPIIMainInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
                             KPIMainLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-                            KPIMainLabel.textContent = 'ตัวชี้วัด*'; // ตั้งข้อความใน label
+                            KPIMainLabel.textContent = ''; // ตั้งข้อความใน label
 
                             mainContainer.appendChild(KPIMainLabel);
 
@@ -117,7 +118,9 @@
 
                             const KPIMainDropdown = document.createElement('select');
                             KPIMainDropdown.classList.add('form-control');
-                            KPIMainDropdown.id = `KPIMainID_${Date.now()}`;
+                            KPIMainDropdown.id = `KPIMainID_${index+=1}`;
+
+
                             KPIMainDropdown.name = 'KPIMain[]';
 
                             const selectedgoalID = document.getElementById('goalID').value;
@@ -237,6 +240,7 @@
                         function updateGoalDropdown(selectedSFAID) {
                             const goalSelect = document.getElementById('goalID');
                             goalSelect.innerHTML = '';
+                            const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
 
                             if (!selectedSFAID) {
                                 const noGoalOption = document.createElement('option');
@@ -244,7 +248,10 @@
                                 noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                 goalSelect.appendChild(noGoalOption);
                                 goalSelect.disabled = true;
-                                updateKPIMainDropdown(null);
+                                kpiMainElements.forEach(function(kpiMainElement) {
+                                    updateKPIMainDropdown(null, kpiMainElement.id);
+                                });
+                                // updateKPIMainDropdown(null, 'KPIMainID_1');
                                 return;
                             }
 
@@ -257,7 +264,10 @@
                                 noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                 goalSelect.appendChild(noGoalOption);
                                 goalSelect.disabled = true;
-                                updateKPIMainDropdown(null);
+                                kpiMainElements.forEach(function(kpiMainElement) {
+                                    updateKPIMainDropdown(null, kpiMainElement.id);
+                                });
+                                // updateKPIMainDropdown(null, 'KPIMainID_1');
                             } else {
                                 goalSelect.disabled = false;
                                 filteredGoals.forEach(goal => {
@@ -266,13 +276,16 @@
                                     option.textContent = goal.name;
                                     goalSelect.appendChild(option);
                                 });
-                                updateKPIMainDropdown(filteredGoals[0].goalID);
+                                kpiMainElements.forEach(function(kpiMainElement) {
+                                    updateKPIMainDropdown(filteredGoals[0].goalID, kpiMainElement.id);
+                                });
+                                // updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_1');
                             }
 
                         }
 
-                        function updateKPIMainDropdown(selectedgoalID) {
-                            const KPIMainSelect = document.getElementById('KPIMainID');
+                        function updateKPIMainDropdown(selectedgoalID, selectID) {
+                            const KPIMainSelect = document.getElementById(selectID);
                             KPIMainSelect.innerHTML = '';
 
                             if (!selectedgoalID) {
@@ -333,7 +346,12 @@
 
                             goalSelect.addEventListener('change', function() {
                                 const selectedgoalID = this.value;
-                                updateKPIMainDropdown(selectedgoalID);
+                              
+                                const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
+                                kpiMainElements.forEach(function(kpiMainElement) {
+                                    updateKPIMainDropdown(selectedgoalID, kpiMainElement.id);
+                                });
+
                             });
 
 

@@ -12,6 +12,8 @@ use App\Models\StrategicIssues;
 use App\Models\Goals;
 use App\Models\Tactics;
 use App\Models\KPIMains;
+use App\Models\Strategic2Level;
+use App\Models\Strategic1Level;
 use App\Models\KPIProjects;
 use App\Models\Projects;
 use App\Models\ProjectType;
@@ -42,7 +44,7 @@ class ProjectController extends Controller
         $users = $users=DB::table('users')->get();
         return view('Project.index',compact('users','project','status','year','projectYear'));
     }
-    function create(){
+    function create2(){
         $user = Users::all();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
@@ -60,7 +62,14 @@ class ProjectController extends Controller
         $expanses = ExpenseBadgets::all();
         $costTypes=CostTypes::all();
         $CountKPIProjects = CountKPIProjects::all();
-        return view('Project.create',compact('CountKPIProjects','year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+        return view('Project.create2',compact('CountKPIProjects','year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+    }
+    function create1(){
+        $year = Year::all();
+        $strategic3Level = Strategics::all();
+        $strategic2Level = Strategic2Level::all();
+        $strategic1Level = Strategic1Level::all();
+        return view('Project.create1',compact('year','strategic3Level','strategic2Level','strategic1Level'));
     }
     function send(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
@@ -442,18 +451,9 @@ class ProjectController extends Controller
             'planID'=>$request->planID,
             'updated_at' => now()
         ];
+        DB::table('projects')->where('proID',$id)->update($project);
         
         
-        // $straMap=[
-        //     'straMapID'=>$request->straMapID,
-        //     'straID' => $request->straID,
-        //     'SFAID' => $request->SFAID,
-        //     'goalID' => $request->goalID,
-        //     'tacID' => $request->tacID,
-        //     'KPIMainID' =>  $request->KPIMainID,
-        //     'updated_at' => now()
-        // ];
-        // dd($straMap);
         $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
         $straMapIDs = $strategicMap->pluck('straMapID')->toArray();
         $straIDs = $strategicMap->pluck('straID')->toArray();
@@ -520,35 +520,7 @@ class ProjectController extends Controller
         $userMapID = $request->userID;
         //  dd($userMapIDs,$userMapID);
 
-
-        $objs = DB::table('objectives')->where('proID',$id)->get();
-        $objIDs = $objs->pluck('objID')->toArray();
-        // dd($objIDs);
-        $obj = $request->obj;
-        $objID = $request->objID;
-        // dd($objIDs,$objID);
         
-        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
-        $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
-        $KPIProject = $request->KPIProject;
-        $countProject = $request->countKPIProject;
-        $targetProject = $request->targetProject;
-        $KPIProID = $request->KPIProID;
-        // dd($KPIProID);
-
-        $steps =DB::table('steps')->where('proID',$id)->get(); 
-        $stepIDs = $steps->pluck('stepID')->toArray();
-        $stepName = $request->stepName;
-        $stepStart = $request->stepStart;
-        $stepEnd = $request->stepEnd;
-        $stepID = $request->stepID;
-
-        $benefits = DB::table('benefits')->where('proID',$id)->get();
-        $bnfIDs = $benefits->pluck('bnfID')->toArray();
-        $bnf = $request->benefit;
-        $bnfID = $request->bnfID;
-
-        DB::table('projects')->where('proID',$id)->update($project);
         foreach ($userMapID as $index => $userMap){
             if(isset($userMap)){
                 $currentuserMapID = $userMap;
@@ -591,11 +563,13 @@ class ProjectController extends Controller
             ->delete();
         }
 
-        // DB::table('strategic_maps')->where('proID',$id)->update($straMap);
-
-
-
-
+        $objs = DB::table('objectives')->where('proID',$id)->get();
+        $objIDs = $objs->pluck('objID')->toArray();
+        // dd($objIDs);
+        $obj = $request->obj;
+        $objID = $request->objID;
+        // dd($objIDs,$objID);
+        
         foreach ($obj as $index => $obj) {
             
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
@@ -645,6 +619,14 @@ class ProjectController extends Controller
             ->delete();
         }
         // dd($countProject,$targetProject);
+        
+        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
+        $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
+        $KPIProject = $request->KPIProject;
+        $countProject = $request->countKPIProject;
+        $targetProject = $request->targetProject;
+        $KPIProID = $request->KPIProID;
+        // dd($KPIProID);
         foreach($KPIProject as $index => $KPI){
             // dd($KPI);
             if(isset($KPIProID[$index])){
@@ -695,6 +677,13 @@ class ProjectController extends Controller
             ->delete();
         }
 
+        $steps =DB::table('steps')->where('proID',$id)->get(); 
+        $stepIDs = $steps->pluck('stepID')->toArray();
+        $stepName = $request->stepName;
+        $stepStart = $request->stepStart;
+        $stepEnd = $request->stepEnd;
+        $stepID = $request->stepID;
+        
         foreach($stepName as $index => $step){
             // dd($KPI);
             if(isset($stepID[$index])){
@@ -744,6 +733,11 @@ class ProjectController extends Controller
             ->whereIn('stepID',$stepDelect)
             ->delete();
         }
+
+        $benefits = DB::table('benefits')->where('proID',$id)->get();
+        $bnfIDs = $benefits->pluck('bnfID')->toArray();
+        $bnf = $request->benefit;
+        $bnfID = $request->bnfID;
 
         foreach ($bnf as $index => $bnf) {
             

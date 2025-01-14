@@ -38,7 +38,7 @@ class Tactics2LevelController extends Controller
         $tactics = $tactics->fresh();
 
         $KPIMainMap = $request->input('KPIMain');
-        if(is_array($KPIMainMap)){
+        if(is_array($KPIMainMap && !empty($KPIMainMaps))){
             foreach($KPIMainMap as $index => $KPIMain ){
                 $Map = new Tactic2LevelMapKPIMain2Level();
                 $Map->KPIMain2LVID = $KPIMain ?? null;
@@ -54,9 +54,11 @@ class Tactics2LevelController extends Controller
         $year=Year::all();
         $strategic=Strategic2Level::all();
         $SFA=StrategicIssues2Level::all();
-        $KPIMainMap=Tactic2LevelMapKPIMain2Level::all();
+        $KPIMainMaps=Tactic2LevelMapKPIMain2Level::all();
+        $KPIMainMap=$KPIMainMaps->where('tac2LVID',$tactics->tac2LVID)->first();
+        // dd($KPIMainMap);
         $KPIMain=KPIMain2Level::all();
-        return view('Strategic2Level.Tactics.update',compact('year','strategic','SFA','tactics','KPIMainMap','KPIMain'));
+        return view('Strategic2Level.Tactics.update',compact('year','strategic','SFA','tactics','KPIMainMaps','KPIMain','KPIMainMap'));
     }
     function update(Request $request,$id){
         $tactics=[
@@ -64,6 +66,55 @@ class Tactics2LevelController extends Controller
             'name'=>$request->name
         ];
         DB::table('tactic2_levels')->where('tac2LVID',$id)->update($tactics);
+
+        $KPIMainMaps = DB::table('tactic2_level_map_k_p_i_main2_levels')->where('tac2LVID',$id)->get();
+        $KPIMainIDs = $KPIMainMaps->pluck('KPIMain2LVID')->toArray();
+        $KPIMain = $request->KPIMain2LVID;
+        foreach ($KPIMain as $index => $item) {
+            if(isset($item)){
+                $currentKPIMainID = $item;
+                if(in_array($currentKPIMainID,$KPIMainIDs)){
+                    // dd($currentKPIMainID,$KPIMainIDs);
+                    DB::table('tactic2_level_map_k_p_i_main2_levels')->updateOrInsert(
+                        [
+                            'KPIMain2LVID' => $currentKPIMainID,
+                            'tac2LVID' => $id
+                        ],
+                        [
+                            'KPIMain2LVID' => $currentKPIMainID,
+                            'tac2LVID' => $id,
+                            'updated_at' => now()
+                        ]
+                    );
+                }else{
+                    // dd($currentKPIMainID,$KPIMainIDs);
+                    DB::table('tactic2_level_map_k_p_i_main2_levels')->insert(
+                        [
+                            'KPIMain2LVID' => $item,
+                            'tac2LVID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                }
+            }else{
+                DB::table('tactic2_level_map_k_p_i_main2_levels')->insert(
+                    [
+                        'KPIMain2LVID' => $item,
+                        'tac2LVID' => $id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+        $KPIMainMapToDelete = array_diff($KPIMainIDs,$KPIMain);
+        if(!empty($KPIMainMapToDelete)){
+            DB::table('tactic2_level_map_k_p_i_main2_levels')
+            ->where('tac2LVID',$id)
+            ->whereIn('KPIMain2LVID',$KPIMainMapToDelete)
+            ->delete();
+        }
         return redirect('/tactic2LV'); 
     }
 
