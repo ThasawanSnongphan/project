@@ -24,9 +24,10 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="GET" action="/projectCreate2"novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="GET" action="{{ route('project.create1') }}"novalidate
+                        enctype="multipart/form-data">
                         @csrf
-                        
+
 
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ<span
@@ -45,44 +46,57 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="year" name="yearID" class="form-control" required >
+                                {{-- <input type="text" value="{{$selectYear}}"> --}}
+                                <select id="year" name="yearID" class="form-control" onchange="this.form.submit()"
+                                    required>
                                     @foreach ($year as $item)
-                                        <option value="{{ $item->yearID }}">
+                                        <option value="{{ $item->yearID }}"
+                                            {{ isset($selectYear) && $selectYear == $item->yearID ? 'selected' : '' }}>
                                             {{ $item->year }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        
+
                         @php
                             $index = 0;
                         @endphp
                         @foreach ($strategic3Level as $item)
-                            
-                            {{-- <div class="row p-2" style="background-color: azure"> --}}
                             <div class="row field item form-group align-items-center">
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 d-flex">
                                     <input type="checkbox">
-                                    <input type="text" value="{{ $index }}">
+                                    {{-- <input type="text" value="{{ $item->straID }}"> --}}
+                                   
+                                    <input type="hidden" value="{{ $index }}">
                                     <input class="ml-2 form-control" type="text" name="straID[]"
                                         id="straID_{{ $index }}" required='required'
-                                        data-validate-length-range="8,20" readonly value="{{$item->name}}">
+                                        data-validate-length-range="8,20" readonly value="{{ $item->name }}"
+                                        {{-- {{ isset($selectStrategic3Level) && $selectStrategic3Level == $item->straID ? 'selected' : '' }} --}}
+                                        >
                                 </div>
-                                {{-- </div> --}}
 
-                                <div class="col-md-9 border mb-2 p-2" style="background-color:aquamarine">
+
+                                <div class="col-md-9 border m-2 p-2">
                                     <div class="row field item form-group align-items-center">
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input type="text" value="{{ $index }}">
+                                            <input type="hidden" value="{{ $index }}">
+                                            {{-- <textarea>{{ is_array($selectSFA3Level) ? implode("\n", $selectSFA3Level) : $selectSFA3Level }}</textarea> --}}
                                             <select id="SFAID_{{ $index }}" name="SFAID[]" class="form-control"
-                                                required>
-                                                <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                onchange="this.form.submit()" required>
+                                                <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
+                                                @foreach ($SFA3LVs as $SFA)
+                                                    @if ($SFA->straID == $item->straID)
+                                                        <option value="{{ $SFA->SFAID }}"
+                                                            {{ isset($selectSFA3Level) && in_array($SFA->SFAID, (array) $selectSFA3Level) ? 'selected' : '' }}>
+                                                            {{ $SFA->name }}</option>
+                                                    @endif
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -91,9 +105,22 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
+                                             <input type="text" value="{{$goal3Level}}">
+                                             <input type="text" value="{{$selectSFA3Level[$index]}}">
+                                             
                                             <select id="goalID_{{ $index }}" name="goalID[]" class="form-control"
-                                                required>
-                                                <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                required onchange="this.form.submit()">
+                                                <option value="">--เลือกเป้าประสงค์--</option>
+                                                @foreach ($goal3Level as $goal)
+                                                        {{-- <input type="text" value="{{$goal->SFAID}}"> --}}
+                                                    
+                                                    @if (!empty($selectSFA3Level[$index]) && $goal->SFAID == $selectSFA3Level[$index] )
+                                                        <option value="{{ $goal->goalID }}"
+                                                        {{ isset($selectGoal3Level) && in_array($goal->goalID, (array) $selectGoal3Level) ? 'selected' : '' }}>
+                                                        {{ $goal->name }}</option>
+                                                    @endif
+                                                    
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -104,7 +131,15 @@
                                         <div class="col-md-6 col-sm-6">
                                             <select id="tacID_{{ $index }}" name="tacID[]" class="form-control"
                                                 required>
-                                                <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
+                                                <option value="">--เลือกกลยุทธ์--</option>
+                                                @foreach ($tactics3LV as $tactics)
+                                                    @if (!empty($selectGoal3Level) && $tactics->goalID == $selectGoal3Level[$index])
+                                                    <option value="{{ $tactics->tacID }}"
+                                                        {{ isset($selectTactics3LV) && in_array($tactics->tacID, (array) $selectTactics3LV) ? 'selected' : '' }}>
+                                                        {{ $tactics->name }}</option>
+                                                    @endif
+                                                    
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -115,6 +150,7 @@
                                 $index += 1;
                             @endphp
                         @endforeach
+
                         <div class="row field item form-group align-items-center" id="KPIMainNone" style="display: flex;">
                             <label for="title"
                                 class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผนฉบับที่ 13</label>
@@ -161,8 +197,7 @@
                         </div>
 
                         @foreach ($strategic2Level as $item)
-                            <div class="row field item form-group align-items-center"
-                                style="background-color: antiquewhite">
+                            <div class="row field item form-group align-items-center">
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
@@ -248,8 +283,7 @@
 
 
                         @foreach ($strategic1Level as $item)
-                            <div class="row field item form-group align-items-center"
-                                style="background-color: antiquewhite">
+                            <div class="row field item form-group align-items-center">
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
@@ -294,4 +328,28 @@
     </div>
 @endsection
 
+{{-- <script>
+    function updatePlanDropdown(selectedYearID){
+        const mainContainer = document.createElement('div');
+        mainContainer.classList.add('row','field','item','form-group','align-items-center');
 
+        const straLabel = document.createElement('label');
+        straLabel.setAttribute('for','strategicInput');
+        straLabel.classList.add('col-form-label','col-md-3','col-sm-3','label-align');
+
+        mainContainer.appendChild(straLabel);
+    }
+    window.onload = function(){
+        const yearSelect = document.getElementByID('year');
+
+        yearSelect.addEventListener('change',function(){
+            const selectedYearID = this.value;
+            updatePlanDropdown(selectedYearID);
+        });
+
+        const defaultYearID = yearSelect.value;
+        if(defaultYearID){
+            updatePlanDropdown(defaultYearID);
+        }
+    }
+</script> --}}

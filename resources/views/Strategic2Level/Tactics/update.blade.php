@@ -120,12 +120,15 @@
                                         </div>
 
                                         @foreach ($KPIMainMaps as $item)
-                                            @if (!empty($item->KPIMain2LVID) && $item->KPIMain2LVID != $KPIMainMap->KPIMain2LVID && $item->tac2LVID == $tactics->tac2LVID)
+                                            @if (
+                                                !empty($item->KPIMain2LVID) &&
+                                                    $item->KPIMain2LVID != $KPIMainMap->KPIMain2LVID &&
+                                                    $item->tac2LVID == $tactics->tac2LVID)
                                                 <div class="i field item form-group">
                                                     <label for="title"
                                                         class="col-form-label col-md-3 col-sm-3  label-align"></label>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <input type="hidden" value="{{ $item->KPIMain2LVID  }}">
+                                                        <input type="hidden" value="{{ $item->KPIMain2LVID }}">
                                                         <select id="KPIMain2LVID_{{ $item->KPIMain2LVID }}"
                                                             name="KPIMain2LVID[]" class="form-control" required>
 
@@ -256,6 +259,7 @@
                                                 // console.log(selectedPlanID);
                                                 const issueSelect = document.getElementById('SFA2LVID');
                                                 issueSelect.innerHTML = '';
+                                                const kpiMains = document.querySelectorAll('[id^="KPIMain2LVID_"]');
 
                                                 if (!selectedPlanID) {
                                                     const noIssueOption = document.createElement('option');
@@ -263,7 +267,10 @@
                                                     noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                                     issueSelect.appendChild(noIssueOption);
                                                     issueSelect.disabled = true;
-                                                    updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                    // updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                    kpiMains.forEach(function(KPIMain) {
+                                                        updateKPIMainDropdown(null, KPIMain.id);
+                                                    });
                                                     return;
                                                 }
 
@@ -275,7 +282,10 @@
                                                     noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
                                                     issueSelect.appendChild(noIssueOption);
                                                     issueSelect.disabled = true;
-                                                    updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0'}});
+                                                    // updateKPIMainDropdown(null, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                    kpiMains.forEach(function(KPIMain) {
+                                                        updateKPIMainDropdown(null, KPIMain.id);
+                                                    });
                                                 } else {
                                                     issueSelect.disabled = false;
                                                     filteredIssues.forEach(issue => {
@@ -286,13 +296,19 @@
 
                                                         if (issue.SFA2LVID == '{{ $tactics->SFA2LVID }}') {
                                                             option.selected = true;
-                                                            updateKPIMainDropdown(issue.SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                            // updateKPIMainDropdown(issue.SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                            kpiMains.forEach(function(KPIMain) {
+                                                                updateKPIMainDropdown(issue.SFA2LVID, KPIMain.id);
+                                                            });
                                                         }
 
                                                         issueSelect.appendChild(option);
                                                     });
                                                     if (!filteredIssues.some(issue => issue.SFA2LVID == '{{ $tactics->SFA2LVID }}')) {
-                                                        updateKPIMainDropdown(filteredIssues[0].SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID  ?? '0'}});
+                                                        // updateKPIMainDropdown(filteredIssues[0].SFA2LVID, 'KPIMain2LVID_' + {{ $KPIMainMap->KPIMain2LVID ?? '0' }});
+                                                        kpiMains.forEach(function(KPIMain) {
+                                                        updateKPIMainDropdown(filteredIssues[0].SFA2LVID, KPIMain.id);
+                                                    });
                                                     }
                                                 }
                                             }
@@ -376,10 +392,6 @@
                                                     });
 
                                                 });
-
-
-
-
                                                 // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
                                                 const defaultYearID = yearSelect.value;
                                                 if (defaultYearID) {

@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Models\Strategics;
 use App\Models\StrategicMap;
 use App\Models\StrategicIssues;
+use App\Models\StrategicIssues2Level;
 use App\Models\Goals;
 use App\Models\Tactics;
 use App\Models\KPIMains;
@@ -64,12 +65,28 @@ class ProjectController extends Controller
         $CountKPIProjects = CountKPIProjects::all();
         return view('Project.create2',compact('CountKPIProjects','year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
     }
-    function create1(){
+    function create1(Request $request){
         $year = Year::all();
-        $strategic3Level = Strategics::all();
-        $strategic2Level = Strategic2Level::all();
-        $strategic1Level = Strategic1Level::all();
-        return view('Project.create1',compact('year','strategic3Level','strategic2Level','strategic1Level'));
+        $selectYear = $request->input('yearID');
+        $strategic3Level = $selectYear ? Strategics::where('yearID',$selectYear)->get() : Strategics::all();
+        // dd($strategic3Level);
+        $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() : Strategic2Level::all();
+        $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() : Strategic1Level::all();
+       
+        $selectStra3LV = $request->input('straID');
+        $SFA3LVs = StrategicIssues::all();
+        
+
+        $selectSFA3Level = $request->input('SFAID');
+        $goal3Level = $selectSFA3Level ? Goals::where('SFAID', $selectSFA3Level)->get() : Goals::all();
+        
+        $selectGoal3Level = $request->input('goalID');
+        $tactics3LV = $selectGoal3Level ? Tactics::where('goalID',$selectGoal3Level)->get() : Tactics::all();
+        $selectTactics3LV = $request->input('tacID');
+        // dd($request->all());
+        // dd($selectSFA3Level);
+
+        return view('Project.create1',compact('year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV'));
     }
     function send(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();

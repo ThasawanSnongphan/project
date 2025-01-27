@@ -306,6 +306,7 @@
                                             function updateGoalDropdown(selectedSFAID) {
                                                 const goalSelect = document.getElementById('goalID');
                                                 goalSelect.innerHTML = '';
+                                                const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
                                                 
 
 
@@ -316,7 +317,11 @@
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
 
-                                                    updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                    // updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                    // const kpiMainElements = document.querySelectorAll('[id^="KPIMainID_"]');
+                                                    kpiMainElements.forEach(function(kpiMainElement) {
+                                                        updateKPIMainDropdown(null, kpiMainElement.id);
+                                                    });
                                                     return;
                                                 }
 
@@ -329,7 +334,11 @@
                                                     noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                                     goalSelect.appendChild(noGoalOption);
                                                     goalSelect.disabled = true;
-                                                    updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                    // updateKPIMainDropdown(null, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                   
+                                                    kpiMainElements.forEach(function(kpiMainElement) {
+                                                        updateKPIMainDropdown(null, kpiMainElement.id);
+                                                    });
                                                 } else {
                                                     goalSelect.disabled = false;
                                                     filteredGoals.forEach(goal => {
@@ -338,12 +347,18 @@
                                                         option.textContent = goal.name;
                                                         if (goal.goalID == '{{ $tactics->goalID }}') {
                                                             option.selected = true;
-                                                            updateKPIMainDropdown(goal.goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                            // updateKPIMainDropdown(goal.goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                            kpiMainElements.forEach(function(kpiMainElement) {
+                                                        updateKPIMainDropdown(goal.goalID, kpiMainElement.id);
+                                                    });
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
                                                     if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goalID }}')) {
-                                                        updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                        // updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
+                                                        kpiMainElements.forEach(function(kpiMainElement) {
+                                                        updateKPIMainDropdown(filteredGoals[0].goalID, kpiMainElement.id);
+                                                    });
                                                     }
                                                 }
 

@@ -38,7 +38,8 @@ class Tactics2LevelController extends Controller
         $tactics = $tactics->fresh();
 
         $KPIMainMap = $request->input('KPIMain');
-        if(is_array($KPIMainMap && !empty($KPIMainMaps))){
+        // dd($KPIMainMap);
+        if(is_array($KPIMainMap ) && !empty($KPIMainMap)){
             foreach($KPIMainMap as $index => $KPIMain ){
                 $Map = new Tactic2LevelMapKPIMain2Level();
                 $Map->KPIMain2LVID = $KPIMain ?? null;
@@ -70,6 +71,7 @@ class Tactics2LevelController extends Controller
         $KPIMainMaps = DB::table('tactic2_level_map_k_p_i_main2_levels')->where('tac2LVID',$id)->get();
         $KPIMainIDs = $KPIMainMaps->pluck('KPIMain2LVID')->toArray();
         $KPIMain = $request->KPIMain2LVID;
+        // dd($KPIMain);
         foreach ($KPIMain as $index => $item) {
             if(isset($item)){
                 $currentKPIMainID = $item;

@@ -148,7 +148,7 @@
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
-                                                <li><a href="/projectcreate">สร้างโครงการใหม่</a></li>
+                                                <li><a href="/projectcreate1">สร้างโครงการใหม่</a></li>
 
                                             </ul>
                                         </li>
