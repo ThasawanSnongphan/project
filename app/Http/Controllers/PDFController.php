@@ -70,7 +70,7 @@ class PDFController extends Controller
         $expense_badgets = ExpenseBadgets::all();
         $cost_quarters = CostQuarters::all();
         $cost_types = CostTypes::all();
-        
+
 
         $badget_types = BadgetType::all();
         $KPI_pros = KPIProjects::all();
@@ -121,6 +121,10 @@ class PDFController extends Controller
                 text-align: justify;
                 line-height: 1.5; /* กำหนดระยะห่างบรรทัดให้ดูอ่านง่าย */
                 font-size: 14px; /* ขนาดตัวอักษร */
+            }
+
+            .no-break {
+                    page-break-inside: avoid;
             }
 
         </style>";
@@ -190,12 +194,12 @@ class PDFController extends Controller
         foreach ($strategic_maps as $strategic_map) {
             if ($projects->proID == $strategic_map->proID) {
                 // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-                
+
                 // เช็คชื่อจาก straID
                 foreach ($strategics as $strategic) {
                     if ($strategic->straID == $strategic_map->straID) {
-                        
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.'. $counter . ' '. $strategic->name . ' </b><br>';
+
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $counter . ' ' . $strategic->name . ' </b><br>';
                         $counter++;
                         break; // เจอข้อมูลแล้วออกจากลูป
                     }
@@ -262,13 +266,21 @@ class PDFController extends Controller
             }
         }
 
-        // &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
+        // $htmlContent .= '
+        //     <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
+        //     &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
+        //     <b>7. วัตถุประสงค์ </b> <br> 
+        // ';
 
         $htmlContent .= '
-            <b>6. หลักการและเหตุผลของโครงการ </b> <br> 
-            &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
-            <b>7. วัตถุประสงค์ </b> <br> 
+            <div class="no-break">
+                <b>6. หลักการและเหตุผลของโครงการ </b> <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;' . $projects->princiDetail . ' <br>
+            </div>
+
+            <b>7. วัตถุประสงค์ </b> <br>
         ';
+
 
         $htmlContent .= '';
         if (DB::table('objectives')->where('proID', $id)->exists()) {
@@ -518,14 +530,14 @@ class PDFController extends Controller
         }
 
 
+
         $htmlContent .= '
+            <div class="no-break">
+            
+
             <b>13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท ) </b><br>
-        ';
-
-
-        $htmlContent .= '
             <body>
-                <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;">
+                <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;" class="no-break">
                     <thead>
                         <tr>
                             <td rowspan="3">ประเภทการจ่าย</td>
@@ -568,13 +580,13 @@ class PDFController extends Controller
                 $sumQu3 += $cost_quarter->costQu3;
                 $sumQu4 += $cost_quarter->costQu4;
 
-                
+
                 foreach ($expense_badgets as $expense_badget) {
                     if ($cost_quarter->expID == $expense_badget->expID) {
 
                         $htmlContent .= '
                     <tr>
-                        <td style="text-align: left;">'. $counter .'. ' . $expense_badget->name . '</td>
+                        <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -592,7 +604,7 @@ class PDFController extends Controller
                     if ($cost_quarter->costID == $cost_type->costID) {
                         $htmlContent .= '
                             <tr>
-                                <td style="text-align: left;">1.'. $counter .' ' .  $cost_type->name . '</td>
+                                <td style="text-align: left;">1.' . $counter . ' ' .  $cost_type->name . '</td>
                                 <td>' . number_format($totalCost, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
@@ -619,6 +631,7 @@ class PDFController extends Controller
             </tbody>
         </table>
         </body>
+        </div>
         ';
 
 
@@ -663,7 +676,8 @@ class PDFController extends Controller
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
-        $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
+        $mpdf->WriteHTML($htmlContent, 2);
+        $mpdf->SetAutoPageBreak(true, 10);            // เขียนเนื้อหา HTML ลงใน PDF
 
         return $mpdf->Output('แบบเสนอโครงการประจำปีงบประมาณ.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
     }

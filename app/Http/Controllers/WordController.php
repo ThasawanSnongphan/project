@@ -10,7 +10,6 @@ use App\Models\ExpenseBadgets;
 use App\Models\Funds;
 use App\Models\Goals;
 use App\Models\KPIProjects;
-use App\Models\Objective;
 use App\Models\Objectives;
 use App\Models\ProjectCharec;
 use App\Models\ProjectIntegrat;
@@ -56,27 +55,7 @@ class WordController extends Controller
 
     public function createWordDocFromDB($id)
     {
-
-        // ดึงข้อมูลจาก db
-        // $users = User::all();
-        // $user = User::all();
-        // $users = User::find(10);
-        // $years = Year::where('yearID', 5)->first();
-        // $projects_chas = ProjectCharec::all();
-        // $p = ProjectCharec::where('ProChaID', 4)->first();
-        // $project_integrats = ProjectIntegrat::all();
-        // $projects = Projects::where('ProID', 1)->first();
-        // $objects = Objectives::all();
-
-        // $username = Users::where('id', 10)->first();
-        // $projects = Projects::where('proID', $id)->first();
-        // $years = Year::all();
-        // $badget_types = BadgetType::all();
-        // $KPI_pros = KPIProjects::all();
-        // $project_integrats = ProjectIntegrat::all();
-        // $project_charecs = ProjectCharec::all();
-        // $objects = Objectives::all();
-
+        //ดึงข้อมูล db
         $projects = Projects::where('proID', $id)->first();
         $years = Year::all();
         $users_map = UsersMapProject::all();
@@ -168,9 +147,6 @@ class WordController extends Controller
             )
         );
 
-        // เว้นบรรทัด
-        // $section->addTextBreak();
-
         foreach ($years as $year) {
             if ($projects->yearID == $year->yearID) {
                 $section->addText(
@@ -189,11 +165,13 @@ class WordController extends Controller
 
         // เว้นบรรทัด
         $section->addTextBreak();
+
         $textRun = $section->addTextRun();
 
         $textRun->addText(
             '1. ชื่อโครงการ : ',
-            $boldTextStyle
+            $boldTextStyle,
+            // ['spaceBefore' => 800]
         );
 
         $textRun->addText(
@@ -300,10 +278,10 @@ class WordController extends Controller
         foreach ($project_charecs as $project_charec) {
             if ($projects->proChaID == $project_charec->proChaID) {
                 // เพิ่มข้อความพร้อมเครื่องหมายถูก
-                $textLine .= '☑ ' . $project_charec->name . '    ';
+                $textLine .= '    ☑ ' . $project_charec->name . '    ';
             } else {
                 // เพิ่มข้อความโดยไม่มีเครื่องหมายถูก
-                $textLine .= '☐ ' . $project_charec->name . '    ';
+                $textLine .= '    ☐ ' . $project_charec->name . '    ';
             }
         }
 
@@ -312,19 +290,24 @@ class WordController extends Controller
 
         $section->addText(
             '5. การบูรณาการโครงการ',
-            $boldTextStyle
+            $boldTextStyle,
+            ['keepNext' => true] // ป้องกันการแยกหัวข้อกับรายการ
         );
 
         foreach ($project_integrats as $project_integrat) {
             if ($projects->proInID == $project_integrat->proInID) {
                 // เพิ่มข้อความพร้อมเครื่องหมายถูก
                 $section->addText(
-                    '☑ ' . $project_integrat->name
+                    '    ☑ ' . $project_integrat->name,
+                    [],
+                    ['keepNext' => true] // ป้องกันการแยกหัวข้อกับรายการ
                 );
             } else {
                 // เพิ่มข้อความโดยไม่มีเครื่องหมายถูก
                 $section->addText(
-                    '☐ ' . $project_integrat->name
+                    '    ☐ ' . $project_integrat->name,
+                    [],
+                    ['keepNext' => true] // ป้องกันการแยกหัวข้อกับรายการ
                 );
             }
         }
@@ -335,7 +318,7 @@ class WordController extends Controller
         );
 
         $section->addText(
-            $projects->princiDetail
+            '    ' . $projects->princiDetail
         );
 
         $section->addText(
@@ -372,8 +355,8 @@ class WordController extends Controller
             $table = $section->addTable([
                 'borderSize' => 6,
                 'borderColor' => '000000',
-                'cellMargin' => 50,
-                'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER,
+                'cellMargin' => 60,
+                'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER
             ]);
 
             // เพิ่มส่วนหัวของตาราง
@@ -405,13 +388,14 @@ class WordController extends Controller
 
         $section->addText(
             '9. กลุ่มเป้าหมาย (ระบุกลุ่มเป้าหมายและจำนวนกลุ่มเป้าหมายที่เข้าร่วมโครงการ)',
-            $boldTextStyle
+            $boldTextStyle,
+            ['spaceBefore' => 200]
         );
 
         $pro_tars = Projects::with('target')->get();
 
         foreach ($pro_tars as $pro_tar) {
-            $tarID = $pro_tar->tarID;
+            // $tarID = $pro_tar->tarID;
             $targetName = $pro_tar->target->name ?? 'N/A'; // ใช้ข้อมูลจากตาราง targets
 
         }
@@ -423,9 +407,15 @@ class WordController extends Controller
 
         $section->addText(
             '10. ขั้นตอนการดำเนินงาน : ',
-            $boldTextStyle
+            $boldTextStyle,
+            ['keepNext' => true] // ป้องกันการแยกหัวข้อกับรายการ
         );
 
+        // ตรวจสอบว่ามีเนื้อหาในหน้าปัจจุบันหรือไม่ (ให้เพิ่มคำสั่งนี้ก่อนเพิ่มตาราง)
+        $phpWord->getSections(); // เก็บข้อมูลเกี่ยวกับ sections ที่มีอยู่
+
+        // ถ้าตารางมีขนาดใหญ่ให้เพิ่ม PageBreak เพื่อย้ายหัวข้อและตารางไปหน้าใหม่
+        $section->addPageBreak();
 
         if (DB::table('steps')->where('proID', $id)->exists()) {
             $pro_steps = DB::table('steps')->where('proID', $id)->get();
@@ -433,7 +423,7 @@ class WordController extends Controller
             $minYear = PHP_INT_MAX;
             $maxYear = PHP_INT_MIN;
 
-            foreach ($pro_steps as $step) {
+            foreach ($pro_steps as $index => $step) {
                 $startDate = $step->start ?? null;
                 $endDate = $step->end ?? null;
                 $startYear = $startDate ? (new DateTime($startDate))->format('Y') + 543 : null;
@@ -454,12 +444,15 @@ class WordController extends Controller
                 $maxYear = 'N/A';
             }
 
+            // // เพิ่มการขึ้นหน้าใหม่ก่อนเพิ่มตาราง
+            // $section->addPageBreak();
+
 
             // กำหนด style ของตาราง
             $tableStyle = [
                 'borderSize' => 6,
                 'borderColor' => '000000',
-                'cellMargin' => 80,
+                'cellMargin' => 60,
                 'width' => 100 * 50,
                 'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER
 
@@ -493,27 +486,15 @@ class WordController extends Controller
                     ['align' => 'center']
                 );
 
-            // $table->addRow();
-            // $table->addCell(null, ['vMerge' => 'continue']); // เซลล์ว่างที่รวมกับ "ขั้นตอนการดำเนินการ"
-            // $table->addCell()->addText('ต.ค.');
-            // $table->addCell()->addText('พ.ย.');
-            // $table->addCell()->addText('ธ.ค.');
-            // $table->addCell()->addText('ม.ค.');
-            // $table->addCell()->addText('ก.พ.');
-            // $table->addCell()->addText('มี.ค.');
-            // $table->addCell()->addText('เม.ย.');
-            // $table->addCell()->addText('พ.ค.');
-            // $table->addCell()->addText('มิ.ย.');
-            // $table->addCell()->addText('ก.ค.');
-            // $table->addCell()->addText('ส.ค.');
-            // $table->addCell()->addText('ก.ย.');
+
+            $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
+            $monthMap = [10 => 0, 11 => 1, 12 => 2, 1 => 3, 2 => 4, 3 => 5, 4 => 6, 5 => 7, 6 => 8, 7 => 9, 8 => 10, 9 => 11]; // Map เดือนให้ตรงกับ index
 
             $table->addRow();
             $table->addCell(null, ['vMerge' => 'continue']); // เซลล์ที่รวมกับ "ขั้นตอนการดำเนินการ"
-            $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
             foreach ($months as $month) {
-                $table->addCell(500, ['width' => 50 * 50]) // ปรับความกว้างแต่ละเซลล์เดือน
-                    ->addText($month, $center);
+                $table->addCell(1000, ['width' => 50 * 50])
+                    ->addText($month, [], ['align' => 'center']);
             }
 
             // เพิ่มข้อมูลในตาราง
@@ -528,7 +509,10 @@ class WordController extends Controller
                     $end = new DateTime($endDate);
 
                     while ($start <= $end) {
-                        $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
+                        $monthNum = (int) $start->format('n'); // ดึงหมายเลขเดือน (1-12)
+                        if (isset($monthMap[$monthNum])) {
+                            $highlightMonths[] = $monthMap[$monthNum]; // แปลงให้ตรงกับ index ของตาราง
+                        }
                         $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
                     }
                 }
@@ -536,13 +520,12 @@ class WordController extends Controller
                 $table->addRow();
                 $table->addCell()->addText(($index + 1) . '. ' . $stepName);
 
-                for ($month = 1; $month <= 12; $month++) {
-                    $cellStyle = in_array($month, $highlightMonths) ? ['bgColor' => 'FFFF00'] : []; // ไฮไลต์เซลล์
+                for ($i = 0; $i < 12; $i++) {
+                    $cellStyle = in_array($i, $highlightMonths) ? ['bgColor' => 'FFFF00'] : [];
                     $table->addCell(null, $cellStyle);
                 }
             }
         }
-
 
         $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
         $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
@@ -587,7 +570,9 @@ class WordController extends Controller
             $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
         }
 
-        $textRun = $section->addTextRun();
+        $textRun = $section->addTextRun(
+            ['spaceBefore' => 200]
+        );
 
         $textRun->addText(
             '11. ระยะเวลาดำเนินงาน : ',
@@ -607,7 +592,7 @@ class WordController extends Controller
             if ($projects->badID == $badget_type->badID) {
                 // เพิ่มเช็คลิสต์ใน PHPWord
                 $section->addText(
-                    '☑ ' . $badget_type->name,
+                    '   ☑ ' . $badget_type->name,
                     ['name' => 'DejaVu Sans']
                 );
             }
@@ -618,14 +603,11 @@ class WordController extends Controller
             $boldTextStyle
         );
 
-        // เริ่มสร้าง Section
-        // $section = $phpWord->addSection();
-
         // กำหนด Style ของ Table
         $tableStyle = [
             'borderSize' => 6,
             'borderColor' => '000000',
-            'cellMargin' => 50
+            'cellMargin' => 60
         ];
 
         $phpWord->addTableStyle('BudgetTable', $tableStyle);
@@ -711,13 +693,10 @@ class WordController extends Controller
 
         $section->addText(
             '14. ประมาณการงบประมาณที่ใช้ : ' . number_format($sumTotal, 2) . ' บาท',
-            ['bold' => true] // ฟอร์แมตให้ข้อความเป็นตัวหนา
+            ['bold' => true], // ฟอร์แมตให้ข้อความเป็นตัวหนา
+            ['spaceBefore' => 200]
         );
 
-        // $section->addText(
-        //     '15. ประโยชน์ที่คาดว่าจะได้รับ',
-        //     ['bold' => true] // ฟอร์แมตให้ข้อความเป็นตัวหนา
-        // );
 
         if (DB::table('benefits')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
