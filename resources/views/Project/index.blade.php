@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             @if ($item->statusID == 16 || $item->statusID == 14)
-                                <a href="{{ route('project.edit', $item->proID) }}"><i
+                                <a href="{{ route('project.edit1', $item->proID) }}"><i
                                         class="fa fa-pencil btn btn-warning"></i></a>
                                 <a href="{{ route('project.delete', $item->proID) }}"
                                     onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
@@ -141,8 +141,8 @@
                 if (cell) {
                     const projectID = cell.getAttribute('data-project');
                     const project = projectYear.find(project => project.proID == projectID);
-                    console.log(projectID);
-                    console.log(project);
+                    // console.log(projectID);
+                    // console.log(project);
 
                     // Check if the row should be displayed
                     if (project && (year === "" || year === "ทั้งหมด" || project.yearID == year)) {

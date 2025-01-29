@@ -39,7 +39,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="textt" name="name" id="name" required='required'
+                            <input class="form-control" type="text" name="name" id="name" required='required'
                                 data-validate-length-range="8,20" />
                             @error('name')
                                 <div class="m-2">

@@ -85,10 +85,10 @@
                                                     name="status" checked {{ old('Supply_Analyst') ? 'checked' : '' }} />
                                             </td>
                                             <td>
-                                                <a href="{{ route('strategic.edit', $stra->straID) }}">
+                                                <a href="{{ route('strategic.edit', $stra->stra3LVID) }}">
                                                     <i class="fa fa-pencil btn btn-warning"></i>
                                                 </a>
-                                                <a href="{{ route('strategic.delete', $stra->straID) }}"
+                                                <a href="{{ route('strategic.delete', $stra->stra3LVID) }}"
                                                     onclick="return confirm('ต้องการลบข่าว {{ $stra->name }} หรือไม่')">
                                                     <i class="fa fa-times btn btn-danger"></i>
                                                 </a>

@@ -110,9 +110,9 @@
                                             </td>
                                             <td>
                                                 <a
-                                                        href="{{route('KPIMain.edit',$item->KPIMainID)}}"><i
+                                                        href="{{route('KPIMain.edit',$item->KPIMain3LVID)}}"><i
                                                             class="fa fa-pencil btn btn-warning"></i></a>
-                                                    <a href="{{route('KPIMain.delete',$item->KPIMainID)}}"
+                                                    <a href="{{route('KPIMain.delete',$item->KPIMain3LVID)}}"
                                                         onclick="return confirm('ต้องการลบตัวชี้วัดบังคับ {{$item->name}}   หรือไม่')"><i
                                                             class="fa fa-times btn btn-danger"></i></a>
                                             </td>

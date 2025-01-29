@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class KPIMains extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'KPIMainID';
+    protected $primaryKey = 'KPIMain3LVID';
     public function goal()
     {
-        return $this->belongsTo(Goals::class, 'goalID','goalID');
+        return $this->belongsTo(Goals::class, 'goal3LVID','goal3LVID');
     }
 
     public function director()

@@ -82,12 +82,12 @@
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
                                                 <td>{{ $item->strategic->year->year ?? 'ไม่พบปีงบประมาณ' }}</td>
-                                                <td>{{ $strategic->firstWhere('straID', $item->straID)->name ?? 'ไม่พบแผนยุทธศาสตร์' }}
+                                                <td>{{ $strategic->firstWhere('stra3LVID', $item->stra3LVID)->name ?? 'ไม่พบแผนยุทธศาสตร์' }}
                                                 </td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>
-                                                    <a href="{{ route('SFA.edit', $item->SFAID) }}"><i class="fa fa-pencil btn btn-warning"></i></a>
-                                                    <a href="{{ route('SFA.delete', $item->SFAID) }}" onclick="return confirm('ต้องการลบประเด็นยุทธศาสตร์ {{$item->name}}  หรือไม่')"><i
+                                                    <a href="{{ route('SFA.edit', $item->SFA3LVID) }}"><i class="fa fa-pencil btn btn-warning"></i></a>
+                                                    <a href="{{ route('SFA.delete', $item->SFA3LVID) }}" onclick="return confirm('ต้องการลบประเด็นยุทธศาสตร์ {{$item->name}}  หรือไม่')"><i
                                                             class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>

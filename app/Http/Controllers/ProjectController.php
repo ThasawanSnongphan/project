@@ -6,7 +6,7 @@ use App\Models\Year;
 use App\Models\Users;
 use App\Models\UsersMapProject;
 use App\Models\Status;
-use App\Models\Strategics;
+use App\Models\Strategic3Level;
 use App\Models\StrategicMap;
 use App\Models\StrategicIssues;
 use App\Models\StrategicIssues2Level;
@@ -14,6 +14,7 @@ use App\Models\Goals;
 use App\Models\Tactics;
 use App\Models\Tactic2Level;
 use App\Models\KPIMains;
+use App\Models\KPIMainMapProjects;
 use App\Models\KPIMain2Level;
 use App\Models\Strategic2Level;
 use App\Models\Strategic1Level;
@@ -48,43 +49,26 @@ class ProjectController extends Controller
         $users = $users=DB::table('users')->get();
         return view('Project.index',compact('users','project','status','year','projectYear'));
     }
-    function create2(){
-        $user = Users::all();
-        $year = Year::all(); // ดึงข้อมูลปี
-        $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
-        $SFA = StrategicIssues::all();
-        $goal = Goals::all();
-        $tactics = Tactics::all();
-        $KPIMain=KPIMains::with('goal.SFA.strategic.year')->get();
-        $projectType=ProjectType::all();
-        $projectCharec=ProjectCharec::all();
-        $projectIntegrat=ProjectIntegrat::all();
-        $target=Targets::all();
-        $badgetType=BadgetType::all();
-        $uniplan=UniPlan::all();
-        $fund=Funds::all();
-        $expanses = ExpenseBadgets::all();
-        $costTypes=CostTypes::all();
-        $CountKPIProjects = CountKPIProjects::all();
-        return view('Project.create2',compact('CountKPIProjects','year','user','strategic','SFA','goal','tactics','KPIMain','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
-    }
+    
     function create1(Request $request){
         $year = Year::all();
         $selectYear = $request->input('yearID');
-        $strategic3Level = $selectYear ? Strategics::where('yearID',$selectYear)->get() : Strategics::all();
+       
+        $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() : Strategic3Level::all();
         // dd($strategic3Level);
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() : Strategic2Level::all();
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() : Strategic1Level::all();
        
-        
-        $selectStra3LV = $request->input('straID');
-        $selectSFA3Level = $request->input('SFAID');
-        $selectGoal3Level = $request->input('goalID');
-        $selectTactics3LV = $request->input('tacID');
-        $selectKPIMain = $request->input('KPIMainID');
+        $name = $request->input('name');
+        // dd($name);
+        $selectStra3LV = $request->input('stra3LVID', []);
+        $selectSFA3Level = $request->input('SFA3LVID');
+        $selectGoal3Level = $request->input('goal3LVID');
+        $selectTactics3LV = $request->input('tac3LVID');
+        $selectKPIMain = $request->input('KPIMain3LVID');
         // dd($request->all());
         // dd($selectStra3LV,$selectSFA3Level,$selectGoal3Level,$selectTactics3LV,$selectKPIMain);
-        dd($selectStra3LV);
+        // dd($selectStra3LV);
         $SFA3LVs = StrategicIssues::all();
         $goal3Level = Goals::all();
         $tactics3LV = Tactics::all(); 
@@ -96,15 +80,79 @@ class ProjectController extends Controller
 
         $target1LV = Target1Level::all();
 
-        return view('Project.create1',compact('year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain'));
+        return view('Project.create1',compact('name','year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain'));
     }
+
+    function create2(Request $request){
+        $year = Year::where('yearID',$request->input('yearID'))->first();
+        $project = new Projects();
+        $project->yearID = $year->yearID;
+        $project->name = $request->input('name');
+        $project->statusID =  16;
+        $project->save(); 
+
+        $project = $project->fresh();
+
+        $stra3LV = $request->input('stra3LVID');
+        $SFA3LV = $request->input('SFA3LVID');
+        $goal3LV = $request->input('goal3LVID');
+        $tac3LV = $request->input('tac3LVID');
+        // dd();
+        if(is_array($stra3LV) && is_array($SFA3LV) && is_array($goal3LV) && is_array($tac3LV) ){
+            foreach($stra3LV as $index => $stra){
+                $straMap = new StrategicMap();
+                $straMap->proID = $project->proID;
+                $straMap->stra3LVID = $stra;
+                $straMap->SFA3LVID = $SFA3LV[$index] ?? null;
+                $straMap->goal3LVID = $goal3LV[$index] ?? null;
+                $straMap->tac3LVID = $tac3LV[$index] ?? null;
+                $straMap->save();
+            }
+        }
+
+        $KPIMain3LV = $request->input('KPIMain3LVID');
+        // dd($KPIMain3LV);
+        if(is_array($KPIMain3LV)){
+            foreach ($KPIMain3LV as $index => $KPIMain) {
+                if(!empty($KPIMain)){
+                $map = new KPIMainMapProjects();
+                $map->KPIMain3LVID = $KPIMain ?? null;
+                $map->proID = $project->proID;
+                $map->save(); 
+                }
+            }
+        }
+
+        $user = Users::all();
+        $years = Year::all(); // ดึงข้อมูลปี
+        $strateegicMap = StrategicMap::all();
+        $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
+        $SFAs = StrategicIssues::all();
+        $goals = Goals::all();
+        $tactics = Tactics::all();
+        $KPIMains=KPIMains::all();
+        $KPIMainMapProject = KPIMainMapProjects::all();
+        $projectType=ProjectType::all();
+        $projectCharec=ProjectCharec::all();
+        $projectIntegrat=ProjectIntegrat::all();
+        $target=Targets::all();
+        $badgetType=BadgetType::all();
+        $uniplan=UniPlan::all();
+        $fund=Funds::all();
+        $expanses = ExpenseBadgets::all();
+        $costTypes=CostTypes::all();
+        $CountKPIProjects = CountKPIProjects::all();
+        return view('Project.create2',compact('project','CountKPIProjects','year','years','user','strateegicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+    }
+
+    
     function send(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
-        $strategic = Strategics::where('straID',$request->input('straID'))->first();
-        $SFA = StrategicIssues::where('SFAID',$request->input('SFAID'))->first();
-        $goal = Goals::where('goalID',$request->input('goalID'))->first();
-        $tactics = Tactics::where('tacID',$request->input('tacID'))->first();
-        $KPIMain = KPIMains::where('KPIMainID',$request->input('KPIMainID'))->first();
+        $strategic = Strategic3Level::where('stra3LVID',$request->input('straID'))->first();
+        $SFA = StrategicIssues::where('SFA3LVID',$request->input('SFAID'))->first();
+        $goal = Goals::where('goal3LVID',$request->input('goalID'))->first();
+        $tactics = Tactics::where('tac3LVID',$request->input('tacID'))->first();
+        $KPIMain = KPIMains::where('KPIMain3LVID',$request->input('KPIMainID'))->first();
         $proType = ProjectType::where('proTypeID',$request->input('proTypeID'))->first();
         $proCha = ProjectCharec::where('proChaID',$request->input('proChaID'))->first();
         $proIn = ProjectIntegrat::where('proInID',$request->input('proInID'))->first();
@@ -247,6 +295,19 @@ class ProjectController extends Controller
             }
         }
         return redirect('/project');
+    }
+
+    
+
+    function save1(Request $request){
+        $year = Year::where('yearID',$request->input('yearID'))->first();
+        $project = new Projects();
+        $project->yearID = $year->yearID;
+        $project->name = $request->input('name');
+        $project->statusID =  16;
+        $project->save();   
+        return redirect('/project');
+        
     }
 
     function save(Request $request){

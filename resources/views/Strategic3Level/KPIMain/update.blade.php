@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form method="POST" action="{{ route('KPIMain.update', $KPIMain->KPIMainID) }}" novalidate enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('KPIMain.update', $KPIMain->KPIMain3LVID) }}" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="field item form-group">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
@@ -95,16 +95,16 @@
                                     planSelect.disabled = false;
                                     filteredPlans.forEach(plan => {
                                         const option = document.createElement('option');
-                                        option.value = plan.straID;
+                                        option.value = plan.stra3LVID;
                                         option.textContent = plan.name;
-                                        if (plan.straID == '{{ $KPIMain->goal->SFA->straID }}') {
+                                        if (plan.stra3LVID == '{{ $KPIMain->goal->SFA->stra3LVID }}') {
                                             option.selected = true;
-                                            updateIssueDropdown(plan.straID);
+                                            updateIssueDropdown(plan.stra3LVID);
                                         }
                                         planSelect.appendChild(option);
                                     });
-                                    if (!filteredPlans.some(plan => plan.straID == '{{ $KPIMain->goal->SFA->straID }}')) {
-                                        updateIssueDropdown(filteredPlans[0].straID);
+                                    if (!filteredPlans.some(plan => plan.stra3LVID == '{{ $KPIMain->goal->SFA->stra3LVID }}')) {
+                                        updateIssueDropdown(filteredPlans[0].stra3LVID);
                                     }
                                 }
                             }
@@ -124,7 +124,7 @@
                                     return;
                                 }
 
-                                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                                const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
 
                                 if (filteredIssues.length === 0) {
                                     const noIssueOption = document.createElement('option');
@@ -137,16 +137,16 @@
                                     issueSelect.disabled = false;
                                     filteredIssues.forEach(issue => {
                                         const option = document.createElement('option');
-                                        option.value = issue.SFAID;
+                                        option.value = issue.SFA3LVID;
                                         option.textContent = issue.name;
-                                        if (issue.SFAID == '{{ $KPIMain->goal->SFAID }}') {
+                                        if (issue.SFA3LVID == '{{ $KPIMain->goal->SFA3LVID }}') {
                                             option.selected = true;
-                                            updateGoalDropdown(issue.SFAID);
+                                            updateGoalDropdown(issue.SFA3LVID);
                                         }
                                         issueSelect.appendChild(option);
                                     });
-                                    if (!filteredIssues.some(issue => issue.SFAID == '{{ $KPIMain->goal->SFAID }}')) {
-                                        updateGoalDropdown(filteredIssues[0].SFAID);
+                                    if (!filteredIssues.some(issue => issue.SFA3LVID == '{{ $KPIMain->goal->SFA3LVID }}')) {
+                                        updateGoalDropdown(filteredIssues[0].SFA3LVID);
                                     }
 
                                 }
@@ -168,7 +168,7 @@
                                 }
 
                                 // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+                                const filteredGoals = goals.filter(goal => goal.SFA3LVID == selectedSFAID);
 
                                 if (filteredGoals.length === 0) {
                                     const noGoalOption = document.createElement('option');
@@ -181,9 +181,9 @@
                                     goalSelect.disabled = false;
                                     filteredGoals.forEach(goal => {
                                         const option = document.createElement('option');
-                                        option.value = goal.goalID;
+                                        option.value = goal.goal3LVID;
                                         option.textContent = goal.name;
-                                        if (goal.goalID == '{{ $KPIMain->goalID }}') {
+                                        if (goal.goal3LVID == '{{ $KPIMain->goal3LVID }}') {
                                             option.selected = true;
                                         }
                                         goalSelect.appendChild(option);

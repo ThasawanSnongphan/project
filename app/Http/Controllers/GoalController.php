@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Year;
-use App\Models\Strategics;
+use App\Models\Strategic3Level;
 use App\Models\StrategicIssues;
 use App\Models\Goals;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class GoalController extends Controller
         // $strategic=DB::table('strategics')->get()->keyBy('straID');
         // $SFA=DB::table('strategic_issues')->get()->keyBy('SFAID');
         $year=Year::all();
-        $strategic=Strategics::all();
+        $strategic=Strategic3Level::all();
         $SFA=StrategicIssues::all();
         $goal=DB::table('goals')->get();
         $goals=Goals::with('SFA.strategic.year')->get();
@@ -24,7 +24,7 @@ class GoalController extends Controller
     }
 
     function insert(Request $request){
-        $SFA = StrategicIssues::where('SFAID',$request->input('SFAID'))->first();
+        $SFA = StrategicIssues::where('SFA3LVID',$request->input('SFAID'))->first();
         $request->validate(
             [
                 'name'=>'required'
@@ -32,29 +32,29 @@ class GoalController extends Controller
         );
         $goal = new Goals();
         $goal->name = $request->input('name');
-        $goal->SFAID = $SFA->SFAID;
+        $goal->SFA3LVID = $SFA->SFA3LVID;
         $goal->save();
         return redirect('/goal');
     }
 
     function delete($id){
-        DB::table('goals')->where('goalID',$id)->delete();
+        DB::table('goals')->where('goal3LVID',$id)->delete();
         return redirect('/goal');
     }
 
     function edit($id){
-        $goal=Goals::with('SFA.strategic.year')->where('goalID',$id)->first();
+        $goal=Goals::with('SFA.strategic.year')->where('goal3LVID',$id)->first();
         $year=Year::all();
         $SFA = StrategicIssues::all(); 
-        $strategic=Strategics::all();
+        $strategic=Strategic3Level::all();
         return view('Strategic3Level.Goal.update',compact('goal','year','SFA','strategic'));
     }
     function update(Request $request,$id){
         $goal=[
-            'SFAID'=>$request->SFAID,
+            'SFA3LVID'=>$request->SFAID,
             'name'=>$request->name
         ];
-        DB::table('goals')->where('goalID',$id)->update($goal);
+        DB::table('goals')->where('goal3LVID',$id)->update($goal);
         return redirect('/goal'); 
     }
 }

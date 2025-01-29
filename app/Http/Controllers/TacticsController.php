@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Year;
-use App\Models\Strategics;
+use App\Models\Strategic3Level;
 use App\Models\StrategicIssues;
 use App\Models\Goals;
 use App\Models\Tactics;
@@ -17,7 +17,7 @@ class TacticsController extends Controller
     function index(){
         
         $year=Year::all();
-        $strategic=Strategics::all();
+        $strategic=Strategic3Level::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
         $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->get();
@@ -26,8 +26,8 @@ class TacticsController extends Controller
     }
 
     function insert(Request $request){
-        $goal = Goals::where('goalID',$request->input('goalID'))->first();
-        $KPIMain = KPIMains::where('KPIMainID',$request->input('KPIMainID'))->first();
+        $goal = Goals::where('goal3LVID',$request->input('goalID'))->first();
+        $KPIMain = KPIMains::where('KPIMain3LVID',$request->input('KPIMainID'))->first();
         $request->validate(
             [
                 'name'=>'required'
@@ -35,7 +35,7 @@ class TacticsController extends Controller
         );
         $tactics = new Tactics();
         $tactics->name = $request->input('name');
-        $tactics->goalID = $goal->goalID;
+        $tactics->goal3LVID = $goal->goal3LVID;
         $tactics->save();
 
         $tactics = $tactics->fresh();
@@ -44,8 +44,8 @@ class TacticsController extends Controller
         if(is_array($KPIMainMap)){
             foreach($KPIMainMap as $index => $KPIMain ){
                 $Map = new KPIMainMapTactics();
-                $Map->KPIMainID = $KPIMain ?? null;
-                $Map->tacId = $tactics->tacID;
+                $Map->KPIMain3LVID = $KPIMain ?? null;
+                $Map->tac3LVID = $tactics->tac3LVID;
                 $Map->save();
             }
         }
@@ -53,32 +53,32 @@ class TacticsController extends Controller
     }
 
     function delete($id){
-        DB::table('tactics')->where('tacID',$id)->delete();
+        DB::table('tactics')->where('tac3LVID',$id)->delete();
         return redirect('/tactics');
     }
 
     function edit($id){
-        $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->where('tacID',$id)->first();
+        $tactics=Tactics::with(['goal.SFA.strategic.year', 'KPIMain'])->where('tac3LVID',$id)->first();
         $year=Year::all();
-        $strategic=Strategics::all();
+        $strategic=Strategic3Level::all();
         $SFA=StrategicIssues::all();
         $goal=Goals::all();
         $KPIMainMaps=KPIMainMapTactics::all();
-        $KPIMainMap = $KPIMainMaps->where('tacID',$tactics->tacID)->first();
+        $KPIMainMap = $KPIMainMaps->where('tac3LVID',$tactics->tac3LVID)->first();
       
         $KPIMain=KPIMains::all();
         return view('Strategic3Level.Tactics.update',compact('year','strategic','SFA','goal','tactics','KPIMainMaps','KPIMainMap','KPIMain'));
     }
     function update(Request $request,$id){
         $tactics=[
-            'goalID'=>$request->goalID,
+            'goal3LVID'=>$request->goalID,
             'name'=>$request->name
         ];
-        DB::table('tactics')->where('tacID',$id)->update($tactics);
+        DB::table('tactics')->where('tac3LVID',$id)->update($tactics);
 
         
-        $KPIMainMaps = Db::table('k_p_i_main_map_tactics')->where('tacID',$id)->get();
-        $KPIMainIDs =$KPIMainMaps->pluck('KPIMainID')->toArray();
+        $KPIMainMaps = Db::table('k_p_i_main_map_tactics')->where('tac3LVID',$id)->get();
+        $KPIMainIDs =$KPIMainMaps->pluck('KPIMain3LVID')->toArray();
         $KPIMain = $request->KPIMain;
         // dd($KPIMainMaps,$KPIMainIDs,$KPIMain);
         foreach($KPIMain as $index => $kpi){
@@ -87,19 +87,19 @@ class TacticsController extends Controller
                 if(in_array($currentKPIMainID,$KPIMainIDs)){
                     DB::table('k_p_i_main_map_tactics')->updateOrInsert(
                     [
-                        'KPIMainID' => $currentKPIMainID,
-                        'tacID' => $id
+                        'KPIMain3LVID' => $currentKPIMainID,
+                        'tac3LVID' => $id
                     ],
                     [
-                        'tacID' => $id,
+                        'tac3LVID' => $id,
                         'updated_at' => now()
                     ]
                     );
                 }else{
                     Db::table('k_p_i_main_map_tactics')->insert(
                         [
-                            'KPIMainID' => $kpi,
-                            'tacID' => $id,
+                            'KPIMain3LVID' => $kpi,
+                            'tac3LVID' => $id,
                             'updated_at' => now(), 
                             'created_at' => now() 
                         ]
@@ -108,8 +108,8 @@ class TacticsController extends Controller
             }else{
                 DB::table('k_p_i_main_map_tactics')->insert(
                     [
-                        'KPIMainID' => $kpi,
-                        'tacID' => $id,
+                        'KPIMain3LVID' => $kpi,
+                        'tac3LVID' => $id,
                         'updated_at' => now(), 
                         'created_at' => now() 
                     ]
@@ -119,8 +119,8 @@ class TacticsController extends Controller
         $KPIMainMapToDelete = array_diff($KPIMainIDs,$KPIMain);
         if(!empty($KPIMainMapToDelete)){
             DB::table('k_p_i_main_map_tactics')
-            ->where('tacID',$id)
-            ->whereIn('KPIMainID',$KPIMainMapToDelete)
+            ->where('tac3LVID',$id)
+            ->whereIn('KPIMain3LVID',$KPIMainMapToDelete)
             ->delete();
         }
         return redirect('/tactics'); 

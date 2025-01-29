@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('tactics.update', $tactics->tacID) }}"novalidate
+                                    <form method="POST" action="{{ route('tactics.update', $tactics->tac3LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -114,11 +114,11 @@
                                             <label for="title"
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ตัวชี้วัด<span
                                                     class="required">*</span></label>
-                                            @if (!empty($KPIMainMap->KPiMainID))
-                                                <input type="hidden" value="{{ $KPIMainMap->KPIMainID }}">
+                                            @if (!empty($KPIMainMap->KPiMain3LVID))
+                                                <input type="hidden" value="{{ $KPIMainMap->KPIMain3LVID }}">
                                             @endif
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="KPIMainID_{{ $KPIMainMap->KPIMainID }}" name="KPIMain[]" class="form-control" required>
+                                                <select id="KPIMainID_{{ $KPIMainMap->KPIMain3LVID }}" name="KPIMain[]" class="form-control" required>
 
                                                 </select>
                                             </div>
@@ -129,12 +129,12 @@
                                         </div>
 
                                         @foreach ($KPIMainMaps as $item)
-                                            @if (!empty($item->KPIMainID) && $item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
+                                            @if (!empty($item->KPIMain3LVID) && $item->tac3LVID === $tactics->tac3LVID && $item->KPIMain3LVID != $KPIMainMap->KPIMain3LVID)
                                                 <div class="i field item form-group ">
                                                     <div class="col-md-3 col-sm-3"></div>
-                                                    <input type="hidden" value="{{ $item->KPIMainID }}">
+                                                    <input type="hidden" value="{{ $item->KPIMain3LVID }}">
                                                     <div class="col-md-6 col-sm-6">
-                                                        <select id="KPIMainID_{{ $item->KPIMainID }}" name="KPIMain[]"
+                                                        <select id="KPIMainID_{{ $item->KPIMain3LVID }}" name="KPIMain[]"
                                                             class="form-control" required>
                                                         </select>
                                                     </div>
@@ -190,7 +190,7 @@
                                                     return;
                                                 }
 
-                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goal3LVID == selectedgoalID);
 
                                                 if (filteredKPIMain.length === 0) {
                                                     const noKPIMainOption = document.createElement('option');
@@ -202,7 +202,7 @@
                                                     KPIMainDropdown.disabled = false;
                                                     filteredKPIMain.forEach(KPIMain => {
                                                         const option = document.createElement('option');
-                                                        option.value = KPIMain.KPIMainID;
+                                                        option.value = KPIMain.KPIMain3LVID;
                                                         option.textContent = KPIMain.name;
                                                         KPIMainDropdown.appendChild(option);
                                                     });
@@ -241,17 +241,17 @@
                                                     planSelect.disabled = false;
                                                     filteredPlans.forEach(plan => {
                                                         const option = document.createElement('option');
-                                                        option.value = plan.straID;
+                                                        option.value = plan.stra3LVID;
                                                         option.textContent = plan.name;
                                                         // console.log(plan.straID , {{ $tactics->goal->SFA->straID }});
-                                                        if (plan.straID == '{{ $tactics->goal->SFA->straID }}') {
+                                                        if (plan.stra3LVID == '{{ $tactics->goal->SFA->stra3LVID }}') {
                                                             option.selected = true;
-                                                            updateIssueDropdown(plan.straID);
+                                                            updateIssueDropdown(plan.stra3LVID);
                                                         }
                                                         planSelect.appendChild(option);
                                                     });
-                                                    if (!filteredPlans.some(plan => plan.straID == '{{ $tactics->goal->SFA->straID }}')) {
-                                                        updateIssueDropdown(filteredPlans[0].straID);
+                                                    if (!filteredPlans.some(plan => plan.stra3LVID == '{{ $tactics->goal->SFA->stra3LVID }}')) {
+                                                        updateIssueDropdown(filteredPlans[0].stra3LVID);
                                                     }
                                                 }
                                             }
@@ -272,7 +272,7 @@
                                                     return;
                                                 }
 
-                                                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                                                const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
 
                                                 if (filteredIssues.length === 0) {
                                                     const noIssueOption = document.createElement('option');
@@ -285,19 +285,19 @@
                                                     issueSelect.disabled = false;
                                                     filteredIssues.forEach(issue => {
                                                         const option = document.createElement('option');
-                                                        option.value = issue.SFAID;
+                                                        option.value = issue.SFA3LVID;
                                                         option.textContent = issue.name;
                                                         // console.log(issue.SFAID , '$tactics->goal->SFAID' );
 
-                                                        if (issue.SFAID == '{{ $tactics->goal->SFAID }}') {
+                                                        if (issue.SFA3LVID == '{{ $tactics->goal->SFA3LVID }}') {
                                                             option.selected = true;
-                                                            updateGoalDropdown(issue.SFAID);
+                                                            updateGoalDropdown(issue.SFA3LVID);
                                                         }
 
                                                         issueSelect.appendChild(option);
                                                     });
-                                                    if (!filteredIssues.some(issue => issue.SFAID == '{{ $tactics->goal->SFAID }}')) {
-                                                        updateGoalDropdown(filteredIssues[0].SFAID);
+                                                    if (!filteredIssues.some(issue => issue.SFA3LVID == '{{ $tactics->goal->SFA3LVID }}')) {
+                                                        updateGoalDropdown(filteredIssues[0].SFA3LVID);
                                                     }
                                                 }
                                             }
@@ -326,7 +326,7 @@
                                                 }
 
                                                 // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                                                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+                                                const filteredGoals = goals.filter(goal => goal.SFA3LVID == selectedSFAID);
 
                                                 if (filteredGoals.length === 0) {
                                                     const noGoalOption = document.createElement('option');
@@ -343,21 +343,21 @@
                                                     goalSelect.disabled = false;
                                                     filteredGoals.forEach(goal => {
                                                         const option = document.createElement('option');
-                                                        option.value = goal.goalID;
+                                                        option.value = goal.goal3LVID;
                                                         option.textContent = goal.name;
-                                                        if (goal.goalID == '{{ $tactics->goalID }}') {
+                                                        if (goal.goal3LVID == '{{ $tactics->goal3LVID }}') {
                                                             option.selected = true;
                                                             // updateKPIMainDropdown(goal.goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                             kpiMainElements.forEach(function(kpiMainElement) {
-                                                        updateKPIMainDropdown(goal.goalID, kpiMainElement.id);
+                                                        updateKPIMainDropdown(goal.goal3LVID, kpiMainElement.id);
                                                     });
                                                         }
                                                         goalSelect.appendChild(option);
                                                     });
-                                                    if (!filteredGoals.some(goal => goal.goalID == '{{ $tactics->goalID }}')) {
+                                                    if (!filteredGoals.some(goal => goal.goal3LVID == '{{ $tactics->goal3LVID }}')) {
                                                         // updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_'+{{ $KPIMainMap->KPIMainID }});
                                                         kpiMainElements.forEach(function(kpiMainElement) {
-                                                        updateKPIMainDropdown(filteredGoals[0].goalID, kpiMainElement.id);
+                                                        updateKPIMainDropdown(filteredGoals[0].goal3LVID, kpiMainElement.id);
                                                     });
                                                     }
                                                 }
@@ -367,8 +367,8 @@
 
                                             document.addEventListener('DOMContentLoaded', function() {
                                                 @foreach ($KPIMainMaps as $item)
-                                                    @if ($item->tacID === $tactics->tacID && $item->KPIMainID != $KPIMainMap->KPIMainID)
-                                                        updateKPIMainDropdown('{{ $tactics->goalID }}', 'KPIMainID_{{ $item->KPIMainID }}');
+                                                    @if ($item->tac3LVID === $tactics->tac3LVID && $item->KPIMain3LVID != $KPIMainMap->KPIMain3LVID)
+                                                        updateKPIMainDropdown('{{ $tactics->goal3LVID }}', 'KPIMainID_{{ $item->KPIMain3LVID }}');
                                                     @endif
                                                 @endforeach
                                             });
@@ -387,7 +387,7 @@
                                                     return;
                                                 }
 
-                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID ==
+                                                const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goal3LVID ==
                                                     selectedgoalID);
 
 
@@ -403,11 +403,11 @@
 
                                                     filteredKPIMain.forEach(KPIMain => {
                                                         const option = document.createElement('option');
-                                                        option.value = KPIMain.KPIMainID;
+                                                        option.value = KPIMain.KPIMain3LVID;
                                                         option.textContent = KPIMain.name;
-                                                        const map = tacticMap.find(map => map.KPIMainID == KPIMain.KPIMainID);
+                                                        const map = tacticMap.find(map => map.KPIMain3LVID == KPIMain.KPIMain3LVID);
                                                         
-                                                        if ((map && selectID === 'KPIMainID_' + map.KPIMainID) ) {
+                                                        if ((map && selectID === 'KPIMainID_' + map.KPIMain3LVID) ) {
 
                                                             option.selected = true; // Set the option selected if matched
                                                             // console.log('Selected option for', selectID, map , 'KPIMainID_'+map.KPIMainID);

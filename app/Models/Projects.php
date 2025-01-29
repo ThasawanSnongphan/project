@@ -44,4 +44,9 @@ class Projects extends Model
     // {
     //     return $this->belongsToMany(strategics::class, 'strategic_maps', 'proID', 'straID');
     // }
+
+    public function KPIMain()
+    {
+        return $this->belongsToMany(KPIMains::class, 'k_p_i_main_map_projects', 'proID', 'KPIMain3LVID');
+    }
 }

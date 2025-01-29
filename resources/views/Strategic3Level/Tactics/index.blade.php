@@ -87,7 +87,7 @@
                                                 <td>{{ $item->goal->SFA->strategic->year->year ?? 'ไม่พบปี' }}</td>
                                                 <td>{{ $item->goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
                                                 <td>{{ $item->goal->SFA->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
-                                                <td>{{ $goal->firstWhere('goalID', $item->goalID)->name ?? 'ไม่พบเป้าประสงค์' }}
+                                                <td>{{ $goal->firstWhere('goal3LVID', $item->goal3LVID)->name ?? 'ไม่พบเป้าประสงค์' }}
                                                 </td>
                                                 <td>
                                                     @foreach ($item->KPIMain as $kpi)
@@ -97,9 +97,9 @@
 
                                                 <td>{{ $item->name }}</td>
                                                 <td>
-                                                    <a href="{{ route('tactics.edit', $item->tacID) }}"><i
+                                                    <a href="{{ route('tactics.edit', $item->tac3LVID) }}"><i
                                                             class="fa fa-pencil btn btn-warning"></i></a>
-                                                    <a href="{{ route('tactics.delete', $item->tacID) }}"
+                                                    <a href="{{ route('tactics.delete', $item->tac3LVID) }}"
                                                         onclick="return confirm('ต้องการลบกลยุทธ์ {{ $item->name }} หรือไม่')"><i
                                                             class="fa fa-times btn btn-danger"></i></a>
                                                 </td>

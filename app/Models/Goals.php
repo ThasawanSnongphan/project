@@ -10,6 +10,6 @@ class Goals extends Model
     use HasFactory;
     public function SFA()
     {
-        return $this->belongsTo(StrategicIssues::class, 'SFAID','SFAID');
+        return $this->belongsTo(StrategicIssues::class, 'SFA3LVID','SFA3LVID');
     }
 }

@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('strategic.update', $strategic->straID) }}"novalidate
+                                    <form method="POST" action="{{ route('strategic.update', $strategic->stra3LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">

@@ -76,11 +76,11 @@
                                 planSelect.disabled = false;
                                 filteredPlans.forEach(plan => {
                                     const option = document.createElement('option');
-                                    option.value = plan.straID;
+                                    option.value = plan.stra3LVID;
                                     option.textContent = plan.name;
                                     planSelect.appendChild(option);
                                 });
-                                updateIssueDropdown(filteredPlans[0].straID);
+                                updateIssueDropdown(filteredPlans[0].stra3LVID);
                             }
                         }
 
@@ -98,7 +98,7 @@
                                 return;
                             }
 
-                            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                            const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
 
                             if (filteredIssues.length === 0) {
                                 const noIssueOption = document.createElement('option');
@@ -110,7 +110,7 @@
                                 issueSelect.disabled = false;
                                 filteredIssues.forEach(issue => {
                                     const option = document.createElement('option');
-                                    option.value = issue.SFAID;
+                                    option.value = issue.SFA3LVID;
                                     option.textContent = issue.name;
                                     issueSelect.appendChild(option);
                                 });

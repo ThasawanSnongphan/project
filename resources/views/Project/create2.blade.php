@@ -30,12 +30,13 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="year" name="yearID" class="form-control" required>
-                                    @foreach ($year as $item)
-                                        <option value="{{ $item->yearID }}">
-                                            {{ $item->year }}</option>
-                                    @endforeach
-                                </select>
+                                <input class="form-control" type="text" name="yearID" id="yearID"
+                                    data-validate-length-range="8,20"
+                                    @foreach ($years as $item)
+                                        @if ($item->yearID == $project->yearID)
+                                        value="{{ $item->year }}" 
+                                        @endif @endforeach
+                                    readonly />
                             </div>
                         </div>
 
@@ -43,13 +44,9 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="name" id="name" required='required'
-                                    data-validate-length-range="8,20" />
-                                @error('name')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                <input class="form-control" type="text" name="name" id="name"
+                                    data-validate-length-range="8,20" value="{{ $project->name }}" readonly />
+
                             </div>
                         </div>
                         {{-- ถ้ามีหลายคนก็เเก้ไขได้ --}}
@@ -93,57 +90,76 @@
                             </div>
                         </div>
 
-                        <div class="row field item form-group align-items-center">
-                            <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
-                                    class="required">*</span></label>
-                            <div class="col-md-6 col-sm-6">
-                                <select id="straID" name="straID[]" class="form-control" required
-                                    onchange="KPIMainNone()">
-                                    <!-- แผนจะถูกโหลดที่นี่ -->
-                                </select>
-                            </div>
-                            <div class="col-md-3 col-sm-3">
-                                <button type='button' class="btn btn-primary"
-                                    onclick="insertStrategic()">เพิ่มความสอดคล้อง</button>
-                            </div>
-                        </div>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-9 border mb-2 p-2">
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="SFAID" name="SFAID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
+                        @foreach ($strateegicMap as $item)
+                            @if ($item->proID == $project->proID)
+                                <div class="row field item form-group align-items-center">
+                                    <label for="plan"
+                                        class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                            class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input class="form-control" type="text" name="name" id="name"
+                                            data-validate-length-range="8,20"
+                                            @foreach ($strategic as $stra)
+                                                @if ($stra->stra3LVID == $item->stra3LVID)
+                                                    value="{{ $stra->name }}" 
+                                                @endif @endforeach
+                                            readonly />
+                                    </div>
+
                                 </div>
-                            </div>
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="goalID" name="goalID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row field item form-group align-items-center">
-                                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                                        class="required">*</span></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <select id="tacID" name="tacID[]" class="form-control" required>
-                                        <!-- กลยุทธ์จะถูกโหลดที่นี่ -->
-                                    </select>
-                                </div>
-                            </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-9 border mb-2 p-2">
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="title"
+                                            class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" name="name" id="name"
+                                                data-validate-length-range="8,20"
+                                                @foreach ($SFAs as $SFA)
+                                                    @if ($SFA->SFA3LVID == $item->SFA3LVID)
+                                                         value="{{ $SFA->name }}" 
+                                                    @endif @endforeach
+                                                readonly />
+                                        </div>
+                                    </div>
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="title"
+                                            class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" name="name" id="name"
+                                                data-validate-length-range="8,20"
+                                                @foreach ($goals as $goal)
+                                                   @if ($goal->goal3LVID == $item->goal3LVID)
+                                                        value="{{ $goal->name }}"
+                                                       
+                                                   @endif @endforeach
+                                                readonly />
+                                        </div>
+                                    </div>
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="title"
+                                            class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <input class="form-control" type="text" name="name" id="name"
+                                                data-validate-length-range="8,20"
+                                                @foreach ($tactics as $tactic)
+                                                    @if ($tactic->tac3LVID == $item->tac3LVID)
+                                                        value="{{ $tactic->name }}" 
+                                                        
+                                                    @endif @endforeach
+                                                readonly />
+                                        </div>
+                                    </div>
 
 
-                        </div>
-                        {{-- <div class="col-md-3"></div> --}}
+                                </div>
+                            @endif
+                        @endforeach
 
-                        <div id="insertStrategic"></div>
+
 
 
 
@@ -242,28 +258,44 @@
                                         <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                     </div>
                                 </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="col-md-4 col-sm-4 m-1">
-                                        <select id="KPIMain_1" name="KPIMainID[]" class="form-control" required>
-                                            <!-- KPIจะถูกโหลดที่นี่ -->
-                                        </select>
-                                    </div>
-                                    <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countMain[]" id="countMain_1"
-                                            disabled>
+                                @foreach ($KPIMainMapProject as $item)
+                                    @if ($item->proID == $project->proID)
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="col-md-5 col-sm-5 m-1">
+                                                <input class="form-control" type="text" name="KPIMain[]"
+                                                    id="KPIMain_1"
+                                                    @foreach ($KPIMains as $KPIMain)
+                                                        @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
+                                                            value={{$KPIMain->name}}
+                                                        @endif
+                                                    @endforeach
+                                                    readonly/>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="countMain[]"
+                                                    id="countMain_1"
+                                                    @foreach ($KPIMains as $KPIMain)
+                                                    @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
+                                                        value={{$KPIMain->count}}
+                                                    @endif
+                                                @endforeach
+                                                    readonly>
 
-                                    </div>
-                                    <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain_1"
-                                            disabled>
-                                    </div>
-                                    <div class="col-md-1 col-sm-1 m-1">
-                                        <button type='button' class="btn btn-primary" onclick="insertKPIMain()">เพิ่ม
-                                        </button>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="targetMain[]"
+                                                    id="targetMain_1"
+                                                    @foreach ($KPIMains as $KPIMain)
+                                                    @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
+                                                        value={{$KPIMain->target}}
+                                                    @endif
+                                                @endforeach
+                                                    readonly>
+                                            </div>
 
-                                    </div>
-                                </div>
-                                <div id="insertKPIMain"></div>
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                         <div class="row field item form-group align-items-center" id="KPIMainDigitalNone"
@@ -341,10 +373,10 @@
                                         <select id="countKPIProject" name="countKPIProject[]" class="form-control"
                                             required>
                                             <option value="">--</option>
-                                            @foreach ($CountKPIProjects as $item)
+                                            {{-- @foreach ($CountKPIProjects as $item)
                                                 <option value="{{ $item->countKPIProID }}">
                                                     {{ $item->name }}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
 
                                     </div>
@@ -369,10 +401,10 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="target" name="tarID" class="form-control" required>
-                                    @foreach ($target as $item)
+                                    {{-- @foreach ($target as $item)
                                         <option value="{{ $item->tarID }}">
                                             {{ $item->name }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
 
@@ -423,10 +455,10 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="badget" name="badID" class="form-control" required>
-                                    @foreach ($badgetType as $item)
+                                    {{-- @foreach ($badgetType as $item)
                                         <option value="{{ $item->badID }}">
                                             {{ $item->name }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -436,9 +468,9 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="planID" name="planID" class="form-control" required>
-                                    @foreach ($uniplan as $item)
+                                    {{-- @foreach ($uniplan as $item)
                                         <option value="{{ $item->planID }}">{{ $item->name }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -623,11 +655,11 @@
     </div>
 
     <script>
-        const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
+        // const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
         const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
         const goals = @json($goal); // ข้อมูลเป้าประสงค์
         const tactics = @json($tactics); // ข้อมูลกลยุทธ์
-        const KPIMains = @json($KPIMain);
+        const KPIMains = @json($KPIMains);
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
@@ -1053,94 +1085,7 @@
 
         }
 
-        function insertKPIMain() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('col-md-12', 'col-sm-12');
 
-            const colKPI = document.createElement('div');
-            colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
-
-            const KPIDropdown = document.createElement('select');
-            KPIDropdown.classList.add('form-control');
-            KPIDropdown.id = `KPIMainID_${Date.now()}`;
-            KPIDropdown.name = 'KPIMainID[]';
-            KPIDropdown.innerHTML = '';
-
-            const colCount = document.createElement('div');
-            colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
-
-            const countInput = document.createElement('input');
-            countInput.classList.add('form-control');
-            countInput.type = 'text';
-            countInput.id = `countMain_${Date.now()}`;
-            countInput.name = 'countMain[]';
-
-            const colTarget = document.createElement('div');
-            colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
-
-            const targetInput = document.createElement('input');
-            targetInput.classList.add('form-control');
-            targetInput.type = 'text';
-            targetInput.id = `targetMain_${Date.now()}`;
-            targetInput.name = 'targetMain[]';
-
-            const selectedGoalID = document.getElementById('goalID').value;
-            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-            if (filteredKPIMains.length === 0) {
-                const noKPIMainOption = document.createElement('option');
-                noKPIMainOption.value = '';
-                noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                KPIDropdown.appendChild(noKPIMainOption);
-                KPIDropdown.disabled = true;
-                countInput.value = 'ไม่มีหน่วยนับ';
-                targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            } else {
-                // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
-                KPIDropdown.disabled = false;
-                filteredKPIMains.forEach(KPIMain => {
-                    const option = document.createElement('option');
-                    option.value = KPIMain.KPIMainID;
-                    option.textContent = KPIMain.name;
-                    KPIDropdown.appendChild(option);
-                });
-
-                // กำหนดค่าเริ่มต้นให้กับ input
-                const firstKPIMain = filteredKPIMains[0];
-                countInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-                targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            }
-            KPIDropdown.addEventListener('change', function() {
-                const selectedKPIMainID = this.value;
-                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
-                if (selectedKPIMain) {
-                    countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                }
-            });
-
-            const colDelete = document.createElement('div');
-            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
-            };
-
-
-            mainContainer.appendChild(colKPI);
-            mainContainer.appendChild(colCount);
-            mainContainer.appendChild(colTarget);
-            mainContainer.appendChild(colDelete);
-            colKPI.appendChild(KPIDropdown);
-            colCount.appendChild(countInput);
-            colTarget.appendChild(targetInput);
-            colDelete.appendChild(deleteButton);
-            // เพิ่มปุ่มลบลงใน mainContainer
-            document.getElementById('insertKPIMain').appendChild(mainContainer);
-        }
 
         function insertKPIMain2() {
             const mainContainer = document.createElement('div');

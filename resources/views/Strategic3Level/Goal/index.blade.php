@@ -84,13 +84,13 @@
                                             <th scope="row">{{$i}}</th>
                                             <td>{{$goal->SFA->strategic->year->year ?? 'ไม่พบปี' }}</td>
                                             <td>{{$goal->SFA->strategic->name ?? 'ไม่พบแผนยุทธศาสตร์' }}</td>
-                                            <td>{{$SFA->firstWhere('SFAID',$goal->SFAID)->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
+                                            <td>{{$SFA->firstWhere('SFA3LVID',$goal->SFA3LVID)->name ?? 'ไม่พบประเด็นยุทธศาสตร์' }}</td>
                                             <td>{{$goal->name}}</td>
                                             <td>
                                                 <a
-                                                        href="{{route('goal.edit',$goal->goalID)}}"><i
+                                                        href="{{route('goal.edit',$goal->goal3LVID)}}"><i
                                                             class="fa fa-pencil btn btn-warning"></i></a>
-                                                    <a href="{{route('goal.delete',$goal->goalID)}}"
+                                                    <a href="{{route('goal.delete',$goal->goal3LVID)}}"
                                                         onclick="return confirm('ต้องการลบข่าว {{$goal->name}}   หรือไม่')"><i
                                                             class="fa fa-times btn btn-danger"></i></a>
                                             </td>

@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('goal.update', $goal->goalID) }}"novalidate
+                                    <form method="POST" action="{{ route('goal.update', $goal->goal3LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -121,20 +121,20 @@
                                                     planSelect.disabled = false;
                                                     filteredPlans.forEach(plan => {
                                                         const option = document.createElement('option');
-                                                        option.value = plan.straID;
+                                                        option.value = plan.stra3LVID;
                                                         option.textContent = plan.name;
                                                         // console.log( plan.straID, {{ $goal->SFA->straID }})
-                                                        if (plan.straID == '{{ $goal->SFA->straID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
+                                                        if (plan.stra3LVID == '{{ $goal->SFA->stra3LVID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
                                                             option.selected = true;
                                                             // console.log('Adding Plan:', plan.straID, plan.name);
-                                                            updateIssueDropdown(plan.straID);
+                                                            updateIssueDropdown(plan.stra3LVID);
 
                                                         }
                                                         planSelect.appendChild(option);
                                                     });
                                                     // ตรวจสอบให้แน่ใจว่ามีข้อมูลใน `filteredPlans` ก่อนเรียก `updateIssueDropdown`
-                                                    if (!filteredPlans.some(plan => plan.straID == '{{ $goal->SFA->straID }}')) {
-                                                        updateIssueDropdown(filteredPlans[0].straID);
+                                                    if (!filteredPlans.some(plan => plan.stra3LVID == '{{ $goal->SFA->stra3LVID }}')) {
+                                                        updateIssueDropdown(filteredPlans[0].stra3LVID);
                                                     }
 
 
@@ -145,7 +145,7 @@
                                             function updateIssueDropdown(selectedPlanID) {
 
 
-                                                console.log(selectedPlanID, {{ $goal->SFA->straID }});
+                                                // console.log(selectedPlanID, {{ $goal->SFA->stra3LVID }});
                                                 const issueSelect = document.getElementById('SFAID');
                                                 issueSelect.innerHTML = '';
 
@@ -157,7 +157,7 @@
                                                     issueSelect.disabled = true;
                                                     return;
                                                 }
-                                                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                                                const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
                                                 // console.log('Filtered Issues:', filteredIssues);
 
                                                 if (filteredIssues.length === 0) {
@@ -170,10 +170,10 @@
                                                     issueSelect.disabled = false;
                                                     filteredIssues.forEach(issue => {
                                                         const option = document.createElement('option');
-                                                        option.value = issue.SFAID;
+                                                        option.value = issue.SFA3LVID;
                                                         option.textContent = issue.name;
                                                         // console.log(issue.SFAID, {{ $goal->SFAID }});
-                                                        if (issue.SFAID == '{{ $goal->SFAID }}') {
+                                                        if (issue.SFA3LVID == '{{ $goal->SFA3LVID }}') {
                                                             option.selected = true;
                                                             // console.log('Adding Plan:', issue.SFAID,issue.name);
                                                         }

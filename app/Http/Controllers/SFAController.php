@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Year;
-use App\Models\Strategics;
+use App\Models\Strategic3Level;
 use App\Models\StrategicIssues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,14 +12,14 @@ class SFAController extends Controller
 {
     function index(){
         $year=Year::all();
-        $strategic=Strategics::all();
+        $strategic=Strategic3Level::all();
         $SFA=StrategicIssues::with(['strategic.year']) // ดึงข้อมูลสัมพันธ์
         ->get();
         return view('Strategic3Level.SFA.index',compact('strategic','year','SFA'));
     }
 
     function insert(Request $request){
-        $strategic = Strategics::where('straID',$request->input('straID'))->first();
+        $strategic = Strategic3Level::where('stra3LVID',$request->input('stra3LVID'))->first();
         $request->validate(
             [
                 'name'=>'required'
@@ -28,31 +28,31 @@ class SFAController extends Controller
 
         $SFA = new StrategicIssues();
         $SFA->name = $request->input('name');
-        $SFA->straID = $strategic->straID;
+        $SFA->stra3LVID = $strategic->stra3LVID;
         $SFA->save();
         return redirect('/SFA');
 
     }
 
     function delete($id){
-        DB::table('strategic_issues')->where('SFAID',$id)->delete();
+        DB::table('strategic_issues')->where('SFA3LVID',$id)->delete();
         return redirect('/SFA');
     }
 
     function edit($id){
-        $SFA = StrategicIssues::with('strategic.year')->where('SFAID', $id)->first();
-        $strategic = Strategics::all();
+        $SFA = StrategicIssues::with('strategic.year')->where('SFA3LVID', $id)->first();
+        $strategic = Strategic3Level::all();
         $year = Year::all(); 
         return view('Strategic3Level.SFA.update',compact('SFA','strategic','year'));
     }
     function update(Request $request,$id){
-        $strategic = Strategics::where('straID',$request->input('straID'))->first();
+        $strategic = Strategic3Level::where('stra3LVID',$request->input('stra3LVID'))->first();
         
         $SFA=[
-            'straID'=>$request->straID,
+            'stra3LVID'=>$request->straID,
             'name'=>$request->name
         ];
-        DB::table('strategic_issues')->where('SFAID',$id)->update($SFA);
+        DB::table('strategic_issues')->where('SFA3LVID',$id)->update($SFA);
         return redirect('/SFA'); 
     }
 }

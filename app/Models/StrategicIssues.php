@@ -10,6 +10,6 @@ class StrategicIssues extends Model
     use HasFactory;
     public function strategic()
     {
-        return $this->belongsTo(Strategics::class, 'straID','straID');
+        return $this->belongsTo(Strategic3Level::class, 'stra3LVID','stra3LVID');
     }
 }

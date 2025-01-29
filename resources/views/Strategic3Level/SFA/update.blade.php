@@ -46,7 +46,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('SFA.update', $SFA->SFAID) }}"novalidate
+                                    <form method="POST" action="{{ route('SFA.update', $SFA->SFA3LVID) }}"novalidate
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">

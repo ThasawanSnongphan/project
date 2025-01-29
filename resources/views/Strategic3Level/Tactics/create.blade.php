@@ -135,7 +135,7 @@
                                 return;
                             }
 
-                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goal3LVID == selectedgoalID);
 
                             if (filteredKPIMain.length === 0) {
                                 const noKPIMainOption = document.createElement('option');
@@ -147,7 +147,7 @@
                                 KPIMainDropdown.disabled = false;
                                 filteredKPIMain.forEach(KPIMain => {
                                     const option = document.createElement('option');
-                                    option.value = KPIMain.KPIMainID;
+                                    option.value = KPIMain.KPIMain3LVID;
                                     option.textContent = KPIMain.name;
                                     KPIMainDropdown.appendChild(option);
                                 });
@@ -192,11 +192,11 @@
                                 planSelect.disabled = false;
                                 filteredPlans.forEach(plan => {
                                     const option = document.createElement('option');
-                                    option.value = plan.straID;
+                                    option.value = plan.stra3LVID;
                                     option.textContent = plan.name;
                                     planSelect.appendChild(option);
                                 });
-                                updateIssueDropdown(filteredPlans[0].straID);
+                                updateIssueDropdown(filteredPlans[0].stra3LVID);
                             }
                         }
 
@@ -215,7 +215,7 @@
                                 return;
                             }
 
-                            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                            const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
 
                             if (filteredIssues.length === 0) {
                                 const noIssueOption = document.createElement('option');
@@ -228,11 +228,11 @@
                                 issueSelect.disabled = false;
                                 filteredIssues.forEach(issue => {
                                     const option = document.createElement('option');
-                                    option.value = issue.SFAID;
+                                    option.value = issue.SFA3LVID;
                                     option.textContent = issue.name;
                                     issueSelect.appendChild(option);
                                 });
-                                updateGoalDropdown(filteredIssues[0].SFAID);
+                                updateGoalDropdown(filteredIssues[0].SFA3LVID);
                             }
                         }
 
@@ -256,7 +256,7 @@
                             }
 
                             // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                            const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+                            const filteredGoals = goals.filter(goal => goal.SFA3LVID == selectedSFAID);
 
                             if (filteredGoals.length === 0) {
                                 const noGoalOption = document.createElement('option');
@@ -272,12 +272,12 @@
                                 goalSelect.disabled = false;
                                 filteredGoals.forEach(goal => {
                                     const option = document.createElement('option');
-                                    option.value = goal.goalID;
+                                    option.value = goal.goal3LVID;
                                     option.textContent = goal.name;
                                     goalSelect.appendChild(option);
                                 });
                                 kpiMainElements.forEach(function(kpiMainElement) {
-                                    updateKPIMainDropdown(filteredGoals[0].goalID, kpiMainElement.id);
+                                    updateKPIMainDropdown(filteredGoals[0].goal3LVID, kpiMainElement.id);
                                 });
                                 // updateKPIMainDropdown(filteredGoals[0].goalID, 'KPIMainID_1');
                             }
@@ -297,7 +297,7 @@
                                 return;
                             }
 
-                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goalID == selectedgoalID);
+                            const filteredKPIMain = KPIMains.filter(KPIMain => KPIMain.goal3LVID == selectedgoalID);
 
                             if (filteredKPIMain.length === 0) {
                                 const noKPIMainOption = document.createElement('option');
@@ -309,7 +309,7 @@
                                 KPIMainSelect.disabled = false;
                                 filteredKPIMain.forEach(KPIMain => {
                                     const option = document.createElement('option');
-                                    option.value = KPIMain.KPIMainID;
+                                    option.value = KPIMain.KPIMain3LVID;
                                     option.textContent = KPIMain.name;
                                     KPIMainSelect.appendChild(option);
                                 });

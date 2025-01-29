@@ -95,11 +95,11 @@
                                 planSelect.disabled = false;
                                 filteredPlans.forEach(plan => {
                                     const option = document.createElement('option');
-                                    option.value = plan.straID;
+                                    option.value = plan.stra3LVID;
                                     option.textContent = plan.name;
                                     planSelect.appendChild(option);
                                 });
-                                updateIssueDropdown(filteredPlans[0].straID);
+                                updateIssueDropdown(filteredPlans[0].stra3LVID);
                             }
                         }
 
@@ -118,7 +118,7 @@
                                 return;
                             }
 
-                            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
+                            const filteredIssues = issues.filter(issue => issue.stra3LVID == selectedPlanID);
 
                             if (filteredIssues.length === 0) {
                                 const noIssueOption = document.createElement('option');
@@ -131,11 +131,11 @@
                                 issueSelect.disabled = false;
                                 filteredIssues.forEach(issue => {
                                     const option = document.createElement('option');
-                                    option.value = issue.SFAID;
+                                    option.value = issue.SFA3LVID;
                                     option.textContent = issue.name;
                                     issueSelect.appendChild(option);
                                 });
-                                updateGoalDropdown(filteredIssues[0].SFAID);
+                                updateGoalDropdown(filteredIssues[0].SFA3LVID);
 
                             }
                         }
@@ -156,7 +156,7 @@
                             }
 
                             // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                            const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
+                            const filteredGoals = goals.filter(goal => goal.SFA3LVID == selectedSFAID);
 
                             if (filteredGoals.length === 0) {
                                 const noGoalOption = document.createElement('option');
@@ -164,16 +164,16 @@
                                 noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
                                 goalSelect.appendChild(noGoalOption);
                                 goalSelect.disabled = true;
-                                updateTacticsDropdown(null);
+                               
                             } else {
                                 goalSelect.disabled = false;
                                 filteredGoals.forEach(goal => {
                                     const option = document.createElement('option');
-                                    option.value = goal.goalID;
+                                    option.value = goal.goal3LVID;
                                     option.textContent = goal.name;
                                     goalSelect.appendChild(option);
                                 });
-                                updateTacticsDropdown(filteredGoals[0].goalID);
+                                
 
                             }
                         }

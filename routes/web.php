@@ -81,13 +81,16 @@ Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->n
 Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->name('departmentEdit');
 
 Route::get('/project', [ProjectController::class,'index']);
-Route::get('/projectcreate1', [ProjectController::class,'create1'])->name('project.create1');
-Route::get('/projectcreate2', [ProjectController::class,'create2']);
+Route::any('/projectcreate1', [ProjectController::class,'create1']);
+Route::post('/projectcreate2', [ProjectController::class,'create2']);
+Route::post('/projectSave1', [ProjectController::class,'save1']);
 Route::post('/projectSave', [ProjectController::class,'save']);
 Route::post('/projectSend', [ProjectController::class,'send']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');
-Route::get('projectedit/{id}',[ProjectController::class,'edit'])->name('project.edit');
-Route::post('projectupdate/{id}',[ProjectController::class,'update'])->name('project.update');
+Route::get('projectedit1/{id}',[ProjectController::class,'edit1'])->name('project.edit1');
+Route::get('projectedit2/{id}',[ProjectController::class,'edit'])->name('project.edit');
+Route::post('projectupdate1/{id}',[ProjectController::class,'update1'])->name('project.update1');
+Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
 

@@ -38,7 +38,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="straID" name="straID" class="form-control" required>
+                            <select id="stra3LVID" name="stra3LVID" class="form-control" required>
                             </select>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="textt" name="name" id="name" required='required'
+                            <input class="form-control" type="text" name="name" id="name" required='required'
                                 data-validate-length-range="8,20" />
                             @error('name')
                                 <div class="m-2">
@@ -73,7 +73,7 @@
                     const strategic = @json($strategic);
 
                     function updatePlanDropdown(selectedYearID) {
-                        const planSelect = document.getElementById('straID');
+                        const planSelect = document.getElementById('stra3LVID');
                         planSelect.innerHTML = '';
 
                         const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
@@ -88,7 +88,7 @@
                             planSelect.disabled = false;
                             filteredPlans.forEach(plan => {
                                 const option = document.createElement('option');
-                                option.value = plan.straID;
+                                option.value = plan.stra3LVID;
                                 option.textContent = plan.name;
                                 planSelect.appendChild(option);
                             });
@@ -96,7 +96,7 @@
                     }
                     window.onload = function() {
                         const yearSelect = document.getElementById('yearID');
-                        const planSelect = document.getElementById('straID');
+                        const planSelect = document.getElementById('stra3LVID');
 
                         // เมื่อเปลี่ยนปีงบประมาณ
                         yearSelect.addEventListener('change', function() {
