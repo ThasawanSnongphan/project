@@ -12,7 +12,9 @@ use App\Models\StrategicIssues;
 use App\Models\StrategicIssues2Level;
 use App\Models\Goals;
 use App\Models\Tactics;
+use App\Models\Tactic2Level;
 use App\Models\KPIMains;
+use App\Models\KPIMain2Level;
 use App\Models\Strategic2Level;
 use App\Models\Strategic1Level;
 use App\Models\KPIProjects;
@@ -21,6 +23,7 @@ use App\Models\ProjectType;
 use App\Models\ProjectCharec;
 use App\Models\ProjectIntegrat;
 use App\Models\Targets;
+use App\Models\Target1Level;
 use App\Models\BadgetType;
 use App\Models\UniPlan;
 use App\Models\Funds;
@@ -73,20 +76,27 @@ class ProjectController extends Controller
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() : Strategic2Level::all();
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() : Strategic1Level::all();
        
+        
         $selectStra3LV = $request->input('straID');
-        $SFA3LVs = StrategicIssues::all();
-        
-
         $selectSFA3Level = $request->input('SFAID');
-        $goal3Level = $selectSFA3Level ? Goals::where('SFAID', $selectSFA3Level)->get() : Goals::all();
-        
         $selectGoal3Level = $request->input('goalID');
-        $tactics3LV = $selectGoal3Level ? Tactics::where('goalID',$selectGoal3Level)->get() : Tactics::all();
         $selectTactics3LV = $request->input('tacID');
+        $selectKPIMain = $request->input('KPIMainID');
         // dd($request->all());
-        // dd($selectSFA3Level);
+        // dd($selectStra3LV,$selectSFA3Level,$selectGoal3Level,$selectTactics3LV,$selectKPIMain);
+        dd($selectStra3LV);
+        $SFA3LVs = StrategicIssues::all();
+        $goal3Level = Goals::all();
+        $tactics3LV = Tactics::all(); 
+        $KPIMain3LV = KPIMains::all();
 
-        return view('Project.create1',compact('year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV'));
+        $SFA2LV = StrategicIssues2Level::all(); 
+        $tactics2LV = Tactic2Level::all();
+        $KPIMain2LV = KPIMain2Level::all();
+
+        $target1LV = Target1Level::all();
+
+        return view('Project.create1',compact('year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain'));
     }
     function send(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
