@@ -101,6 +101,7 @@ class WordController extends Controller
             ]
         ]);
 
+
         // ตั้งค่าหน้ากระดาษ
         $sectionStyle = [
             'orientation' => $pageSettings['orientation'] === 'landscape'
@@ -226,6 +227,7 @@ class WordController extends Controller
             '5. การบูรณาการโครงการ',
             $boldTextStyle
         );
+
 
         foreach ($project_integrats as $project_integrat) {
             if ($projects->proInID == $project_integrat->proInID) {
@@ -438,6 +440,7 @@ class WordController extends Controller
                 }
             }
         }
+
 
         // ตรวจสอบผลลัพธ์
         if ($minStartDate) {
