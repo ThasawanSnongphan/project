@@ -137,7 +137,7 @@ class PDFController extends Controller
             if ($projects->yearID == $year->yearID) {
                 $htmlContent .= '
                     <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->year . '
-                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
+                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือd
                     </p>
                 ';
                 $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $year->year);
