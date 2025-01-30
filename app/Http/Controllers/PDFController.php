@@ -34,6 +34,7 @@ use App\Models\UsersMapProject;
 
 Carbon::setLocale('th');
 
+
 class PDFController extends Controller
 {
     public function generatePDF()
@@ -90,6 +91,7 @@ class PDFController extends Controller
         // ตั้งชื่อไฟล์ PDF
         // $fileName = $username . '_report_' . '.pdf';
 
+
         $stylesheet = "
         <style>
             table {
@@ -137,7 +139,7 @@ class PDFController extends Controller
             if ($projects->yearID == $year->yearID) {
                 $htmlContent .= '
                     <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->year . '
-                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือd
+                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
                     </p>
                 ';
                 $mpdf->SetTitle('แบบเสนอโครงการประจำปีงบประมาณ ' . $year->year);
@@ -272,6 +274,7 @@ class PDFController extends Controller
                 }
             }
         }
+
 
 
         $htmlContent .= '
@@ -496,6 +499,7 @@ class PDFController extends Controller
             ';
         }
 
+
         $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
         $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
 
@@ -606,6 +610,7 @@ class PDFController extends Controller
         $sumQu2 = 0;
         $sumQu3 = 0;
         $sumQu4 = 0;
+
 
         foreach ($cost_quarters as $cost_quarter) {
             if ($projects->proID == $cost_quarter->proID) {
