@@ -8,13 +8,17 @@ use App\Models\UsersMapProject;
 use App\Models\Status;
 use App\Models\Strategic3Level;
 use App\Models\StrategicMap;
+use App\Models\Strategic2LevelMapProject;
+use App\Models\Strategic1LevelMapProject;
 use App\Models\StrategicIssues;
 use App\Models\StrategicIssues2Level;
+
 use App\Models\Goals;
 use App\Models\Tactics;
 use App\Models\Tactic2Level;
 use App\Models\KPIMains;
 use App\Models\KPIMainMapProjects;
+use App\Models\KPIMain2LevelMapProject;
 use App\Models\KPIMain2Level;
 use App\Models\Strategic2Level;
 use App\Models\Strategic1Level;
@@ -69,6 +73,15 @@ class ProjectController extends Controller
         // dd($request->all());
         // dd($selectStra3LV,$selectSFA3Level,$selectGoal3Level,$selectTactics3LV,$selectKPIMain);
         // dd($selectStra3LV);
+        $selectStra2LV = $request->input('stra2LVID');
+        $selectSFA2Level = $request->input('SFA2LVID');
+        $selectTactics2LV = $request->input('tac2LVID');
+        $selectKPIMain2LV = $request->input('KPIMain2LVID');
+
+        $selectStra1LV = $request->input('stra1LVID');
+        $selectTarget1LV = $request->input('tar1LVID');
+        $selectKPIMain1LV = $request->input('KPIMain1LVID');
+
         $SFA3LVs = StrategicIssues::all();
         $goal3Level = Goals::all();
         $tactics3LV = Tactics::all(); 
@@ -76,14 +89,20 @@ class ProjectController extends Controller
 
         $SFA2LV = StrategicIssues2Level::all(); 
         $tactics2LV = Tactic2Level::all();
+        // dd($tactics2LV);
         $KPIMain2LV = KPIMain2Level::all();
 
         $target1LV = Target1Level::all();
 
-        return view('Project.create1',compact('name','year','selectYear','strategic3Level','selectStra3LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain'));
+        
+
+
+
+        return view('Project.create1',compact('name','year','selectYear','strategic3Level','selectStra3LV','selectStra2LV','selectSFA2Level','selectTactics2LV','selectKPIMain2LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain','selectKPIMain1LV','selectTarget1LV','selectStra1LV'));
     }
 
-    function create2(Request $request){
+
+    function send1(Request $request){
         $year = Year::where('yearID',$request->input('yearID'))->first();
         $project = new Projects();
         $project->yearID = $year->yearID;
@@ -92,7 +111,7 @@ class ProjectController extends Controller
         $project->save(); 
 
         $project = $project->fresh();
-
+        
         $stra3LV = $request->input('stra3LVID');
         $SFA3LV = $request->input('SFA3LVID');
         $goal3LV = $request->input('goal3LVID');
@@ -112,19 +131,78 @@ class ProjectController extends Controller
 
         $KPIMain3LV = $request->input('KPIMain3LVID');
         // dd($KPIMain3LV);
-        if(is_array($KPIMain3LV)){
+        if(is_array($KPIMain3LV) && is_array($stra3LV)){
             foreach ($KPIMain3LV as $index => $KPIMain) {
-                if(!empty($KPIMain)){
+                if(!empty($KPIMain) && isset($stra3LV[$index])){
                 $map = new KPIMainMapProjects();
                 $map->KPIMain3LVID = $KPIMain ?? null;
+                $map->stra3LVID = $stra3LV[$index];
                 $map->proID = $project->proID;
                 $map->save(); 
                 }
             }
         }
 
+        $stra2LV = $request->input('stra2LVID');
+        $SFA2LV = $request->input('SFA2LVID');
+        $tactics2LV = $request->input('tac2LVID');
+        // dd($tactics2LV);
+        if(is_array($stra2LV) && is_array($SFA2LV) && is_array($tactics2LV)){
+            foreach($stra2LV as $index => $stra){
+                $straMap = new Strategic2LevelMapProject();
+                $straMap->stra2LVID = $stra;
+                $straMap->SFA2LVID = $SFA2LV[$index] ?? null;
+                $straMap->tac2LVID = $tactics2LV[$index] ?? null;
+                $straMap->proID = $project->proID;
+                $straMap->save();
+            }
+        }
+
+        $KPIMain2LV = $request->input('KPIMain2LVID');
+        // dd($KPIMain2LV);
+        
+        if(is_array($KPIMain2LV)){
+            foreach($KPIMain2LV as $index => $KPI){
+                if(!empty($KPI) ){
+                $map = new KPIMain2LevelMapProject();
+                $map->stra2LVID = $stra2LV[$index];
+                $map->KPIMain2LVID = $KPI;
+                $map->proID = $project->proID;
+                $map->save();
+            }
+            }
+        }
+    
+
+        $stra1LV = $request->input('stra1LVID');
+        $tar1LV = $request->input('tar1LVID');
+        if(!empty($stra1LV) && !empty($tar1LV)){
+            // dd($stra1LV,);
+            if(is_array($stra1LV) && is_array($tar1LV)){
+                foreach($stra1LV as $index => $stra){
+                    $straMap = new Strategic1LevelMapProject();
+                    $straMap->stra1LVID = $stra;
+                    $straMap->tar1LVID = $tar1LV[$index];
+                    $straMap->proID = $project->proID;
+                    $straMap->save();
+                }
+            }
+        } 
+
+
+        $id = $project->proID;
+        return redirect('/projectcreate2/'.$id);
+    }
+
+    
+    function create2(Request $request,$id){
+
+        $project=DB::table('projects')->where('proID',$id)->first();
+        //  dd($project,$id);
+        $year = Year::all();
         $user = Users::all();
         $years = Year::all(); // ดึงข้อมูลปี
+
         $strateegicMap = StrategicMap::all();
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFAs = StrategicIssues::all();
@@ -132,6 +210,18 @@ class ProjectController extends Controller
         $tactics = Tactics::all();
         $KPIMains=KPIMains::all();
         $KPIMainMapProject = KPIMainMapProjects::all();
+
+        $strategic2LV = StrategicIssues2Level::all();
+        $strategic2LVMap = Strategic2LevelMapProject::all();
+        $SFA2Lv = StrategicIssues2Level::all();
+        $tactics2LV = Tactic2Level::all();
+        $KPIMain2LV =KPIMain2Level::all();
+        $KPIMain2LVMap = KPIMain2LevelMapProject::all();
+
+        $strategic1LV = Strategic1Level::all();
+        $strategic1LVMap = Strategic1LevelMapProject::all();
+        $target1LV = Target1Level::all();
+
         $projectType=ProjectType::all();
         $projectCharec=ProjectCharec::all();
         $projectIntegrat=ProjectIntegrat::all();
@@ -142,158 +232,176 @@ class ProjectController extends Controller
         $expanses = ExpenseBadgets::all();
         $costTypes=CostTypes::all();
         $CountKPIProjects = CountKPIProjects::all();
-        return view('Project.create2',compact('project','CountKPIProjects','year','years','user','strateegicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+        $proID=Projects::all();
+        return view('Project.create2',compact('strategic2LV','target1LV','strategic2LVMap','KPIMain2LV','KPIMainMapProject','SFA2Lv','tactics2LV','KPIMain2LVMap','strategic1LV','strategic1LVMap','project','CountKPIProjects','year','years','user','strateegicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
     }
-
     
-    function send(Request $request){
-        $year = Year::where('yearID',$request->input('yearID'))->first();
-        $strategic = Strategic3Level::where('stra3LVID',$request->input('straID'))->first();
-        $SFA = StrategicIssues::where('SFA3LVID',$request->input('SFAID'))->first();
-        $goal = Goals::where('goal3LVID',$request->input('goalID'))->first();
-        $tactics = Tactics::where('tac3LVID',$request->input('tacID'))->first();
-        $KPIMain = KPIMains::where('KPIMain3LVID',$request->input('KPIMainID'))->first();
-        $proType = ProjectType::where('proTypeID',$request->input('proTypeID'))->first();
-        $proCha = ProjectCharec::where('proChaID',$request->input('proChaID'))->first();
-        $proIn = ProjectIntegrat::where('proInID',$request->input('proInID'))->first();
-        $target = Targets::where('tarID',$request->input('tarID'))->first();
-        $badget = BadgetType::where('badID',$request->input('badID'))->first();
-        $UniPlan = UniPlan::where('planID',$request->input('planID'))->first();
-        $expID = ExpenseBadgets::where('expID',$request->input('expID'))->first();
-        $costID = CostTypes::where('costID',$request->input('costID'))->first();
-        $status = Status::all();
-        $request->validate(
-            [
-                'name'=>'required',
-                'principle'=>'required',
-                'obj'=>'required',
-                'stepName'=>'required',
-                'stepStart'=>'required',
-                'stepEnd'=>'required',
-                // 'costQu1'=>'required',
-                // 'costQu2'=>'required',
-                // 'costQu3'=>'required',
-                // 'costQu4'=>'required',
-                'benefit'=>'required',
-                'file'=>'required',
-            ]
-        );
-        $project = new Projects();
-        $project->yearID = $year->yearID;
-        $project->name = $request->input('name');
-        $project->format = $request->input('format');
-        $project->princiDetail = $request->input('principle');
-        $project->proTypeID = $proType->proTypeID;
-        $project->proChaID = $proCha->proChaID;
-        $project->proInID = $proIn->proInID;
-        $project->proInDetail = $request->input('proInDetail');
-        $project->tarID = $target->tarID;
-        $project->badID = $badget->badID;
-        $project->badgetTotal = $request->input('badgetTotal');
+    function send2(Request $request,$id){
+       
+        // $year = Year::where('yearID',$request->input('yearID'))->first();
+        // $strategic = Strategic3Level::where('stra3LVID',$request->input('straID'))->first();
+        // $SFA = StrategicIssues::where('SFA3LVID',$request->input('SFAID'))->first();
+        // $goal = Goals::where('goal3LVID',$request->input('goalID'))->first();
+        // $tactics = Tactics::where('tac3LVID',$request->input('tacID'))->first();
+        // $KPIMain = KPIMains::where('KPIMain3LVID',$request->input('KPIMainID'))->first();
+        // $proType = ProjectType::where('proTypeID',$request->input('proTypeID'))->first();
+        // $proCha = ProjectCharec::where('proChaID',$request->input('proChaID'))->first();
+        // $proIn = ProjectIntegrat::where('proInID',$request->input('proInID'))->first();
+        // $target = Targets::where('tarID',$request->input('tarID'))->first();
+        // $badget = BadgetType::where('badID',$request->input('badID'))->first();
+        // $UniPlan = UniPlan::where('planID',$request->input('planID'))->first();
+        // $expID = ExpenseBadgets::where('expID',$request->input('expID'))->first();
+        // $costID = CostTypes::where('costID',$request->input('costID'))->first();
+        // $status = Status::all();
+        // $request->validate(
+        //     [
+                
+        //         'principle'=>'required',
+        //         'obj'=>'required',
+        //         'stepName'=>'required',
+        //         'stepStart'=>'required',
+        //         'stepEnd'=>'required',
+        //         // 'costQu1'=>'required',
+        //         // 'costQu2'=>'required',
+        //         // 'costQu3'=>'required',
+        //         // 'costQu4'=>'required',
+        //         'benefit'=>'required',
+        //         'file'=>'required',
+        //     ]
+        // );
+        // // $project = new Projects();
+        // // $project->yearID = $year->yearID;
+        // // $project->name = $request->input('name');
+
+
+        // $project->format = $request->input('format');
+        // $project->princiDetail = $request->input('principle');
+        // $project->proTypeID = $proType->proTypeID;
+        // $project->proChaID = $proCha->proChaID;
+        // $project->proInID = $proIn->proInID;
+        // $project->proInDetail = $request->input('proInDetail');
+        // $project->tarID = $target->tarID;
+        // $project->badID = $badget->badID;
+        // $project->badgetTotal = $request->input('badgetTotal');
     
-        $project->planID = $UniPlan->planID;
-        $project->statusID =  1;
-        $project->save();
+        // $project->planID = $UniPlan->planID;
+        // $project->statusID =  1;
+        // $project->save();
 
-        $project = $project->fresh();
+        // $project = $project->fresh();
 
-        $users = $request->input('userID');
-        if(!empty($users) && is_array($users)){
-            foreach($users as $index => $user){
-                $userMap = new UsersMapProject();
-                $userMap->userID = $user;
-                $userMap->proID = $project->proID;
-                $userMap->save();
-            }
-        }
+        // $users = $request->input('userID');
+        // if(!empty($users) && is_array($users)){
+        //     foreach($users as $index => $user){
+        //         $userMap = new UsersMapProject();
+        //         $userMap->userID = $user;
+        //         $userMap->proID = $project->proID;
+        //         $userMap->save();
+        //     }
+        // }
 
-        $objDetail = $request->input('obj');
-        if(is_array($objDetail)) {
-            foreach($objDetail as $index => $obj){
-                $objs = new Objectives();
-                $objs->detail = $obj;
-                $objs->proID = $project->proID;
-                $objs->save();
-            }
-        }
+        // $objDetail = $request->input('obj');
+        // if(is_array($objDetail)) {
+        //     foreach($objDetail as $index => $obj){
+        //         $objs = new Objectives();
+        //         $objs->detail = $obj;
+        //         $objs->proID = $project->proID;
+        //         $objs->save();
+        //     }
+        // }
 
-        $straID = $request->input('straID');
-        $SFAID = $request->input('SFAID');
-        $goalID = $request->input('goalID');
-        $tacID = $request->input('tacID');
-        $KPIMainID = $request->input('KPIMainID');
-        if(is_array($straID) && is_array($SFAID) && is_array($goalID) && is_array($tacID) && is_array($KPIMainID)){
-            foreach($straID as $index => $stra){
-                $straMap = new StrategicMap();
-                $straMap->proID = $project->proID;
-                $straMap->straID = $stra;
-                $straMap->SFAID = $SFAID[$index] ?? null;
-                $straMap->goalID = $goalID[$index] ?? null;
-                $straMap->tacID = $tacID[$index] ?? null;
-                // if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
-                    $straMap->KPIMainID = $KPIMainID[$index] ?? null;
-                // }
-                $straMap->save();
-            }
-        }
+        // $straID = $request->input('straID');
+        // $SFAID = $request->input('SFAID');
+        // $goalID = $request->input('goalID');
+        // $tacID = $request->input('tacID');
+        // $KPIMainID = $request->input('KPIMainID');
+        // if(is_array($straID) && is_array($SFAID) && is_array($goalID) && is_array($tacID) && is_array($KPIMainID)){
+        //     foreach($straID as $index => $stra){
+        //         $straMap = new StrategicMap();
+        //         $straMap->proID = $project->proID;
+        //         $straMap->straID = $stra;
+        //         $straMap->SFAID = $SFAID[$index] ?? null;
+        //         $straMap->goalID = $goalID[$index] ?? null;
+        //         $straMap->tacID = $tacID[$index] ?? null;
+        //         // if ($request->has('KPIMainID') && !empty($request->input('KPIMainID'))) {
+        //             $straMap->KPIMainID = $KPIMainID[$index] ?? null;
+        //         // }
+        //         $straMap->save();
+        //     }
+        // }
 
-        $KPIName = $request->input('KPIProject') ;
-        $KPICount =  $request->input('countKPIProject') ;
-        $KPITarget =  $request->input('targetProject') ;
-        if(is_array($KPIName) && is_array($KPICount) && is_array($KPITarget)){
-            foreach ($KPIName as $index => $KPI){
-                $KPIProject = new KPIProjects();
-                $KPIProject->name = $KPI;
-                $KPIProject->countKPIProID =  $KPICount[$index] ?? null;
-                $KPIProject->target = $KPITarget[$index] ?? null;
-                $KPIProject->proID = $project->proID;
-                $KPIProject->save();
-            }
-        }
+        // $KPIName = $request->input('KPIProject') ;
+        // $KPICount =  $request->input('countKPIProject') ;
+        // $KPITarget =  $request->input('targetProject') ;
+        // if(is_array($KPIName) && is_array($KPICount) && is_array($KPITarget)){
+        //     foreach ($KPIName as $index => $KPI){
+        //         $KPIProject = new KPIProjects();
+        //         $KPIProject->name = $KPI;
+        //         $KPIProject->countKPIProID =  $KPICount[$index] ?? null;
+        //         $KPIProject->target = $KPITarget[$index] ?? null;
+        //         $KPIProject->proID = $project->proID;
+        //         $KPIProject->save();
+        //     }
+        // }
 
-        $stepName = $request->input('stepName');
-        $stepStart = $request->input('stepStart');
-        $stepEnd = $request->input('stepEnd');
-        if(is_array($stepName) && is_array($stepStart) && is_array($stepEnd)){
-            foreach($stepName as $index => $name){
-                $step = new Steps();
-                $step->name = $name;
-                $step->start = $stepStart[$index] ?? null;
-                $step->end = $stepEnd[$index] ?? null;
-                $step->proID = $project->proID;
-                $step->save();
-            }
-        }
+        // $stepName = $request->input('stepName');
+        // $stepStart = $request->input('stepStart');
+        // $stepEnd = $request->input('stepEnd');
+        // if(is_array($stepName) && is_array($stepStart) && is_array($stepEnd)){
+        //     foreach($stepName as $index => $name){
+        //         $step = new Steps();
+        //         $step->name = $name;
+        //         $step->start = $stepStart[$index] ?? null;
+        //         $step->end = $stepEnd[$index] ?? null;
+        //         $step->proID = $project->proID;
+        //         $step->save();
+        //     }
+        // }
 
-        $costQu1 = $request->input('costQu1');
-        $costQu2= $request->input('costQu2');
-        $costQu3= $request->input('costQu3');
-        $costQu4= $request->input('costQu4');
-        $expID = $request->input('expID');
-        $costID = $request->input('costID');
-        if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
-            foreach($costQu1 as $index => $cost1){
-                $costQu = new CostQuarters();
-                $costQu->costQu1 = $cost1;
-                $costQu->costQu2 = $costQu2[$index];
-                $costQu->costQu3 = $costQu3[$index];
-                $costQu->costQu4 = $costQu4[$index];
-                $costQu->proID = $project->proID;
-                $costQu->expID = $expID[$index];
-                $costQu->costID = $costID[$index];
-                $costQu->save();
-            }
-        }
+        // $costQu1 = $request->input('costQu1');
+        // $costQu2= $request->input('costQu2');
+        // $costQu3= $request->input('costQu3');
+        // $costQu4= $request->input('costQu4');
+        // $expID = $request->input('expID');
+        // $costID = $request->input('costID');
+        // if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
+        //     foreach($costQu1 as $index => $cost1){
+        //         $costQu = new CostQuarters();
+        //         $costQu->costQu1 = $cost1;
+        //         $costQu->costQu2 = $costQu2[$index];
+        //         $costQu->costQu3 = $costQu3[$index];
+        //         $costQu->costQu4 = $costQu4[$index];
+        //         $costQu->proID = $project->proID;
+        //         $costQu->expID = $expID[$index];
+        //         $costQu->costID = $costID[$index];
+        //         $costQu->save();
+        //     }
+        // }
 
-        $benefits = $request->input('benefit');
-        if(is_array($benefits)){
-            foreach($benefits as $index => $bnf){
-                $benefit = new Benefits();
-                $benefit->detail = $bnf;
-                $benefit->proID = $project->proID;
-                $benefit->save();
-            }
-        }
+        // $benefits = $request->input('benefit');
+        // if(is_array($benefits)){
+        //     foreach($benefits as $index => $bnf){
+        //         $benefit = new Benefits();
+        //         $benefit->detail = $bnf;
+        //         $benefit->proID = $project->proID;
+        //         $benefit->save();
+        //     }
+        // }
+
+        $project=[
+            'format'=>$request->format,
+            'princiDetail'=>$request->principle,
+            'proTypeID'=>$request->proTypeID,
+            'proChaID'=>$request->proChaID,
+            'proInID'=>$request->proInID,
+            'proInDetail'=>$request->proInDetail,
+            'tarID'=>$request->tarID,
+            'badID'=>$request->badID,
+            'badgetTotal'=>$request->badgetTotal,
+            'planID'=>$request->planID,
+            'updated_at' => now()
+        ];
+        DB::table('projects')->where('proID',$id)->update($project);
         return redirect('/project');
     }
 
@@ -493,6 +601,7 @@ class ProjectController extends Controller
         $user = Users::all();
         $userMap = UsersMapProject::with('users')->get();
         $project=Projects::with('strategicMap')->where('proID',$id)->first();
+        // dd($project);
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
         $strategicMap = StrategicMap::all();

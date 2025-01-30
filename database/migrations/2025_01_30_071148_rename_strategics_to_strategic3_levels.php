@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('strategics', 'strategic3_levels');
+        Schema::table('strategic3_levels', function (Blueprint $table) {
+            Schema::rename('strategics', 'strategic3_levels');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::rename('strategic3_levels', 'strategics');
+        Schema::table('strategic3_levels', function (Blueprint $table) {
+            Schema::rename('strategic3_levels', 'strategics');
+        });
     }
 };
