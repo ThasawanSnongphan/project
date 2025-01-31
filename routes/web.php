@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PDFKPIController;
+use App\Http\Controllers\PDFPlanController;
+use App\Http\Controllers\PDFQ4Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
@@ -40,11 +43,17 @@ use App\Http\Controllers\Executive;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
 
+//PDF
+Route::get('/pdfKPI', [PDFKPIController::class, 'pdf_gen']);
+Route::get('/pdfPlan', [PDFPlanController::class, 'pdf_gen']);
+Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
+
+
 Route::get('/gen-word', [WordController::class, 'createWordDoc']); //แบบไม่ db
 Route::get('/gen-word-db/{$id}', [WordController::class, 'createWordDocFromDB']); //db
 
 Route::get('/generate-pdf', [PDFController::class, 'generatePDF']); //แบบไม่ db
-Route::get('/generate-pdf-db', [PDFController::class, 'db_gen']); //db
+
 
 Route::get('/', [NewsController::class,'index']);
 Auth::routes();
