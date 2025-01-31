@@ -603,7 +603,7 @@ class ProjectController extends Controller
         $project=Projects::with('strategicMap')->where('proID',$id)->first();
         // dd($project);
         $year = Year::all(); // ดึงข้อมูลปี
-        $strategic = Strategics::all(); // ดึงข้อมูลแผนทั้งหมด
+        $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
         $strategicMap = StrategicMap::all();
         $straMap = $strategicMap->where('proID',$project->proID)->first();
         $SFA = StrategicIssues::all();
@@ -994,7 +994,7 @@ class ProjectController extends Controller
         $userMap = UsersMapProject::with('users')->get();
         $project=DB::table('projects')->where('proID',$id)->first();
         $strategicMap=StrategicMap::all();
-        $strategic = Strategics::all();
+        $strategic = Strategic3Level::all();
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
         $tactics = Tactics::all();
