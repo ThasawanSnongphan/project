@@ -83,7 +83,7 @@ class PDFController extends Controller
 
 
 
-        $config = include(config_path('config_pdf.php'));       // ดึงการตั้งค่าฟอนต์จาก config
+        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);                            // สร้าง instance ของ Mpdf ด้วยการตั้งค่าจาก config
 
         // กำหนดระยะห่างระหว่างโลโก้และเนื้อหา
@@ -152,61 +152,13 @@ class PDFController extends Controller
         <b>1. ชื่อโครงการ : </b>' . $projects->name . '<br>
         ';
 
-
-        // foreach ($users_map as $user_map) {
-        //     if ($projects->proID == $user_map->proID) {
-        //         foreach ($users as $user) {
-        //             if ($user->userID == $user_map->userID) {
-        //                 $htmlContent .= '
-        //                     <b>2. สังกัด :  </b><br>
-        //                     <b>&nbsp;&nbsp;&nbsp;&nbsp;' . $user->department_name . ' </b><br>
-        //                     <b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ : </b>' . $user->username . ' <br>
-        //                 ';
-        //                 $name = $user->username;
-        //                 // dd($name);
-        //             }
-        //         }
-        //     }
-        // }
-
-        // $htmlContent .= '<b>2. สังกัด :</b><br>';
-
-        // // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
-        // $departments = [];
-        // $responsibleNames = [];
-
-        // // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
-        // foreach ($users_map as $user_map) {
-        //     if ($projects->proID == $user_map->proID) {
-        //         foreach ($users as $user) {
-        //             if ($user->userID == $user_map->userID) {
-        //                 // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
-        //                 if (!in_array($user->department_name, $departments)) {
-        //                     $departments[] = $user->department_name;
-        //                 }
-        //                 // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
-        //                 $responsibleNames[] = $user->username;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // // แสดงข้อมูลสังกัด
-        // foreach ($departments as $department) {
-        //     $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;' . $department . '</b><br>';
-        // }
-
-        // // แสดงข้อมูลผู้รับผิดชอบ
-        // $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ :</b>';
-        // foreach ($responsibleNames as $name) {
-        //     $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;' . $name . '<br>';
-        // }
-
         $htmlContent .= '<b>2. สังกัด :</b><br>';
 
         // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
         $departments = [];
         $responsibleNames = [];
+        $names = [];  // เพิ่มอาร์เรย์เพื่อเก็บชื่อ
+        
 
         // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
         foreach ($users_map as $user_map) {
@@ -219,11 +171,13 @@ class PDFController extends Controller
                         }
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
                         $responsibleNames[] = $user->username;
-                        $name = $user->username;
+                        $name[] = $user->username;
+                        // dd($name);
                     }
                 }
             }
         }
+        
 
         // แสดงข้อมูลสังกัด
         foreach ($departments as $department) {
@@ -387,7 +341,7 @@ class PDFController extends Controller
         $pro_tars = Projects::with('target')->get();
 
         foreach ($pro_tars as $pro_tar) {
-            $tarID = $pro_tar->tarID;
+            // $tarID = $pro_tar->tarID;
             $targetName = $pro_tar->target->name ?? 'N/A'; // ใช้ข้อมูลจากตาราง targets
         }
 
@@ -398,9 +352,9 @@ class PDFController extends Controller
 
         ';
 
-
+        $pro_steps = DB::table('steps')->where('proID', $id)->get();
         if (DB::table('steps')->where('proID', $id)->exists()) {
-            $pro_steps = DB::table('steps')->where('proID', $id)->get();
+            
 
             $minYear = PHP_INT_MAX; // ค่าเริ่มต้นของปีที่น้อยที่สุด
             $maxYear = PHP_INT_MIN; // ค่าเริ่มต้นของปีที่มากที่สุด
@@ -573,13 +527,6 @@ class PDFController extends Controller
             <b>13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท ) </b><br>
         ';
 
-        // foreach($plans as $plan){
-        //     if($project->planID == $plan->planID)
-        //     foreach($funds as $fund){
-
-        //     }
-        // }
-
         $htmlContent .= '
             <body>
                 <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;">
@@ -612,7 +559,7 @@ class PDFController extends Controller
         $sumQu3 = 0;
         $sumQu4 = 0;
 
-
+        $counter = 1;
         foreach ($cost_quarters as $cost_quarter) {
             if ($projects->proID == $cost_quarter->proID) {
 
@@ -625,29 +572,29 @@ class PDFController extends Controller
                 $sumQu3 += $cost_quarter->costQu3;
                 $sumQu4 += $cost_quarter->costQu4;
 
+                $subCounter = 1;
                 foreach ($expense_badgets as $expense_badget) {
                     if ($cost_quarter->expID == $expense_badget->expID) {
-
                         $htmlContent .= '
-                    <tr>
-                        <td style="text-align: left;">' . $expense_badget->name . '</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-
-                    
-                ';
+                            <tr>
+                                <td style="text-align: left;">'. $counter . '. ' . $expense_badget->name . '</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        ';
+                        
                     }
                 }
 
+                
                 foreach ($cost_types as $cost_type) {
                     if ($cost_quarter->costID == $cost_type->costID) {
                         $htmlContent .= '
                             <tr>
-                                <td style="text-align: left;">' .  $cost_type->name . '</td>
+                                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;'. $counter .'.'. $subCounter .' ' .  $cost_type->name . '</td>
                                 <td>' . number_format($totalCost, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
@@ -655,10 +602,50 @@ class PDFController extends Controller
                                 <td>' . number_format($cost_quarter->costQu4, 2) . '</td>
                             </tr>
                         ';
+                        $subCounter++;
+                        $counter++;
                     }
                 }
             }
         }
+
+        function numberToThai($number) {
+            $thaiNumbers = [
+                0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่', 5 => 'ห้า', 
+                6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า', 10 => 'สิบ', 20 => 'ยี่สิบ', 
+                30 => 'สามสิบ', 40 => 'สี่สิบ', 50 => 'ห้าสิบ', 60 => 'หกสิบ', 70 => 'เจ็ดสิบ', 
+                80 => 'แปดสิบ', 90 => 'เก้าสิบ', 100 => 'ร้อย', 1000 => 'พัน', 10000 => 'หมื่น', 
+                100000 => 'แสน', 1000000 => 'ล้าน'
+            ];
+        
+            if ($number == 0) {
+                return $thaiNumbers[0];
+            }
+        
+            $str = '';
+            $number = (int)$number;
+            $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
+        
+            foreach ($units as $unit) {
+                $num = (int)($number / $unit);
+                $number %= $unit;
+        
+                if ($num > 0) {
+                    if ($unit >= 100 && $num == 1) {
+                        $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
+                    } elseif ($unit >= 10 && $num == 2) {
+                        $str .= 'ยี่' . $thaiNumbers[$unit];
+                    } else {
+                        $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
+                    }
+                }
+            }
+        
+            return $str . 'บาทถ้วน';
+        }
+        
+
+        $sumTotalInWords = numberToThai($sumTotal);
 
         // รวมเงินงบประมาณทั้งหมด
         $htmlContent .= '
@@ -677,7 +664,7 @@ class PDFController extends Controller
 
 
         $htmlContent .= '
-            <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท<br>
+            <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท    ('. $sumTotalInWords.')<br>
             <b>15. ประโยชน์ที่คาดว่าจะได้รับ </b><br>
         
         ';
@@ -708,12 +695,13 @@ class PDFController extends Controller
         <div style="text-align: right;">
             <div style="width: 300px; text-align: center; float: right;">
                 ลงชื่อ ................................................. <br>
-                ( ' . $name . ' ) <br>
+                ( ' . $name[0] . ' ) <br>
                 ผู้รับผิดชอบโครงการ <br>
                 วันที่ ........../......................./..........
             </div>
         </div>
         ';
+
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
