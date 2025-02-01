@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Strategic3Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +41,7 @@ class PDFController extends Controller
     public function generatePDF()
     {
 
-        $config = include(config_path('config_pdf.php'));
+        $config = include(config_path('configPDF_V.php'));
         $mpdf = new Mpdf($config);
 
         // เพิ่มเนื้อหาที่ต้องการใน PDF
@@ -62,7 +63,7 @@ class PDFController extends Controller
         $users = Users::all();
         $strategic_maps = StrategicMap::all();
         $strategic_issues = StrategicIssues::all();
-        $strategics = Strategics::all();
+        $strategics = Strategic3Level::all();
         $goals = Goals::all();
         $tactics = Tactics::all();
         $plans = UniPlan::all();

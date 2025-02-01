@@ -1076,7 +1076,7 @@ class ProjectController extends Controller
         $userMap = UsersMapProject::with('users')->get();
         $project=DB::table('projects')->where('proID',$id)->first();
         $strategicMap=StrategicMap::all();
-        $strategic = Strategics::all();
+        $strategic = Strategic3Level::all();
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
         $tactics = Tactics::all();
