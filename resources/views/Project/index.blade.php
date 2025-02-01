@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             @if ($item->statusID == 16 || $item->statusID == 14)
-                                <a href="{{ route('project.edit', $item->proID) }}"><i
+                                <a href="{{ route('project.edit1', $item->proID) }}"><i
                                         class="fa fa-pencil btn btn-warning"></i></a>
                                 <a href="{{ route('project.delete', $item->proID) }}"
                                     onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i

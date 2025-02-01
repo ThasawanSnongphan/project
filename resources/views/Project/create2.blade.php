@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="/projectSave"novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action=""novalidate enctype="multipart/form-data">
                         @csrf
                         {{-- <input type="hidden" id="proID" name="proID" value="{{$project->proID}}"> --}}
                         <div class="row field item form-group align-items-center">
@@ -84,9 +84,13 @@
                             <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="format" name="format" class="form-control" required>
-                                    <option value="team">team</option>
-                                    <option value="department">department</option>
+                                <select id="format" name="format" class="form-control" required
+                                    onchange="this.form.submit()">
+                                    <option value="team"
+                                        {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
+                                    <option value="department"
+                                        {{ old('format', request('format')) == 'department' ? 'selected' : '' }}>department
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -290,76 +294,15 @@
                                 </div>
                             @endif
                         @endforeach
-                        {{-- <div class="row field item form-group align-items-center" id="KPIMainNone"
-                            style="display: flex;">
-                            <label for="title"
-                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผนฉบับที่ 13</label>
-                            <div class="row col-md-9 col-sm-9 border m-1">
-                                <div class="col-md-12 col-sm-12">
-                                    <div
-                                        class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
-                                        <label for="title"
-                                            class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
-                                    </div>
-                                    <div
-                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                                        <label class="col-form-label label-align ">หน่วยนับ</label>
-
-                                    </div>
-                                    <div
-                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
-                                    </div>
-                                </div>
-                                @foreach ($KPIMainMapProject as $item)
-                                    @if ($item->proID == $project->proID)
-                                        <div class="col-md-12 col-sm-12">
-                                            <div class="col-md-5 col-sm-5 m-1">
-                                                <input class="form-control" type="text" name="KPIMain[]"
-                                                    id="KPIMain_1"
-                                                    @foreach ($KPIMains as $KPIMain)
-                                                        @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
-                                                            value={{ $KPIMain->name }}
-                                                        @endif @endforeach
-                                                    readonly />
-                                            </div>
-                                            <div class=" col-md-3 col-sm-3 m-1">
-                                                <input class="form-control" type="text" name="countMain[]"
-                                                    id="countMain_1"
-                                                    @foreach ($KPIMains as $KPIMain)
-                                                    @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
-                                                        value={{ $KPIMain->count }}
-                                                    @endif @endforeach
-                                                    readonly>
-
-                                            </div>
-                                            <div class=" col-md-3 col-sm-3 m-1">
-                                                <input class="form-control" type="text" name="targetMain[]"
-                                                    id="targetMain_1"
-                                                    @foreach ($KPIMains as $KPIMain)
-                                                    @if ($KPIMain->KPIMain3LVID == $item->KPIMain3LVID)
-                                                        value={{ $KPIMain->target }}
-                                                    @endif @endforeach
-                                                    readonly>
-                                            </div>
-
-                                        </div>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div> --}}
-
-
-
-
-
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="type" name="proTypeID" class="form-control" required>
+                                <select id="type" name="proTypeID" class="form-control"
+                                    onchange="this.form.submit()" required>
                                     @foreach ($projectType as $item)
-                                        <option value="{{ $item->proTypeID }}">
+                                        <option value="{{ $item->proTypeID }}"
+                                            {{ isset($selectProjectType) && $selectProjectType == $item->proTypeID ? 'selected' : '' }}>
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>
@@ -367,9 +310,11 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control" required>
+                                <select id="charecter" name="proChaID" class="form-control"
+                                    onchange="this.form.submit()" required>
                                     @foreach ($projectCharec as $item)
-                                        <option value="{{ $item->proChaID }}">
+                                        <option value="{{ $item->proChaID }}"
+                                            {{ isset($selectProjectCharec) && $selectProjectCharec == $item->proChaID ? 'selected' : '' }}>
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>
@@ -380,22 +325,24 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control" required
-                                    onchange="toggleTextarea()">
+                                <select id="integrat" name="proInID" class="form-control"
+                                    onchange="this.form.submit(); toggleTextarea();" required>
                                     @foreach ($projectIntegrat as $item)
-                                        <option value="{{ $item->proInID }}">
+                                        <option value="{{ $item->proInID }}"
+                                            {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="row field item form-group align-items-center" id="otherTextContainer"
-                            style="display: none;">
-                            <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
-                            <div class="col-md-6 col-sm-6">
-                                <textarea id="otherText" name="otherText" class="form-control" placeholder="เรื่อง"></textarea>
+                        @if ($selectProjectIntegrat === '6')
+                            <div class="row field item form-group align-items-center" >
+                                <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง" ></textarea>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
@@ -412,13 +359,18 @@
                             </div>
                         </div>
 
+
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">วัตถุประสงค์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="obj[]" id="obj"
                                     required='required' data-validate-length-range="8,20" />
-
+                                @error('obj.*')
+                                    <div class="m-2">
+                                        <span class="text text-danger">{{ $message }}</span>
+                                    </div>
+                                @enderror
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
@@ -426,53 +378,6 @@
                         </div>
 
                         <div id="insertObj"></div>
-
-
-                        <div class="row field item form-group align-items-center" id="KPIMainDigitalNone"
-                            style="display: none;">
-                            <label for="title"
-                                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของแผนดิจิทัล</label>
-                            <div class="row col-md-9 col-sm-9 border m-1">
-                                <div class="col-md-12 col-sm-12">
-                                    <div
-                                        class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
-                                        <label for="title"
-                                            class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
-                                    </div>
-                                    <div
-                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                                        <label class="col-form-label label-align ">หน่วยนับ</label>
-
-                                    </div>
-                                    <div
-                                        class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                                        <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="col-md-4 col-sm-4 m-1">
-                                        <select id="KPIMain_2" name="KPIMainID[]" class="form-control" required>
-                                            <!-- KPIจะถูกโหลดที่นี่ -->
-                                        </select>
-                                    </div>
-                                    <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="countMain[]" id="countMain_2"
-                                            disabled>
-
-                                    </div>
-                                    <div class=" col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetMain[]" id="targetMain_2"
-                                            disabled>
-                                    </div>
-                                    <div class="col-md-1 col-sm-1 m-1">
-                                        <button type='button' class="btn btn-primary"
-                                            onclick="insertKPIMain2()">เพิ่ม</button>
-
-                                    </div>
-                                </div>
-                                <div id="insertKPIMain2"></div>
-                            </div>
-                        </div>
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
@@ -562,13 +467,27 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
                                         <input class="form-control" type="text" name="stepName[]" id="">
+                                        @error('stepName.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="date" name="stepStart[]" id="">
-
+                                        @error('stepStart.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="date" name="stepEnd[]" id="">
+                                        @error('stepEnd.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -678,18 +597,38 @@
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu1[]"
                                             id="">
+                                        @error('costQu1.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu2[]"
                                             id="">
+                                        @error('costQu2.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu3[]"
                                             id="">
+                                        @error('costQu3.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu4[]"
                                             id="">
+                                        @error('costQu4.*')
+                                            <div class="m-2">
+                                                <span class="text text-danger">{{ $message }}</span>
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -729,7 +668,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
                                     required='required' data-validate-length-range="8,20" />
-                                @error('benefit')
+                                @error('benefit.*')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
@@ -768,7 +707,7 @@
                                     <button type='submit' class="btn btn-primary"
                                         onclick="submitButton('save')">บันทึก</button>
                                     <button type='button' class="btn btn-primary"
-                                        onclick="submitButton('send2',{{$project->proID}})">ส่ง</button>
+                                        onclick="submitButton('send2',{{ $project->proID }})">ส่ง</button>
                                 </div>
                             </div>
                         </div>
@@ -1208,7 +1147,7 @@
 
 
 
-        
+
 
         function insertKPIProject() {
             const mainContainer = document.createElement('div');
@@ -1468,16 +1407,16 @@
             document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
         }
 
-        function toggleTextarea() {
-            var select = document.getElementById("integrat");
-            var otherTextContainer = document.getElementById("otherTextContainer");
+        // function toggleTextarea() {
+        //     var select = document.getElementById("integrat");
+        //     var otherTextContainer = document.getElementById("otherTextContainer");
 
-            if (select.value === '6') {
-                otherTextContainer.style.display = "flex";
-            } else {
-                otherTextContainer.style.display = "none";
-            }
-        }
+        //     if (select.value === '6') {
+        //         otherTextContainer.style.display = "flex";
+        //     } else {
+        //         otherTextContainer.style.display = "none";
+        //     }
+        // }
 
 
         function insertBenefit() {
@@ -1927,12 +1866,12 @@
             }
         }
 
-        function submitButton(action,proID) {
+        function submitButton(action, proID) {
             var form = document.getElementById('actionForm');
             if (action === 'save') {
-                form.action = "/projectSave";
+                form.action = "/projectSave2";
             } else if (action === 'send2') {
-                form.action = "/projectSend2/"+proID;
+                form.action = "/projectSend2/" + proID;
             }
             form.submit();
         }
