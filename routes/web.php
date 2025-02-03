@@ -93,7 +93,7 @@ Route::get('/project', [ProjectController::class,'index']);
 Route::any('/projectcreate1', [ProjectController::class,'create1']);
 Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
 Route::post('/projectSave1', [ProjectController::class,'save1']);
-Route::post('/projectSave2', [ProjectController::class,'save2']);
+Route::post('/projectSave2/{id}', [ProjectController::class,'save2']);
 Route::post('/projectSend1', [ProjectController::class,'send1']);
 Route::post('/projectSend2/{id}', [ProjectController::class,'send2']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');

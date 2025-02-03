@@ -26,7 +26,7 @@ class Projects extends Model
         return $this->belongsTo(Steps::class, 'stepID','stepID');
     }
 
-    public function strategicMap()
+    public function strategic3LVMap()
     {
         return $this->hasMany(StrategicMap::class,'proID'); // หรือ hasOne ตามความสัมพันธ์
     }

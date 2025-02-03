@@ -6,7 +6,7 @@
         <div class="col-md-10 col-sm-10">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>สร้างโครงการ</h2>
+                    <h2>เขียนโครงการ</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -24,8 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form method="POST" id="actionForm" action=""novalidate
-                        enctype="multipart/form-data">
+                    <form method="POST" id="actionForm" action=""novalidate enctype="multipart/form-data">
                         @csrf
 
                         <div class="row field item form-group align-items-center">
@@ -37,7 +36,9 @@
                                     <option value="">--เลือกปีงบประมาณ--</option>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
-                                            @if ($item->yearID == $project->yearID) selected @endif>
+                                            @if ($item->yearID == $project->yearID) selected
+                                            @else 
+                                                {{ isset($selectYear) && $selectYear == $item->yearID ? 'selected' : '' }} @endif>
                                             {{ $item->year }}</option>
                                     @endforeach
                                 </select>
@@ -69,8 +70,14 @@
                                     class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 d-flex">
-                                    <input type="checkbox" name="stra3LVID[]"
-                                        {{ in_array($item->stra3LVID, old('stra3LVID', $selectStra3LV ?? [])) ? 'checked' : '' }}
+                                    {{-- @foreach ($strategic3LVMap as $map)
+                                        <input type="text" value="{{$map->stra3LVID}}">
+                                    @endforeach --}}
+                                    <input type="checkbox" name="stra3LVID[]" {{-- {{ in_array($item->stra3LVID, old('stra3LVID', $selectStra3LV ?? [])) ? 'checked' : '' }} --}}
+                                        @foreach ($strategic3LVMap as $map3LV)
+                                            @if ($item->stra3LVID === $map3LV->stra3LVID)
+                                                checked
+                                            @endif @endforeach
                                         value="{{ $item->stra3LVID }}">
 
                                     <input type="hidden" value="{{ $index }}">
@@ -86,14 +93,18 @@
                                         class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-6 col-sm-6">
-                                        <input type="hidden" value="{{ $index }}">
+                                        {{-- <input type="text" value="{{ $selectSFA3Level }}"> --}}
                                         <select id="SFAID_{{ $index }}" name="SFA3LVID[]" class="form-control"
                                             onchange="submitForm(event)" required>
                                             <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
                                             @foreach ($SFA3LVs as $SFA)
                                                 @if ($SFA->stra3LVID == $item->stra3LVID)
                                                     <option value="{{ $SFA->SFA3LVID }}"
-                                                        {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }}>
+                                                        {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }}
+                                                        @foreach ($strategic3LVMap as $map3LV)
+                                                            @if ($SFA->SFA3LVID === $map3LV->SFA3LVID)
+                                                                selected 
+                                                            @endif @endforeach>
                                                         {{ $SFA->name }}</option>
                                                 @endif
                                             @endforeach
@@ -112,11 +123,15 @@
                                             required onchange="submitForm(event)">
                                             <option value="">--เลือกเป้าประสงค์--</option>
                                             @foreach ($goal3Level as $goal)
-                                                @if (!empty($selectSFA3Level[$index]) && $goal->SFA3LVID == $selectSFA3Level[$index])
-                                                    <option value="{{ $goal->goal3LVID }}"
-                                                        {{ isset($selectGoal3Level) && in_array($goal->goal3LVID, (array) $selectGoal3Level) ? 'selected' : '' }}>
-                                                        {{ $goal->name }}</option>
-                                                @endif
+                                                {{-- @if (!empty($selectSFA3Level[$index]) && $goal->SFA3LVID == $selectSFA3Level[$index]) --}}
+                                                <option value="{{ $goal->goal3LVID }}"
+                                                    {{ isset($selectGoal3Level) && in_array($goal->goal3LVID, (array) $selectGoal3Level) ? 'selected' : '' }}
+                                                    @foreach ($strategic3LVMap as $map3LV)
+                                                            @if ($goal->goal3LVID === $map3LV->goal3LVID)
+                                                                selected
+                                                            @endif @endforeach>
+                                                    {{ $goal->name }}</option>
+                                                {{-- @endif --}}
                                             @endforeach
                                         </select>
                                     </div>
@@ -128,15 +143,20 @@
                                         <select id="tacID_{{ $index }}" name="tac3LVID[]" class="form-control"
                                             required onchange="submitForm(event)">
                                             <option value="">--เลือกกลยุทธ์--</option>
-                                            @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index]))
-                                                @foreach ($tactics3LV as $tactics)
-                                                    @if ($tactics->goal3LVID == $selectGoal3Level[$index])
-                                                        <option value="{{ $tactics->tac3LVID }}"
-                                                            {{ isset($selectTactics3LV) && in_array($tactics->tac3LVID, (array) $selectTactics3LV) ? 'selected' : '' }}>
-                                                            {{ $tactics->name }}</option>
-                                                    @endif
-                                                @endforeach
-                                            @endif
+                                            {{-- @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index])) --}}
+                                            @foreach ($tactics3LV as $tactics)
+                                                {{-- @if ($tactics->goal3LVID == $selectGoal3Level[$index]) --}}
+                                                    <option value="{{ $tactics->tac3LVID }}"
+                                                        {{ isset($selectTactics3LV) && in_array($tactics->tac3LVID, (array) $selectTactics3LV) ? 'selected' : '' }}
+                                                        @foreach ($strategic3LVMap as $map3LV)
+                                                            @if ($tactics->tac3LVID === $map3LV->tac3LVID)
+                                                                selected
+                                                            @endif 
+                                                        @endforeach
+                                                        >{{ $tactics->name }}</option>
+                                                {{-- @endif --}}
+                                            @endforeach
+                                            {{-- @endif --}}
 
                                         </select>
                                     </div>
@@ -165,16 +185,23 @@
                                 <select id="KPIMain_{{ $index }}" name="KPIMain3LVID[]" class="form-control"
                                     onchange="submitForm(event)" required>
                                     <option value="">--เลือกตัวชี้วัด--</option>
-                                    @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index]))
+                                    {{-- @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index])) --}}
                                         @foreach ($KPIMain3LV as $KPI)
-                                            @if ($KPI->goal3LVID == $selectGoal3Level[$index])
+                                            {{-- @if ($KPI->goal3LVID == $selectGoal3Level[$index]) --}}
                                                 <option value="{{ $KPI->KPIMain3LVID }}"
-                                                    {{ isset($selectKPIMain) && in_array($KPI->KPIMain3LVID, (array) $selectKPIMain) ? 'selected' : '' }}>
-                                                    {{ $KPI->name }}
+                                                    {{ isset($selectKPIMain) && in_array($KPI->KPIMain3LVID, (array) $selectKPIMain) ? 'selected' : '' }}
+                                                    @foreach ($KPIMain3LVMap as $KPIMap)
+                                                      
+                                                           @if ($KPI->KPIMain3LVID == $KPIMap->KPIMain3LVID && $item->stra3LVID == $KPIMap->stra3LVID) 
+                                                               selected
+                                                           @endif
+                                                      
+                                                    @endforeach
+                                                    >{{ $KPI->name }}
                                                 </option>
-                                            @endif
+                                            {{-- @endif --}}
                                         @endforeach
-                                    @endif
+                                    {{-- @endif --}}
                                 </select>
                             </div>
                             <div class=" col-md-3 col-sm-3 m-1">
@@ -183,6 +210,14 @@
                                     @foreach ($KPIMain3LV as $KPI)
                                                     @if (!empty($selectKPIMain[$index]) && $selectKPIMain[$index] == $KPI->KPIMain3LVID)
                                                         value= {{ $KPI->count ?? 'null' }}
+                                                        @else
+                                                        @foreach ($KPIMain3LVMap as $KPIMap)
+                                                      
+                                                           @if ($KPI->KPIMain3LVID == $KPIMap->KPIMain3LVID && $item->stra3LVID == $KPIMap->stra3LVID) 
+                                                           value= {{ $KPI->count ?? 'null' }}
+                                                           @endif
+                                                      
+                                                    @endforeach
                                                     @endif @endforeach>
 
                             </div>
@@ -191,7 +226,15 @@
                                     id="targetMain_{{ $index }}" disabled
                                     @foreach ($KPIMain3LV as $KPI)
                                                     @if (!empty($selectKPIMain[$index]) && $selectKPIMain[$index] == $KPI->KPIMain3LVID)
-                                                       value= {{ $KPI->target }}  
+                                                       value= {{ $KPI->target }} 
+                                                       @else
+                                                       @foreach ($KPIMain3LVMap as $KPIMap)
+                                                     
+                                                          @if ($KPI->KPIMain3LVID == $KPIMap->KPIMain3LVID && $item->stra3LVID == $KPIMap->stra3LVID) 
+                                                          value= {{ $KPI->target ?? 'null' }}
+                                                          @endif
+                                                     
+                                                   @endforeach
                                                     @endif @endforeach>
                             </div>
                             <div class="col-md-1 col-sm-1 m-1">
@@ -219,6 +262,10 @@
                         <div class="col-md-6 col-sm-6 d-flex">
                             <input type="checkbox" name="stra2LVID[]"
                                 {{ in_array($item->stra2LVID, old('stra2LVID', $selectStra2LV ?? [])) ? 'checked' : '' }}
+                                @foreach ($strategic2LVMap as $map2LV)
+                                @if ($item->stra2LVID === $map2LV->stra2LVID)
+                                    checked
+                                @endif @endforeach
                                 value="{{ $item->stra2LVID }}">
 
                             <input class="ml-2 form-control" type="text" id="straID_{{ $index }}"
@@ -238,8 +285,12 @@
                                         @foreach ($SFA2LV as $SFA)
                                             @if ($SFA->stra2LVID == $item->stra2LVID)
                                                 <option value="{{ $SFA->SFA2LVID }}"
-                                                    {{ isset($selectSFA2Level) && in_array($SFA->SFA2LVID, (array) $selectSFA2Level) ? 'selected' : '' }}>
-                                                    {{ $SFA->name }}</option>
+                                                    {{ isset($selectSFA2Level) && in_array($SFA->SFA2LVID, (array) $selectSFA2Level) ? 'selected' : '' }}
+                                                    @foreach ($strategic2LVMap as $map2LV)
+                                                            @if ($SFA->SFA2LVID === $map2LV->SFA2LVID)
+                                                                selected 
+                                                            @endif @endforeach
+                                                    >{{ $SFA->name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
@@ -252,16 +303,21 @@
                                     <select id="tacID_{{ $index }}" name="tac2LVID[]" class="form-control"
                                         required onchange="submitForm(event)">
                                         <option value="">--เลือกกลยุทธ์--</option>
-                                        @if (!empty($selectSFA2Level[$index]))
+                                        {{-- @if (!empty($selectSFA2Level[$index])) --}}
                                             <option value="">---</option>
                                             @foreach ($tactics2LV as $tactics)
-                                                @if ($tactics->SFA2LVID == $selectSFA2Level[$index])
+                                                {{-- @if ($tactics->SFA2LVID == $selectSFA2Level[$index]) --}}
                                                     <option value="{{ $tactics->tac2LVID }}"
-                                                        {{ isset($selectTactics2LV) && in_array($tactics->tac2LVID, (array) $selectTactics2LV) ? 'selected' : '' }}>
-                                                        {{ $tactics->name }}</option>
-                                                @endif
+                                                        {{ isset($selectTactics2LV) && in_array($tactics->tac2LVID, (array) $selectTactics2LV) ? 'selected' : '' }}
+                                                        @foreach ($strategic2LVMap as $map2LV)
+                                                            @if ($tactics->tac2LVID === $map2LV->tac2LVID)
+                                                                selected
+                                                            @endif 
+                                                        @endforeach
+                                                        >{{ $tactics->name }}</option>
+                                                {{-- @endif --}}
                                             @endforeach
-                                        @endif
+                                        {{-- @endif --}}
 
 
                                     </select>
@@ -290,16 +346,23 @@
                                     <select id="KPIMain_{{ $index }}" name="KPIMain2LVID[]" class="form-control"
                                         onchange="submitForm(event)" required>
                                         <option value="">--เลือกตัวชี้วัด--</option>
-                                        @if (!empty($selectSFA2Level[$index]))
+                                        {{-- @if (!empty($selectSFA2Level[$index])) --}}
                                             @foreach ($KPIMain2LV as $KPI)
-                                                @if ($KPI->SFA2LVID == $selectSFA2Level[$index])
+                                                {{-- @if ($KPI->SFA2LVID == $selectSFA2Level[$index]) --}}
                                                     <option value="{{ $KPI->KPIMain2LVID }}"
-                                                        {{ isset($selectKPIMain2LV) && in_array($KPI->KPIMain2LVID, (array) $selectKPIMain2LV) ? 'selected' : '' }}>
-                                                        {{ $KPI->name }}
+                                                        {{ isset($selectKPIMain2LV) && in_array($KPI->KPIMain2LVID, (array) $selectKPIMain2LV) ? 'selected' : '' }}
+                                                        @foreach ($KPIMain2LVMap as $KPIMap)
+                                                      
+                                                        @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID && $item->stra2LVID == $KPIMap->stra2LVID) 
+                                                            selected
+                                                        @endif
+                                                   
+                                                 @endforeach
+                                                        >{{ $KPI->name }}
                                                     </option>
-                                                @endif
+                                                {{-- @endif --}}
                                             @endforeach
-                                        @endif
+                                        {{-- @endif --}}
                                     </select>
                                 </div>
                                 <div class=" col-md-3 col-sm-3 m-1">
@@ -308,6 +371,14 @@
                                         @foreach ($KPIMain2LV as $KPI)
                                                     @if (!empty($selectKPIMain2LV[$index]) && $selectKPIMain2LV[$index] == $KPI->KPIMain2LVID)
                                                         value= {{ $KPI->count ?? '-' }}
+                                                    @else
+                                                    @foreach ($KPIMain2LVMap as $KPIMap)
+                                                      
+                                                    @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID && $item->stra2LVID == $KPIMap->stra2LVID ) 
+                                                    value= {{ $KPI->count ?? '-' }}
+                                                    @endif
+                                               
+                                             @endforeach
                                                     @endif @endforeach>
 
                                 </div>
@@ -317,6 +388,13 @@
                                         @foreach ($KPIMain2LV as $KPI)
                                                     @if (!empty($selectKPIMain2LV[$index]) && $selectKPIMain2LV[$index] == $KPI->KPIMain2LVID)
                                                         value= {{ $KPI->target ?? '-' }}
+                                                        @else
+                                                    @foreach ($KPIMain2LVMap as $KPIMap)
+                                                      
+                                                    @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID && $item->stra2LVID == $KPIMap->stra2LVID ) 
+                                                    value= {{ $KPI->target ?? '-' }}
+                                                    @endif
+                                                    @endforeach
                                                     @endif @endforeach>
                                 </div>
                                 <div class="col-md-1 col-sm-1 m-1">
@@ -342,6 +420,11 @@
                         <div class="col-md-6 col-sm-6 d-flex">
                             <input type="checkbox" name="stra1LVID[]"
                                 {{ in_array($item->stra1LVID, old('stra1LVID', $selectStra1LV ?? [])) ? 'checked' : '' }}
+                                @foreach ($strategic1LVMap as $map1LV)
+                                @if ($item->stra1LVID === $map1LV->stra1LVID)
+                                    checked
+                                @endif 
+                                @endforeach
                                 value="{{ $item->stra1LVID }}">
 
                             <input class="ml-2 form-control" type="text" id="straID_{{ $index }}"
@@ -361,8 +444,12 @@
                                     @foreach ($target1LV as $target)
                                         @if ($target->stra1LVID == $item->stra1LVID)
                                             <option value="{{ $target->tar1LVID }}"
-                                                {{ isset($selectTarget1LV) && in_array($target->tar1LVID, (array) $selectTarget1LV) ? 'selected' : '' }}>
-                                                {{ $target->name }}</option>
+                                                {{ isset($selectTarget1LV) && in_array($target->tar1LVID, (array) $selectTarget1LV) ? 'selected' : '' }}
+                                                @foreach ($strategic1LVMap as $map1LV)
+                                                            @if ($target->tar1LVID === $map1LV->tar1LVID)
+                                                                selected 
+                                                            @endif @endforeach
+                                                >{{ $target->name }}</option>
                                         @endif
                                     @endforeach
                                 </select>

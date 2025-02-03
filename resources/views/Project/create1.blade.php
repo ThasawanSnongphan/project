@@ -31,12 +31,13 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="year" name="yearID" class="form-control" onchange="submitForm(event)" required>
+                                <input type="text" value="{{ $selectYear }}">
+                                <select id="year" name="yearID" class="form-control" onchange="submitForm()" required>
                                     <option value="">--เลือกปีงบประมาณ--</option>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
-                                            {{ isset($selectYear) && $selectYear == $item->yearID ? 'selected' : '' }}>
-                                            {{ $item->year }}</option>
+                                            {{ request('yearID') == $item->yearID ? 'selected' : '' }}>{{ $item->year }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -399,18 +400,9 @@
 
     <script>
         function submitForm(event) {
-          // บันทึกตำแหน่งของ scroll
-        var scrollPosition = window.scrollY;
-
-// ป้องกันไม่ให้ฟอร์มรีเฟรช
-event.preventDefault();
-
-// ส่งฟอร์มโดยการใช้ submit ฟอร์ม
-document.getElementById('actionForm').submit();
-
-// คืนค่าการเลื่อนหน้าให้กลับไปที่ตำแหน่งเดิม
-window.scrollTo(0, scrollPosition);
-            
+            event.preventDefault();
+            document.getElementById('actionForm').submit();
+            return false;
         }
 
         function submitButton(action) {

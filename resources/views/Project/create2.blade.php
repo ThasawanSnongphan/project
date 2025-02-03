@@ -705,7 +705,7 @@
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary"
-                                        onclick="submitButton('save')">บันทึก</button>
+                                        onclick="submitButton('save2',{{$project->proID}})">บันทึก</button>
                                     <button type='button' class="btn btn-primary"
                                         onclick="submitButton('send2',{{ $project->proID }})">ส่ง</button>
                                 </div>
@@ -1868,8 +1868,8 @@
 
         function submitButton(action, proID) {
             var form = document.getElementById('actionForm');
-            if (action === 'save') {
-                form.action = "/projectSave2";
+            if (action === 'save2') {
+                form.action = "/projectSave2/" + proID;
             } else if (action === 'send2') {
                 form.action = "/projectSend2/" + proID;
             }
