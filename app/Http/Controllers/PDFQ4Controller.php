@@ -89,9 +89,9 @@ class PDFQ4Controller extends Controller
 
         // logo 
         $htmlContent = '
-            <div style="text-align: left; margin-bottom: 20px; background-color: blue;">
+            <div style="text-align: left; margin-bottom: 20px;">
                 <img src="' . public_path('images/Garuda.png') . '" style="width: 60px; height: auto;">
-                <h1 style="margin: 0; flex-grow: 1; text-align: center; background-color: yellow;">บันทึกข้อความ</h1>            
+                <h1 style="margin: 0; flex-grow: 1; text-align: center;">บันทึกข้อความ</h1>            
             </div>
         ';
 
