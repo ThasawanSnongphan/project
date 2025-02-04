@@ -312,7 +312,6 @@ class PDFController extends Controller
             ';
 
             foreach ($KPI_pros as $KPI_pro) {
-                // เริ่มต้นค่าเริ่มต้นของหน่วยนับ
                 $unitName = '-';
 
                 // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่

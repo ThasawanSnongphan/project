@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CountKPIProjects;
+use App\Models\Projects;
 use Illuminate\Http\Request;
 
 use Mpdf\Mpdf;
@@ -12,6 +14,8 @@ class PDFAllResultsController extends Controller
 {
     public function pdf_gen()
     {
+        $projects = Projects::all();
+
         $config = include(config_path('configPDF_H.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
 
@@ -23,7 +27,7 @@ class PDFAllResultsController extends Controller
             table {
                 border-collapse: collapse;
                 width: 100%;
-                margin-bottom: 7px;555555555555555555555555555555555
+                margin-bottom: 7px;
 
             }
             table, th, td {
@@ -87,6 +91,21 @@ class PDFAllResultsController extends Controller
                 white-space: nowrap;
                 padding: 10px;
             }
+                
+            .rotate-header {
+                transform: rotate(270deg);
+                white-space: nowrap;
+                text-align: center;
+                vertical-align: middle;
+                height: 100px;
+            }
+
+            .rotate {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: nowrap;
+    text-align: center;
+}
 
             .underline::before { margin-right: 5px; }
             .underline::after { margin-left: 5px; }
@@ -106,6 +125,10 @@ class PDFAllResultsController extends Controller
             </div>
         ';
 
+        $projects = Projects::all();
+        $countKPI_pros = CountKPIProjects::all();
+
+        $index = 1; 
 
         $htmlContent .= '
             <table border="1" cellspacing="0" cellpadding="5" width="100%">
@@ -114,9 +137,11 @@ class PDFAllResultsController extends Controller
                         <th>ลำดับ</th>
                         <th>โครงการ/กิจกรรม</th>
                         <th>หน่วยนับ</th>
-                        <th class="vertical-header">เป้าหมาย</th>
+                        <th class="rotate">เป้าหมาย</th>
                         <th>ผล</th>
-                        <th>*</th>
+                        <th style="font-size: 14px">
+                            การบรรลุ <span style="font-family: DejaVu Sans, Arial, sans-serif;">(✔ / ✖)</span>
+                        </th>
                         <th>งบประมาณที่จัดสรร</th>
                         <th>ผลการใช้จ่ายเงิน</th>
                         <th>ผลการดำเนินงาน</th>
@@ -124,64 +149,35 @@ class PDFAllResultsController extends Controller
                         <th>ผู้รับผิดชอบ</th>
                     </tr>
                 </thead>
-                <tbody>
+            <tbody>';
+
+            foreach ($projects as $project) {
+                // ค้นหาหน่วยนับที่ตรงกับ proID
+                $unitName = "-"; // ค่าเริ่มต้น (ถ้าไม่มีข้อมูล)
+                foreach ($countKPI_pros as $countKPI_pro) {
+                    if ($project->proID == $countKPI_pro->countKPIProID) {
+                        $unitName = $countKPI_pro->name;
+                        break; // เจอแล้วออกจาก loop
+                    }
+                }
+            
+                // สร้างแถวข้อมูล
+                $htmlContent .= '
                     <tr>
-                        <td>1</td>
-                        <td>
-                            โครงการจัดการความรู้ (KM) ของสำนักคอมพิวเตอร์ฯ
-                            <br><b>ตัวชี้วัด</b>
-                            <br>1. จำนวนองค์ความรู้เผยแพร่สู่บุคลากร - 10 เรื่อง (ผล: 12 เรื่อง)
-                            <br>2. จำนวนองค์ความรู้ที่นำไปใช้ในการปฏิบัติงาน - 6 เรื่อง (ผล: 12 เรื่อง)
-                        </td>
+                        <td>' . $index . '</td>  
+                        <td>' . $project->name . '</td>
+                        <td>' . $unitName . '</td>
+                    </tr>';
+            
+                $index++; // เพิ่มลำดับ
+            }
 
-                        <td>เรื่อง</td>
-                        <td>10</td>
-                        <td>12</td>
-                        <td>✔</td>
-                        <td>50,000</td>
-                        <td>17,680.00</td>
-
-                        <td>
-                            <b>ปิดโครงการ</b>
-                            <ul>
-                                <li>มีการดำเนินกิจกรรมประกวดผลงานองค์ความรู้ และเผยแพร่องค์ความรู้...</li>
-                                <li>จัดทำสื่อ Clip VDO และสื่อโปสเตอร์...</li>
-                            </ul>
-                        </td>
-                        <td>-</td>
-                        <td>สำนักฯ</td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            โครงการพัฒนาบุคลากร
-                            <br><b>ตัวชี้วัด</b>
-                            <br>1. ร้อยละของบุคลากรที่ได้รับการพัฒนาความสมรรถนะ KMUTNB - 85% (ผล: 100%)
-                        </td>
-                        <td>ร้อยละ</td>
-                        <td>85</td>
-                        <td>100</td>
-                        <td>✔</td>
-                        <td>570,000</td>
-                        <td>828,645.54</td>
-                        <td>
-                            <b>ปิดโครงการ</b>
-                            <ul>
-                                <li>สำรวจความต้องการในการฝึกอบรมบุคลากร...</li>
-                                <li>จัดฝึกอบรมพัฒนาบุคลากร...</li>
-                            </ul>
-                        </td>
-                        <td>-</td>
-                        <td>สำนักฯ</td>
-                    </tr>
-
+        $htmlContent .= '
                 </tbody>
             </table>
-
         ';
 
-        
+
 
 
 
