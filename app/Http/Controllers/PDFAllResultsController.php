@@ -27,7 +27,7 @@ class PDFAllResultsController extends Controller
             table {
                 border-collapse: collapse;
                 width: 100%;
-                margin-bottom: 7px;
+                margin-bottom: 7px;555555555555555555555555555555555
 
             }
             table, th, td {
