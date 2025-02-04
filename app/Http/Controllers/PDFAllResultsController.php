@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Projects;
 use Illuminate\Http\Request;
 
 use Mpdf\Mpdf;
@@ -13,15 +12,12 @@ class PDFAllResultsController extends Controller
 {
     public function pdf_gen()
     {
-        $projects = Projects::all();
-
-
         $config = include(config_path('configPDF_H.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
 
         // กำหนดความยาวของเส้นใต้ (ปรับ px ตามต้องการ)
         // $underlineLength = "300px"; 
-        
+
         $stylesheet = "
         <style>
             table {
@@ -92,14 +88,6 @@ class PDFAllResultsController extends Controller
                 padding: 10px;
             }
 
-            .rotate-header {
-                transform: rotate(270deg);
-                white-space: nowrap;
-                text-align: center;
-                vertical-align: middle;
-                height: 100px;
-            }
-
             .underline::before { margin-right: 5px; }
             .underline::after { margin-left: 5px; }
 
@@ -119,7 +107,6 @@ class PDFAllResultsController extends Controller
         ';
 
 
-
         $htmlContent .= '
             <table border="1" cellspacing="0" cellpadding="5" width="100%">
                 <thead>
@@ -127,11 +114,9 @@ class PDFAllResultsController extends Controller
                         <th>ลำดับ</th>
                         <th>โครงการ/กิจกรรม</th>
                         <th>หน่วยนับ</th>
-                        <th class="rotate-header">เป้าหมาย</th>
+                        <th class="vertical-header">เป้าหมาย</th>
                         <th>ผล</th>
-                        <th style="font-size: 14px">
-                            การบรรลุ <span style="font-family: DejaVu Sans, Arial, sans-serif;">(✔ / ✖)</span>
-                        </th>
+                        <th>*</th>
                         <th>งบประมาณที่จัดสรร</th>
                         <th>ผลการใช้จ่ายเงิน</th>
                         <th>ผลการดำเนินงาน</th>
@@ -196,7 +181,7 @@ class PDFAllResultsController extends Controller
 
         ';
 
-
+        
 
 
 
