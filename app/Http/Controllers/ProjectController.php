@@ -58,6 +58,7 @@ class ProjectController extends Controller
        
         $year = Year::all();
         $selectYear = $request->input('yearID');
+        $request->session()->put('selectYear',$request->input('yearID'));
         $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() : Strategic3Level::all();
         // dd($strategic3Level);
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() : Strategic2Level::all();
@@ -589,7 +590,8 @@ class ProjectController extends Controller
         $SFA3LVs =  StrategicIssues::all();
         $selectSFA3Level = $request->input('SFA3LVID');
         $goal3Level = $selectSFA3Level ? Goals::where('SFA3LVID',$selectSFA3Level)->get() : Goals::all();
-        $tactics3LV = Tactics::all(); 
+        $selectGoal3Level = $request->input('goal3LVID');
+        $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
         $KPIMain3LV = KPIMains::all();
         $KPIMain3LVMap = KPIMainMapProjects::all();
 
@@ -604,7 +606,7 @@ class ProjectController extends Controller
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() :  Strategic1Level::all();
         $target1LV = Target1Level::all();
 
-        return view('Project.update1',compact('project','strategic3LVMap','selectYear','year','strategic3Level','selectStra3LV','SFA3LVs','selectSFA3Level','goal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
+        return view('Project.update1',compact('project','strategic3LVMap','selectYear','year','strategic3Level','selectStra3LV','SFA3LVs','selectSFA3Level','goal3Level','selectGoal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
     }
 
     function update1(Request $request,$id){

@@ -26,19 +26,20 @@
                 <div class="x_content">
                     <form method="POST" id="actionForm" action=""novalidate enctype="multipart/form-data">
                         @csrf
-
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
+                                    
+                                    {{-- <input type="text" value="{{$selectYear}}"> --}}
                             <div class="col-md-6 col-sm-6">
                                 <select id="year" name="yearID" class="form-control" onchange="submitForm(event)"
                                     required>
-                                    <option value="">--เลือกปีงบประมาณ--</option>
+                                    {{-- <option value="">--เลือกปีงบประมาณ--</option> --}}
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
                                             @if ($item->yearID == $project->yearID) selected
                                             @else 
-                                                {{ isset($selectYear) && $selectYear == $item->yearID ? 'selected' : '' }} @endif>
+                                             {{ isset($selectYear) && $selectYear == $item->yearID ? 'selected' : '' }} @endif>
                                             {{ $item->year }}</option>
                                     @endforeach
                                 </select>
@@ -93,18 +94,18 @@
                                         class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-6 col-sm-6">
-                                        {{-- <input type="text" value="{{ $selectSFA3Level }}"> --}}
+                                        <input type="text" value="">
                                         <select id="SFAID_{{ $index }}" name="SFA3LVID[]" class="form-control"
-                                            onchange="submitForm(event)" required>
+                                            onchange="submitForm(event)" 
+                                            required>
                                             <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
                                             @foreach ($SFA3LVs as $SFA)
                                                 @if ($SFA->stra3LVID == $item->stra3LVID)
                                                     <option value="{{ $SFA->SFA3LVID }}"
-                                                        {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }}
                                                         @foreach ($strategic3LVMap as $map3LV)
-                                                            @if ($SFA->SFA3LVID === $map3LV->SFA3LVID)
-                                                                selected 
-                                                            @endif @endforeach>
+                                                            @if ($SFA->SFA3LVID === $map3LV->SFA3LVID)selected @endif 
+                                                            {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }}
+                                                        @endforeach>
                                                         {{ $SFA->name }}</option>
                                                 @endif
                                             @endforeach
@@ -123,13 +124,15 @@
                                             required onchange="submitForm(event)">
                                             <option value="">--เลือกเป้าประสงค์--</option>
                                             @foreach ($goal3Level as $goal)
-                                                {{-- @if (!empty($selectSFA3Level[$index]) && $goal->SFA3LVID == $selectSFA3Level[$index]) --}}
+                                                {{-- @if (!empty($selectSFA3Level[$index]) &&$goal->SFA3LVID == $selectSFA3Level[$index] ) --}}
+                                                {{-- <input type="text" value="{{$selectGoal3Level[$index]}}"> --}}
                                                 <option value="{{ $goal->goal3LVID }}"
-                                                    {{ isset($selectGoal3Level) && in_array($goal->goal3LVID, (array) $selectGoal3Level) ? 'selected' : '' }}
                                                     @foreach ($strategic3LVMap as $map3LV)
                                                             @if ($goal->goal3LVID === $map3LV->goal3LVID)
                                                                 selected
-                                                            @endif @endforeach>
+                                                            @endif 
+                                                            {{ isset($selectGoal3Level) && in_array($goal->goal3LVID, (array) $selectGoal3Level) ? 'selected' : '' }}
+                                                            @endforeach>
                                                     {{ $goal->name }}</option>
                                                 {{-- @endif --}}
                                             @endforeach
@@ -486,6 +489,9 @@
 
 
     <script>
+
+
+    
         function submitForm(event) {
             // บันทึกตำแหน่งของ scroll
             var scrollPosition = window.scrollY;
@@ -510,6 +516,57 @@
             }
             form.submit();
         }
+        function updateGoalDropdown(selectedSFAID,index) {
+            // const goalSelect = document.getElementById('goalID');
+            const goalSelect = document.querySelectorAll('[id^="goal3LVID_"]');
+            goalSelect.innerHTML = '';
+
+            if (!selectedSFA3LVID) {
+                const noGoalOption = document.createElement('option');
+                noGoalOption.value = '';
+                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                goalSelect.appendChild(noGoalOption);
+                goalSelect.disabled = true;
+                updateKPIMain(null);
+                updateTacticsDropdown(null);
+                return;
+            }
+
+            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
+            const filteredGoals = goals.filter(goal => goal.SFA3LVID == selectedSFA3LVID);
+
+            if (filteredGoals.length === 0) {
+                const noGoalOption = document.createElement('option');
+                noGoalOption.value = '';
+                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
+                goalSelect.appendChild(noGoalOption);
+                goalSelect.disabled = true;
+                updateKPIMain(null);
+                updateTacticsDropdown(null);
+
+            } else {
+                goalSelect.disabled = false;
+                filteredGoals.forEach(goal => {
+                    const option = document.createElement('option');
+                    option.value = goal.goal3LVID;
+                    option.textContent = goal.name;
+                    strategicMaps.forEach(map => {
+                        if (map.goal3LVID == goal.goal3LVID) {
+                            option.selected = true;
+                            // updateKPIMain(goal.goalID);
+                            // updateTacticsDropdown(goal.goalID);
+                        }
+                    });
+                    goalSelect.appendChild(option);
+                });
+                if (!filteredGoals.some(goal => strategicMaps.some(map => map.goal3LVID == goal.goal3LVID))) {
+                    // updateKPIMain(filteredGoals[0].goalID);
+                    // updateTacticsDropdown(filteredGoals[0].goalID);
+                }
+            }
+        }
+
+
         document.addEventListener('DOMContentLoaded', function() {
             document.body.addEventListener('click', function(event) {
                 if (event.target.classList.contains('insert-kpi-button')) {
@@ -613,5 +670,32 @@
                 console.error(`ไม่พบ <div id="insertKPIMain_${index}"> ใน DOM`);
             }
         }
+        window.onload = function() {
+            // const goalSelect = document.getElementById('goalID');
+            const SFA3LVSelect = document.querySelectorAll('[id^="SFA3LVID_"]');
+            const goal3LVSelect = document.querySelectorAll('[id^="goal3LVID_"]');
+
+            SFA3LVSelect.addEventListener('change', function() {
+                const selectedSFAID = this.value;
+                updateGoalDropdown(selectedSFAID);
+            });
+
+            goal3LVSelect.addEventListener('change', function() {
+                const selectedGoalID = this.value;
+                updateTacticsDropdown(selectedGoalID);
+                updateKPIMain(selectedGoalID);
+            });
+
+            // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+            const defaultGoal3LVID = SFA3LVSelect.value;
+            if (defaultGoal3LVID) {
+                updatePlanDropdown(defaultYearID);
+            }
+
+            const defaultPlanID = planSelect.value;
+            if (defaultPlanID) {
+                updateExpenseDropdown(defaultPlanID);
+            }
+        };
     </script>
 @endsection

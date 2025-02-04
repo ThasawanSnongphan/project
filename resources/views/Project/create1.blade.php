@@ -31,12 +31,15 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" value="{{ $selectYear }}">
-                                <select id="year" name="yearID" class="form-control" onchange="submitForm()" required>
+                                <input type="text" value="{{session('selectYear')}}">
+                                <select id="year" name="yearID" class="form-control" required 
+                                {{-- onchange="submitForm(event)" --}}
+                                 >
                                     <option value="">--เลือกปีงบประมาณ--</option>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
-                                            {{ request('yearID') == $item->yearID ? 'selected' : '' }}>{{ $item->year }}
+                                            {{-- {{ request('yearID') == $item->yearID ? 'selected' : '' }} --}}
+                                            >{{ $item->year }}
                                         </option>
                                     @endforeach
                                 </select>
