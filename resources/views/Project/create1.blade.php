@@ -31,14 +31,12 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="text" value="{{session('selectYear')}}">
-                                <select id="year" name="yearID" class="form-control" required 
-                                {{-- onchange="submitForm(event)" --}}
-                                 >
+                                {{-- <input type="text" value="{{session('selectYear')}}"> --}}
+                                <select id="year" name="yearID" class="form-control" required oninput="submitForm(event)">
                                     <option value="">--เลือกปีงบประมาณ--</option>
                                     @foreach ($year as $item)
                                         <option value="{{ $item->yearID }}"
-                                            {{-- {{ request('yearID') == $item->yearID ? 'selected' : '' }} --}}
+                                            {{ request('yearID') == $item->yearID ? 'selected' : '' }}
                                             >{{ $item->year }}
                                         </option>
                                     @endforeach
@@ -89,14 +87,15 @@
                                                 class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input type="hidden" value="{{ $index }}">
-                                            <select id="SFAID_{{ $index }}" name="SFA3LVID[]" class="form-control"
-                                                onchange="submitForm(event)" required>
+                                            <select id="SFA3LVID_{{ $index }}" name="SFA3LVID[]" class="form-control"
+                                                required 
+                                                >
                                                 <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
                                                 @foreach ($SFA3LVs as $SFA)
                                                     @if ($SFA->stra3LVID == $item->stra3LVID)
                                                         <option value="{{ $SFA->SFA3LVID }}"
-                                                            {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }}>
-                                                            {{ $SFA->name }}</option>
+                                                            {{-- {{ isset($selectSFA3Level) && in_array($SFA->SFA3LVID, (array) $selectSFA3Level) ? 'selected' : '' }} --}}
+                                                            >{{ $SFA->name }}</option>
                                                     @endif
                                                 @endforeach
 
@@ -111,15 +110,8 @@
                                         <div class="col-md-6 col-sm-6">
 
                                             <select id="goal3LVID_{{ $index }}" name="goal3LVID[]"
-                                                class="form-control" required onchange="submitForm(event)">
+                                                class="form-control" required >
                                                 <option value="">--เลือกเป้าประสงค์--</option>
-                                                @foreach ($goal3Level as $goal)
-                                                    @if (!empty($selectSFA3Level[$index]) && $goal->SFA3LVID == $selectSFA3Level[$index])
-                                                        <option value="{{ $goal->goal3LVID }}"
-                                                            {{ isset($selectGoal3Level) && in_array($goal->goal3LVID, (array) $selectGoal3Level) ? 'selected' : '' }}>
-                                                            {{ $goal->name }}</option>
-                                                    @endif
-                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -128,19 +120,9 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <select id="tacID_{{ $index }}" name="tac3LVID[]"
-                                                class="form-control" required onchange="submitForm(event)">
+                                            <select id="tac3LVID_{{ $index }}" name="tac3LVID[]"
+                                                class="form-control" required >
                                                 <option value="">--เลือกกลยุทธ์--</option>
-                                                @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index]))
-                                                    @foreach ($tactics3LV as $tactics)
-                                                        @if ($tactics->goal3LVID == $selectGoal3Level[$index])
-                                                            <option value="{{ $tactics->tac3LVID }}"
-                                                                {{ isset($selectTactics3LV) && in_array($tactics->tac3LVID, (array) $selectTactics3LV) ? 'selected' : '' }}>
-                                                                {{ $tactics->name }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-
                                             </select>
                                         </div>
                                     </div>
@@ -165,10 +147,10 @@
                         </div>
                         <div class="col-md-12 col-sm-12">
                             <div class="col-md-4 col-sm-4 m-1">
-                                <select id="KPIMain_{{ $index }}" name="KPIMain3LVID[]" class="form-control"
-                                    onchange="submitForm(event)" required>
+                                <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]" class="form-control"
+                                   required>
                                     <option value="">--เลือกตัวชี้วัด--</option>
-                                    @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index]))
+                                    {{-- @if (!empty($selectGoal3Level[$index]) && !empty($selectSFA3Level[$index]))
                                         @foreach ($KPIMain3LV as $KPI)
                                             @if ($KPI->goal3LVID == $selectGoal3Level[$index])
                                                 <option value="{{ $KPI->KPIMain3LVID }}"
@@ -177,21 +159,17 @@
                                                 </option>
                                             @endif
                                         @endforeach
-                                    @endif
+                                    @endif --}}
                                 </select>
                             </div>
                             <div class=" col-md-3 col-sm-3 m-1">
                                 <input class="form-control" type="text" name="countMain3LV[]"
-                                    id="countMain_{{ $index }}" disabled
-                                    @foreach ($KPIMain3LV as $KPI)
-                                                    @if (!empty($selectKPIMain[$index]) && $selectKPIMain[$index] == $KPI->KPIMain3LVID)
-                                                        value= {{ $KPI->count ?? 'null' }}
-                                                    @endif @endforeach>
+                                    id="count3LV_{{ $index }}" readonly >
 
                             </div>
                             <div class=" col-md-3 col-sm-3 m-1">
                                 <input class="form-control" type="text" name="targetMain3LV[]"
-                                    id="targetMain_{{ $index }}" disabled
+                                    id="target3LV_{{ $index }}" disabled
                                     @foreach ($KPIMain3LV as $KPI)
                                                     @if (!empty($selectKPIMain[$index]) && $selectKPIMain[$index] == $KPI->KPIMain3LVID)
                                                        value= {{ $KPI->target }}  
@@ -400,8 +378,93 @@
     <div class="col-md-1 col-sm-1"></div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('[id^="SFA3LVID_"]').change(function(event){
+                var SFA3LVID = this.value;
+                var dropdownID = $(this).attr('id');
+                var idIndex = dropdownID.split("_")[1];
+                // alert(idIndex);
+                // alert(SFA3LVID);
+                $('[id^="goal3LVID_"]');
+                $.ajax({
+                    url: "/projectgoal3LV",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {SFA3LVID: SFA3LVID,_token:"{{csrf_token()}}"},
+                    success:function(response){
+                        // console.log(response);
+                        // $('#goal3LVID_'+idIndex).html('');
+                        $('#goal3LVID_'+idIndex).html('<option value="">--เลือกเป้าประสงค์--</option>');
+                        $.each(response.goal3LV,function(index,val){
+                            $('#goal3LVID_'+idIndex).append('<option value="'+val.goal3LVID+'"> '+val.name+' </option>');
+                            // console.log(val.goal3LVID);
+                        });
+                        $('#tac3LVID_'+idIndex).html('<option value="">--เลือกกลยุทธ์--</option>');
+                        $('#KPIMain3LVID_'+idIndex).html('<option value="">--เลือกตัวชี้วัด--</option>');
+                    }
+                })
+            });
+            $('[id^="goal3LVID_"]').change(function(event){
+                var goal3LVID = this.value;
+                var dropdownID = $(this).attr('id');
+                var idIndex = dropdownID.split("_")[1];
+                $('[id^="tac3LVID_"]');
+               
+                $.ajax({
+                    url: "/projecttactics3LV",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {goal3LVID: goal3LVID,_token:"{{csrf_token()}}"},
+                    success:function(response){
+                        $('#tac3LVID_'+idIndex).html('<option value="">--เลือกกลยุทธ์--</option>');
+                        $.each(response.tactics3LV,function(index,val){
+                            $('#tac3LVID_'+idIndex).append('<option value="'+val.tac3LVID+'"> '+val.name+' </option>')
+                        });
+                        
+                    }
+                });
+            });
+            $('[id^="goal3LVID_"]').change(function(event){
+                var goal3LVID = this.value;
+                var dropdownID = $(this).attr('id');
+                var idIndex = dropdownID.split("_")[1];
+                $('[id^="KPIMain3LVID_"]');
+                $.ajax({
+                    url: "/projectKPIMain3LV",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {goal3LVID: goal3LVID,_token:"{{csrf_token()}}"},
+                    success:function(response){
+                        $('#KPIMain3LVID_'+idIndex).html('<option value="">--เลือกตัวชี้วัด--</option>');
+                        $.each(response.KPIMain3LV,function(index,val){
+                            $('#KPIMain3LVID_'+idIndex).append('<option value="'+val.KPIMain3LVID+'"> '+val.name+' </option>')
+                        })
+                    }
+                });
+            });
+            $('[id^="KPIMain3LVID_"]').change(function(event){
+                var KPIMain3LVID = this.value;
+                var dropdownID = $(this).attr('id');
+                var idIndex = dropdownID.split("_")[1];
+                $('[id^="count3LV_"]');
+                $('[id^="target3LV_"]');
+                $.ajax({
+                    url: '/projectcount_target',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {KPIMain3LVID: KPIMain3LVID,_token:"{{csrf_token()}}"},
+                    success:function(response){
+                        $.each(response.count_target,function(index,val){
+                            $('#count3LV_'+idIndex).val(val.count);
+                            $('#target3LV_'+idIndex).val(val.target);
+                        });
+                    }
+                })
+            });
+        });
 
-    <script>
         function submitForm(event) {
             event.preventDefault();
             document.getElementById('actionForm').submit();

@@ -107,6 +107,22 @@ class ProjectController extends Controller
 
         return view('Project.create1',compact('name','year','selectYear','strategic3Level','selectStra3LV','selectStra2LV','selectSFA2Level','selectTactics2LV','selectKPIMain2LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain','selectKPIMain1LV','selectTarget1LV','selectStra1LV'));
     }
+    function goal3LV(Request $request){
+        $goal3LVs['goal3LV']=Goals::where('SFA3LVID',$request->SFA3LVID)->get(['name','goal3LVID']);
+        return response()->json($goal3LVs);
+    }
+    function tactics3LV(Request $request){
+        $tactics3LVs['tactics3LV']=Tactics::where('goal3LVID',$request->goal3LVID)->get(['name','tac3LVID']);
+        return response()->json($tactics3LVs);
+    }
+    function KPIMain3LV(Request $request){
+        $KPIMain3LVs['KPIMain3LV']=KPIMains::where('goal3LVID',$request->goal3LVID)->get(['name','KPIMain3LVID']);
+        return response()->json($KPIMain3LVs);
+    }
+    function count_target_KPIMain3LV(Request $request){
+        $data['count_target']=KPIMains::where('KPIMain3LVID',$request->KPIMain3LVID)->get(['count','target']);
+        return response()->json($data);
+    }
 
 
     function send1(Request $request){
