@@ -124,6 +124,19 @@ class ProjectController extends Controller
         return response()->json($data);
     }
 
+    function tactics2LV(Request $request){
+        $tactics2LVs['tactics2LV']=Tactic2Level::where('SFA2LVID',$request->SFA2LVID)->get(['name','tac2LVID']);
+        return response()->json($tactics2LVs);
+    }
+    function KPIMain2LV(Request $request){
+        $KPIMain2LVs['KPIMain2LV']=KPIMain2Level::where('SFA2LVID',$request->SFA2LVID)->get(['name','KPIMain2LVID']);
+        return response()->json($KPIMain2LVs);
+    }
+    function count_target_KPIMain2LV(Request $request){
+        $data['count_target2LV']=KPIMain2Level::where('KPIMain2LVID',$request->KPIMain2LVID)->get(['count','target']);
+        return response()->json($data);
+    }
+
 
     function send1(Request $request){
 
@@ -597,7 +610,8 @@ class ProjectController extends Controller
     }
 
     function edit1(Request $request,$id){
-        $project=Projects::with('strategic3LVMap')->where('proID',$id)->first();
+        $project=DB::table('projects')->where('proID',$id)->first();
+        // dd($project);
         $strategic3LVMap = DB::table('strategic_maps')->where('proID',$id)->get();
         $selectYear = $request->input('yearID');
         $year = Year::all(); // ดึงข้อมูลปี

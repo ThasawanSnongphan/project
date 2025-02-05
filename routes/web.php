@@ -91,10 +91,16 @@ Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::any('/projectcreate1', [ProjectController::class,'create1']);
+
 Route::post('/projectgoal3LV', [ProjectController::class,'goal3LV']);
 Route::post('/projecttactics3LV', [ProjectController::class,'tactics3LV']);
 Route::post('/projectKPIMain3LV', [ProjectController::class,'KPIMain3LV']);
-Route::post('/projectcount_target', [ProjectController::class,'count_target_KPIMain3LV']);
+Route::post('/projectcount_target3LV', [ProjectController::class,'count_target_KPIMain3LV']);
+
+Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
+Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
+Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
+
 Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
 Route::post('/projectSave1', [ProjectController::class,'save1']);
 Route::post('/projectSave2/{id}', [ProjectController::class,'save2']);
