@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Strategic1Level;
+use App\Models\Strategic1LevelMapProject;
+use App\Models\Strategic2Level;
+use App\Models\Strategic2LevelMapProject;
 use App\Models\Strategic3Level;
+use App\Models\StrategicIssues2Level;
+use App\Models\Tactic2Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,11 +67,28 @@ class PDFController extends Controller
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
+
         $strategic_maps = StrategicMap::all();
+        $strategic1_level_maps = Strategic1LevelMapProject::all();
+        $strategic2_level_maps = Strategic2LevelMapProject::all();
+
         $strategic_issues = StrategicIssues::all();
+        $strategic_issue2_levels = StrategicIssues2Level::all();
+
         $strategics = Strategic3Level::all();
+        $strategic2_levels = Strategic2Level::all();
+        $strategic1_levels = Strategic1Level::all();
+
+
         $goals = Goals::all();
+
         $tactics = Tactics::all();
+        $tactic2_levels = Tactic2Level::all();
+
+        $KPI_pros = KPIProjects::all();
+        // $KPI_main
+
+
         $plans = UniPlan::all();
         $funds = Funds::all();
         $badget_types = BadgetType::all();
@@ -74,7 +97,7 @@ class PDFController extends Controller
         $cost_types = CostTypes::all();
 
         $badget_types = BadgetType::all();
-        $KPI_pros = KPIProjects::all();
+        
         $countKPI_pros = CountKPIProjects::all();
         $project_integrats = ProjectIntegrat::all();
         $project_charecs = ProjectCharec::all();
@@ -152,13 +175,13 @@ class PDFController extends Controller
         <b>1. ชื่อโครงการ : </b>' . $projects->name . '<br>
         ';
 
-        $htmlContent .= '<b>2. สังกัด :</b><br>';
+        $htmlContent .= '<b>2. สังกัด : </b><br>';
 
         // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
         $departments = [];
         $responsibleNames = [];
         $names = [];  // เพิ่มอาร์เรย์เพื่อเก็บชื่อ
-        
+
 
         // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
         foreach ($users_map as $user_map) {
@@ -171,25 +194,29 @@ class PDFController extends Controller
                         }
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
                         $responsibleNames[] = $user->username;
-                        $name[] = $user->username;
-                        // dd($name);
+                        $names[] = $user->username;
+                        // dd($names);
                     }
                 }
             }
         }
-        
 
-        // แสดงข้อมูลสังกัด
-        foreach ($departments as $department) {
-            $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;' . $department . '</b><br>';
+
+        // ตรวจสอบว่ามีข้อมูลหรือไม่
+        if (empty($departments) && empty($responsibleNames)) {
+            $htmlContent .= 'ไม่มีข้อมูล <br>';
+        } else {
+
+            // แสดงข้อมูลสังกัด
+            foreach ($departments as $department) {
+                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;' . $department . '</b><br>';
+            }
+
+            // แสดงข้อมูลผู้รับผิดชอบในรูปแบบชื่อคั่นด้วย ","
+            if (!empty($responsibleNames)) {
+                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ :</b> ' . implode(', ', $responsibleNames) . '<br>';
+            }
         }
-
-        // แสดงข้อมูลผู้รับผิดชอบในรูปแบบชื่อคั่นด้วย ","
-        if (!empty($responsibleNames)) {
-            $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;ผู้รับผิดชอบ :</b> ' . implode(', ', $responsibleNames) . '<br>';
-        }
-
-
 
 
         foreach ($strategic_maps as $strategic_map) {
@@ -223,6 +250,82 @@ class PDFController extends Controller
                 // เช็คชื่อจาก tacID
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+            }
+        }
+
+        foreach ($strategic2_level_maps as $strategic2_level_map) {
+            if ($projects->proID == $strategic2_level_map->proID) {
+                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+                // เช็คชื่อจาก straID
+                foreach ($strategic2_levels as $strategic2_level) {
+                    if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
+                        $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ ' . $strategic2_level->name . '</b> <br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // เช็คชื่อจาก SFAID
+                foreach ($strategic_issue2_levels as $strategic_issue2_level) {
+                    if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic2_level->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // // เช็คชื่อจาก goalID
+                // foreach ($goals as $goal) {
+                //     if ($goal->goalID == $strategic2_level_map->goalID) {
+                //         $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+                //         break; // เจอข้อมูลแล้วออกจากลูป
+                //     }
+                // }
+
+                // เช็คชื่อจาก tacID
+                foreach ($tactic2_levels as $tactic2_level) {
+                    if ($tactic2_level->tacID == $strategic2_level_map->tacID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+            }
+        }
+
+        foreach ($strategic1_level_maps as $strategic1_level_map) {
+            if ($projects->proID == $strategic1_level_map->proID) {
+                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+                // เช็คชื่อจาก straID
+                foreach ($strategic1_levels as $strategic1_level) {
+                    if ($strategic1_level->stra1LVID == $strategic1_level_map->stra1LVID) {
+                        $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ ' . $strategic->name . '</b> <br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // // เช็คชื่อจาก SFAID
+                // foreach ($strategic_issues as $strategic_issue) {
+                //     if ($strategic_issue->SFAID == $strategic1_level_map->SFAID) {
+                //         $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name . '<br>';
+                //         break; // เจอข้อมูลแล้วออกจากลูป
+                //     }
+                // }
+
+                // เช็คชื่อจาก goalID
+                foreach ($goals as $goal) {
+                    if ($goal->goalID == $strategic1_level_map->goalID) {
+                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+                        break; // เจอข้อมูลแล้วออกจากลูป
+                    }
+                }
+
+                // เช็คชื่อจาก tacID
+                foreach ($tactics as $tactic) {
+                    if ($tactic->tacID == $strategic1_level_map->tacID) {
                         $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
                         break; // เจอข้อมูลแล้วออกจากลูป
                     }
@@ -353,7 +456,7 @@ class PDFController extends Controller
 
         $pro_steps = DB::table('steps')->where('proID', $id)->get();
         if (DB::table('steps')->where('proID', $id)->exists()) {
-            
+
 
             $minYear = PHP_INT_MAX; // ค่าเริ่มต้นของปีที่น้อยที่สุด
             $maxYear = PHP_INT_MIN; // ค่าเริ่มต้นของปีที่มากที่สุด
@@ -576,7 +679,7 @@ class PDFController extends Controller
                     if ($cost_quarter->expID == $expense_badget->expID) {
                         $htmlContent .= '
                             <tr>
-                                <td style="text-align: left;">'. $counter . '. ' . $expense_badget->name . '</td>
+                                <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -584,16 +687,15 @@ class PDFController extends Controller
                                 <td></td>
                             </tr>
                         ';
-                        
                     }
                 }
 
-                
+
                 foreach ($cost_types as $cost_type) {
                     if ($cost_quarter->costID == $cost_type->costID) {
                         $htmlContent .= '
                             <tr>
-                                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;'. $counter .'.'. $subCounter .' ' .  $cost_type->name . '</td>
+                                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . $counter . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
                                 <td>' . number_format($totalCost, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
                                 <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
@@ -608,27 +710,47 @@ class PDFController extends Controller
             }
         }
 
-        function numberToThai($number) {
+        function numberToThai($number)
+        {
             $thaiNumbers = [
-                0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่', 5 => 'ห้า', 
-                6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า', 10 => 'สิบ', 20 => 'ยี่สิบ', 
-                30 => 'สามสิบ', 40 => 'สี่สิบ', 50 => 'ห้าสิบ', 60 => 'หกสิบ', 70 => 'เจ็ดสิบ', 
-                80 => 'แปดสิบ', 90 => 'เก้าสิบ', 100 => 'ร้อย', 1000 => 'พัน', 10000 => 'หมื่น', 
-                100000 => 'แสน', 1000000 => 'ล้าน'
+                0 => 'ศูนย์',
+                1 => 'หนึ่ง',
+                2 => 'สอง',
+                3 => 'สาม',
+                4 => 'สี่',
+                5 => 'ห้า',
+                6 => 'หก',
+                7 => 'เจ็ด',
+                8 => 'แปด',
+                9 => 'เก้า',
+                10 => 'สิบ',
+                20 => 'ยี่สิบ',
+                30 => 'สามสิบ',
+                40 => 'สี่สิบ',
+                50 => 'ห้าสิบ',
+                60 => 'หกสิบ',
+                70 => 'เจ็ดสิบ',
+                80 => 'แปดสิบ',
+                90 => 'เก้าสิบ',
+                100 => 'ร้อย',
+                1000 => 'พัน',
+                10000 => 'หมื่น',
+                100000 => 'แสน',
+                1000000 => 'ล้าน'
             ];
-        
+
             if ($number == 0) {
                 return $thaiNumbers[0];
             }
-        
+
             $str = '';
             $number = (int)$number;
             $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
-        
+
             foreach ($units as $unit) {
                 $num = (int)($number / $unit);
                 $number %= $unit;
-        
+
                 if ($num > 0) {
                     if ($unit >= 100 && $num == 1) {
                         $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
@@ -639,10 +761,10 @@ class PDFController extends Controller
                     }
                 }
             }
-        
+
             return $str . 'บาทถ้วน';
         }
-        
+
 
         $sumTotalInWords = numberToThai($sumTotal);
 
@@ -663,7 +785,7 @@ class PDFController extends Controller
 
 
         $htmlContent .= '
-            <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท    ('. $sumTotalInWords.')<br>
+            <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท    (' . $sumTotalInWords . ')<br>
             <b>15. ประโยชน์ที่คาดว่าจะได้รับ </b><br>
         
         ';
@@ -690,16 +812,28 @@ class PDFController extends Controller
 
         ';
 
-        $htmlContent .= '
-        <div style="text-align: right;">
-            <div style="width: 300px; text-align: center; float: right;">
-                ลงชื่อ ................................................. <br>
-                ( ' . $name[0] . ' ) <br>
-                ผู้รับผิดชอบโครงการ <br>
-                วันที่ ........../......................./..........
-            </div>
-        </div>
-        ';
+        if (!empty($names)) {
+            $htmlContent .= '
+                <div style="text-align: right;">
+                    <div style="width: 300px; text-align: center; float: right;">
+                        ลงชื่อ ................................................. <br>
+                        ( ' . $names[0] . ' ) <br>
+                        ผู้รับผิดชอบโครงการ <br>
+                        วันที่ ........../......................./..........
+                    </div>
+                </div>';
+        } else {
+            $htmlContent .= '<div style="text-align: right;">
+                    <div style="width: 300px; text-align: center; float: right;">
+                        ลงชื่อ ................................................. <br>
+                        ( ไม่มีข้อมูล ) <br>
+                        ผู้รับผิดชอบโครงการ <br>
+                        วันที่ ........../......................./..........
+                    </div>
+                </div>
+            ';
+        }
+
 
 
 
