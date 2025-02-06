@@ -610,16 +610,20 @@ class ProjectController extends Controller
     }
 
     function edit1(Request $request,$id){
-        $project=DB::table('projects')->where('proID',$id)->first();
+        $project=Projects::find($id);
         // dd($project);
         $strategic3LVMap = DB::table('strategic_maps')->where('proID',$id)->get();
+        
+        // dd($strategic3LVMap);
         $selectYear = $request->input('yearID');
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() :  Strategic3Level::all();
         $selectStra3LV = $request->input('stra3LVID');
         $SFA3LVs =  StrategicIssues::all();
-        $selectSFA3Level = $request->input('SFA3LVID');
-        $goal3Level = $selectSFA3Level ? Goals::where('SFA3LVID',$selectSFA3Level)->get() : Goals::all();
+        // $sfa3LVIDs = $SFA3LVs->pluck('SFA3LVID');
+        $goal3Level = Goals::all();
+        // $goal3Level = DB::table('goals')->whereIn('SFA3LVID',$sfa3LVIDs)->get();
+        // dd($goal3Level);
         $selectGoal3Level = $request->input('goal3LVID');
         $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
         $KPIMain3LV = KPIMains::all();
@@ -636,7 +640,7 @@ class ProjectController extends Controller
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() :  Strategic1Level::all();
         $target1LV = Target1Level::all();
 
-        return view('Project.update1',compact('project','strategic3LVMap','selectYear','year','strategic3Level','selectStra3LV','SFA3LVs','selectSFA3Level','goal3Level','selectGoal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
+        return view('Project.update1',compact('project','strategic3LVMap','selectYear','year','strategic3Level','selectStra3LV','SFA3LVs','goal3Level','selectGoal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
     }
 
     function update1(Request $request,$id){
