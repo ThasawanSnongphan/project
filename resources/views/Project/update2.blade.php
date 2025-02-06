@@ -136,8 +136,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="hidden" name="straMapID[]" value="{{ $straMap->straMapID }}">
-                                <select id="straID" name="straID[]" class="form-control" required
-                                    onchange="KPIMainNone()">
+                                <select id="straID" name="straID[]" class="form-control" required>
 
                                     <!-- แผนจะถูกโหลดที่นี่ -->
                                 </select>
@@ -860,11 +859,7 @@
     </div>
 
     <script>
-        const strategic = @json($strategic); // ข้อมูลแผนยุทธศาสตร์
-        const issues = @json($SFA); // ข้อมูลประเด็นยุทธศาสตร์
-        const goals = @json($goal); // ข้อมูลเป้าประสงค์
-        const tactics = @json($tactics); // ข้อมูลกลยุทธ์
-        const KPIMains = @json($KPIMain);
+        
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
