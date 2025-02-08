@@ -66,6 +66,19 @@ class PDFQ4Controller extends Controller
                 text-align: left;
                 padding: 5px 10px; /* เพิ่มช่องว่าง */
             }
+                
+
+            .dot-line1 {
+                display: inline-block;
+                border-bottom: 1px dotted black;
+                width: 100%; /* ทำให้เส้นเต็มพื้นที่ที่เหลือ */
+            }
+
+            .dot-line2 {
+        display: inline-block;
+        word-spacing: 5px; /* กระจายจุดให้เต็ม */
+        letter-spacing: 2px;
+    }
 
             .underline::before,
             .underline::after {
@@ -94,6 +107,7 @@ class PDFQ4Controller extends Controller
                 <h1 style="margin: 0; flex-grow: 1; text-align: center;">บันทึกข้อความ</h1>            
             </div>
         ';
+
 
         $htmlContent .= '
             <b style="font-size: 22pt;">ส่วนราชการ</b> 
