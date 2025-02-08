@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PDFAllResultsController;
 use App\Http\Controllers\PDFKPIController;
 use App\Http\Controllers\PDFPlanController;
 use App\Http\Controllers\PDFQ4Controller;
@@ -47,6 +48,7 @@ use App\Http\Controllers\WordController;
 Route::get('/pdfKPI', [PDFKPIController::class, 'pdf_gen']);
 Route::get('/pdfPlan', [PDFPlanController::class, 'pdf_gen']);
 Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
+Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
 
 Route::get('/gen-word', [WordController::class, 'createWordDoc']); //แบบไม่ db
