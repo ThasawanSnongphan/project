@@ -66,31 +66,21 @@ class PDFQ4Controller extends Controller
                 text-align: left;
                 padding: 5px 10px; /* เพิ่มช่องว่าง */
             }
-                
-
-            .dot-line1 {
-                display: inline-block;
-                border-bottom: 1px dotted black;
-                width: 100%; /* ทำให้เส้นเต็มพื้นที่ที่เหลือ */
+            
+            .dot-line {
+                display: block; /* ให้ครอบคลุมเต็มบรรทัด */
+                border-bottom: 1px dotted black; /* จุดไข่ปลา */
+                white-space: nowrap; /* ห้ามตัดคำในบรรทัด */
+                overflow: hidden; /* ป้องกันข้อความล้น */
+                text-align: left; /* จัดข้อความชิดซ้าย */
+                padding-left: 10px; /* เพิ่มช่องว่างระหว่างจุดไข่ปลากับข้อความ */
+                width: 100%; /* ให้ span เต็มบรรทัด */
+                white-space: normal; /* อนุญาตให้ขึ้นบรรทัดใหม่ */
+                word-wrap: break-word; /* ตัดคำเมื่อเกินบรรทัด */
             }
 
-            .dot-line2 {
-        display: inline-block;
-        word-spacing: 5px; /* กระจายจุดให้เต็ม */
-        letter-spacing: 2px;
-    }
+   
 
-            .underline::before,
-            .underline::after {
-                content: ' ';
-                display: inline-block;
-                width: 5000px; /* ปรับให้เส้นเลยออกจากข้อความ */
-                border-bottom: 1px dotted black;
-                vertical-align: middle;
-            }
-
-            .underline::before { margin-right: 5px; }
-            .underline::after { margin-left: 5px; }
 
             .dark-green { background-color: #003300; width: 80%; }
             .light-green { background-color: #00b300; width: 60%; }
@@ -107,22 +97,63 @@ class PDFQ4Controller extends Controller
                 <h1 style="margin: 0; flex-grow: 1; text-align: center;">บันทึกข้อความ</h1>            
             </div>
         ';
+        
 
+        function addSpacesToEnd($text, $maxLength) {
+            $currentLength = mb_strlen(strip_tags($text)); // นับความยาวของข้อความ (ไม่รวม HTML)
+            $spacesToAdd = max(0, $maxLength - $currentLength); // คำนวณช่องว่างที่ต้องเพิ่ม
+            return $text . str_repeat("&nbsp;", $spacesToAdd);
+        }
 
+        function wrapTextWithDots($text, $lineLength = 80) {
+            $words = explode(" ", $text);
+            $lines = [];
+            $currentLine = "";
+        
+            foreach ($words as $word) {
+                if (mb_strlen($currentLine . " " . $word) > $lineLength) {
+                    $lines[] = $currentLine; // เก็บบรรทัดปัจจุบัน
+                    $currentLine = $word; // เริ่มบรรทัดใหม่
+                } else {
+                    $currentLine .= ($currentLine ? " " : "") . $word;
+                }
+            }
+            $lines[] = $currentLine; // เพิ่มบรรทัดสุดท้าย
+        
+            // แปลงแต่ละบรรทัดเป็น HTML พร้อมเส้นใต้จุดไข่ปลา
+            return implode('<br><span class="dot-line">', $lines) . str_repeat('.', max(0, $lineLength - mb_strlen($lines[count($lines) - 1])));
+        }
+        
+        
+        
+        // กำหนดความยาวสูงสุดที่ต้องการให้เส้นจุดไข่ปลาวิ่งถึง
+        $maxLineLength = 100; 
+        $minLineLength = 55;
+        
         $htmlContent .= '
             <b style="font-size: 22pt;">ส่วนราชการ</b> 
-            <span class="underline">สำนักคอมพิวเตอร์สารสนเทศ โทร.2215</span><br>
-            <b style="font-size: 22pt;">ที่</b>
-            <span class="underline">สค ภายใน /2566</span>
-            <b style="font-size: 22pt;">วันที่</b>
-            <span class="underline">19 ตุลาคม 2566</span><br>
-            <b style="font-size: 22pt;">เรื่อง</b>
-            <span class="underline">ขอจัดส่งรายงานผลการดําเนินงานโครงการตามแผนปฏิบัติการ และโครงการนอกแผนปฏิบัติการประจําปีงบประมาณ พ.ศ. 2566 ( 1 ตุลาคม 2565 - 30 กันยายน 2566)</span><br>
-        ';
+            <span class="dot-line">' . addSpacesToEnd("สำนักคอมพิวเตอร์สารสนเทศ โทร.2215", $maxLineLength) . '</span><br>
 
-        $htmlContent .= '
-            <b>เรียน</b><br>
+            <b style="font-size: 22pt;">ที่</b>
+            <span class="dot-line">' . addSpacesToEnd("สค ภายใน /2566", $minLineLength) . '</span>
+
+            <b style="font-size: 22pt;">วันที่</b>
+            <span class="dot-line">' . addSpacesToEnd("19 ตุลาคม 2566", $minLineLength) . '</span><br>
+
+            <b style="font-size: 22pt;">เรื่อง</b>
+            <span class="dot-line">' . addSpacesToEnd("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", $maxLineLength) . '</span><br>
+            
+            <b style="font-size: 22pt;">เรื่อง</b>
+            <span class="dot-line">' . wrapTextWithDots("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", 80) . '</span><br>
+
         ';
+        
+
+
+
+        // $htmlContent .= '
+        //     <b>เรียน</b><br>
+        // ';
 
         $htmlContent .= '
             <div style="text-align: center;">
@@ -192,15 +223,7 @@ class PDFQ4Controller extends Controller
             </div>
         ';
 
-
-
-
-
-
-
-
-
-
+        
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
         $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
@@ -208,4 +231,6 @@ class PDFQ4Controller extends Controller
         $mpdf->SetTitle('บันทึกขอจัดส่งผลการดำเนินงานตามแผนปฏิบัติการไตรมาส4');
         return $mpdf->Output('บันทึกขอจัดส่งผลการดำเนินงานตามแผนปฏิบัติการไตรมาส4.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
     }
+    
+    
 }
