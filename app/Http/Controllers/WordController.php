@@ -489,6 +489,75 @@ class WordController extends Controller
         }
 
 
+        $section->addText('10. ขั้นตอนการดำเนินงาน :', ['bold' => true], ['spaceBefore' => 240]);
+
+        if (DB::table('steps')->where('proID', $id)->exists()) {
+            $pro_steps = DB::table('steps')->where('proID', $id)->get();
+
+            $minYear = PHP_INT_MAX;
+            $maxYear = PHP_INT_MIN;
+
+            foreach ($pro_steps as $step) {
+                $startDate = $step->start ?? null;
+                $endDate = $step->end ?? null;
+                $startYear = $startDate ? (new DateTime($startDate))->format('Y') + 543 : null;
+                $endYear = $endDate ? (new DateTime($endDate))->format('Y') + 543 : null;
+
+                if ($startYear) {
+                    $minYear = min($minYear, $startYear);
+                }
+                if ($endYear) {
+                    $maxYear = max($maxYear, $endYear);
+                }
+            }
+
+            if ($minYear === PHP_INT_MAX) $minYear = 'N/A';
+            if ($maxYear === PHP_INT_MIN) $maxYear = 'N/A';
+
+            $tableStyle = ['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 50];
+            $phpWord->addTableStyle('myTable', $tableStyle);
+            $table = $section->addTable('myTable');
+
+            $table->addRow();
+            $table->addCell(4000)->addText('ขั้นตอนการดำเนินการ', ['bold' => true]);
+            $table->addCell(1500, ['gridSpan' => 3])->addText('พ.ศ. ' . $minYear, ['bold' => true]);
+            $table->addCell(4500, ['gridSpan' => 9])->addText('พ.ศ. ' . $maxYear, ['bold' => true]);
+
+            $table->addRow();
+            $table->addCell();
+            $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
+            foreach ($months as $month) {
+                $table->addCell(500)->addText($month);
+            }
+
+            foreach ($pro_steps as $index => $step) {
+                $stepName = $step->name ?? 'ไม่มีข้อมูล';
+                $highlightMonths = [];
+                $startDate = $step->start ?? null;
+                $endDate = $step->end ?? null;
+
+                if ($startDate && $endDate) {
+                    $start = new DateTime($startDate);
+                    $end = new DateTime($endDate);
+                    while ($start <= $end) {
+                        $highlightMonths[] = (int)$start->format('n');
+                        $start->modify('+1 month');
+                    }
+                }
+
+                $table->addRow();
+                $table->addCell(4000)->addText(($index + 1) . '. ' . $stepName);
+
+                for ($month = 10; $month <= 12; $month++) {
+                    $cellStyle = in_array($month, $highlightMonths) ? ['bgColor' => 'FFFF00'] : [];
+                    $table->addCell(500, $cellStyle);
+                }
+                for ($month = 1; $month <= 9; $month++) {
+                    $cellStyle = in_array($month, $highlightMonths) ? ['bgColor' => 'FFFF00'] : [];
+                    $table->addCell(500, $cellStyle);
+                }
+            }
+        }
 
         // $section->addText(
         //     '10. ขั้นตอนการดำเนินงาน : ',
@@ -587,60 +656,79 @@ class WordController extends Controller
         // }
 
 
-        // $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
-        // $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
+        $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
+        $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
 
-        // foreach ($pro_steps as $step) {
-        //     $startDate = $step->start ?? null; // วันที่เริ่มต้น
-        //     $endDate = $step->end ?? null;    // วันที่สิ้นสุด
+        foreach ($pro_steps as $step) {
+            $startDate = $step->start ?? null; // วันที่เริ่มต้น
+            $endDate = $step->end ?? null;    // วันที่สิ้นสุด
 
-        //     if ($startDate) {
-        //         $start = Carbon::parse($startDate);
-        //         // อัปเดต $minStartDate ถ้า $start น้อยกว่า หรือ $minStartDate ยังเป็น null
-        //         if (!$minStartDate || $start->lessThan($minStartDate)) {
-        //             $minStartDate = $start;
-        //         }
-        //     }
+            if ($startDate) {
+                $start = Carbon::parse($startDate);
+                // อัปเดต $minStartDate ถ้า $start น้อยกว่า หรือ $minStartDate ยังเป็น null
+                if (!$minStartDate || $start->lessThan($minStartDate)) {
+                    $minStartDate = $start;
+                }
+            }
 
-        //     if ($endDate) {
-        //         $end = Carbon::parse($endDate);
-        //         // อัปเดต $maxEndDate ถ้า $end มากกว่า หรือ $maxEndDate ยังเป็น null
-        //         if (!$maxEndDate || $end->greaterThan($maxEndDate)) {
-        //             $maxEndDate = $end;
-        //         }
-        //     }
-        // }
+            if ($endDate) {
+                $end = Carbon::parse($endDate);
+                // อัปเดต $maxEndDate ถ้า $end มากกว่า หรือ $maxEndDate ยังเป็น null
+                if (!$maxEndDate || $end->greaterThan($maxEndDate)) {
+                    $maxEndDate = $end;
+                }
+            }
+        }
 
 
-        // // ตรวจสอบผลลัพธ์
-        // if ($minStartDate) {
-        //     $startDay = $minStartDate->day;
-        //     $startMonth = $minStartDate->translatedFormat('F');
-        //     $startYear = $minStartDate->year + 543;
-        //     $formattedStartDate = "{$startDay} {$startMonth} {$startYear}";
-        // } else {
-        //     $formattedStartDate = 'ไม่มีวันที่เริ่มต้น';
-        // }
+        // ตรวจสอบผลลัพธ์
+        if ($minStartDate) {
+            $startDay = $minStartDate->day;
+            $startMonth = $minStartDate->translatedFormat('F');
+            $startYear = $minStartDate->year + 543;
+            $formattedStartDate = "{$startDay} {$startMonth} {$startYear}";
+        } else {
+            $formattedStartDate = 'ไม่มีวันที่เริ่มต้น';
+        }
 
-        // if ($maxEndDate) {
-        //     $endDay = $maxEndDate->day;
-        //     $endMonth = $maxEndDate->translatedFormat('F');
-        //     $endYear = $maxEndDate->year + 543;
-        //     $formattedEndDate = "{$endDay} {$endMonth} {$endYear}";
-        // } else {
-        //     $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
-        // }
+        if ($maxEndDate) {
+            $endDay = $maxEndDate->day;
+            $endMonth = $maxEndDate->translatedFormat('F');
+            $endYear = $maxEndDate->year + 543;
+            $formattedEndDate = "{$endDay} {$endMonth} {$endYear}";
+        } else {
+            $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
+        }
 
-        // $textRun = $section->addTextRun();
+        // กำหนดรูปแบบสำหรับการเว้นระยะ
+        $spaceBeforeStyle = ['spaceBefore' => 200];
+        $textRun = $section->addTextRun($spaceBeforeStyle);
 
-        // $textRun->addText(
-        //     '11. ระยะเวลาดำเนินงาน : ',
-        //     $boldTextStyle
-        // );
+        $textRun->addText(
+            '11. ระยะเวลาดำเนินงาน : ',
+            $boldTextStyle
+        );
 
-        // $textRun->addText(
-        //     'เริ่มต้น ' . $formattedStartDate . ' สิ้นสุด ' . $formattedEndDate,
-        // );
+        $textRun->addText(
+            'เริ่มต้น ' . $formattedStartDate . ' สิ้นสุด ' . $formattedEndDate,
+        );
+
+        $section->addText('12. แหล่งเงิน / ประเภทงบประมาณที่ใช้ / แผนงาน', ['bold' => true]);
+
+        $hasBudget = false;
+        foreach ($badget_types as $badget_type) {
+            if ($projects->badID == $badget_type->badID) {
+                $hasBudget = true;
+                $section->addText('☑ ' . $badget_type->name, [], ['indentation' => ['left' => 480]]);
+            }
+        }
+
+        if (!$hasBudget) {
+            $section->addText('ไม่มีข้อมูล', [], ['indentation' => ['left' => 480]]);
+        }
+
+        
+
 
 
 

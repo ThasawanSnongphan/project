@@ -638,7 +638,7 @@ class PDFController extends Controller
             $htmlContent .= '<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ไม่มีข้อมูล</div>';
         }
 
-        $htmlContent .= '</div>'; // ปิด div
+        $htmlContent .= '</div>';
 
 
         $htmlContent .= '
