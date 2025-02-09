@@ -70,13 +70,14 @@ class PDFQ4Controller extends Controller
             .dot-line {
                 display: block; /* ให้ครอบคลุมเต็มบรรทัด */
                 border-bottom: 1px dotted black; /* จุดไข่ปลา */
-                white-space: nowrap; /* ห้ามตัดคำในบรรทัด */
+                
                 overflow: hidden; /* ป้องกันข้อความล้น */
                 text-align: left; /* จัดข้อความชิดซ้าย */
                 padding-left: 10px; /* เพิ่มช่องว่างระหว่างจุดไข่ปลากับข้อความ */
                 width: 100%; /* ให้ span เต็มบรรทัด */
                 white-space: normal; /* อนุญาตให้ขึ้นบรรทัดใหม่ */
                 word-wrap: break-word; /* ตัดคำเมื่อเกินบรรทัด */
+                overflow-wrap: break-word;
             }
 
    
@@ -90,6 +91,7 @@ class PDFQ4Controller extends Controller
 
         </style>";
 
+        // white-space: nowrap; /* ห้ามตัดคำในบรรทัด */
         // logo 
         $htmlContent = '
             <div style="text-align: left; margin-bottom: 20px;">
@@ -143,17 +145,28 @@ class PDFQ4Controller extends Controller
             <b style="font-size: 22pt;">เรื่อง</b>
             <span class="dot-line">' . addSpacesToEnd("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", $maxLineLength) . '</span><br>
             
-            <b style="font-size: 22pt;">เรื่อง</b>
-            <span class="dot-line">' . wrapTextWithDots("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", 80) . '</span><br>
-
+            
         ';
+
+        // <b style="font-size: 22pt;">เรื่อง</b>
+        //     <span class="dot-line">' . wrapTextWithDots("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", 80) . '</span><br>
+
         
 
+        $htmlContent .= '
+            <div style="margin-top: 7px;">
+                <b>เรียน</b> ผู้อํานวยการสํานักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ<br>
+            </div>
+        ';
 
 
-        // $htmlContent .= '
-        //     <b>เรียน</b><br>
-        // ';
+        $htmlContent .= ' 
+            <div style="page-break-inside: avoid;">
+                <div style="text-align: justify; text-indent: 2em;">
+                    ' . nl2br('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.') . ' <br>
+                </div>
+            </div>
+        ';
 
         $htmlContent .= '
             <div style="text-align: center;">
