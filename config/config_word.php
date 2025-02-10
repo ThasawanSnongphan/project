@@ -42,6 +42,8 @@ return [
         'right' => ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT],
         'left' => ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::LEFT],
         'indentation' => ['indentation' => ['left' => 920]],
+        'indentationMin' => ['indentation' => ['left' => 250]],
+        'indentationMax' => ['indentation' => ['left' => 500]],
     ],
 
     // กำหนดค่าการตั้งค่าหลายรูปแบบ
