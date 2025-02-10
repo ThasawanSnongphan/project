@@ -389,7 +389,7 @@ class PDFController extends Controller
 
             <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ (Output/Outcome) และ ค่าเป้าหมาย (ระบุหน่วยนับ)</b> <br>';
 
-        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+            if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
@@ -418,8 +418,8 @@ class PDFController extends Controller
                 // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่
                 foreach ($countKPI_pros as $countKPI_pro) {
                     if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
-                        $unitName = $countKPI_pro->name; // ดึงชื่อหน่วยนับ
-                        break; // ออกจาก loop เมื่อเจอข้อมูลที่ตรงกัน
+                        $unitName = $countKPI_pro->name; 
+                        break; 
                     }
                 }
 
@@ -434,7 +434,7 @@ class PDFController extends Controller
 
             $htmlContent .= '
                     </tbody>
-                </table>
+                    </table>
                 </body>
             ';
         }
@@ -638,7 +638,7 @@ class PDFController extends Controller
             $htmlContent .= '<div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ไม่มีข้อมูล</div>';
         }
 
-        $htmlContent .= '</div>'; // ปิด div
+        $htmlContent .= '</div>';
 
 
         $htmlContent .= '
@@ -652,7 +652,7 @@ class PDFController extends Controller
                 <table border="1" style="border-collapse: collapse; width: 100%; text-align: center; margin-bottom: 7px;">
                     <thead>
                         <tr>
-                            <td rowspan="3">ประเภทการจ่าย</td>
+                            <td rowspan="3" style="width: 24%;">ประเภทการจ่าย</td>
                             <td rowspan="2">รวม</td>
                         </tr>
                         <tr>
@@ -812,7 +812,7 @@ class PDFController extends Controller
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>15. ประโยชน์ที่คาดว่าจะได้รับ </b><br>
-            </div>
+            
         ';
 
 
@@ -842,7 +842,7 @@ class PDFController extends Controller
         $signatureName = $names[0] ?? 'ไม่มีข้อมูล';
 
         $htmlContent .= '
-            <div style="text-align: right; page-break-inside: avoid;">
+            <div style="text-align: right;">
                 <div style="width: 300px; text-align: center; display: inline-block; margin-left: auto; margin-right: 0;">
                     ลงชื่อ ................................................. <br>
                     ( ' . htmlspecialchars($signatureName) . ' ) <br>
@@ -851,6 +851,8 @@ class PDFController extends Controller
                 </div>
             </div>
         ';
+
+        $htmlContent .='</div>';
 
 
 
