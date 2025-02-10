@@ -107,7 +107,8 @@
                                             @foreach ($strategic as $stra)
                                                 @if ($stra->stra3LVID == $item->stra3LVID)
                                                     value="{{ $stra->name }}" 
-                                                @endif @endforeach
+                                                @endif
+                                             @endforeach
                                             readonly />
                                     </div>
 

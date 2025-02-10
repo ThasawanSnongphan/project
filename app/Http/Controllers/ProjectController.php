@@ -612,22 +612,37 @@ class ProjectController extends Controller
     function edit1(Request $request,$id){
         $project=Projects::find($id);
         // dd($project);
-        $strategic3LVMap = DB::table('strategic_maps')->where('proID',$id)->get();
-        
+        $strategic3LVMap= DB::table('strategic_maps')->where('proID',$id)->get();
+        $SFA3LVMap=$strategic3LVMap->pluck('SFA3LVID')->toArray();
+        $goal3LVMap = $strategic3LVMap->pluck('goal3LVID')->toArray();
+        $tac3LVMap =  $strategic3LVMap->pluck('tac3LVID')->toArray();
+
+        $KPIMain3LVMaps = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
+        $KPIMain3LVMap =  $KPIMain3LVMaps->pluck('KPIMain3LVID')->toArray();
+        // dd($KPIMain3LVMap);
+        // dd($tac3LVMap );
+        // dd($goal3LVMap);
+        // dd($SFA3LVMap3LV);
         // dd($strategic3LVMap);
-        $selectYear = $request->input('yearID');
+        // $selectYear = $request->input('yearID');
+        $selectYear = $project->yearID;
+        // dd($selectYear);
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() :  Strategic3Level::all();
+        // dd( $strategic3Level);
         $selectStra3LV = $request->input('stra3LVID');
         $SFA3LVs =  StrategicIssues::all();
+        // $data['SFA3LVs'] = StrategicIssues::where('SFA3LVID', '=', $data['strategic3LVMap']->SFA3LVID)->first();
+        // dd($SFA3LVs);
         // $sfa3LVIDs = $SFA3LVs->pluck('SFA3LVID');
         $goal3Level = Goals::all();
         // $goal3Level = DB::table('goals')->whereIn('SFA3LVID',$sfa3LVIDs)->get();
         // dd($goal3Level);
         $selectGoal3Level = $request->input('goal3LVID');
-        $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
+        // $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
+        $tactics3LV =Tactics::all(); 
         $KPIMain3LV = KPIMains::all();
-        $KPIMain3LVMap = KPIMainMapProjects::all();
+        // $KPIMain3LVMap = KPIMainMapProjects::all();
 
         $strategic2LVMap = DB::table('strategic2_level_map_projects')->where('proID',$id)->get();
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() :  Strategic2Level::all();
@@ -640,7 +655,7 @@ class ProjectController extends Controller
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() :  Strategic1Level::all();
         $target1LV = Target1Level::all();
 
-        return view('Project.update1',compact('project','strategic3LVMap','selectYear','year','strategic3Level','selectStra3LV','SFA3LVs','goal3Level','selectGoal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
+        return view('Project.update1',compact('project','strategic3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMaps','KPIMain3LVMap','SFA3LVs','selectYear','year','strategic3Level','selectStra3LV','goal3Level','selectGoal3Level','tactics3LV','KPIMain3LV','KPIMain3LVMap','strategic2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap','strategic1Level','strategic1LVMap','target1LV'));
     }
 
     function update1(Request $request,$id){

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StrategicIssues extends Model
 {
+    protected $primaryKey = 'SFA3LVID';
     use HasFactory;
     public function strategic()
     {
