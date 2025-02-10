@@ -419,77 +419,8 @@ class WordController extends Controller
         $section->addText('9. กลุ่มเป้าหมาย (ระบุกลุ่มเป้าหมายและจำนวนกลุ่มเป้าหมายที่เข้าร่วมโครงการ)', $boldTextStyle, $spaceBeforeStyle);
         $section->addText('    ' . $targetName);
 
-        $pro_steps = DB::table('steps')->where('proID', $id)->get();
 
-        if ($pro_steps->isNotEmpty()) {
-            $minYear = PHP_INT_MAX;
-            $maxYear = PHP_INT_MIN;
-
-            foreach ($pro_steps as $step) {
-                $startDate = $step->start ?? null;
-                $endDate = $step->end ?? null;
-                $startYear = $startDate ? (new DateTime($startDate))->format('Y') + 543 : null;
-                $endYear = $endDate ? (new DateTime($endDate))->format('Y') + 543 : null;
-
-                if ($startYear) {
-                    $minYear = min($minYear, $startYear);
-                }
-                if ($endYear) {
-                    $maxYear = max($maxYear, $endYear);
-                }
-            }
-
-            if ($minYear === PHP_INT_MAX) $minYear = 'N/A';
-            if ($maxYear === PHP_INT_MIN) $maxYear = 'N/A';
-
-            $section->addText('10. ขั้นตอนการดำเนินงาน :', ['bold' => true], ['spaceBefore' => 240]);
-
-            $table = $section->addTable(['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 50]);
-
-            // Header row
-            $table->addRow();
-            $table->addCell(4000, ['vMerge' => 'restart'])->addText('ขั้นตอนการดำเนินการ', ['bold' => true]);
-            $table->addCell(2000, ['gridSpan' => 3])->addText('พ.ศ. ' . $minYear, ['bold' => true]);
-            $table->addCell(6000, ['gridSpan' => 12])->addText('พ.ศ. ' . $maxYear, ['bold' => true]);
-
-            // Month row
-            $table->addRow();
-            $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
-            $table->addCell(null, ['vMerge' => 'continue']);
-            foreach ($months as $month) {
-                $table->addCell(500)->addText($month);
-            }
-
-            // Data rows
-            foreach ($pro_steps as $index => $step) {
-                $stepName = $step->name ?? 'ไม่มีข้อมูล';
-                $highlightMonths = [];
-                $startDate = $step->start ?? null;
-                $endDate = $step->end ?? null;
-
-                if ($startDate && $endDate) {
-                    $start = new DateTime($startDate);
-                    $end = new DateTime($endDate);
-                    while ($start <= $end) {
-                        $highlightMonths[] = $start->format('n');
-                        $start->modify('+1 month');
-                    }
-                }
-
-                $table->addRow();
-                $table->addCell(4000)->addText(($index + 1) . '. ' . $stepName);
-
-                for ($i = 10; $i <= 12; $i++) {
-                    $table->addCell(500, ['bgColor' => in_array($i, $highlightMonths) ? 'yellow' : null]);
-                }
-                for ($i = 1; $i <= 9; $i++) {
-                    $table->addCell(500, ['bgColor' => in_array($i, $highlightMonths) ? 'yellow' : null]);
-                }
-            }
-        }
-
-
-        $section->addText('10. ขั้นตอนการดำเนินงาน :', ['bold' => true], ['spaceBefore' => 240]);
+        $section->addText('10. ขั้นตอนการดำเนินงาน :', $boldTextStyle, ['spaceBefore' => 240]);
 
         if (DB::table('steps')->where('proID', $id)->exists()) {
             $pro_steps = DB::table('steps')->where('proID', $id)->get();
@@ -514,20 +445,27 @@ class WordController extends Controller
             if ($minYear === PHP_INT_MAX) $minYear = 'N/A';
             if ($maxYear === PHP_INT_MIN) $maxYear = 'N/A';
 
-            $tableStyle = ['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 50];
+            $tableStyle = [
+                'borderSize' => 6,
+                'borderColor' => '000000',
+                'cellMargin' => 60
+            ];
             $phpWord->addTableStyle('myTable', $tableStyle);
             $table = $section->addTable('myTable');
 
             $table->addRow();
-            $table->addCell(4000)->addText('ขั้นตอนการดำเนินการ', ['bold' => true]);
-            $table->addCell(1500, ['gridSpan' => 3])->addText('พ.ศ. ' . $minYear, ['bold' => true]);
-            $table->addCell(4500, ['gridSpan' => 9])->addText('พ.ศ. ' . $maxYear, ['bold' => true]);
+            $table->addCell(4900, ['vMerge' => 'restart', 'valign' => 'center', 'gridSpan' => 1])
+                ->addText('ขั้นตอนการดำเนินการ', $boldTextStyle, $center);
+            $table->addCell(1600, ['gridSpan' => 3])
+                ->addText('พ.ศ. ' . $minYear, $boldTextStyle, $center);
+            $table->addCell(3500, ['gridSpan' => 9])
+                ->addText('พ.ศ. ' . $maxYear, $boldTextStyle, $center);
 
             $table->addRow();
-            $table->addCell();
+            $table->addCell(null, ['vMerge' => 'continue']);
             $months = ['ต.ค.', 'พ.ย.', 'ธ.ค.', 'ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.'];
             foreach ($months as $month) {
-                $table->addCell(500)->addText($month);
+                $table->addCell(1000)->addText($month);
             }
 
             foreach ($pro_steps as $index => $step) {
@@ -558,102 +496,6 @@ class WordController extends Controller
                 }
             }
         }
-
-        // $section->addText(
-        //     '10. ขั้นตอนการดำเนินงาน : ',
-        //     $boldTextStyle
-        // );
-
-
-        // if (DB::table('steps')->where('proID', $id)->exists()) {
-        //     $pro_steps = DB::table('steps')->where('proID', $id)->get();
-
-        //     $minYear = PHP_INT_MAX;
-        //     $maxYear = PHP_INT_MIN;
-
-        //     foreach ($pro_steps as $step) {
-        //         $startDate = $step->start ?? null;
-        //         $endDate = $step->end ?? null;
-        //         $startYear = $startDate ? (new DateTime($startDate))->format('Y') + 543 : null;
-        //         $endYear = $endDate ? (new DateTime($endDate))->format('Y') + 543 : null;
-
-        //         if ($startYear) {
-        //             $minYear = min($minYear, $startYear);
-        //         }
-        //         if ($endYear) {
-        //             $maxYear = max($maxYear, $endYear);
-        //         }
-        //     }
-
-        //     if ($minYear === PHP_INT_MAX) {
-        //         $minYear = 'N/A';
-        //     }
-        //     if ($maxYear === PHP_INT_MIN) {
-        //         $maxYear = 'N/A';
-        //     }
-
-
-        //     // กำหนด style ของตาราง
-        //     $tableStyle = [
-        //         'borderSize' => 6,
-        //         'borderColor' => '000000',
-        //         'cellMargin' => 50
-        //     ];
-        //     $phpWord->addTableStyle('myTable', $tableStyle);
-
-        //     // เพิ่มตารางในเอกสาร
-        //     $table = $section->addTable('myTable');
-
-        //     // เพิ่มหัวตาราง
-        //     $table->addRow();
-        //     $table->addCell(null, ['vMerge' => 'restart', 'valign' => 'center', 'gridSpan' => 1])
-        //         ->addText('ขั้นตอนการดำเนินการ');
-        //     $table->addCell(null, ['gridSpan' => 3, 'valign' => 'center'])
-        //         ->addText('พ.ศ. ' . $minYear);
-        //     $table->addCell(null, ['gridSpan' => 9, 'valign' => 'center'])
-        //         ->addText('พ.ศ. ' . $maxYear);
-
-        //     $table->addRow();
-        //     $table->addCell(); // เว้น cell ว่าง
-        //     $table->addCell()->addText('ต.ค.');
-        //     $table->addCell()->addText('พ.ย.');
-        //     $table->addCell()->addText('ธ.ค.');
-        //     $table->addCell()->addText('ม.ค.');
-        //     $table->addCell()->addText('ก.พ.');
-        //     $table->addCell()->addText('มี.ค.');
-        //     $table->addCell()->addText('เม.ย.');
-        //     $table->addCell()->addText('พ.ค.');
-        //     $table->addCell()->addText('มิ.ย.');
-        //     $table->addCell()->addText('ก.ค.');
-        //     $table->addCell()->addText('ส.ค.');
-        //     $table->addCell()->addText('ก.ย.');
-
-        //     // เพิ่มข้อมูลในตาราง
-        //     foreach ($pro_steps as $index => $step) {
-        //         $stepName = $step->name ?? 'N/A';
-        //         $highlightMonths = [];
-        //         $startDate = $step->start ?? null;
-        //         $endDate = $step->end ?? null;
-
-        //         if ($startDate && $endDate) {
-        //             $start = new DateTime($startDate);
-        //             $end = new DateTime($endDate);
-
-        //             while ($start <= $end) {
-        //                 $highlightMonths[] = $start->format('n'); // ดึงเดือน (1-12)
-        //                 $start->modify('+1 month'); // เลื่อนเดือนเพิ่มทีละ 1
-        //             }
-        //         }
-
-        //         $table->addRow();
-        //         $table->addCell()->addText(($index + 1) . '. ' . $stepName);
-
-        //         for ($month = 1; $month <= 12; $month++) {
-        //             $cellStyle = in_array($month, $highlightMonths) ? ['bgColor' => 'FFFF00'] : []; // ไฮไลต์เซลล์
-        //             $table->addCell(null, $cellStyle);
-        //         }
-        //     }
-        // }
 
 
         $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
@@ -713,7 +555,7 @@ class WordController extends Controller
             'เริ่มต้น ' . $formattedStartDate . ' สิ้นสุด ' . $formattedEndDate,
         );
 
-        $section->addText('12. แหล่งเงิน / ประเภทงบประมาณที่ใช้ / แผนงาน', ['bold' => true]);
+        $section->addText('12. แหล่งเงิน / ประเภทงบประมาณที่ใช้ / แผนงาน', $boldTextStyle);
 
         $hasBudget = false;
         foreach ($badget_types as $badget_type) {
@@ -727,7 +569,191 @@ class WordController extends Controller
             $section->addText('ไม่มีข้อมูล', [], ['indentation' => ['left' => 480]]);
         }
 
-        
+        // ตรวจสอบข้อมูล
+        if (!$hasBudget) {
+            $section->addText('ไม่มีข้อมูล', $boldTextStyle);
+        }
+
+        $section->addText('13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท )', $boldTextStyle);
+
+        // สร้างตาราง
+        $table = $section->addTable([
+            'borderSize' => 6,
+            'borderColor' => '000000',
+            'width' => 100 * 80,
+            'cellMargin' => 100
+
+
+        ]);
+
+        // หัวตาราง
+        $table->addRow();
+        $table->addCell(4000, ['vMerge' => 'restart', 'valign' => 'center'])->addText('ประเภทการจ่าย', [], $center);
+        $table->addCell(2500)->addText('รวม', [], $center);
+        $table->addCell(2500)->addText('ไตรมาส 1', [], $center);
+        $table->addCell(2500)->addText('ไตรมาส 2', [], $center);
+        $table->addCell(2500)->addText('ไตรมาส 3', [], $center);
+        $table->addCell(2500)->addText('ไตรมาส 4', [], $center);
+
+        $table->addRow();
+        $table->addCell(null, ['vMerge' => 'continue']);
+        $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
+        $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
+        $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
+        $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
+        $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
+
+        $totalCost = 0;
+        $sumTotal = 0;
+        $sumQu1 = 0;
+        $sumQu2 = 0;
+        $sumQu3 = 0;
+        $sumQu4 = 0;
+        $counter = 1;
+
+        foreach ($cost_quarters as $cost_quarter) {
+            if ($projects->proID == $cost_quarter->proID) {
+                $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+                $sumTotal += $totalCost;
+                $sumQu1 += $cost_quarter->costQu1;
+                $sumQu2 += $cost_quarter->costQu2;
+                $sumQu3 += $cost_quarter->costQu3;
+                $sumQu4 += $cost_quarter->costQu4;
+
+                foreach ($expense_badgets as $expense_badget) {
+                    if ($cost_quarter->expID == $expense_badget->expID) {
+                        $table->addRow();
+                        $table->addCell(4000)->addText($counter . '. ' . $expense_badget->name);
+                        for ($i = 0; $i < 5; $i++) $table->addCell(1200)->addText('');
+                    }
+                }
+
+                $subCounter = 1;
+                foreach ($cost_types as $cost_type) {
+                    if ($cost_quarter->costID == $cost_type->costID) {
+                        $table->addRow();
+                        $table->addCell(4000)->addText($counter . '.' . $subCounter . ' ' . $cost_type->name, [], $center);
+                        $table->addCell(2500)->addText($totalCost > 0 ? number_format($totalCost, 2) : '-', [], $center);
+                        $table->addCell(2500)->addText($cost_quarter->costQu1 > 0 ? number_format($cost_quarter->costQu1, 2) : '-', [], $center);
+                        $table->addCell(2500)->addText($cost_quarter->costQu2 > 0 ? number_format($cost_quarter->costQu2, 2) : '-', [], $center);
+                        $table->addCell(2500)->addText($cost_quarter->costQu3 > 0 ? number_format($cost_quarter->costQu3, 2) : '-', [], $center);
+                        $table->addCell(2500)->addText($cost_quarter->costQu4 > 0 ? number_format($cost_quarter->costQu4, 2) : '-', [], $center);
+                        $subCounter++;
+                        $counter++;
+                    }
+                }
+            }
+        }
+
+        // แสดงผลรวมท้ายตาราง
+        $table->addRow();
+        $table->addCell(4000)->addText('รวมเงินงบประมาณ', [], $center);
+        $table->addCell(2500)->addText($sumTotal > 0 ? number_format($sumTotal, 2) : '-', [], $center);
+        $table->addCell(2500)->addText($sumQu1 > 0 ? number_format($sumQu1, 2) : '-', [], $center);
+        $table->addCell(2500)->addText($sumQu2 > 0 ? number_format($sumQu2, 2) : '-', [], $center);
+        $table->addCell(2500)->addText($sumQu3 > 0 ? number_format($sumQu3, 2) : '-', [], $center);
+        $table->addCell(2500)->addText($sumQu4 > 0 ? number_format($sumQu4, 2) : '-', [], $center);
+
+
+        function numberToThai($number)
+        {
+            $thaiNumbers = [
+                0 => 'ศูนย์',
+                1 => 'หนึ่ง',
+                2 => 'สอง',
+                3 => 'สาม',
+                4 => 'สี่',
+                5 => 'ห้า',
+                6 => 'หก',
+                7 => 'เจ็ด',
+                8 => 'แปด',
+                9 => 'เก้า',
+                10 => 'สิบ',
+                20 => 'ยี่สิบ',
+                30 => 'สามสิบ',
+                40 => 'สี่สิบ',
+                50 => 'ห้าสิบ',
+                60 => 'หกสิบ',
+                70 => 'เจ็ดสิบ',
+                80 => 'แปดสิบ',
+                90 => 'เก้าสิบ',
+                100 => 'ร้อย',
+                1000 => 'พัน',
+                10000 => 'หมื่น',
+                100000 => 'แสน',
+                1000000 => 'ล้าน'
+            ];
+
+            if ($number == 0) {
+                return $thaiNumbers[0];
+            }
+
+            $str = '';
+            $number = (int)$number;
+            $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
+
+            foreach ($units as $unit) {
+                $num = (int)($number / $unit);
+                $number %= $unit;
+
+                if ($num > 0) {
+                    if ($unit >= 100 && $num == 1) {
+                        $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
+                    } elseif ($unit >= 10 && $num == 2) {
+                        $str .= 'ยี่' . $thaiNumbers[$unit];
+                    } else {
+                        $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
+                    }
+                }
+            }
+
+            return $str . 'บาทถ้วน';
+        }
+
+        $spaceBeforeStyle = ['spaceBefore' => 200];
+        $sumTotalInWords = numberToThai($sumTotal);
+
+        $textRun = $section->addTextRun(['spaceAfter' => 240, 'spaceBefore' => 200]); // ใช้ $spaceBeforeStyle ที่นี่
+
+        $textRun->addText('14. ประมาณการงบประมาณที่ใช้ : ', $boldTextStyle);
+        $textRun->addText(number_format($sumTotal, 2) . ' บาท (' . $sumTotalInWords . ')');
+
+
+
+        $section->addText('15. ประโยชน์ที่คาดว่าจะได้รับ', $boldTextStyle);
+
+        $bnfs = DB::table('benefits')->where('proID', $id)->get(); // ดึงข้อมูลที่ตรงกับ proID
+
+        if ($bnfs->isNotEmpty()) { // ถ้ามีข้อมูล
+            $counter = 1;
+            foreach ($bnfs as $bnf) {
+                $section->addText(
+                    '     15.' . $counter . ' ' . $bnf->detail,
+                    [],
+                    ['spaceAfter' => 120] // ตั้งค่าระยะห่างระหว่างบรรทัด
+                );
+                $counter++;
+            }
+        } else {
+            $section->addText('     ไม่มีข้อมูล', [], ['spaceAfter' => 120]);
+        }
+
+        $section->addTextBreak(5); 
+
+        // กำหนดค่าเริ่มต้นให้กับชื่อ
+        $signatureName = $names[0] ?? 'ไม่มีข้อมูล';
+
+        $section->addTextBreak(2);
+
+        $textRun = $section->addTextRun(['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $textRun->addText("ลงชื่อ ", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $textRun->addText(".................................................", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $section->addText('(' . htmlspecialchars($signatureName) . ')', [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $section->addText("ผู้รับผิดชอบโครงการ", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $section->addText("วันที่ ........../......................./..........", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+
+
+
 
 
 
