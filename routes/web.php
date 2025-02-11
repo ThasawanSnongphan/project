@@ -111,7 +111,9 @@ Route::post('/projectSend2/{id}', [ProjectController::class,'send2']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');
 // Route::get('projectedit1/{id}',[ProjectController::class,'edit1'])->name('project.edit1');
 Route::any('projectedit/{id}',[ProjectController::class,'edit1'])->name('project.edit1');
-Route::post('projectupdate1/{id}',[ProjectController::class,'update1'])->name('project.update1');
+Route::post('projectsaveUpdate1/{id}',[ProjectController::class,'saveUpdate1']);
+Route::post('projectsendUpdate1/{id}',[ProjectController::class,'sendUpdate1']);
+
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 

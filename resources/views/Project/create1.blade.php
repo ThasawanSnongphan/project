@@ -294,7 +294,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="SFAID_{{ $index }}" name="tar1LVID[]" class="form-control"
+                                <select id="tar1LVID_{{ $index }}" name="tar1LVID[]" class="form-control"
                                      required>
                                     <option value="">--เลือกเป้าหมาย--</option>
                                     @foreach ($target1LV as $target)

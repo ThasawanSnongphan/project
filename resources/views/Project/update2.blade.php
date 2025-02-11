@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form method="POST" action="{{ route('project.update', $project->proID) }}"novalidate
+                    <form method="POST" action=""novalidate
                         enctype="multipart/form-data">
                         @csrf
                         <div class="row field item form-group align-items-center">
