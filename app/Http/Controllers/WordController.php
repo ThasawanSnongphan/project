@@ -353,9 +353,17 @@ class WordController extends Controller
 
         $section->addText('6. หลักการและเหตุผลของโครงการ', $boldTextStyle);
 
-        $textRun = $section->addTextRun($indentationMin);
-        $textRun->addText($projects->princiDetail, null, ['align' => 'both', 'firstLineIndent' => 800]);
+        // กำหนดสไตล์การจัดวางข้อความ
+        $paragraphStyle = [
+            'align' => 'both',       // จัดข้อความชิดซ้าย-ขวา
+            'spaceAfter' => 120,     // ระยะห่างระหว่างย่อหน้า (หน่วย twip)
+            'firstLineIndent' => 5000 // ย่อหน้าแรกเข้าไป
+        ];
 
+        // เพิ่มข้อความพร้อมกำหนดสไตล์
+        $textRun = $section->addTextRun($paragraphStyle);
+        $textRun->addText($projects->princiDetail, null);
+        
 
         $section->addText('7. วัตถุประสงค์', $boldTextStyle);
 
@@ -738,7 +746,7 @@ class WordController extends Controller
             $section->addText('     ไม่มีข้อมูล', [], ['spaceAfter' => 120]);
         }
 
-        $section->addTextBreak(5); 
+        $section->addTextBreak(5);
 
         // กำหนดค่าเริ่มต้นให้กับชื่อ
         $signatureName = $names[0] ?? 'ไม่มีข้อมูล';
