@@ -4,6 +4,7 @@ use App\Http\Controllers\PDFAllResultsController;
 use App\Http\Controllers\PDFKPIController;
 use App\Http\Controllers\PDFPlanController;
 use App\Http\Controllers\PDFQ4Controller;
+use App\Http\Controllers\WordQ4Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
@@ -51,10 +52,11 @@ Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
 
-Route::get('/gen-word', [WordController::class, 'createWordDoc']); //แบบไม่ db
 Route::get('/gen-word-db/{$id}', [WordController::class, 'createWordDocFromDB']); //db
+Route::get('/gen-word-Q4', [WordQ4Controller::class, 'createWordDocFromDB']); //db
 
-Route::get('/generate-pdf', [PDFController::class, 'generatePDF']); //แบบไม่ db
+
+
 
 
 Route::get('/', [NewsController::class,'index']);

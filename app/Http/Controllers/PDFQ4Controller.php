@@ -16,9 +16,6 @@ class PDFQ4Controller extends Controller
         $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
 
-        // กำหนดความยาวของเส้นใต้ (ปรับ px ตามต้องการ)
-        // $underlineLength = "300px"; 
-
         $stylesheet = "
         <style>
             table {
@@ -91,7 +88,6 @@ class PDFQ4Controller extends Controller
 
         </style>";
 
-        // white-space: nowrap; /* ห้ามตัดคำในบรรทัด */
         // logo 
         $htmlContent = '
             <div style="text-align: left; margin-bottom: 20px;">
@@ -194,10 +190,19 @@ class PDFQ4Controller extends Controller
 
         ';
 
-        $htmlContent .= '
-            <div style="text-align: center;">
-                <b>โครงการนอกแผนปฏิบัติการประจําปีงบประมาณ พ.ศ. 2566</b>
+        $htmlContent .= ' 
+            <div style="page-break-inside: avoid;">
+                <div style="text-align: justify; text-indent: 2em;">
+                    ' . nl2br('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.') . ' <br>
+                </div>
             </div>
+        ';
+
+        $htmlContent .= '
+            <div style="page-break-inside: avoid;">
+                <div style="text-align: center;">
+                    <b>โครงการนอกแผนปฏิบัติการประจําปีงบประมาณ พ.ศ. 2566</b>
+                </div>
         ';
 
         $htmlContent .= '
@@ -219,6 +224,8 @@ class PDFQ4Controller extends Controller
             </table>
 
         ';
+
+        $htmlContent .= '</div>';
 
         $htmlContent .= '
             <div style="text-align: center;">
