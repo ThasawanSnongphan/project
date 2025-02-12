@@ -662,11 +662,11 @@ class PDFController extends Controller
                             <td>ไตรมาส 4</td>
                         </tr>
                         <tr>
-                            <td>แผนการใช้จ่าย</td>
-                            <td>แผนการใช้จ่าย</td>
-                            <td>แผนการใช้จ่าย</td>
-                            <td>แผนการใช้จ่าย</td>
-                            <td>แผนการใช้จ่าย</td>
+                            <td style="width: 16%;">แผนการใช้จ่าย</td>
+                            <td style="width: 16%;">แผนการใช้จ่าย</td>
+                            <td style="width: 16%;">แผนการใช้จ่าย</td>
+                            <td style="width: 16%;">แผนการใช้จ่าย</td>
+                            <td style="width: 16%;">แผนการใช้จ่าย</td>
                         </tr>
                     </thead>
                     <tbody>';
