@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="/projectedit1" novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="" novalidate enctype="multipart/form-data">
                         @csrf
 
                         <div class="row field item form-group align-items-center">
@@ -48,7 +48,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="name" id="name"
+                                <input class="form-control" type="text" name="project_name" id="project_name"
                                     data-validate-length-range="8,20" value="{{ $project->name }}" />
 
                             </div>
@@ -325,10 +325,10 @@
                                                 @foreach ($KPIMain2LV as $KPI)
                                                     @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                         @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
-                                                            <option value="{{ $KPI->KPIMain2LV }}" selected>
+                                                            <option value="{{ $KPI->KPIMain2LVID }}" selected>
                                                                 {{ $KPI->name }}</option>
                                                         @else
-                                                            <option value="{{ $KPI->KPIMain2LV }}">
+                                                            <option value="{{ $KPI->KPIMain2LVID }}">
                                                                 {{ $KPI->name }}</option>
                                                         @endif
                                                     @endif
@@ -338,8 +338,8 @@
                                         </div>
                                         <div class=" col-md-3 col-sm-3 m-1">
 
-                                            <input class="form-control" type="text" name="countMain3LV[]"
-                                                id="count3LV_{{ $index }}"
+                                            <input class="form-control" type="text" name="countMain2LV[]"
+                                                id="count2LV_{{ $index }}"
                                                 @foreach ($KPIMain2LV as $KPI)
                                                 @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                     @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
@@ -352,8 +352,8 @@
 
                                         </div>
                                         <div class=" col-md-3 col-sm-3 m-1">
-                                            <input class="form-control" type="text" name="targetMain3LV[]"
-                                                id="target3LV_{{ $index }}" 
+                                            <input class="form-control" type="text" name="targetMain2LV[]"
+                                                id="target2LV_{{ $index }}" 
                                                 @foreach ($KPIMain2LV as $KPI)
                                                 @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                     @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
@@ -390,7 +390,7 @@
                                     class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 d-flex">
-                                    <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra3LVID }}"
+                                    <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra1LVID }}"
                                         @foreach ($strategic1LVMap as $map)
                                         @if ($item->stra1LVID == $map->stra1LVID)
                                                 checked

@@ -31,13 +31,12 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="yearID" id="yearID"
+                                <input type="hidden" name="yearID" id="yearID" value="{{ session('yearID') }}">
+                                <input class="form-control" type="text" name="year" id="year"
                                     data-validate-length-range="8,20"
                                     @foreach ($years as $item)
-                                        @if ($item->yearID == $project->yearID)
-                                        value="{{ $item->year }}" 
-                                        @endif @endforeach
-                                    disabled />
+                                        {{ session('yearID') == $item->yearID }} value="{{ $item->year }}" @endforeach
+                                    readonly />
                             </div>
                         </div>
 
@@ -45,8 +44,8 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="name" id="name"
-                                    data-validate-length-range="8,20" value="{{ $project->name }}" disabled />
+                                <input class="form-control" type="text" name="project_name" id="project_name"
+                                    data-validate-length-range="8,20" value="{{ session('name') }}" readonly />
 
                             </div>
                         </div>
@@ -84,8 +83,7 @@
                             <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="format" name="format" class="form-control" required
-                                    onchange="this.form.submit()">
+                                <select id="format" name="format" class="form-control" required>
                                     <option value="team"
                                         {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
                                     <option value="department"
@@ -95,21 +93,23 @@
                             </div>
                         </div>
 
-                        @foreach ($strateegicMap as $item)
-                            @if ($item->proID == $project->proID)
+
+                        @if (session()->has('stra3LVID'))
+                            @foreach (session('stra3LVID') as $index => $item)
                                 <div class="row field item form-group align-items-center">
                                     <label for="plan"
-                                        class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
-                                            class="required">*</span></label>
+                                        class="col-form-label col-md-3 col-sm-3 label-align">ชื่อแผน</label>
                                     <div class="col-md-6 col-sm-6">
-                                        <input class="form-control" type="text" name="name" id="name"
-                                            data-validate-length-range="8,20"
-                                            @foreach ($strategic as $stra)
-                                                @if ($stra->stra3LVID == $item->stra3LVID)
-                                                    value="{{ $stra->name }}" 
-                                                @endif
-                                             @endforeach
-                                            readonly />
+                                        <input type="hidden" name="stra3LVID[]" value="{{ $item }}">
+
+                                        @foreach ($strategic as $stra)
+                                            @if ($stra->stra3LVID == $item)
+                                                <input class="form-control" type="text" id="stra3LV"
+                                                    data-validate-length-range="8,20" value="{{ $stra->name }}"
+                                                    readonly />
+                                            @endif
+                                        @endforeach
+
                                     </div>
 
                                 </div>
@@ -120,13 +120,19 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($SFAs as $SFA)
-                                                    @if ($SFA->SFA3LVID == $item->SFA3LVID)
-                                                         value="{{ $SFA->name }}" 
-                                                    @endif @endforeach
-                                                readonly />
+                                            @foreach ($SFAs as $SFA)
+                                                @if (session()->has('SFA3LVID') && is_array(session('SFA3LVID')))
+                                                    @foreach (session('SFA3LVID') as $SFA3LVID)
+                                                        @if ($SFA->SFA3LVID == $SFA3LVID && $SFA->stra3LVID == $item)
+                                                            <input type="hidden" name="SFA3LVID[]"
+                                                                value="{{ $SFA->SFA3LVID }}">
+                                                            <input class="form-control" type="text" id="SFA3LVID"
+                                                                value="{{ $SFA->name }}" readonly>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
@@ -134,14 +140,18 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($goals as $goal)
-                                                   @if ($goal->goal3LVID == $item->goal3LVID)
-                                                        value="{{ $goal->name }}"
-                                                       
-                                                   @endif @endforeach
-                                                readonly />
+                                            @foreach ($goals as $goal)
+                                                @if (session()->has('goal3LVID') && is_array(session('goal3LVID')))
+                                                    @foreach (session('goal3LVID') as $goal3LVID)
+                                                        @if ($goal->goal3LVID == $goal3LVID && $goal->SFA3LVID == session('SFA3LVID')[$index])
+                                                            <input type="hidden" name="goal3LVID[]"
+                                                                value="{{ $goal->goal3LVID }}">
+                                                            <input class="form-control" type="text" id="goal3LVID"
+                                                                value="{{ $goal->name }}" readonly>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
@@ -149,56 +159,67 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($tactics as $tactic)
-                                                    @if ($tactic->tac3LVID == $item->tac3LVID)
-                                                        value="{{ $tactic->name }}" 
-                                                        
-                                                    @endif @endforeach
-                                                readonly />
+                                            @foreach ($tactics as $tactic)
+                                                @if (session()->has('tac3LVID') && is_array(session('tac3LVID')))
+                                                    @foreach (session('tac3LVID') as $tac3LVID)
+                                                        @if ($tactic->tac3LVID == $tac3LVID && $tactic->goal3LVID == session('goal3LVID')[$index])
+                                                            <input type="hidden" name="tac3LVID[]"
+                                                                value="{{ $tactic->tac3LVID }}">
+                                                            <input class="form-control" type="text" id="tac3LVID"
+                                                                value="{{ $tactic->name }}" readonly>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ตัวชีวัดของแผน<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-4 col-sm-4">
-                                            @foreach ($KPIMainMapProject as $KPIMap)
-                                                @if ($KPIMap->proID == $project->proID)
-                                                    @if ($item->stra3LVID == $KPIMap->stra3LVID)
-                                                        <input class="form-control" type="text" name="name"
-                                                            id="name"
-                                                            @foreach ($KPIMains as $KPI)
-                                                            @if ($KPI->KPIMain3LVID == $KPIMap->KPIMain3LVID)
-                                                                 value= "{{ $KPI->name }}"
-                                                                
-                                                            @endif @endforeach
-                                                            readonly />
-                                                    @endif
+                                        <div class="col-md-8 col-sm-8 d-flex ">
+
+                                            @foreach ($KPIMains as $KPI)
+                                                @if (session()->has('KPIMain3LVID') && is_array(session('KPIMain3LVID')))
+                                                    @foreach (session('KPIMain3LVID') as $KPIMain3LVID)
+                                                        @if ($KPI->KPIMain3LVID == $KPIMain3LVID && $KPI->goal3LVID == session('goal3LVID')[$index])
+                                                            <input type="hidden" name="KPIMain3LVID[]"
+                                                                value="{{ $KPI->KPIMain3LVID }}">
+                                                            <input class="form-control mr-2" type="text"
+                                                                id="KPIMain3LVID" value="{{ $KPI->name }}" readonly>
+                                                            <input class="form-control mr-2" type="text"
+                                                                name="count3LVID" id="count3LVID"
+                                                                value="{{ $KPI->count }}" readonly>
+                                                            <input class="form-control" type="text" name="target3LVID"
+                                                                id="target3LVID" value="{{ $KPI->target }}" readonly>
+                                                        @endif
+                                                    @endforeach
                                                 @endif
                                             @endforeach
+
 
                                         </div>
                                     </div>
 
                                 </div>
-                            @endif
-                        @endforeach
-                        @foreach ($strategic2LVMap as $item)
-                            @if ($item->proID == $project->proID)
+                            @endforeach
+                        @endif
+                        @if (session()->has('stra2LVID'))
+                            @foreach (session('stra2LVID') as $index => $item)
                                 <div class="row field item form-group align-items-center">
                                     <label for="plan"
                                         class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-6 col-sm-6">
-                                        <input class="form-control" type="text" name="name" id="name"
-                                            data-validate-length-range="8,20"
-                                            @foreach ($strategic2LV as $stra)
-                                                @if ($stra->stra2LVID == $item->stra2LVID)
-                                                    value="{{ $stra->name }}" 
-                                                @endif @endforeach
-                                            readonly />
+                                        <input type="hidden" name="stra2LVID[]" value="{{ $item }}">
+                                        @foreach ($strategic2LV as $stra)
+                                            @if ($stra->stra2LVID == $item)
+                                                <input class="form-control" type="text" id="stra2LVID"
+                                                    data-validate-length-range="8,20" value="{{ $stra->name }}"
+                                                    readonly />
+                                            @endif
+                                        @endforeach
+
                                     </div>
 
                                 </div>
@@ -209,13 +230,19 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($SFA2Lv as $SFA)
-                                                    @if ($SFA->SFA2LVID == $item->SFA2LVID)
-                                                         value="{{ $SFA->name }}" 
-                                                    @endif @endforeach
-                                                readonly />
+                                            @foreach ($SFA2Lv as $SFA)
+                                                @if (session()->has('SFA2LVID') && is_array(session('SFA2LVID')))
+                                                    @foreach (session('SFA2LVID') as $SFA2LVID)
+                                                        @if ($SFA->SFA2LVID == $SFA2LVID && $SFA->stra2LVID == $item)
+                                                            <input type="hidden" name="SFA2LVID[]"
+                                                                value="{{ $SFA->SFA2LVID }}">
+                                                            <input class="form-control" type="text" id="SFA2LVID"
+                                                                data-validate-length-range="8,20"
+                                                                value="{{ $SFA->name }}" readonly />
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
@@ -223,56 +250,69 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($tactics2LV as $tactic)
-                                                    @if ($tactic->tac2LVID == $item->tac2LVID)
-                                                        value="{{ $tactic->name }}" 
-                                                        
-                                                    @endif @endforeach
-                                                readonly />
+                                            @foreach ($tactics2LV as $tactic)
+                                                @if (session()->has('tac2LVID') && is_array(session('tac2LVID')))
+                                                    @foreach (session('tac2LVID') as $tac2LVID)
+                                                        @if ($tactic->tac2LVID == $tac2LVID && $tactic->SFA2LVID == session('SFA2LVID')[$index])
+                                                            <input type="hidden" name="tac2LVID[]"
+                                                                value="{{ $tactic->tac2LVID }}">
+                                                            <input class="form-control" type="text" id="tac2LVID"
+                                                                data-validate-length-range="8,20"
+                                                                value="{{ $tactic->name }}" readonly />
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ตัวชีวัดของแผน<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-4 col-sm-4">
-                                            @foreach ($KPIMain2LVMap as $KPIMap)
-                                                @if ($KPIMap->proID == $project->proID)
-                                                    @if ($item->stra2LVID == $KPIMap->stra2LVID)
-                                                        <input class="form-control" type="text" name="name"
-                                                            id="name"
-                                                            @foreach ($KPIMain2LV as $KPI)
-                                                            @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
-                                                                 value= "{{ $KPI->name }}"
-                                                                
-                                                            @endif @endforeach
-                                                            readonly />
-                                                    @endif
+                                        <div class="col-md-8 col-sm-8 d-flex">
+                                            @foreach ($KPIMain2LV as $KPI)
+                                                @if (session()->has('KPIMain2LVID') && is_array(session('KPIMain2LVID')))
+                                                    @foreach (session('KPIMain2LVID') as $KPIMain2LVID)
+                                                        @if ($KPI->KPIMain2LVID == $KPIMain2LVID && $KPI->SFA2LVID == session('SFA2LVID')[$index])
+                                                            <input type="hidden" name="KPIMain2LVID[]"
+                                                                value="{{ $KPI->KPIMain2LVID }}">
+                                                            <input class="form-control mr-2" type="text"
+                                                                id="KPIMain2LVID" value="{{ $KPI->name }}" readonly>
+                                                            <input class="form-control mr-2" type="text"
+                                                                name="count2LVID[]" id="count2LVID"
+                                                                value="{{ $KPI->count ?? '-' }}" readonly>
+                                                            <input class="form-control" type="text"
+                                                                name="target2LVID[]" id="target2LVID"
+                                                                value="{{ $KPI->target ?? '-' }}" readonly>
+                                                        @endif
+                                                    @endforeach
                                                 @endif
                                             @endforeach
 
+
                                         </div>
                                     </div>
-
                                 </div>
-                            @endif
-                        @endforeach
-                        @foreach ($strategic1LVMap as $item)
-                            @if ($item->proID == $project->proID)
+                            @endforeach
+                        @endif
+
+                        @if (session()->has('stra1LVID'))
+                            @foreach (session('stra1LVID') as $index => $item)
+                                {{-- {{dd(session('stra1LVID'))}} --}}
                                 <div class="row field item form-group align-items-center">
                                     <label for="plan"
                                         class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-6 col-sm-6">
-                                        <input class="form-control" type="text" name="name" id="name"
-                                            data-validate-length-range="8,20"
-                                            @foreach ($strategic1LV as $stra)
-                                                @if ($stra->stra1LVID == $item->stra1LVID)
-                                                    value="{{ $stra->name }}" 
-                                                @endif @endforeach
-                                            readonly />
+                                        <input type="hidden" name="stra1LVID[]" value="{{$item}}">
+                                        @foreach ($strategic1LV as $stra)
+                                            @if ($stra->stra1LVID == $item)
+                                                <input class="form-control" type="text"  id="stra1LVID"
+                                                    data-validate-length-range="8,20" value="{{ $stra->name }}"
+                                                    readonly />
+                                            @endif
+                                        @endforeach
+
                                     </div>
 
                                 </div>
@@ -283,18 +323,25 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <input class="form-control" type="text" name="name" id="name"
-                                                data-validate-length-range="8,20"
-                                                @foreach ($target1LV as $tar)
-                                                    @if ($tar->tar1LVID == $item->tar1LVID)
-                                                         value="{{ $tar->name }}" 
-                                                    @endif @endforeach
-                                                readonly />
+
+                                            @foreach ($target1LV as $tar)
+                                                @if (session()->has('tar1LVID') && is_array(session('tar1LVID')))
+                                                    @foreach (session('tar1LVID') as $tar1LVID)
+                                                        @if ($tar->tar1LVID == $tar1LVID && $tar->stra1LVID == $item)
+                                                        <input type="hidden" name="tar1LVID[]" value="{{$tar->tar1LVID}}">
+                                                            <input class="form-control" type="text" 
+                                                                id="tar1LV" data-validate-length-range="8,20"
+                                                                value="{{ $tar->name }}" readonly />
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                        @endforeach
+                            @endforeach
+                        @endif
+
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
@@ -311,8 +358,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control"
-                                    onchange="this.form.submit()" required>
+                                <select id="charecter" name="proChaID" class="form-control" required>
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
                                             {{ isset($selectProjectCharec) && $selectProjectCharec == $item->proChaID ? 'selected' : '' }}>
@@ -326,8 +372,7 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control"
-                                    onchange="this.form.submit(); toggleTextarea();" required>
+                                <select id="integrat" name="proInID" class="form-control" toggleTextarea();" required>
                                     @foreach ($projectIntegrat as $item)
                                         <option value="{{ $item->proInID }}"
                                             {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>
@@ -337,10 +382,10 @@
                             </div>
                         </div>
                         @if ($selectProjectIntegrat === '6')
-                            <div class="row field item form-group align-items-center" >
+                            <div class="row field item form-group align-items-center">
                                 <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง" ></textarea>
+                                    <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง"></textarea>
                                 </div>
                             </div>
                         @endif
@@ -706,9 +751,9 @@
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary"
-                                        onclick="submitButton('save2',{{$project->proID}})">บันทึก</button>
+                                        onclick="submitButton('save2')">บันทึก</button>
                                     <button type='button' class="btn btn-primary"
-                                        onclick="submitButton('send2',{{ $project->proID }})">ส่ง</button>
+                                        onclick="submitButton('send2')">ส่ง</button>
                                 </div>
                             </div>
                         </div>
@@ -1867,12 +1912,12 @@
             }
         }
 
-        function submitButton(action, proID) {
+        function submitButton(action) {
             var form = document.getElementById('actionForm');
             if (action === 'save2') {
-                form.action = "/projectSave2/" + proID;
+                form.action = "/projectSave2";
             } else if (action === 'send2') {
-                form.action = "/projectSend2/" + proID;
+                form.action = "/projectSend2";
             }
             form.submit();
         }

@@ -102,17 +102,20 @@ Route::post('/projectcount_target3LV', [ProjectController::class,'count_target_K
 Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
 Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
-
-Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
+Route::any('/projectcreate2', [ProjectController::class,'create2']);
+// Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
 Route::post('/projectSave1', [ProjectController::class,'save1']);
-Route::post('/projectSave2/{id}', [ProjectController::class,'save2']);
+Route::post('/projectSave2', [ProjectController::class,'save2']);
 Route::post('/projectSend1', [ProjectController::class,'send1']);
-Route::post('/projectSend2/{id}', [ProjectController::class,'send2']);
+Route::post('/projectSend2', [ProjectController::class,'send2']);
 Route::get('projectdelete/{id}',[ProjectController::class,'delete'])->name('project.delete');
 // Route::get('projectedit1/{id}',[ProjectController::class,'edit1'])->name('project.edit1');
 Route::any('projectedit/{id}',[ProjectController::class,'edit1'])->name('project.edit1');
 Route::post('projectsaveUpdate1/{id}',[ProjectController::class,'saveUpdate1']);
 Route::post('projectsendUpdate1/{id}',[ProjectController::class,'sendUpdate1']);
+Route::post('projectSaveUpdate2/{id}',[ProjectController::class,'saveUpdate2']);
+Route::post('projectSendUpdate2/{id}',[ProjectController::class,'sendUpdate2']);
+Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');

@@ -23,9 +23,6 @@ class AuthController extends Controller
             'password' => $request->input('password'),
         ];
 
-        // if (Auth::guard('web')->attempt($login)) {
-        //      return redirect("/");
-        // }
         if(Auth::attempt($login)){
             return redirect("/");
         } else {
