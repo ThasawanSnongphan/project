@@ -8,6 +8,7 @@ use DateTime;
 
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord\PhpWord;
+use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\Jc;
@@ -19,7 +20,10 @@ class WordQ4Controller extends Controller
     {
         // สร้างเอกสารใหม่
         $phpWord = new PhpWord();
-        $id = request('id', uniqid()); // ใช้ ID จาก request ถ้ามี
+        // $id = request('id', uniqid()); // ใช้ ID จาก request ถ้ามี
+        // ดึงค่า ID ล่าสุดจาก session และเพิ่มค่า
+        $id = Session::get('word_doc_id', 1);
+        Session::put('word_doc_id', $id + 1);
 
 
 
@@ -86,8 +90,8 @@ class WordQ4Controller extends Controller
         // Title
         $section->addText(
             'บันทึกข้อความ',
-            ['size' => 16, 'bold' => true],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+            array_merge(['size' => 30], $boldTextStyle),
+            $center
         );
 
         function addSpacesToEnd($text, $maxLength)
@@ -121,73 +125,99 @@ class WordQ4Controller extends Controller
         $maxLineLength = 100;
         $minLineLength = 55;
 
-        $section->addText(
-            'ส่วนราชการ',
-            ['bold' => true, 'size' => 22]
-        );
-        $section->addText(
-            addSpacesToEnd("สำนักคอมพิวเตอร์สารสนเทศ โทร.2215", $maxLineLength),
-            [],
-            ['underline' => 'single']
+
+        $textRun = $section->addTextRun();
+
+        // ส่วนราชการ (ตัวหนา ขนาด 22)
+        $textRun->addText(
+            'ส่วนราชการ ',
+            array_merge(['size' => 22], $boldTextStyle)
         );
 
-        $section->addText(
-            'ที่',
-            ['bold' => true, 'size' => 22]
-        );
-        $section->addText(
-            addSpacesToEnd("สค ภายใน /2566", $minLineLength),
-            [],
-            ['underline' => 'single']
+        $textRun->addText(
+            'สำนักคอมพิวเตอร์สารสนเทศ โทร.2215',
+            ['underline' => 'dotted']
         );
 
-        $section->addText(
-            'วันที่',
-            ['bold' => true, 'size' => 22]
+        $textRun = $section->addTextRun();
+
+        // ส่วนราชการ (ตัวหนา ขนาด 22)
+        $textRun->addText(
+            'ที่ ',
+            array_merge(['size' => 22], $boldTextStyle)
         );
-        $section->addText(
+
+        $textRun->addText(
+            'สค ภายใน /2566',
+            ['underline' => 'dotted']
+        );
+        
+
+        $textRun->addText(
+            ' วันที่ ',
+            array_merge(['size' => 22], $boldTextStyle)
+        );
+
+        $textRun->addText(
             addSpacesToEnd("19 ตุลาคม 2566", $minLineLength),
-            [],
-            ['underline' => 'single']
+            ['underline' => 'dotted']
         );
 
-        $section->addText(
-            'เรื่อง',
-            ['bold' => true, 'size' => 22]
+        $textRun = $section->addTextRun();
+
+        $textRun->addText(
+            'เรื่อง ',
+            array_merge(['size' => 22], $boldTextStyle)
         );
-        $section->addText(
+
+        $textRun->addText(
             addSpacesToEnd("ขอจัดส่งรายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการและโครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566 (1 ตุลาคม 2565 - 30 กันยายน 2566)", $maxLineLength),
-            [],
-            ['underline' => 'single']
+            ['underline' => 'dotted']
         );
 
-        $section->addText(
-            'เรียน ผู้อำนวยการสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ',
-            ['bold' => true]
+        $textRun = $section->addTextRun();
+
+        $textRun->addText(
+            'เรียน ',
+            $boldTextStyle
+        );
+        
+        $textRun->addText(
+            'ผู้อำนวยการสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ'
         );
 
-        $section->addTextBreak(1);
+        $section->addTextBreak();
 
         $section->addText(
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             [],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2)]]
+            [
+                        'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 
+                        'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2)]
+                    ]
         );
 
         $section->addTextBreak(1);
 
         $section->addText(
             'แผนประจำปีงบประมาณ พ.ศ.2566',
-            ['bold' => true],
+            $boldTextStyle,
             ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
         );
 
-        $table = $section->addTable(['borderSize' => 6, 'borderColor' => '000000', 'width' => 100 * 50, 'unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::PERCENT, 'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER]);
+        $table = $section->addTable([
+            'borderSize' => 6, 
+            'borderColor' => '000000',
+            'cellMargin' => 60,
+            'width' => 100 * 50, 
+            'unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::PERCENT, 
+            'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER]
+        );
 
         // Header row
         $table->addRow();
-        $table->addCell()->addText('ผลการดำเนินงาน', ['bold' => true]);
-        $table->addCell()->addText('จำนวนโครงการ', ['bold' => true]);
+        $table->addCell()->addText('ผลการดำเนินงาน', $boldTextStyle, $center);
+        $table->addCell()->addText('จำนวนโครงการ', $boldTextStyle, $center);
 
         // Empty row
         $table->addRow();
@@ -196,15 +226,17 @@ class WordQ4Controller extends Controller
 
         // Summary row
         $table->addRow();
-        $table->addCell()->addText('รวม', ['bold' => true]);
+        $table->addCell()->addText('รวม', $boldTextStyle, $center);
         $table->addCell()->addText('');
 
 
-        // Paragraph with justified text and indentation
         $section->addText(
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
             [],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2)]]
+            [
+                        'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::BOTH, 
+                        'indentation' => ['firstLine' => \PhpOffice\PhpWord\Shared\Converter::cmToTwip(2)]
+                    ]
         );
 
         $section->addTextBreak(1);
@@ -212,7 +244,7 @@ class WordQ4Controller extends Controller
         // Centered bold title
         $section->addText(
             'โครงการนอกแผนปฏิบัติการประจำปีงบประมาณ พ.ศ. 2566',
-            ['bold' => true],
+            $boldTextStyle,
             ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
         );
 
@@ -220,6 +252,7 @@ class WordQ4Controller extends Controller
         $table = $section->addTable([
             'borderSize' => 6,
             'borderColor' => '000000',
+            'cellMargin' => 60,
             'width' => 100 * 50, // 100% width
             'unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::PERCENT,
             'alignment' => \PhpOffice\PhpWord\SimpleType\JcTable::CENTER
@@ -227,8 +260,8 @@ class WordQ4Controller extends Controller
 
         // Header row
         $table->addRow();
-        $table->addCell()->addText('ผลการดำเนินงาน', ['bold' => true]);
-        $table->addCell()->addText('จำนวนโครงการ', ['bold' => true]);
+        $table->addCell()->addText('ผลการดำเนินงาน', $boldTextStyle, $center);
+        $table->addCell()->addText('จำนวนโครงการ',  $boldTextStyle, $center);
 
         // Empty row
         $table->addRow();
@@ -237,28 +270,28 @@ class WordQ4Controller extends Controller
 
         // Summary row
         $table->addRow();
-        $table->addCell()->addText('รวม', ['bold' => true]);
+        $table->addCell()->addText('รวม', $boldTextStyle, $center);
         $table->addCell()->addText('');
 
         $section->addText(
-            'จึงเรียนมาเพื่อโปรดทราบ และเห็นควรนําเสนอคณะกรรมการบริหารสํานักคอมพิวเตอร์ฯ เพื่อพิจารณาต่อไป',
-            [],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]
+            'จึงเรียนมาเพื่อโปรดทราบ และเห็นควรนําเสนอคณะกรรมการบริหารสํานักคอมพิวเตอร์ฯ เพื่อพิจารณาต่อไป'
+            
         );
 
         $section->addTextBreak(3); // เว้นบรรทัด
 
         $section->addText(
-            '(นางศรินญา พงศ์สุริยา)',
+            '( นางศรินญา พงศ์สุริยา )',
             [],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT]
+            ['alignment' => 'center', 'indentation' => ['left' => 5000]]
         );
 
         $section->addText(
-            'นักวิเคราะห์นโยบายและแผน',
+            "นักวิเคราะห์นโยบายและแผน",
             [],
-            ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT]
+            ['alignment' => 'center', 'indentation' => ['left' => 5000]]
         );
+
 
 
 
@@ -267,7 +300,7 @@ class WordQ4Controller extends Controller
 
 
         // บันทึกเอกสารเป็นไฟล์ .docx
-        $fileName = 'document_' . $id . '.docx';
+        $fileName = 'บันทึกขอจัดส่งผลการดำเนินงานตามแผนปฏิบัติการไตรมาส4' . '.docx';
         $phpWord->save(storage_path('app/public/' . $fileName), 'Word2007');
 
         return response()->download(storage_path('app/public/' . $fileName));
