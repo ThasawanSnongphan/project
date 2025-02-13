@@ -453,6 +453,11 @@ class WordController extends Controller
             if ($minYear === PHP_INT_MAX) $minYear = 'N/A';
             if ($maxYear === PHP_INT_MIN) $maxYear = 'N/A';
 
+            // ถ้า $minYear และ $maxYear เป็นปีเดียวกัน ให้เพิ่ม maxYear อีก 1 ปี
+            if (is_numeric($minYear) && is_numeric($maxYear) && $minYear === $maxYear) {
+                $maxYear += 1;
+            }
+
             $tableStyle = [
                 'borderSize' => 6,
                 'borderColor' => '000000',
@@ -768,7 +773,7 @@ class WordController extends Controller
 
 
         // บันทึกเอกสารเป็นไฟล์ .docx
-        $fileName = 'document_' . $id . '.docx';
+        $fileName = $projects->name . '.docx';
         $phpWord->save(storage_path('app/public/' . $fileName), 'Word2007');
 
         return response()->download(storage_path('app/public/' . $fileName));

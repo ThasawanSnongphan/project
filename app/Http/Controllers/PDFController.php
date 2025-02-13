@@ -389,7 +389,7 @@ class PDFController extends Controller
 
             <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ (Output/Outcome) และ ค่าเป้าหมาย (ระบุหน่วยนับ)</b> <br>';
 
-            if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
@@ -418,8 +418,8 @@ class PDFController extends Controller
                 // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่
                 foreach ($countKPI_pros as $countKPI_pro) {
                     if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
-                        $unitName = $countKPI_pro->name; 
-                        break; 
+                        $unitName = $countKPI_pro->name;
+                        break;
                     }
                 }
 
@@ -486,6 +486,11 @@ class PDFController extends Controller
             }
             if ($maxYear === PHP_INT_MIN) {
                 $maxYear = 'N/A'; // ถ้าไม่มีข้อมูลใด ๆ
+            }
+
+            // ถ้า $minYear และ $maxYear เป็นปีเดียวกัน ให้เพิ่ม maxYear อีก 1 ปี
+            if (is_numeric($minYear) && is_numeric($maxYear) && $minYear === $maxYear) {
+                $maxYear += 1;
             }
 
             // สร้าง HTML ของส่วนหัวตารางหลังคำนวณเสร็จ
@@ -852,7 +857,7 @@ class PDFController extends Controller
             </div>
         ';
 
-        $htmlContent .='</div>';
+        $htmlContent .= '</div>';
 
 
 
