@@ -44,6 +44,8 @@ use App\Http\Controllers\Department_Head;
 use App\Http\Controllers\Executive;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
+use App\Http\Controllers\ExcelAllResultsController;
+
 
 //PDF
 Route::get('/pdfKPI', [PDFKPIController::class, 'pdf_gen']);
@@ -55,7 +57,7 @@ Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 Route::get('/gen-word-db/{$id}', [WordController::class, 'createWordDocFromDB']); //db
 Route::get('/gen-word-Q4', [WordQ4Controller::class, 'createWordDocFromDB']); //db
 
-
+Route::get('/excelAllResults', [ExcelAllResultsController::class, 'exportExcel']);
 
 
 

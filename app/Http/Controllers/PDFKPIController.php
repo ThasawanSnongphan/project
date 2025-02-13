@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class PDFKPIController extends Controller
 {
     public function pdf_gen(){
-        $config = include(config_path('config_pdf.php'));       // ดึงการตั้งค่าฟอนต์จาก config
+        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
         $mpdf->SetY(60);
 
