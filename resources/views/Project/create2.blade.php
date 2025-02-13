@@ -681,6 +681,7 @@
                                             onclick="insertCostType()">เพิ่ม</button>
                                     </div>
                                 </div>
+                                
                                 <div id="insertExpense"></div>
                                 <div id="insertCostType"></div>
                             </div>
@@ -752,8 +753,8 @@
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary"
                                         onclick="submitButton('save2')">บันทึก</button>
-                                    <button type='button' class="btn btn-primary"
-                                        onclick="submitButton('send2')">ส่ง</button>
+                                    {{-- <button type='button' class="btn btn-primary"
+                                        onclick="submitButton('send2')">ส่ง</button> --}}
                                 </div>
                             </div>
                         </div>

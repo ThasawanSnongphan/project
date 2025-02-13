@@ -176,7 +176,7 @@
                                                 <option value="">--เลือกตัวชี้วัด--</option>
                                                 @foreach ($KPIMain3LV as $KPI)
                                                     @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                        @if ($KPI->KPIMain3LVID == $KPIMain3LVMap[$index])
+                                                        @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
                                                             <option value="{{ $KPI->KPIMain3LVID }}" selected>
                                                                 {{ $KPI->name }}</option>
                                                         @else
@@ -193,7 +193,7 @@
                                                 id="count3LV_{{ $index }}"
                                                 @foreach ($KPIMain3LV as $KPI)
                                                     @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                        @if ($KPI->KPIMain3LVID == $KPIMain3LVMap[$index])
+                                                        @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
                                                             value="{{$KPI->count ?? '-'}}"
                                                         @endif
                                                     @endif
@@ -206,7 +206,7 @@
                                                 id="target3LV_{{ $index }}" 
                                                 @foreach ($KPIMain3LV as $KPI)
                                                 @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain3LVID == $KPIMain3LVMap[$index])
+                                                    @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
                                                         value="{{$KPI->target ?? '-'}}"
                                                     @endif
                                                 @endif

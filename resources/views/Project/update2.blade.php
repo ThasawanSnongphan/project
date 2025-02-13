@@ -130,9 +130,7 @@
                                         @foreach ($strategicMap as $map)
                                             @if ($map->stra3LVID == $item)
                                                 <input type="hidden" name="straMapID[]" value="{{ $map->straMapID }}">
-                                           
                                             @endif
-
                                         @endforeach
 
                                         <input type="hidden" name="stra3LVID[]" value="{{ $item }}">
@@ -236,7 +234,7 @@
 
                                 </div>
                             @endforeach
-                        {{-- @else
+                            {{-- @else
                             @foreach ($strategicMap as $item)
                                 @if ($item->proID == $project->proID)
                                     <div class="row field item form-group align-items-center">
@@ -1009,6 +1007,59 @@
                                 <button type='button' class="btn btn-primary" onclick="insertCostType()">เพิ่ม</button>
                             </div>
                         </div>
+                        @if (!empty($costQuarters))
+                                    @foreach ($costQuarters as $index => $item)
+                                        @if ($index > 0 && $item->proID == $project->proID && $item->costQuID != $costQuarter->costQuID)
+                                            <div class="row col-md-12 col-sm-12">
+
+                                                <div class="row col-md-3 col-sm-3 mr-1">
+                                                    <select id="expID" name="expID" class="form-control" required>
+                                                        @foreach ($expanses as $exp)
+                                                            @if ($exp->expID == $item->expID)
+                                                                <option value="{{$exp->expID}}" selected>{{$exp->name}}</option>
+
+                                                            @endif
+                                                            
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row col-md-12 col-sm-12 mt-2">
+                                                <div class="row col-md-3 col-sm-3 mr-1">
+                                                    <select id="costType" name="costID" class="form-control" required>
+                                                        @foreach ($costTypes as $cost)
+                                                            @if ($cost->costID == $item->costID)
+                                                                <option value="{{$cost->costID}}">{{$cost->name}}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="hidden" name="costQuID[]"
+                                                        id="" value="{{ $item->costQuID }}">
+                                                    <input class="form-control" type="text" name="costQu1[]"
+                                                        id="" value="{{ $item->costQu1 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu2[]"
+                                                        id="" value="{{ $item->costQu2 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu3[]"
+                                                        id="" value="{{ $item->costQu3 }}">
+                                                </div>
+                                                <div class="row col-md-2 col-sm-2 mr-1">
+                                                    <input class="form-control" type="text" name="costQu4[]"
+                                                        id="" value="{{ $item->costQu4 }}">
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type="button" class="btn btn-danger "
+                                                        onclick="this.closest('.row').remove()">ลบ</button>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endif
                         <div id="insertExpense"></div>
                         <div id="insertCostType"></div>
                     </div>
@@ -1061,8 +1112,7 @@
                                 <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
                                     required='required' data-validate-length-range="8,20" value="{{ $item->bnfID }}" />
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20"
-                                    value="{{ $item->detail }}" />
+                                    required='required' data-validate-length-range="8,20" value="{{ $item->detail }}" />
 
                             </div>
                             <div class="col-md-3 col-sm-3">
@@ -1078,6 +1128,8 @@
                     <label for="title"
                         class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                     <div class="col-md-6 col-sm-6">
+
+
                         <input class="form-control" type="file" name="file[]" id="file" required='required'
                             data-validate-length-range="8,20" />
                         @error('file')
@@ -1085,14 +1137,35 @@
                                 <span class="text text-danger">{{ $message }}</span>
                             </div>
                         @enderror
-
+                        @if (!empty($files))
+                            @foreach ($files as $item)
+                                <div class="row m-2">
+                                    <div class="col-md-6 col-sm-6">
+                                        <input type="hidden" name="fileID[]" value="{{ $item->fileID }}">
+                                        <input type="hidden" name="file[]" value="{{ $item->name }}">
+                                        <a href="{{ asset('files/' . $item->name) }}"
+                                            target="_blank">{{ $item->name }}</a>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <button type="button" onclick="this.closest('.row').remove()">ลบ</button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
+
+
+
                     {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
                     <div class="col-md-1 col-sm-1 ">
                         <button type='button' class="btn btn-primary" onclick="insertFile()">เพิ่ม</button>
                     </div>
+
+
                 </div>
+
                 <div id="insertFile"></div>
+
 
                 <div class="ln_solid">
                     <div class="form-group ">

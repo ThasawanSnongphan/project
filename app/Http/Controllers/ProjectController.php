@@ -442,7 +442,17 @@ class ProjectController extends Controller
     function save1(Request $request){
         $request->validate(
             [
-                'name' => 'required'
+                'principle'=>'required',
+                'obj.*'=>'required',
+                'stepName.*'=>'required',
+                'stepStart.*'=>'required',
+                'stepEnd.*'=>'required',
+                'costQu1.*'=>'required',
+                'costQu2.*'=>'required',
+                'costQu3.*'=>'required',
+                'costQu4.*'=>'required',
+                'benefit.*'=>'required',
+                'file'=>'required',
             ]
         );
         $year = Year::where('yearID',$request->input('yearID'))->first();
@@ -530,7 +540,26 @@ class ProjectController extends Controller
     }
 
     function save2(Request $request){
-       
+        $request->validate(
+           
+                [
+                    'principle' => 'required',
+                    'obj.*' => 'required',
+                    'stepName.*' => 'required',
+                    'stepStart.*' => 'required',
+                    'stepEnd.*' => 'required',
+                    'costQu1.*' => 'required',
+                    'costQu2.*' => 'required',
+                    'costQu3.*' => 'required',
+                    'costQu4.*' => 'required',
+                    'benefit.*' => 'required',
+                    
+                ],
+                [
+                    'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
+            ]
+
+        );
         $projects=[
             'yearID'=>$request->yearID,
             'name'=>$request->project_name,
@@ -898,15 +927,688 @@ class ProjectController extends Controller
         $steps = Steps::all();
         $step = $steps->where('proID',$project->proID)->first();
         $costQuarters = CostQuarters::all();
+        // dd($costQuarters);
         $costQuarter = $costQuarters->where('proID',$project->proID)->first();
         $benefits = Benefits::all();
         $benefit = $benefits->where('proID',$project->proID)->first();
-        $files = Files::all();
-        $file = $files->where('proID',$id)->first();
+        $files = DB::table('files')->where('proID',$id)->get();
+        // dd($files);
+       
         return view('Project.update2',compact('userMap','user','project','years','strategic','strategicMap','straMap','SFAs','goals','tactics','KPIMainMapProject','KPIMains',
                     'strategic2LV','strategic2LVMap','SFA2Lv','tactics2LV','KPIMain2LV','KPIMain2LVMap',
                     'strategic1LV','strategic1LVMap','target1LV','obj','objProject','KPIProjects','KPIProject','CountKPIProjects',
-                    'steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit','files','file'));
+                    'steps','step','costQuarters','costQuarter','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes','benefits','benefit','files'));
+    }
+
+    function saveUpdate2(Request $request,$id){
+        $project=[
+            'yearID'=>$request->yearID,
+            'name'=>$request->name,
+            'format'=>$request->format,
+            'princiDetail'=>$request->principle,
+            'proTypeID'=>$request->proTypeID,
+            'proChaID'=>$request->proChaID,
+            'proInID'=>$request->proInID,
+            'proInDetail'=>$request->proInDetail,
+            'tarID'=>$request->tarID,
+            'badID'=>$request->badID,
+            'badgetTotal'=>$request->badgetTotal,
+            'planID'=>$request->planID,
+            'statusID'=>16,
+            'updated_at' => now()
+        ];
+        DB::table('projects')->where('proID',$id)->update($project);
+        
+        $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
+        //ดึงuserIDทัั้งหมดในuserMap
+        $userMapIDs = $userMaps->pluck('userID')->toArray();
+        // dd($userMapIDs);
+        $userMapID = $request->userID;
+        //  dd($userMapIDs,$userMapID);
+
+        
+        foreach ($userMapID as $index => $userMap){
+            // dd($userMap);
+            if(isset($userMap)){
+                $currentuserMapID = $userMap;
+                // dd($currentuserMapID);
+                if(in_array($currentuserMapID,$userMapIDs)){
+                    DB::table('users_map_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'userID' => $currentuserMapID
+                        ],
+                        [
+                            'proID' => $id,
+                            'updated_at' => now()
+                        ]
+                        );
+                }else{
+                    DB::table('users_map_projects')->insert(
+                        [
+                            'userID' => $userMap,
+                            'proID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]);
+                }
+            }else{
+                DB::table('users_map_projects')->insert(
+                    [
+                        'userID'=>$userMap,
+                        'proID'=>$id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]);
+            }
+        }
+
+        $userMapToDelete = array_diff($userMapIDs,$userMapID);
+        if(!empty($userMapToDelete)){
+            DB::table('users_map_projects')
+            ->where('proID',$id)
+            ->whereIn('userID',$userMapToDelete)
+            ->delete();
+        }
+        
+        $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
+        
+        $stra3LVIDs = $strategicMap->pluck('stra3LVID')->toArray();
+        $SFA3LVIDs = $strategicMap->pluck('SFA3LVID')->toArray();
+        $goal3LVIDs = $strategicMap->pluck('goal3LVID')->toArray();
+        $tac3LVIDs = $strategicMap->pluck('tac3LVID')->toArray();
+        // dd($straMapIDs,$straIDs,$SFAIDs,$goalIDs,$tacIDs);
+       
+        $stra3LVID = $request->stra3LVID ?? [];
+        $SFA3LVID = $request->SFA3LVID;
+        $goal3LVID = $request->goal3LVID;
+        $tac3LVID = $request->tac3LVID;
+        // dd($straMap3LVID,$stra3LVID,$SFA3LVID,$goal3LVID,$tac3LVID);
+        
+        foreach($stra3LVID as $index => $straMap){
+            // dd($straMap);
+            if(isset($straMap)){
+                $currentstraMapID = $straMap;
+                if(in_array($currentstraMapID,$stra3LVIDs)){
+                    DB::table('strategic_maps')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'stra3LVID' => $currentstraMapID
+                        ],
+                        [
+                            'proID' => $id,
+                            'stra3LVID' => $stra3LVID[$index],
+                            'SFA3LVID' => $SFA3LVID[$index],
+                            'goal3LVID' => $goal3LVID[$index],
+                            'tac3LVID' => $tac3LVID[$index],
+                            'updated_at' => now()
+                        ]
+                    );
+                }else{
+                    DB::table('strategic_maps')->insert(
+                        [
+                            
+                            'proID' => $id,
+                            'stra3LVID' => $straMap,
+                            'SFA3LVID' => $SFA3LVID[$index],
+                            'goal3LVID' => $goal3LVID[$index],
+                            'tac3LVID' => $tac3LVID[$index],
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                
+                }    
+            }else{
+                DB::table('strategic_maps')->insert(
+                    [
+                        
+                        'proID' => $id,
+                        'stra3LVID' => $straMap,
+                        'SFA3LVID' => $SFA3LVID[$index],
+                        'goal3LVID' => $goal3LVID[$index],
+                        'tac3LVID' => $tac3LVID[$index],
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+    
+        $straMapToDelete = array_diff($stra3LVIDs,$stra3LVID);
+        if(!empty($straMapToDelete)){
+            DB::table('strategic_maps')
+            ->where('proID',$id)
+            ->whereIn('stra3LVID',$straMapToDelete)
+            ->delete();
+        }
+        $KPIMain3LVMap = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
+        $KPIMain3LVIDs = $KPIMain3LVMap->pluck('KPIMain3LVID')->toArray();
+        
+        $KPIMain3LVID = $request->KPIMain3LVID ?? [];
+       
+        foreach ($KPIMain3LVID as $index => $KPIMain3LV){
+            if(isset($KPIMain3LV)){
+                $currentKPIMain3LLVID = $KPIMain3LV;
+                if(in_array($currentKPIMain3LLVID,$KPIMain3LVIDs)){
+                    DB::table('k_p_i_main_map_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'KPIMain3LVID' => $currentKPIMain3LLVID
+                        ],
+                        [
+                            'proID' => $id,
+                            'updated_at' => now()
+                        ]
+                        );
+                }
+                else{
+                    DB::table('k_p_i_main_map_projects')->insert(
+                        [
+                            'KPIMain3LVID' => $KPIMain3LV,
+                            'stra3LVID' => $stra3LVID[$index],
+                            'proID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                        );
+                }
+            }
+            else{
+                DB::table('k_p_i_main_map_projects')->insert(
+                    [
+                        'KPIMain3LVID' => $KPIMain3LV,
+                        'stra3LVID' => $stra3LVID[$index],
+                        'proID' => $id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                    );
+            }
+        }
+    
+        $KPIMain3LVMapToDelete = array_diff($KPIMain3LVIDs,$KPIMain3LVID);
+        if(!empty($KPIMain3LVMapToDelete)){
+            DB::table('k_p_i_main_map_projects')
+            ->where('proID',$id)
+            ->whereIn('KPIMain3LVID',$KPIMain3LVMapToDelete)
+            ->delete();
+        }
+
+        $stra2LVMap = DB::table('strategic2_level_map_projects')->where('proID',$id)->get();
+        $stra2LVIDs = $stra2LVMap->pluck('stra2LVID')->toArray();
+        $SFA2LVIDs = $stra2LVMap->pluck('SFA2LVID')->toArray();
+        $tac2LVIDs = $stra2LVMap->pluck('tac2LVID')->toArray();
+
+        $stra2LVID = $request->stra2LVID ?? [];
+        $SFA2LVID = $request->SFA2LVID;
+        $tac2LVID = $request->tac2LVID;
+        // dd($stra2LVID,$SFA2LVID,$tac2LVID);
+
+        foreach($stra2LVID as $index => $stra2LV){
+            if(isset($stra2LV)){
+                $currentstar2LVMapID = $stra2LV;
+                if(in_array($currentstar2LVMapID,$stra2LVIDs)){
+                    DB::table('strategic2_level_map_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'stra2LVID' => $stra2LV
+                        ],
+                        [
+                            'proID' =>$id,
+                            'stra2LVID' => $stra2LV,
+                            'SFA2LVID' => $SFA2LVID[$index],
+                            'tac2LVID' => $tac2LVID[$index],
+                            'updated_at' => now()
+                        ]
+                        );
+                }
+                else{
+                    DB::table('strategic2_level_map_projects')->insert(
+                        [
+                            'proID' =>$id,
+                            'stra2LVID' => $stra2LV,
+                            'SFA2LVID' => $SFA2LVID[$index],
+                            'tac2LVID' => $tac2LVID[$index],
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                }
+            }
+            else{
+                DB::table('strategic2_level_map_projects')->insert(
+                    [
+                        'proID' =>$id,
+                        'stra2LVID' => $stra2LV,
+                        'SFA2LVID' => $SFA2LVID[$index],
+                        'tac2LVID' => $tac2LVID[$index],
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+        $stra2LVMapToDelete = array_diff($stra2LVIDs,$stra2LVID);
+        if(!empty($stra2LVMapToDelete)){
+            DB::table('strategic2_level_map_projects')
+            ->where('proID',$id)
+            ->where('stra2LVID',$stra2LVMapToDelete)
+            ->delete();
+        }
+
+        $KPIMain2LVMap = DB::table('k_p_i_main2_level_map_projects')->where('proID',$id)->get();
+        $KPIMain2LVIDs = $KPIMain2LVMap->pluck('KPIMain2LVID')->toArray();
+
+        $KPIMain2LVID = $request->KPIMain2LVID ?? [];
+
+        foreach($KPIMain2LVID as $index => $KPIMain2LV){
+            if(isset($KPIMain2LV)){
+                $currentKPIMain2LVID = $KPIMain2LV;
+                if(in_array($currentKPIMain2LVID,$KPIMain2LVIDs)){
+                    DB::table('k_p_i_main2_level_map_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'KPIMain2LVID' => $currentKPIMain2LVID
+                        ],
+                        [
+                            'proID' => $id,
+                            'updated_at' => now()
+                        ]
+                    );
+                }else{
+                    DB::table('k_p_i_main2_level_map_projects')->insert(
+                        [
+                            'KPIMain2LVID' => $KPIMain2LV,
+                            'stra2LVID' => $stra2LVID[$index],
+                            'proID' => $id,
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                }
+            }else{
+                DB::table('k_p_i_main2_level_map_projects')->insert(
+                    [
+                        'KPIMain2LVID' => $KPIMain2LV,
+                        'stra2LVID' => $stra2LVID[$index],
+                        'proID' => $id,
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+        $KPIMain2LVMapToDelete = array_diff($KPIMain2LVIDs,$KPIMain2LVID);
+        if(!empty($KPIMain2LVMapToDelete)){
+            DB::table('k_p_i_main2_level_map_projects')
+            ->where('proID',$id)
+            ->whereIn('KPIMain2LVID',$KPIMain2LVMapToDelete)
+            ->delete();
+        }
+
+        $stra1LVMap = DB::table('strategic1_level_map_projects')->where('proID',$id)->get();
+        $stra1LVIDs = $stra1LVMap->pluck('stra1LVID')->toArray();
+        $tar1LVIDs = $stra1LVMap->pluck('tar1LVID')->toArray();
+
+        $stra1LVID = $request->stra1LVID ?? [];
+        $tar1LVID = $request->tar1LVID;
+
+        foreach($stra1LVID as $index => $stra1LV){
+            if(isset($stra1LV)){
+                $currentstar1LVMapID = $stra1LV;
+                if(in_array($currentstar1LVMapID,$stra1LVIDs)){
+                    DB::table('strategic1_level_map_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'stra1LVID' => $stra1LV
+                        ],
+                        [
+                            'proID' =>$id,
+                            'stra1LVID' => $stra1LV,
+                            'tar1LVID'=>$tar1LVID[$index],
+                            'updated_at' => now()
+                        ]
+                        );
+                }
+                else{
+                    DB::table('strategic1_level_map_projects')->insert(
+                        [
+                            'proID' =>$id,
+                            'stra1LVID' => $stra1LV,
+                            'tar1LVID'=>$tar1LVID[$index],
+                            'updated_at' => now(), 
+                            'created_at' => now() 
+                        ]
+                    );
+                }
+            }
+            else{
+                DB::table('strategic1_level_map_projects')->insert(
+                    [
+                        'proID' =>$id,
+                        'stra1LVID' => $stra1LV,
+                        'tar1LVID'=>$tar1LVID[$index],
+                        'updated_at' => now(), 
+                        'created_at' => now() 
+                    ]
+                );
+            }
+        }
+        $stra1LVMapToDelete = array_diff($stra1LVIDs,$stra1LVID);
+        if(!empty($stra1LVMapToDelete)){
+            DB::table('strategic1_level_map_projects')
+            ->where('proID',$id)
+            ->where('stra1LVID',$stra1LVMapToDelete)
+            ->delete();
+        }
+
+
+
+       
+
+        $objs = DB::table('objectives')->where('proID',$id)->get();
+        $objIDs = $objs->pluck('objID')->toArray();
+        // dd($objIDs);
+        $obj = $request->obj;
+        $objID = $request->objID;
+        // dd($objIDs,$objID);
+        
+        foreach ($obj as $index => $obj) {
+            
+            // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
+            if (isset($objID[$index])) {
+                $currentObjID = $objID[$index];  // ดึง objID จาก array objID[]
+                // dd($currentObjID);
+                // ตรวจสอบว่า objID นี้มีอยู่ในฐานข้อมูลหรือไม่
+                if (in_array($currentObjID, $objIDs)) {
+                    // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
+                    DB::table('objectives')->updateOrInsert(
+                        [   
+                            'proID' => $id,
+                            'objID' => $currentObjID
+                        ],  // เช็คด้วย objID
+                        [
+                            'proID' => $id,
+                            'detail' => $obj,  // อัปเดตชื่อ
+                            'updated_at'=>now()
+                        ]
+                    );
+                } else {
+                    // หากไม่มี objID หรือ objID ไม่ตรง ให้ทำการ insert ใหม่
+                    DB::table('objectives')->insert([
+                        'proID' => $id,
+                        'detail' => $obj,  // เพิ่มชื่อใหม่
+                        'updated_at' => now(), // ใช้เวลาปัจจุบันที่ Laravel รองรับ
+                        'created_at' => now() // หรือสร้างพร้อมกัน
+                    ]);
+                }
+            } else {
+                // หากไม่มี objID ที่ตรงกับ index นี้ ให้ทำการ insert ใหม่
+                DB::table('objectives')->insert([
+                    'proID' => $id,
+                    'detail' => $obj,  // เพิ่มชื่อใหม่
+                    'updated_at' => now(), // ใช้เวลาปัจจุบันที่ Laravel รองรับ
+                    'created_at' => now() // หรือสร้างพร้อมกัน
+                ]);
+            }
+        }
+        $objID = $objID ?? [];
+        // หาค่า objIDs ที่อยู่ในฐานข้อมูล แต่ไม่มีอยู่ใน $objID
+        $objIDsToDelete = array_diff($objIDs, $objID);
+        // dd($objIDsToDelete);
+        if (!empty($objIDsToDelete)) {
+        // ลบข้อมูลที่ไม่มีในคำขอ
+            DB::table('objectives')
+            ->where('proID', $id)
+            ->whereIn('objID', $objIDsToDelete)
+            ->delete();
+        }
+        // dd($countProject,$targetProject);
+        
+        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
+        $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
+        $KPIProject = $request->KPIProject;
+        $countProject = $request->countKPIProject;
+        $targetProject = $request->targetProject;
+        $KPIProID = $request->KPIProID;
+        // dd($KPIProject,$countProject,$targetProject,$KPIProID);
+        foreach($KPIProject as $index => $KPI){
+            // dd($KPI);
+            if(isset($KPIProID[$index])){
+                $currentKPIProID = $KPIProID[$index];
+                if(in_array($currentKPIProID,$KPIProIDs)){
+                    DB::table('k_p_i_projects')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'KPIProID' => $currentKPIProID
+                        ],
+                        [
+                            'proID' => $id,
+                            'name' => $KPI,
+                            'countKPIProID' => $countProject[$index],
+                            'target' => $targetProject[$index],
+                            'updated_at'=>now()
+                        ]
+                    );
+                } else {
+                    DB::table('k_p_i_projects')->Insert(
+                        [
+                            'proID' => $id,
+                            'name' => $KPI,
+                            'countKPIProID' => $countProject[$index],
+                            'target' => $targetProject[$index],
+                            'updated_at'=>now(),
+                            'created_at' => now()
+                        ]
+                    );
+                }
+            } else {
+                DB::table('k_p_i_projects')->Insert(
+                    [
+                        'proID' => $id,
+                        'name' => $KPI,
+                        'countKPIProID' => $countProject[$index],
+                        'target' => $targetProject[$index],
+                        'updated_at'=>now(),
+                        'created_at' => now()
+                    ]
+                );
+            }
+        }
+        $KPIProjectDelect = array_diff($KPIProIDs,$KPIProID);
+        if(!empty($KPIProjectDelect)){
+            DB::table('k_p_i_projects')
+            ->where('proID',$id)
+            ->whereIn('KPIProID',$KPIProjectDelect)
+            ->delete();
+        }
+
+        $steps =DB::table('steps')->where('proID',$id)->get(); 
+        $stepIDs = $steps->pluck('stepID')->toArray();
+        $stepName = $request->stepName;
+        $stepStart = $request->stepStart;
+        $stepEnd = $request->stepEnd;
+        $stepID = $request->stepID;
+        // dd($stepName);
+        foreach($stepName as $index => $step){
+            // dd($KPI);
+            if(isset($stepID[$index])){
+                $currentstepID = $stepID[$index];
+                if(in_array($currentstepID,$stepIDs)){
+                    DB::table('steps')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'stepID' => $currentstepID
+                        ],
+                        [
+                            'proID' => $id,
+                            'name' => $step,
+                            'start' => $stepStart[$index],
+                            'end' => $stepEnd[$index],
+                            'updated_at'=>now()
+                        ]
+                    );
+                } else {
+                    DB::table('steps')->Insert(
+                        [
+                            'proID' => $id,
+                            'name' => $step,
+                            'start' => $stepStart[$index],
+                            'end' => $stepEnd[$index],
+                            'updated_at'=>now(),
+                            'created_at' => now()
+                        ]
+                    );
+                }
+            } else {
+                DB::table('steps')->Insert(
+                    [
+                        'proID' => $id,
+                        'name' => $step,
+                        'start' => $stepStart[$index],
+                        'end' => $stepEnd[$index],
+                        'updated_at'=>now(),
+                        'created_at' => now()
+                    ]
+                );
+            }
+        }
+        $stepID = $stepID ?? [];
+        $stepDelect = array_diff($stepIDs,$stepID);
+        if(!empty($stepDelect)){
+            DB::table('steps')
+            ->where('proID',$id)
+            ->whereIn('stepID',$stepDelect)
+            ->delete();
+        }
+
+        $costQuarters = DB::table('cost_quarters')->where('proID',$id)->get();
+        $costQuarIDs = $costQuarters->pluck('costQuID')->toArray();
+        // dd($costQuarIDs);
+        $costQu1 = $request->costQu1 ?? [];
+        $costQu2 = $request->costQu2 ?? [];
+        $costQu3 = $request->costQu3 ?? [];
+        $costQu4 = $request->costQu4 ?? [];
+        $expID = $request->expID ?? [];
+        $costID = $request->costID ?? [];
+        // dd($costQu1,$costQu2,$costQu3,$costQu4);
+        // dd($expID,$costID);
+        
+        foreach($costQu1 as $index => $item){
+            
+        }
+
+
+
+        $benefits = DB::table('benefits')->where('proID',$id)->get();
+        $bnfIDs = $benefits->pluck('bnfID')->toArray();
+        $bnf = $request->benefit;
+        $bnfID = $request->bnfID ?? [];
+        // dd($bnf,$bnfID);
+        foreach ($bnf as $index => $bnf) {
+            
+            // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
+            if (isset($bnfID[$index])) {
+                $currentbnfID = $bnfID[$index];  // ดึง objID จาก array objID[]
+                
+                // ตรวจสอบว่า objID นี้มีอยู่ในฐานข้อมูลหรือไม่
+                if (in_array($currentbnfID, $bnfIDs)) {
+                    // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
+                    DB::table('benefits')->updateOrInsert(
+                        [   
+                            'proID' => $id,
+                            'bnfID' => $currentbnfID
+                        ],  // เช็คด้วย objID
+                        [
+                            'proID' => $id,
+                            'detail' => $bnf,  // อัปเดตชื่อ
+                            'updated_at'=>now()
+                        ]
+                    );
+                } else {
+                    // หากไม่มี objID หรือ objID ไม่ตรง ให้ทำการ insert ใหม่
+                    DB::table('benefits')->insert([
+                        'proID' => $id,
+                        'detail' => $bnf,  // เพิ่มชื่อใหม่
+                        'updated_at' => now(), // ใช้เวลาปัจจุบันที่ Laravel รองรับ
+                        'created_at' => now() // หรือสร้างพร้อมกัน
+                    ]);
+                }
+            } else {
+                // หากไม่มี objID ที่ตรงกับ index นี้ ให้ทำการ insert ใหม่
+                DB::table('benefits')->insert([
+                    'proID' => $id,
+                    'detail' => $bnf,  // เพิ่มชื่อใหม่
+                    'updated_at' => now(), // ใช้เวลาปัจจุบันที่ Laravel รองรับ
+                    'created_at' => now() // หรือสร้างพร้อมกัน
+                ]);
+            }
+        }
+        
+        // หาค่า objIDs ที่อยู่ในฐานข้อมูล แต่ไม่มีอยู่ใน $objID
+        $bnfIDsToDelete = array_diff($bnfIDs, $bnfID);
+        // dd($objIDsToDelete);
+        if (!empty($bnfIDsToDelete)) {
+        // ลบข้อมูลที่ไม่มีในคำขอ
+            DB::table('benefits')
+            ->where('proID', $id)
+            ->whereIn('bnfID', $bnfIDsToDelete)
+            ->delete();
+        }
+
+        $files = DB::table('files')->where('proID',$id)->get();
+        $fileIDs =  $files->pluck('fileID')->toArray();
+
+        $fileID = $request->fileID ?? [];
+        $file = $request->file ?? [];
+        // dd($file);
+         if(isset($file)){
+        foreach($file as $index => $file){
+           
+               
+                Db::table('files')->insert(
+                    [
+                        'proID' => $id,
+                        'name' => $file->getClientOriginalName(),
+                        'updated_at' => now(), 
+                        'created_at' => now()
+                    ]
+                );
+                $file->move(public_path('files'),$file->getClientOriginalName());
+            }
+        }
+        $fileIDToDelete = array_diff($fileIDs,$fileID);
+        if(!empty($fileIDToDelete)){
+            DB::table('files')
+            ->where('proID',$id)
+            ->whereIn('fileID',$fileIDToDelete)
+            ->delete();
+        }
+
+        
+
+        session()->forget(
+            [
+                'yearID' ,
+                'name' ,
+                'stra3LVID',
+                'SFA3LVID' ,
+                'goal3LVID',
+                'tac3LVID',
+                'KPIMain3LVID',
+                'count3LVID',
+                'target3LVID',
+                'stra2LVID',
+                'SFA2LVID',
+                'tac2LVID',
+                'KPIMain2LVID',
+                'stra1LVID',
+                'tar1LVID' 
+            ]
+        );
+
+        return redirect('/project');
     }
 
     function sendUpdate2(Request $request,$id){
@@ -937,6 +1639,7 @@ class ProjectController extends Controller
 
         
         foreach ($userMapID as $index => $userMap){
+            // dd($userMap);
             if(isset($userMap)){
                 $currentuserMapID = $userMap;
                 // dd($currentuserMapID);
@@ -993,10 +1696,11 @@ class ProjectController extends Controller
         $tac3LVID = $request->tac3LVID;
         // dd($straMap3LVID,$stra3LVID,$SFA3LVID,$goal3LVID,$tac3LVID);
 
-        foreach($straMap3LVID as $index => $straMap){
+        foreach($stra3LVID as $index => $straMap){
+            // dd($straMap);
             if(isset($straMap)){
                 $currentstraMapID = $straMap;
-                if(in_array($currentstraMapID,$straMap3LVIDs)){
+                if(in_array($currentstraMapID,$stra3LVIDs)){
                     DB::table('strategic_maps')->updateOrInsert(
                         [
                             'proID' => $id,
@@ -1299,6 +2003,7 @@ class ProjectController extends Controller
 
         return redirect('/project');
     }
+
 
     function report($id){
         $user=Users::all();
