@@ -48,7 +48,7 @@ use App\Http\Controllers\ExcelAllResultsController;
 
 
 //PDF
-Route::get('/pdfKPI', [PDFKPIController::class, 'pdf_gen']);
+Route::get('/pdfKPI/{id}', [PDFKPIController::class, 'pdf_gen']);
 Route::get('/pdfPlan', [PDFPlanController::class, 'pdf_gen']);
 Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
