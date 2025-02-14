@@ -64,6 +64,11 @@ class PDFController extends Controller
 
     public function db_gen($id)
     {
+        // ตรวจสอบว่า $id มีค่าหรือไม่
+        if (empty($id)) {
+            return response()->json(['message' => 'ไม่มีข้อมูลของโครงการ'], 400, [], JSON_UNESCAPED_UNICODE);
+        }
+
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $projects = Projects::where('proID', $id)->first();
         $years = Year::all();
@@ -107,17 +112,11 @@ class PDFController extends Controller
         $objects = Objectives::all();
 
 
-
-
         $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);                            // สร้าง instance ของ Mpdf ด้วยการตั้งค่าจาก config
 
         // กำหนดระยะห่างระหว่างโลโก้และเนื้อหา
         $mpdf->SetY(60);                                            // ตั้งระยะห่างจากขอบบนก่อนที่จะเริ่มเขียนเนื้อหา
-        // $currentDate = date('Y-m-d');
-        // ตั้งชื่อไฟล์ PDF
-        // $fileName = $username . '_report_' . '.pdf';
-
 
         $stylesheet = "
         <style>
@@ -158,21 +157,31 @@ class PDFController extends Controller
 
         // logo kmutnb
         $htmlContent = '
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="' . public_path('images/logo_kmutnb.png') . '" style="width: 60px; height: auto;">
-        </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="' . public_path('images/logo_kmutnb.png') . '" style="width: 60px; height: auto;">
+            </div>
         ';
 
-        foreach ($years as $year) {
-            if ($projects->yearID == $year->yearID) {
-                $htmlContent .= '
-                    <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->year . '
-                        <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
-                    </p>
-                ';
-                $mpdf->SetTitle($projects->name);
-            }
+        // ตรวจสอบว่าพบข้อมูลโครงการหรือไม่
+        if (!$projects) {
+            return response()->json(['message' => 'ไม่มีข้อมูลของโครงการ'], 400, [], JSON_UNESCAPED_UNICODE);
         }
+
+        if ($projects && $projects->yearID) {
+            foreach ($years as $year) {
+                if ($projects->yearID == $year->yearID) {
+                    $htmlContent .= '
+                        <p style="text-align: center; font-weight: bold;">แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ.' . $year->year . '
+                            <br>มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ
+                        </p>
+                    ';
+                    $mpdf->SetTitle($projects->name);
+                }
+            }
+        } else {
+            return redirect()->back()->with('error', 'ไม่พบข้อมูลโครงการ');
+        }
+
 
 
         $htmlContent .= '
@@ -222,101 +231,191 @@ class PDFController extends Controller
             }
         }
 
-        $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ</b><br>';
-        $index = 1;
+        $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ </b>';
+        $plans = [];
 
         foreach ($strategic_maps as $strategic_map) {
             if ($projects->proID == $strategic_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก straID
+                $planDetails = [];
                 foreach ($strategics as $strategic) {
                     if ($strategic->straID == $strategic_map->straID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic->name . '</b> <br>';
-                        $index++;
+                        $planDetails[] = '<b>' . $strategic->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก SFAID
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก goalID
                 foreach ($goals as $goal) {
                     if ($goal->goalID == $strategic_map->goalID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tacID
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
             }
         }
 
         foreach ($strategic2_level_maps as $strategic2_level_map) {
             if ($projects->proID == $strategic2_level_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก stra2LVID
+                $planDetails = [];
                 foreach ($strategic2_levels as $strategic2_level) {
                     if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic2_level->name . '</b> <br>';
-                        $index++;
+                        $planDetails[] = '<b>'. $strategic2_level->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก SFA2LVID
                 foreach ($strategic_issue2_levels as $strategic_issue2_level) {
                     if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic2_level->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue2_level->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tac2LVID
                 foreach ($tactic2_levels as $tactic2_level) {
                     if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
             }
         }
 
         foreach ($strategic1_level_maps as $strategic1_level_map) {
             if ($projects->proID == $strategic1_level_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก stra1LVID
+                $planDetails = [];
                 foreach ($strategic1_levels as $strategic1_level) {
                     if ($strategic1_level->stra1LVID == $strategic1_level_map->stra1LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic->name . '</b> <br>';
-                        $index++;
+                        $planDetails[] = '<b>' . $strategic1_level->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tar1LVID
                 foreach ($target1_levels as $target1_level) {
                     if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name . '<br>';
+                        $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
             }
         }
+
+        if (count($plans) == 1) {
+            $htmlContent .= $plans[0] . '<br>';
+        } elseif (count($plans) > 1) {
+            $htmlContent .= '<br>';
+            $index = 1;
+            foreach ($plans as $plan) {
+                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' '.'</b>' . $plan . '<br>';
+                $index++;
+            }
+        }
+
+
+        // $htmlContent .= '<b>3. ความเชื่อมโยงสอดคล้องกับ</b><br>';
+        // $index = 1;
+
+        // foreach ($strategic_maps as $strategic_map) {
+        //     if ($projects->proID == $strategic_map->proID) {
+        //         // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+        //         // เช็คชื่อจาก straID
+        //         foreach ($strategics as $strategic) {
+        //             if ($strategic->straID == $strategic_map->straID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic->name . '</b> <br>';
+        //                 $index++;
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก SFAID
+        //         foreach ($strategic_issues as $strategic_issue) {
+        //             if ($strategic_issue->SFAID == $strategic_map->SFAID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก goalID
+        //         foreach ($goals as $goal) {
+        //             if ($goal->goalID == $strategic_map->goalID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก tacID
+        //         foreach ($tactics as $tactic) {
+        //             if ($tactic->tacID == $strategic_map->tacID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // foreach ($strategic2_level_maps as $strategic2_level_map) {
+        //     if ($projects->proID == $strategic2_level_map->proID) {
+        //         // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+        //         // เช็คชื่อจาก stra2LVID
+        //         foreach ($strategic2_levels as $strategic2_level) {
+        //             if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic2_level->name . '</b> <br>';
+        //                 $index++;
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก SFA2LVID
+        //         foreach ($strategic_issue2_levels as $strategic_issue2_level) {
+        //             if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic2_level->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก tac2LVID
+        //         foreach ($tactic2_levels as $tactic2_level) {
+        //             if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // foreach ($strategic1_level_maps as $strategic1_level_map) {
+        //     if ($projects->proID == $strategic1_level_map->proID) {
+        //         // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
+
+        //         // เช็คชื่อจาก stra1LVID
+        //         foreach ($strategic1_levels as $strategic1_level) {
+        //             if ($strategic1_level->stra1LVID == $strategic1_level_map->stra1LVID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . $strategic->name . '</b> <br>';
+        //                 $index++;
+        //                 break;
+        //             }
+        //         }
+
+        //         // เช็คชื่อจาก tar1LVID
+        //         foreach ($target1_levels as $target1_level) {
+        //             if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
+        //                 $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name . '<br>';
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
 
 
         $htmlContent .= '
@@ -337,7 +436,7 @@ class PDFController extends Controller
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <br><b>5. การบูรณาการโครงการ </b> <br> 
+                <b>5. การบูรณาการโครงการ </b> <br> 
         ';
 
         foreach ($project_integrats as $project_integrat) {
