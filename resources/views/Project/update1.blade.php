@@ -56,6 +56,7 @@
 
                         @php
                             $index = 0;
+                            
                         @endphp
 
                         {{-- @if (!empty($selectYear)) --}}
@@ -66,13 +67,18 @@
                                     class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 d-flex">
+                                    
                                     <input type="checkbox" name="stra3LVID[]" value="{{ $item->stra3LVID }}"
                                         @foreach ($strategic3LVMap as $map)
                                             @if ($item->stra3LVID == $map->stra3LVID)
-                                                    checked
-                                            @endif @endforeach>
+                                                    checked 
+                                                     
+                                            @endif 
+                                            @endforeach>
 
-
+                                           
+                                                
+                                          
                                     <input class="ml-2 form-control" type="text" id="straID_{{ $index }}"
                                         required='required' data-validate-length-range="8,20" readonly
                                         value="{{ $item->name }}">
@@ -86,9 +92,12 @@
                                         class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-8 col-sm-8">
+                                        <input type="text" value="{{$SFA3LVMap[$index] ?? ''}}">
+
                                         <select id="SFA3LVID_{{ $index }}" name="SFA3LVID[]" class="form-control"
                                             required>
                                             <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
+
                                             @foreach ($SFA3LVs as $SFA)
                                                 @if ($SFA->stra3LVID == $item->stra3LVID)
                                                     @if ($SFA->SFA3LVID == ($SFA3LVMap[$index] ?? ''))
@@ -169,60 +178,131 @@
                                             <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 col-sm-12">
-                                        <div class="col-md-4 col-sm-4 m-1">
-                                            <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]"
-                                                class="form-control" required>
-                                                <option value="">--เลือกตัวชี้วัด--</option>
-                                                @foreach ($KPIMain3LV as $KPI)
-                                                    @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                        @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
-                                                            <option value="{{ $KPI->KPIMain3LVID }}" selected>
-                                                                {{ $KPI->name }}</option>
-                                                        @else
-                                                            <option value="{{ $KPI->KPIMain3LVID }}">
-                                                                {{ $KPI->name }}</option>
-                                                        @endif
-                                                    @endif
-                                                @endforeach
 
-                                            </select>
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
-                                            <input class="form-control" type="text" name="countMain3LV[]"
-                                                id="count3LV_{{ $index }}"
-                                                @foreach ($KPIMain3LV as $KPI)
-                                                    @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                        @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
-                                                            value="{{$KPI->count ?? '-'}}"
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                                 readonly>
 
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
-                                            <input class="form-control" type="text" name="targetMain3LV[]"
-                                                id="target3LV_{{ $index }}" 
-                                                @foreach ($KPIMain3LV as $KPI)
+                                    @if (isset($KPIMain3LVMapFirst[$index]) && $KPIMain3LVMapFirst[$index]->goal3LVID == $goal3LVMap[$index])
+                                        @foreach ($KPIMain3LVMaps as $KPIMap)
+                                            @if ($KPIMap->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                <div class="row col-md-12 col-sm-12">
+                                                    <div class="col-md-4 col-sm-4 m-1">
+
+                                                        <select id="KPIMain3LVID_{{ $index }}"
+                                                            name="KPIMain3LVID[]" class="form-control" required>
+                                                            <option value="">--เลือกตัวชี้วัด--</option>
+                                                            @foreach ($KPIMain3LV as $KPI)
+                                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                                    @if ($KPI->KPIMain3LVID == $KPIMap->KPIMain3LVID)
+                                                                        <option value="{{ $KPI->KPIMain3LVID }}" selected>
+                                                                            {{ $KPI->name }}</option>
+                                                                    @else
+                                                                        <option value="{{ $KPI->KPIMain3LVID }}">
+                                                                            {{ $KPI->name }}</option>
+                                                                    @endif
+                                                                @endif
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                    <div class=" col-md-3 col-sm-3 m-1">
+                                                        <input class="form-control" type="text" name="countMain3LV[]"
+                                                            id="count3LV_{{ $index }}"
+                                                            @foreach ($KPIMain3LV as $KPI)
                                                 @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain3LVID == ($KPIMain3LVMap[$index] ?? ''))
-                                                        value="{{$KPI->target ?? '-'}}"
+                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
+                                                        value="{{ $KPI->count ?? '-' }}"
                                                     @endif
-                                                @endif
-                                            @endforeach
-                                            readonly>
-                                        </div>
-                                        <div class="col-md-1 col-sm-1 m-1">
-                                            <button type='button' class="btn btn-primary insert-kpi-button"
-                                                data-index="{{ $index }}">เพิ่ม
-                                            </button>
+                                                @endif @endforeach
+                                                            readonly>
 
+                                                    </div>
+                                                    <div class=" col-md-3 col-sm-3 m-1">
+                                                        <input class="form-control" type="text" name="targetMain3LV[]"
+                                                            id="target3LV_{{ $index }}"
+                                                            @foreach ($KPIMain3LV as $KPI)
+                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
+                                                        value="{{ $KPI->target ?? '-' }}"
+                                                    @endif
+                                                @endif @endforeach
+                                                            readonly>
+                                                    </div>
+
+                                                    @if ($KPIMap->KPIMain3LVID == $KPIMain3LVMapFirst[$index]->KPIMain3LVID)
+                                                        <div class="col-md-1 col-sm-1 m-1">
+                                                            <button type='button'
+                                                                class="btn btn-primary insert-kpi3LV-button"
+                                                                data-index="{{ $index }}">เพิ่ม
+                                                            </button>
+
+                                                        </div>
+                                                    @else
+                                                        <div class="col-md-1 col-sm-1 m-1">
+                                                            <button type="button" class="btn btn-danger "
+                                                                onclick="this.closest('.row').remove()">ลบ</button>
+
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                {{-- @else --}}
+                                            @endif
+                                        @endforeach
+                                        @else
+                                        <div class="row col-md-12 col-sm-12">
+                                            <div class="col-md-4 col-sm-4 m-1">
+                                                <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]"
+                                                    class="form-control" required>
+                                                    <option value="">--เลือกตัวชี้วัด--</option>
+                                                    {{-- @foreach ($KPIMain3LV as $KPI)
+                                                        @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                            @if ($KPI->KPIMain3LVID == $KPIMain3LVMapFirst)
+                                                                <option value="{{ $KPI->KPIMain3LVID }}" selected>
+                                                                    {{ $KPI->name }}</option>
+                                                            @else
+                                                                <option value="{{ $KPI->KPIMain3LVID }}">
+                                                                    {{ $KPI->name }}</option>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach --}}
+
+                                                </select>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="countMain3LV[]"
+                                                    id="count3LV_{{ $index }}" {{-- @foreach ($KPIMain3LV as $KPI)
+                                                    @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                        @if ($KPI->KPIMain3LVID == ($KPIMain3LVMapFirst ?? ''))
+                                                            value="{{ $KPI->count ?? '-' }}"
+                                                        @endif
+                                                    @endif @endforeach --}}
+                                                    value ='' readonly>
+
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="targetMain3LV[]"
+                                                    id="target3LV_{{ $index }}" {{-- @foreach ($KPIMain3LV as $KPI)
+                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                    @if ($KPI->KPIMain3LVID == ($KPIMain3LVMapFirst ?? ''))
+                                                        value="{{ $KPI->target ?? '-' }}"
+                                                    @endif
+                                                @endif @endforeach --}}
+                                                    value='' readonly>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type='button' class="btn btn-primary insert-kpi3LV-button"
+                                                    data-index="{{ $index }}">เพิ่ม
+                                                </button>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div id="insertKPIMain_{{ $index }}"></div>
+                                    @endif
+                                    <div id="insertKPIMain1_{{ $index }}"></div>
+                                    {{-- @else --}}
+
+                                    {{-- <div id="insertKPIMain1_{{ $index }}"></div> --}}
+                                    {{-- @endif --}}
                                 </div>
                             </div>
+
                             @php
                                 $index += 1;
                             @endphp
@@ -343,25 +423,23 @@
                                                 @foreach ($KPIMain2LV as $KPI)
                                                 @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                     @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
-                                                        value="{{ $KPI->count ?? '-'}}"
+                                                        value="{{ $KPI->count ?? '-' }}"
                                                    
                                                     @endif
-                                                @endif 
-                                                @endforeach
+                                                @endif @endforeach
                                                 readonly>
 
                                         </div>
                                         <div class=" col-md-3 col-sm-3 m-1">
                                             <input class="form-control" type="text" name="targetMain2LV[]"
-                                                id="target2LV_{{ $index }}" 
+                                                id="target2LV_{{ $index }}"
                                                 @foreach ($KPIMain2LV as $KPI)
                                                 @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                     @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
                                                         value="{{ $KPI->target ?? '-' }}"
                                                     
                                                     @endif
-                                                @endif 
-                                                @endforeach
+                                                @endif @endforeach
                                                 readonly>
                                         </div>
                                         <div class="col-md-1 col-sm-1 m-1">
@@ -645,26 +723,44 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             document.body.addEventListener('click', function(event) {
-                if (event.target.classList.contains('insert-kpi-button')) {
+                if (event.target.classList.contains('insert-kpi3LV-button')) {
                     const index = event.target.getAttribute('data-index');
-                    insertKPIMain(index);
+                    insertKPIMain1(index);
+                }
+
+                if (event.target.classList.contains('insert-kpi2LV-button')) {
+                    const index = event.target.getAttribute('data-index');
+                    insertKPIMain2(index);
                 }
             });
         });
+        const KPIMains = @json($KPIMain3LV);
 
-
-        function insertKPIMain(index) {
+        function insertKPIMain1(index) {
+            // const i=1;
             const mainContainer = document.createElement('div');
-            mainContainer.classList.add('col-md-12', 'col-sm-12');
+            mainContainer.classList.add('row', 'col-md-12', 'col-sm-12');
 
             const colKPI = document.createElement('div');
             colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
 
             const KPIDropdown = document.createElement('select');
             KPIDropdown.classList.add('form-control');
-            KPIDropdown.id = `KPIMainID_${Date.now()}`;
+            // KPIDropdown.id = `KPIMain3LVID_${Date.now()}`;
+            // KPIDropdown.id = `KPIMain3LVID_${index}`;
+            KPIDropdown.id = `KPIMain3LVID_${index}_${Date.now()}`;
+
             KPIDropdown.name = 'KPIMain3LVID[]';
             KPIDropdown.innerHTML = '';
+
+            console.log("สร้าง dropdown ID:", KPIDropdown.id);
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '--เลือกตัวชี้วัด--';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            KPIDropdown.appendChild(defaultOption);
 
             const colCount = document.createElement('div');
             colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
@@ -672,8 +768,10 @@
             const countInput = document.createElement('input');
             countInput.classList.add('form-control');
             countInput.type = 'text';
-            countInput.id = `countMain_${Date.now()}`;
+            // countInput.id = `countMain_${Date.now()}`;
+            countInput.id = `count3LV_${index}_${Date.now()}`;
             countInput.name = 'countMain3LV[]';
+            countInput.readOnly = true;
 
             const colTarget = document.createElement('div');
             colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
@@ -681,42 +779,36 @@
             const targetInput = document.createElement('input');
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
-            targetInput.id = `targetMain_${Date.now()}`;
+            // targetInput.id = `targetMain_${Date.now()}`;
+            targetInput.id = `target3LV_${index}_${Date.now()}`;
             targetInput.name = 'targetMain3LV[]';
+            targetInput.readOnly = true;
 
-            // const selectedGoalID = document.getElementById('goal3LVID').value;
-            // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goal3LVID == selectedGoalID);
-            // if (filteredKPIMains.length === 0) {
-            //     const noKPIMainOption = document.createElement('option');
-            //     noKPIMainOption.value = '';
-            //     noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-            //     KPIDropdown.appendChild(noKPIMainOption);
-            //     KPIDropdown.disabled = true;
-            //     countInput.value = 'ไม่มีหน่วยนับ';
-            //     targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            // } else {
-            //     // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
-            //     KPIDropdown.disabled = false;
-            //     filteredKPIMains.forEach(KPIMain => {
-            //         const option = document.createElement('option');
-            //         option.value = KPIMain.KPIMainID;
-            //         option.textContent = KPIMain.name;
-            //         KPIDropdown.appendChild(option);
-            //     });
+            const selectedGoalID = document.getElementById('goal3LVID_' + index).value;
 
-            //     // กำหนดค่าเริ่มต้นให้กับ input
-            //     const firstKPIMain = filteredKPIMains[0];
-            //     countInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-            //     targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            // }
-            // KPIDropdown.addEventListener('change', function() {
-            //     const selectedKPIMainID = this.value;
-            //     const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
-            //     if (selectedKPIMain) {
-            //         countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-            //         targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            //     }
-            // });
+            const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goal3LVID == selectedGoalID);
+
+            // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
+            KPIDropdown.disabled = false;
+            filteredKPIMains.forEach(KPIMain => {
+                const option = document.createElement('option');
+                option.value = KPIMain.KPIMain3LVID;
+                option.textContent = KPIMain.name;
+                KPIDropdown.appendChild(option);
+            });
+
+
+            KPIDropdown.addEventListener('change', function() {
+                console.log('KPIDropdown changed:', this.value);
+                const selectedKPIMainID = this.value;
+                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMain3LVID == selectedKPIMainID);
+                if (selectedKPIMain) {
+                    countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
+                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                }
+            });
+
+
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
@@ -740,13 +832,120 @@
             colDelete.appendChild(deleteButton);
             // เพิ่มปุ่มลบลงใน mainContainer
             // document.getElementById('insertKPIMain').appendChild(mainContainer);
-            const targetContainer = document.getElementById(`insertKPIMain_${index}`);
+            const targetContainer = document.getElementById(`insertKPIMain1_${index}`);
             if (targetContainer) {
                 targetContainer.appendChild(mainContainer);
             } else {
                 console.error(`ไม่พบ <div id="insertKPIMain_${index}"> ใน DOM`);
             }
         }
+
+        const KPIMain2LVs = @json($KPIMain2LV);
+
+        function insertKPIMain2(index) {
+            // const i=1;
+            const mainContainer = document.createElement('div');
+            mainContainer.classList.add('col-md-12', 'col-sm-12');
+
+            const colKPI = document.createElement('div');
+            colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
+
+            const KPIDropdown = document.createElement('select');
+            KPIDropdown.classList.add('form-control');
+            // KPIDropdown.id = `KPIMain3LVID_${Date.now()}`;
+            // KPIDropdown.id = `KPIMain3LVID_${index}`;
+            KPIDropdown.id = `KPIMain2LVID_${index}_${Date.now()}`;
+
+            KPIDropdown.name = 'KPIMain2LVID[]';
+            KPIDropdown.innerHTML = '';
+
+            console.log("สร้าง dropdown ID:", KPIDropdown.id);
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '--เลือกตัวชี้วัด--';
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            KPIDropdown.appendChild(defaultOption);
+
+            const colCount = document.createElement('div');
+            colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const countInput = document.createElement('input');
+            countInput.classList.add('form-control');
+            countInput.type = 'text';
+            // countInput.id = `countMain_${Date.now()}`;
+            countInput.id = `count2LV_${index}_${Date.now()}`;
+            countInput.name = 'countMain2LV[]';
+            countInput.readOnly = true;
+
+            const colTarget = document.createElement('div');
+            colTarget.classList.add('col-md-3', 'col-sm-3', 'm-1');
+
+            const targetInput = document.createElement('input');
+            targetInput.classList.add('form-control');
+            targetInput.type = 'text';
+            // targetInput.id = `targetMain_${Date.now()}`;
+            targetInput.id = `target2LV_${index}_${Date.now()}`;
+            targetInput.name = 'targetMain2LV[]';
+            targetInput.readOnly = true;
+
+            const selectedSFAID = document.getElementById('SFA2LVID_' + index).value;
+
+            const filteredKPIMains = KPIMain2LVs.filter(KPIMain => KPIMain.SFA2LVID == selectedSFAID);
+
+            // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
+            KPIDropdown.disabled = false;
+            filteredKPIMains.forEach(KPIMain => {
+                const option = document.createElement('option');
+                option.value = KPIMain.KPIMain2LVID;
+                option.textContent = KPIMain.name;
+                KPIDropdown.appendChild(option);
+            });
+
+
+            KPIDropdown.addEventListener('change', function() {
+                console.log('KPIDropdown changed:', this.value);
+                const selectedKPIMainID = this.value;
+                const selectedKPIMain = KPIMain2LVs.find(KPIMain => KPIMain.KPIMain2LVID == selectedKPIMainID);
+                if (selectedKPIMain) {
+                    countInput.value = selectedKPIMain.count || '-';
+                    targetInput.value = selectedKPIMain.target || '-';
+                }
+            });
+
+
+
+            const colDelete = document.createElement('div');
+            colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.classList.add('btn', 'btn-danger'); // เพิ่มคลาส Bootstrap
+            deleteButton.textContent = 'ลบ';
+            deleteButton.onclick = function() {
+                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
+            };
+
+
+            mainContainer.appendChild(colKPI);
+            mainContainer.appendChild(colCount);
+            mainContainer.appendChild(colTarget);
+            mainContainer.appendChild(colDelete);
+            colKPI.appendChild(KPIDropdown);
+            colCount.appendChild(countInput);
+            colTarget.appendChild(targetInput);
+            colDelete.appendChild(deleteButton);
+            // เพิ่มปุ่มลบลงใน mainContainer
+            // document.getElementById('insertKPIMain').appendChild(mainContainer);
+            const targetContainer = document.getElementById(`insertKPIMain2_${index}`);
+            if (targetContainer) {
+                targetContainer.appendChild(mainContainer);
+            } else {
+                console.error(`ไม่พบ <div id="insertKPIMain_${index}"> ใน DOM`);
+            }
+        }
+
 
         function submitButton(action, proID) {
             var form = document.getElementById('actionForm');

@@ -56,6 +56,7 @@ class ProjectController extends Controller
     
     function create1(Request $request){
        
+        // session()->flush(); 
         $year = Year::all();
 
         $selectYear = $request->input('yearID');
@@ -148,7 +149,7 @@ class ProjectController extends Controller
                 'yearID' => $request->yearID,
                 'name' => $request->project_name,
                 'stra3LVID' => $request->stra3LVID,
-                'SFA3LVID' => $request->SFA3LVID,
+                'SFA3LVID' => $request->SFA3LVID ,
                 'goal3LVID' =>$request->goal3LVID,
                 'tac3LVID'=>$request->tac3LVID,
                 'KPIMain3LVID'=>$request->KPIMain3LVID,
@@ -161,16 +162,28 @@ class ProjectController extends Controller
                 'stra1LVID'=>$request->stra1LVID,
                 'tar1LVID'=>$request->tar1LVID
             ]);
-      
+
+       
+        //  dd(session('goal3LVID'));
+            // dd($SFA3LVID);
+       
+
+           
+            
+        
         return redirect('/projectcreate2');
     }
     
     
     function create2(Request $request){
-        // dd(session('SFA3LVID'));
+        
         // $project=DB::table('projects')->where('proID',$id)->first();
         //  dd($project,$id);
-       
+        $sessionSFA3LVID = array_values(array_filter(session('SFA3LVID')));
+        $sessiongoal3LVID = array_values(array_filter(session('goal3LVID')));
+        $sessiontac3LVID = array_values(array_filter(session('tac3LVID')));
+        $sessionKPIMain3LVID = array_values(array_filter(session('KPIMain3LVID')));
+        
         $user = Users::all();
         $years = Year::all(); // ดึงข้อมูลปี
 
@@ -207,7 +220,8 @@ class ProjectController extends Controller
         $costTypes=CostTypes::all();
         $CountKPIProjects = CountKPIProjects::all();
         $proID=Projects::all();
-        return view('Project.create2',compact('strategic2LV','selectProjectType','selectProjectCharec','selectProjectIntegrat','target1LV','strategic2LVMap','KPIMain2LV','KPIMainMapProject','SFA2Lv','tactics2LV','KPIMain2LVMap','strategic1LV','strategic1LVMap','CountKPIProjects','years','user','strategicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes'));
+        return view('Project.create2',compact('strategic2LV','selectProjectType','selectProjectCharec','selectProjectIntegrat','target1LV','strategic2LVMap','KPIMain2LV','KPIMainMapProject','SFA2Lv','tactics2LV','KPIMain2LVMap','strategic1LV','strategic1LVMap','CountKPIProjects','years','user','strategicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes',
+                    'sessionSFA3LVID','sessiongoal3LVID','sessiontac3LVID','sessionKPIMain3LVID'));
     }
     
     function send2(Request $request){
@@ -612,16 +626,17 @@ class ProjectController extends Controller
             }
         }
         $KPIMain3LV = $request->input('KPIMain3LVID');
-        // dd($KPIMain3LV);
-        if(!empty($KPIMain3LV) && is_array($KPIMain3LV) && is_array($stra3LV)){
+        $goalMap = $request->input('goalMap');
+        // dd($goalMap,$KPIMain3LV);
+        if(!empty($KPIMain3LV) && is_array($KPIMain3LV) ){
             foreach ($KPIMain3LV as $index => $KPIMain) {
-                if(!empty($KPIMain) && isset($stra3LV[$index])){
+                
                 $map = new KPIMainMapProjects();
-                $map->KPIMain3LVID = $KPIMain ?? null;
-                $map->stra3LVID = $stra3LV[$index];
+                $map->KPIMain3LVID = $KPIMain ;
+                $map->goal3LVID = $goalMap[$index] ;
                 $map->proID = $project;
                 $map->save(); 
-                }
+                
             }
         }
 
@@ -642,13 +657,14 @@ class ProjectController extends Controller
             }
         }
         $KPIMain2LV = $request->input('KPIMain2LVID');
+        $SFAMap = $request->input('SFAMap');
         // dd($KPIMain2LV);
         
         if(!empty($KPIMain2LV) && is_array($KPIMain2LV)){
             foreach($KPIMain2LV as $index => $KPI){
                 if(!empty($KPI) ){
                 $map = new KPIMain2LevelMapProject();
-                $map->stra2LVID = $stra2LV[$index];
+                $map->SFA2LVID = $SFAMap[$index];
                 $map->KPIMain2LVID = $KPI;
                 $map->proID = $project;
                 $map->save();
@@ -795,15 +811,20 @@ class ProjectController extends Controller
         
         
         $strategic3LVMap= DB::table('strategic_maps')->where('proID',$id)->get();
+       
         $stra3LVMap = $strategic3LVMap->pluck('stra3LVID')->toArray();
-        // dd($stra3LVMap);
+        // dd($strategic3LVMap);
         $SFA3LVMap=$strategic3LVMap->pluck('SFA3LVID')->toArray();
         $goal3LVMap = $strategic3LVMap->pluck('goal3LVID')->toArray();
         $tac3LVMap =  $strategic3LVMap->pluck('tac3LVID')->toArray();
-        // dd($strategic3LVMap);
+        // dd($SFA3LVMap);
+        
         
         $KPIMain3LVMaps = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
         $KPIMain3LVMap =  $KPIMain3LVMaps->pluck('KPIMain3LVID')->toArray();
+        $KPIMain3LVMapFirst = $KPIMain3LVMaps->unique('goal3LVID')->values();
+
+        // dd($KPIMain3LVMapFirst);
         
         // dd($selectYear);
         $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() :  Strategic3Level::all();
@@ -844,7 +865,7 @@ class ProjectController extends Controller
        
 
         return view('Project.update1',
-        compact('selectYear','year','project','strategic3LVMap','stra3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMaps','KPIMain3LVMap',
+        compact('selectYear','year','project','strategic3LVMap','stra3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMapFirst','KPIMain3LVMaps','KPIMain3LVMap',
                 'SFA3LVs','strategic3Level','selectStra3LV','goal3Level','tactics3LV','KPIMain3LV',
                 'strategic2LVMap','SFA2LVMap','tac2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap',
                 'strategic1Level','strategic1LVMap','target1LVMap','target1LV'));
@@ -1311,7 +1332,7 @@ class ProjectController extends Controller
         $objIDs = $objs->pluck('objID')->toArray();
         // dd($objIDs);
         $obj = $request->obj;
-        $objID = $request->objID;
+        $objID = $request->objID ?? [];
         // dd($objIDs,$objID);
         
         foreach ($obj as $index => $obj) {
@@ -1353,7 +1374,7 @@ class ProjectController extends Controller
                 ]);
             }
         }
-        $objID = $objID ?? [];
+       
         // หาค่า objIDs ที่อยู่ในฐานข้อมูล แต่ไม่มีอยู่ใน $objID
         $objIDsToDelete = array_diff($objIDs, $objID);
         // dd($objIDsToDelete);
@@ -1484,19 +1505,76 @@ class ProjectController extends Controller
         }
 
         $costQuarters = DB::table('cost_quarters')->where('proID',$id)->get();
-        $costQuarIDs = $costQuarters->pluck('costQuID')->toArray();
+        $costQuIDs = $costQuarters->pluck('costQuID')->toArray();
         // dd($costQuarIDs);
+        $costQuID = $request->costQuID ?? [];
         $costQu1 = $request->costQu1 ?? [];
         $costQu2 = $request->costQu2 ?? [];
         $costQu3 = $request->costQu3 ?? [];
         $costQu4 = $request->costQu4 ?? [];
         $expID = $request->expID ?? [];
         $costID = $request->costID ?? [];
-        // dd($costQu1,$costQu2,$costQu3,$costQu4);
+        // dd($costQuID,$costQu1,$costQu2,$costQu3,$costQu4);
         // dd($expID,$costID);
         
-        foreach($costQu1 as $index => $item){
-            
+        foreach($costQu1 as $index => $cost1){
+            if(isset($costQuID[$index])){
+                $currentcostQuID = $costQuID[$index];
+                if(in_array($currentcostQuID,$costQuIDs)){
+                    DB::table('cost_quarters')->updateOrInsert(
+                        [
+                            'proID' => $id,
+                            'costQuID' => $currentcostQuID
+                        ],
+                        [
+                            'proID' => $id,
+                            'costQu1' => $cost1,
+                            'costQu2' => $costQu2[$index],
+                            'costQu3' => $costQu3[$index],
+                            'costQu4' => $costQu4[$index],
+                            'expID' => $expID[$index],
+                            'costID' => $costID[$index],
+                            'updated_at'=>now()
+                        ]
+                        );
+                }else{
+                    DB::table('cost_quarters')->insert(
+                        [
+                            'proID' => $id,
+                            'costQu1' => $cost1,
+                            'costQu2' => $costQu2[$index],
+                            'costQu3' => $costQu3[$index],
+                            'costQu4' => $costQu4[$index],
+                            'expID' => $expID[$index],
+                            'costID' => $costID[$index],
+                            'updated_at'=>now(),
+                            'created_at' => now()
+                        ]
+                        );
+                }
+            }else{
+                DB::table('cost_quarters')->insert(
+                    [
+                        'proID' => $id,
+                        'costQu1' => $cost1,
+                        'costQu2' => $costQu2[$index],
+                        'costQu3' => $costQu3[$index],
+                        'costQu4' => $costQu4[$index],
+                        'expID' => $expID[$index],
+                        'costID' => $costID[$index],
+                        'updated_at'=>now(),
+                        'created_at' => now()
+                    ]
+                    );
+            }
+        }
+
+        $costQuIDToDelete = array_diff($costQuIDs,$costQuID);
+        if(!empty($costQuIDToDelete)){
+            DB::table('cost_quarters')
+            ->where('proID',$id)
+            ->whereIn('costQuID',$costQuIDToDelete)
+            ->delete();
         }
 
 

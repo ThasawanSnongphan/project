@@ -968,6 +968,7 @@
                                 </select>
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
+                                <input type="hidden" name="costQuID[]" value="{{$costQuarter->costQuID}}">
                                 <input class="form-control cost-input" type="text" name="costQu1[]" id=""
                                     value="{{ $costQuarter->costQu1 ?? '' }}">
                                 @error('costQu1.*')
