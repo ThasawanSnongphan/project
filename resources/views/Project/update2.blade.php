@@ -113,10 +113,9 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="format" name="format" class="form-control" required>
-                                    <option value="team"
-                                        {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
-                                    <option value="department"
-                                        {{ old('format', request('format')) == 'department' ? 'selected' : '' }}>department
+                                    <option value="team" {{ $project->format == 'team' ? 'selected' : '' }}>team</option>
+                                    <option value="department" {{ $project->format == 'department' ? 'selected' : '' }}>
+                                        department
                                     </option>
                                 </select>
                             </div>
@@ -216,16 +215,18 @@
                                                 @if (session()->has('KPIMain3LVID') && is_array(session('KPIMain3LVID')))
                                                     @foreach (session('KPIMain3LVID') as $KPIMain3LVID)
                                                         @if ($KPI->KPIMain3LVID == $KPIMain3LVID && $KPI->goal3LVID == session('goal3LVID')[$index])
-                                                        <div class="mt-2 d-flex">
-                                                            <input type="hidden" name="KPIMain3LVID[]"
-                                                                value="{{ $KPI->KPIMain3LVID }}">
-                                                            <input class="form-control mr-2" type="text"
-                                                                id="KPIMain3LVID" value="{{ $KPI->name }}" readonly>
-                                                            <input class="form-control mr-2" type="text"
-                                                                name="count3LVID" id="count3LVID"
-                                                                value="{{ $KPI->count }}" readonly>
-                                                            <input class="form-control" type="text" name="target3LVID"
-                                                                id="target3LVID" value="{{ $KPI->target }}" readonly>
+                                                            <div class="mt-2 d-flex">
+                                                                <input type="hidden" name="KPIMain3LVID[]"
+                                                                    value="{{ $KPI->KPIMain3LVID }}">
+                                                                <input class="form-control mr-2" type="text"
+                                                                    id="KPIMain3LVID" value="{{ $KPI->name }}"
+                                                                    readonly>
+                                                                <input class="form-control mr-2" type="text"
+                                                                    name="count3LVID" id="count3LVID"
+                                                                    value="{{ $KPI->count }}" readonly>
+                                                                <input class="form-control" type="text"
+                                                                    name="target3LVID" id="target3LVID"
+                                                                    value="{{ $KPI->target }}" readonly>
                                                             </div>
                                                         @endif
                                                     @endforeach
@@ -398,18 +399,20 @@
                                                 @if (session()->has('KPIMain2LVID') && is_array(session('KPIMain2LVID')))
                                                     @foreach (session('KPIMain2LVID') as $KPIMain2LVID)
                                                         @if ($KPI->KPIMain2LVID == $KPIMain2LVID)
-                                                        <div class="mt-2 d-flex">
-                                                            <input type="hidden" name="SFAMap[]" value="{{$KPI->SFA2LVID}}">
-                                                            <input type="hidden" name="KPIMain2LVID[]"
-                                                                value="{{ $KPI->KPIMain2LVID }}">
-                                                            <input class="form-control mr-2" type="text"
-                                                                id="KPIMain2LVID" value="{{ $KPI->name }}" readonly>
-                                                            <input class="form-control mr-2" type="text"
-                                                                name="count2LVID[]" id="count2LVID"
-                                                                value="{{ $KPI->count ?? '-' }}" readonly>
-                                                            <input class="form-control" type="text"
-                                                                name="target2LVID[]" id="target2LVID"
-                                                                value="{{ $KPI->target ?? '-' }}" readonly>
+                                                            <div class="mt-2 d-flex">
+                                                                <input type="hidden" name="SFAMap[]"
+                                                                    value="{{ $KPI->SFA2LVID }}">
+                                                                <input type="hidden" name="KPIMain2LVID[]"
+                                                                    value="{{ $KPI->KPIMain2LVID }}">
+                                                                <input class="form-control mr-2" type="text"
+                                                                    id="KPIMain2LVID" value="{{ $KPI->name }}"
+                                                                    readonly>
+                                                                <input class="form-control mr-2" type="text"
+                                                                    name="count2LVID[]" id="count2LVID"
+                                                                    value="{{ $KPI->count ?? '-' }}" readonly>
+                                                                <input class="form-control" type="text"
+                                                                    name="target2LVID[]" id="target2LVID"
+                                                                    value="{{ $KPI->target ?? '-' }}" readonly>
                                                             </div>
                                                         @endif
                                                     @endforeach
@@ -583,24 +586,20 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="type" name="proTypeID" class="form-control"
-                                    onchange="this.form.submit()" required>
+                                <select id="type" name="proTypeID" class="form-control" required>
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
-                                            {{ isset($selectProjectType) && $selectProjectType == $item->proTypeID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                            @if ($project->proTypeId == $item->proTypeID) selected @endif>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control"
-                                    onchange="this.form.submit()" required>
+                                <select id="charecter" name="proChaID" class="form-control" required>
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
-                                            {{ isset($selectProjectCharec) && $selectProjectCharec == $item->proChaID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                            @if ($project->proChaID == $item->proChaID) selected @endif>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -610,23 +609,22 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control"
-                                    onchange="this.form.submit(); toggleTextarea();" required>
+                                <select id="integrat" name="proInID" class="form-control" onchange=" toggleTextarea()"
+                                    required>
                                     @foreach ($projectIntegrat as $item)
                                         <option value="{{ $item->proInID }}"
-                                            {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                            @if ($project->proInID == $item->proInID) selected @endif>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         {{-- @if ($selectProjectIntegrat === '6') --}}
-                        {{-- <div class="row field item form-group align-items-center" >
-                                <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
-                                <div class="col-md-6 col-sm-6">
-                                    <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง" ></textarea>
-                                </div>
-                            </div> --}}
+                        <div class="row field item form-group align-items-center" style="none;" id="otherTextContainer">
+                            <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                            <div class="col-md-6 col-sm-6">
+                                <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail ?? '' }}</textarea>
+                            </div>
+                        </div>
                         {{-- @endif --}}
 
                         <div class="row field item form-group align-items-center">
@@ -973,7 +971,7 @@
                                 </select>
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
-                                <input type="hidden" name="costQuID[]" value="{{$costQuarter->costQuID}}">
+                                <input type="hidden" name="costQuID[]" value="{{ $costQuarter->costQuID }}">
                                 <input class="form-control cost-input" type="text" name="costQu1[]" id=""
                                     value="{{ $costQuarter->costQu1 ?? '' }}">
                                 @error('costQu1.*')
@@ -1014,58 +1012,59 @@
                             </div>
                         </div>
                         @if (!empty($costQuarters))
-                                    @foreach ($costQuarters as $index => $item)
-                                        @if ($index > 0 && $item->proID == $project->proID && $item->costQuID != $costQuarter->costQuID)
-                                            <div class="row col-md-12 col-sm-12">
-
-                                                <div class="row col-md-3 col-sm-3 mr-1">
-                                                    <select id="expID" name="expID" class="form-control" required>
-                                                        @foreach ($expanses as $exp)
-                                                            @if ($exp->expID == $item->expID)
-                                                                <option value="{{$exp->expID}}" selected>{{$exp->name}}</option>
-
-                                                            @endif
-                                                            
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                            @foreach ($costQuarters as $index => $item)
+                                @if ($index > 0 && $item->proID == $project->proID && $item->costQuID != $costQuarter->costQuID)
+                                    <div class="exp-group">
+                                        <div class="row col-md-12 col-sm-12">
+                                            <div class="row col-md-3 col-sm-3 mr-1">
+                                                <select id="expID_{{$index}}" name="expID[]" class="form-control" required >
+                                                    @foreach ($expanses as $exp)
+                                                        <option value="{{ $exp->expID }}"
+                                                            @if ($exp->expID == $item->expID) selected @endif>
+                                                            {{ $exp->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
-                                            <div class="row col-md-12 col-sm-12 mt-2">
-                                                <div class="row col-md-3 col-sm-3 mr-1">
-                                                    <select id="costType" name="costID" class="form-control" required>
-                                                        @foreach ($costTypes as $cost)
-                                                            @if ($cost->costID == $item->costID)
-                                                                <option value="{{$cost->costID}}">{{$cost->name}}</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="hidden" name="costQuID[]"
-                                                        id="" value="{{ $item->costQuID }}">
-                                                    <input class="form-control" type="text" name="costQu1[]"
-                                                        id="" value="{{ $item->costQu1 }}">
-                                                </div>
-                                                <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu2[]"
-                                                        id="" value="{{ $item->costQu2 }}">
-                                                </div>
-                                                <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu3[]"
-                                                        id="" value="{{ $item->costQu3 }}">
-                                                </div>
-                                                <div class="row col-md-2 col-sm-2 mr-1">
-                                                    <input class="form-control" type="text" name="costQu4[]"
-                                                        id="" value="{{ $item->costQu4 }}">
-                                                </div>
-                                                <div class="col-md-1 col-sm-1 m-1">
-                                                    <button type="button" class="btn btn-danger "
-                                                        onclick="this.closest('.row').remove()">ลบ</button>
-                                                </div>
+                                        </div>
+                                        <div class="row col-md-12 col-sm-12 mt-2">
+                                            <div class="row col-md-3 col-sm-3 mr-1">
+                                                <select id="costType_{{$index}}" name="costID[]" class="form-control" required>
+                                                    @foreach ($costTypes as $cost)
+                                                        @if ($cost->expID == $item->expID)
+                                                            <option value="{{ $cost->costID }}"
+                                                                @if ($cost->costID == $item->costID) selected @endif>
+                                                                {{ $cost->name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
                                             </div>
-                                        @endif
-                                    @endforeach
+                                            <div class="row col-md-2 col-sm-2 mr-1">
+                                                <input class="form-control" type="hidden" name="costQuID[]"
+                                                    id="" value="{{ $item->costQuID }}">
+                                                <input class="form-control cost-input" type="text" name="costQu1[]"
+                                                    id="" value="{{ $item->costQu1 }}">
+                                            </div>
+                                            <div class="row col-md-2 col-sm-2 mr-1">
+                                                <input class="form-control cost-input" type="text" name="costQu2[]"
+                                                    id="" value="{{ $item->costQu2 }}">
+                                            </div>
+                                            <div class="row col-md-2 col-sm-2 mr-1">
+                                                <input class="form-control cost-input" type="text" name="costQu3[]"
+                                                    id="" value="{{ $item->costQu3 }}">
+                                            </div>
+                                            <div class="row col-md-2 col-sm-2 mr-1">
+                                                <input class="form-control cost-input" type="text" name="costQu4[]"
+                                                    id="" value="{{ $item->costQu4 }}">
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type="button" class="btn btn-danger "
+                                                    onclick="this.closest('.exp-group').remove()">ลบ</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endif
+                            @endforeach
+                        @endif
                         <div id="insertExpense"></div>
                         <div id="insertCostType"></div>
                     </div>
@@ -1116,9 +1115,11 @@
                             <div class="col-md-3 col-sm-3"></div>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20" value="{{ $item->bnfID }}" />
+                                    required='required' data-validate-length-range="8,20"
+                                    value="{{ $item->bnfID }}" />
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20" value="{{ $item->detail }}" />
+                                    required='required' data-validate-length-range="8,20"
+                                    value="{{ $item->detail }}" />
 
                             </div>
                             <div class="col-md-3 col-sm-3">
@@ -1147,8 +1148,8 @@
                             @foreach ($files as $item)
                                 <div class="row m-2">
                                     <div class="col-md-6 col-sm-6">
-                                        <input type="hidden" name="fileID[]" value="{{ $item->fileID }}">
-                                        <input type="hidden" name="file[]" value="{{ $item->name }}">
+                                        <input type="hidden" name="oldfileID[]" value="{{ $item->fileID }}">
+                                        <input type="hidden" name="oldfile[]" value="{{ $item->name }}">
                                         <a href="{{ asset('files/' . $item->name) }}"
                                             target="_blank">{{ $item->name }}</a>
                                     </div>
@@ -1190,7 +1191,19 @@
     <div class="col-md-1 col-sm-1"></div>
     </div>
 
-    <script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('[id^="expID_"]').change(function(event) {
+                var expID = this.value;
+                var dropdownID = $(this).attr('id');
+                var idIndex = dropdownID.split("_")[1];
+                // alert(idIndex);
+                
+            });
+        });
+
+
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
@@ -1316,272 +1329,7 @@
         }
 
 
-        function insertStrategic() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
 
-            // สร้าง label
-            const straLabel = document.createElement('label');
-            straLabel.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
-            straLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            straLabel.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
-
-            // เพิ่ม label ลงใน mainContainer
-            mainContainer.appendChild(straLabel);
-
-            const divstraID = document.createElement('div');
-            divstraID.classList.add('col-md-6', 'col-sm-6');
-
-            const straDropdown = document.createElement('select');
-            straDropdown.classList.add('form-control');
-            // straDropdown.id = 'straID1';
-            const uniqueID = `straID_${Date.now()}`;
-            straDropdown.id = uniqueID;
-            straDropdown.name = 'straID[]';
-
-            const selectedYearID = document.getElementById('year').value;
-            // const planSelect = document.getElementById('straID1');
-            // planSelect.innerHTML = '';
-
-            const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-
-            if (filteredPlans.length === 0) {
-                const noPlanOption = document.createElement('option');
-                noPlanOption.value = '';
-                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
-                straDropdown.appendChild(noPlanOption);
-                straDropdown.disabled = true;
-                // updateSFADropdown();
-            } else {
-                straDropdown.disabled = false;
-                filteredPlans.forEach(plan => {
-                    const option = document.createElement('option');
-                    option.value = plan.straID;
-                    option.textContent = plan.name;
-                    straDropdown.appendChild(option);
-                });
-                // updateSFADropdown();
-            }
-
-            mainContainer.appendChild(divstraID);
-            divstraID.appendChild(straDropdown);
-
-            const mainContainer1 = document.createElement('div');
-            mainContainer1.classList.add('col-md-3');
-
-            const mainContainer2 = document.createElement('div');
-            mainContainer2.classList.add('col-md-9', 'border', 'mb-2', 'p-2');
-
-            const mainContainerSFA = document.createElement('div');
-            mainContainerSFA.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const SFALabel = document.createElement('label');
-            SFALabel.setAttribute('for', 'SFAInput');
-            SFALabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            SFALabel.textContent = 'ประเด็นยุทธศาสตร์';
-            mainContainerSFA.appendChild(SFALabel);
-
-            const divSFA = document.createElement('div');
-            divSFA.classList.add('col-md-6', 'col-sm-6');
-
-            const SFADropdown = document.createElement('select');
-            SFADropdown.classList.add('form-control');
-            SFADropdown.id = `SFA_${Date.now()}`;
-            SFADropdown.name = 'SFAID[]';
-            SFADropdown.innerHTML = '';
-
-            // ฟังก์ชันสำหรับอัปเดต SFADropdown
-            const updateSFADropdown = () => {
-                const selectedPlanID = straDropdown.value;
-
-                // ลบตัวเลือกเก่าใน SFADropdown
-                SFADropdown.innerHTML = '';
-
-                if (!selectedPlanID) {
-                    const noIssueOption = document.createElement('option');
-                    noIssueOption.value = '';
-                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                    SFADropdown.appendChild(noIssueOption);
-                    SFADropdown.disabled = true;
-                    updateGoalDropdown();
-                    return;
-                }
-
-                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-
-                if (filteredIssues.length === 0) {
-                    const noIssueOption = document.createElement('option');
-                    noIssueOption.value = '';
-                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                    SFADropdown.appendChild(noIssueOption);
-                    SFADropdown.disabled = true;
-                    updateGoalDropdown();
-                } else {
-                    SFADropdown.disabled = false;
-                    filteredIssues.forEach(issue => {
-                        const option = document.createElement('option');
-                        option.value = issue.SFAID;
-                        option.textContent = issue.name;
-                        SFADropdown.appendChild(option);
-                    });
-                    // updateGoalDropdown();
-                }
-
-            };
-            // เพิ่ม event listener ให้ straDropdown
-            straDropdown.addEventListener('change', updateSFADropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateSFADropdown();
-
-            mainContainer2.appendChild(mainContainerSFA);
-            mainContainerSFA.appendChild(divSFA);
-            divSFA.appendChild(SFADropdown);
-
-            const mainContainerGoal = document.createElement('div');
-            mainContainerGoal.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const goalLabel = document.createElement('label');
-            goalLabel.setAttribute('for', 'goalInput');
-            goalLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            goalLabel.textContent = 'เป้าประสงค์';
-            mainContainerGoal.appendChild(goalLabel);
-
-            const divGoal = document.createElement('div');
-            divGoal.classList.add('col-md-6', 'col-sm-6');
-
-            const goalDropdown = document.createElement('select');
-            goalDropdown.classList.add('form-control');
-            goalDropdown.id = `goal_${Date.now()}`;
-            goalDropdown.name = 'goalID[]';
-            goalDropdown.innerHTML = '';
-
-            const updateGoalDropdown = () => {
-                const selectedSFAID = SFADropdown.value;
-
-                // ลบตัวเลือกเก่าใน SFADropdown
-                goalDropdown.innerHTML = '';
-
-                if (!selectedSFAID) {
-                    const noGoalOption = document.createElement('option');
-                    noGoalOption.value = '';
-                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                    goalDropdown.appendChild(noGoalOption);
-                    goalDropdown.disabled = true;
-                    updateTacticsDropdown();
-                    return;
-                }
-
-                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
-
-                if (filteredGoals.length === 0) {
-                    const noGoalOption = document.createElement('option');
-                    noGoalOption.value = '';
-                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                    goalDropdown.appendChild(noGoalOption);
-                    goalDropdown.disabled = true;
-                    updateTacticsDropdown();
-                } else {
-                    goalDropdown.disabled = false;
-                    filteredGoals.forEach(goal => {
-                        const option = document.createElement('option');
-                        option.value = goal.goalID;
-                        option.textContent = goal.name;
-                        goalDropdown.appendChild(option);
-                    });
-                }
-            };
-
-            // เพิ่ม event listener ให้ straDropdown
-            SFADropdown.addEventListener('change', updateGoalDropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateGoalDropdown();
-
-            mainContainer2.appendChild(mainContainerGoal);
-            mainContainerGoal.appendChild(divGoal);
-            divGoal.appendChild(goalDropdown);
-
-            const mainContainerTactics = document.createElement('div');
-            mainContainerTactics.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const tacticsLabel = document.createElement('label');
-            tacticsLabel.setAttribute('for', 'tacticsInput');
-            tacticsLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            tacticsLabel.textContent = 'กลยุทธ์';
-            mainContainerTactics.appendChild(tacticsLabel);
-
-            const divTactics = document.createElement('div');
-            divTactics.classList.add('col-md-6', 'col-sm-6');
-
-            const tacticsDropdown = document.createElement('select');
-            tacticsDropdown.classList.add('form-control');
-            tacticsDropdown.id = `tacID_${Date.now()}`;
-            tacticsDropdown.name = 'tacID[]';
-            tacticsDropdown.innerHTML = '';
-
-            const updateTacticsDropdown = () => {
-                const selectedGoalID = goalDropdown.value;
-                tacticsDropdown.innerHTML = '';
-
-                if (!selectedGoalID) {
-                    const noTacticsOption = document.createElement('option');
-                    noTacticsOption.value = '';
-                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                    tacticsDropdown.appendChild(noTacticsOption);
-                    tacticsDropdown.disabled = true;
-                    return;
-                }
-
-                // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-                if (filteredTactics.length === 0) {
-                    const noTacticsOption = document.createElement('option');
-                    noTacticsOption.value = '';
-                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                    tacticsDropdown.appendChild(noTacticsOption);
-                    tacticsDropdown.disabled = true;
-
-                } else {
-                    tacticsDropdown.disabled = false;
-                    filteredTactics.forEach(tactic => {
-                        const option = document.createElement('option');
-                        option.value = tactic.tacID;
-                        option.textContent = tactic.name;
-                        tacticsDropdown.appendChild(option);
-                    });
-
-                }
-            };
-
-            // เพิ่ม event listener ให้ straDropdown
-            goalDropdown.addEventListener('change', updateTacticsDropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateTacticsDropdown();
-
-
-            mainContainer2.appendChild(mainContainerTactics);
-            mainContainerTactics.appendChild(divTactics);
-            divTactics.appendChild(tacticsDropdown);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
-                mainContainer1.remove();
-                mainContainer2.remove();
-            };
-            mainContainer.appendChild(deleteButton);
-
-
-            // ตอนนี้ mainContainer จะมีทั้ง label และ input
-            const container = document.getElementById('insertStrategic');
-            container.appendChild(mainContainer);
-            container.appendChild(mainContainer1);
-            container.appendChild(mainContainer2);
-            // หรือเพิ่มไปที่ container อื่น
-        }
 
         function insertObj() {
             const mainContainer = document.createElement('div');
@@ -1726,8 +1474,10 @@
         }
 
 
-
+        let dropdownCount = 10;
         function insertCostType() {
+           
+            
             const dropdownCount = document.querySelectorAll('.Expense').length + 1;
 
             const mainExpenseContainer = document.createElement('div');
@@ -1739,9 +1489,11 @@
 
             const ExpenseDropdown = document.createElement('select');
             ExpenseDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            ExpenseDropdown.id = `expID_${Date.now()}`;
+            ExpenseDropdown.id = `expID_${dropdownCount}`;
             ExpenseDropdown.name = 'expID[]';
             // ExpenseDropdown.innerHTML = '';
+            console.log("Dropdown ID:", ExpenseDropdown.id);
+            
 
             const selectedPlanID = document.getElementById('planID').value;
 
@@ -1779,10 +1531,12 @@
 
             const costTypeDropdown = document.createElement('select');
             costTypeDropdown.classList.add('form-control'); // เพิ่มคลาสเพื่อทำให้สามารถระบุได้ง่ายขึ้น
-            costTypeDropdown.id = `costType_${Date.now()}`;
+            costTypeDropdown.id = `costType_${dropdownCount}`;
             costTypeDropdown.name = 'costID[]';
             costTypeDropdown.innerHTML = '';
 
+            console.log("Dropdown ID:", costTypeDropdown.id);
+           
             const updateCostTypeDropdown = () => {
                 const selectedEXPID = ExpenseDropdown.value;
                 costTypeDropdown.innerHTML = '';
@@ -1879,16 +1633,16 @@
             document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
         }
 
-        // function toggleTextarea() {
-        //     var select = document.getElementById("integrat");
-        //     var otherTextContainer = document.getElementById("otherTextContainer");
+        function toggleTextarea() {
+            var select = document.getElementById("integrat");
+            var otherTextContainer = document.getElementById("otherTextContainer");
 
-        //     if (select.value === '6') {
-        //         otherTextContainer.style.display = "flex";
-        //     } else {
-        //         otherTextContainer.style.display = "none";
-        //     }
-        // }
+            if (select.value === '6') {
+                otherTextContainer.style.display = "flex";
+            } else {
+                otherTextContainer.style.display = "none";
+            }
+        }
 
 
         function insertBenefit() {
@@ -1976,310 +1730,6 @@
             document.getElementById('insertFile').appendChild(mainContainer);
 
         }
-
-
-
-        // ฟังก์ชันอัปเดต dropdown ของแผน
-        function updatePlanDropdown(selectedYearID) {
-            const planSelect = document.getElementById('straID');
-            planSelect.innerHTML = '';
-
-            const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-
-            if (filteredPlans.length === 0) {
-                const noPlanOption = document.createElement('option');
-                noPlanOption.value = '';
-                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
-                planSelect.appendChild(noPlanOption);
-                planSelect.disabled = true;
-                updateIssueDropdown(null);
-            } else {
-                planSelect.disabled = false;
-                filteredPlans.forEach(plan => {
-                    const option = document.createElement('option');
-                    option.value = plan.straID;
-                    option.textContent = plan.name;
-                    planSelect.appendChild(option);
-                });
-                updateIssueDropdown(filteredPlans[0].straID);
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของประเด็นยุทธศาสตร์
-        function updateIssueDropdown(selectedPlanID) {
-            const issueSelect = document.getElementById('SFAID');
-            issueSelect.innerHTML = '';
-
-            if (!selectedPlanID) {
-                const noIssueOption = document.createElement('option');
-                noIssueOption.value = '';
-                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสาตร์';
-                issueSelect.appendChild(noIssueOption);
-                issueSelect.disabled = true;
-                updateGoalDropdown(null);
-                return;
-            }
-
-            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-
-            if (filteredIssues.length === 0) {
-                const noIssueOption = document.createElement('option');
-                noIssueOption.value = '';
-                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                issueSelect.appendChild(noIssueOption);
-                issueSelect.disabled = true;
-                updateGoalDropdown(null);
-            } else {
-                issueSelect.disabled = false;
-                filteredIssues.forEach(issue => {
-                    const option = document.createElement('option');
-                    option.value = issue.SFAID;
-                    option.textContent = issue.name;
-                    issueSelect.appendChild(option);
-                });
-                updateGoalDropdown(filteredIssues[0].SFAID);
-
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-        function updateGoalDropdown(selectedSFAID) {
-            const goalSelect = document.getElementById('goalID');
-            goalSelect.innerHTML = '';
-
-            if (!selectedSFAID) {
-                const noGoalOption = document.createElement('option');
-                noGoalOption.value = '';
-                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                goalSelect.appendChild(noGoalOption);
-                goalSelect.disabled = true;
-                updateTacticsDropdown(null);
-                updateKPIMain(null);
-                return;
-            }
-
-            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-            const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
-
-            if (filteredGoals.length === 0) {
-                const noGoalOption = document.createElement('option');
-                noGoalOption.value = '';
-                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                goalSelect.appendChild(noGoalOption);
-                goalSelect.disabled = true;
-                updateTacticsDropdown(null);
-                updateKPIMain(null);
-            } else {
-                goalSelect.disabled = false;
-                filteredGoals.forEach(goal => {
-                    const option = document.createElement('option');
-                    option.value = goal.goalID;
-                    option.textContent = goal.name;
-                    goalSelect.appendChild(option);
-                });
-                updateTacticsDropdown(filteredGoals[0].goalID);
-                updateKPIMain(filteredGoals[0].goalID);
-
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-        function updateTacticsDropdown(selectedGoalID) {
-            const tacticsSelect = document.getElementById('tacID');
-            tacticsSelect.innerHTML = '';
-
-            if (!selectedGoalID) {
-                const noTacticsOption = document.createElement('option');
-                noTacticsOption.value = '';
-                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                tacticsSelect.appendChild(noTacticsOption);
-                tacticsSelect.disabled = true;
-                // updateKPIMain(null);
-                return;
-            }
-
-            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-            const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-            if (filteredTactics.length === 0) {
-                const noTacticsOption = document.createElement('option');
-                noTacticsOption.value = '';
-                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                tacticsSelect.appendChild(noTacticsOption);
-                tacticsSelect.disabled = true;
-                // updateKPIMain(null);
-            } else {
-                tacticsSelect.disabled = false;
-                filteredTactics.forEach(tactic => {
-                    const option = document.createElement('option');
-                    option.value = tactic.tacID;
-                    option.textContent = tactic.name;
-                    tacticsSelect.appendChild(option);
-                });
-                // updateKPIMain(filteredTactics[0].tacID);
-            }
-            // แสดงกลยุทธ์ใน dropdown
-
-        }
-
-
-        function updateKPIMain(selectedGoalID) {
-            // console.log(selectedGoalID);
-
-            // const KPIMainSelect = document.getElementById('KPIMain');
-            // const countMainInput = document.getElementById('countMain');
-            // const targetInput = document.getElementById('targetMain');
-
-
-            // ล้างค่าตัวเลือกใน KPIMain
-            // KPIMainSelect.innerHTML = '';
-            // countMainInput.innerHTML = '';
-            // targetInput.innerHTML = '';
-
-            // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-            //     if (!selectedGoalID) {
-            //         const noKPIMainOption = document.createElement('option');
-            //         noKPIMainOption.value = '';
-            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-            //         KPIMainSelect.appendChild(noKPIMainOption);
-            //         KPIMainSelect.disabled = true;
-            //         countMainInput.value = 'ไม่มีหน่วยนับ';
-            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            //         return;
-            //     }
-
-            //     // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
-            //     const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-            //     // console.log(filteredKPIMains);
-            //     // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedTacID);
-
-            //     if (filteredKPIMains.length === 0) {
-            //         const noKPIMainOption = document.createElement('option');
-            //         noKPIMainOption.value = '';
-            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-            //         KPIMainSelect.appendChild(noKPIMainOption);
-            //         KPIMainSelect.disabled = true;
-            //         countMainInput.value = 'ไม่มีหน่วยนับ';
-            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            //     } else {
-            //         // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
-            //         KPIMainSelect.disabled = false;
-            //         filteredKPIMains.forEach(KPIMain => {
-            //             const option = document.createElement('option');
-            //             option.value = KPIMain.KPIMainID;
-            //             option.textContent = KPIMain.name;
-            //             KPIMainSelect.appendChild(option);
-            //         });
-
-            //         // กำหนดค่าเริ่มต้นให้กับ input
-            //         const firstKPIMain = filteredKPIMains[0];
-            //         countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-            //         targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            //     }
-            // }
-            const KPIMainSelects = document.querySelectorAll(
-                '[id^="KPIMain_"]'); // เลือก <select> ที่มี ID เริ่มต้นด้วย "KPIMain_"
-            const countMainInputs = document.querySelectorAll('[id^="countMain_"]'); // เลือก input count
-            const targetInputs = document.querySelectorAll('[id^="targetMain_"]'); // เลือก input target
-
-            // ล้างค่าตัวเลือกในแต่ละ KPIMainSelect
-            KPIMainSelects.forEach((KPIMainSelect, index) => {
-                KPIMainSelect.innerHTML = ''; // ลบตัวเลือกเก่าใน <select>
-                const countMainInput = countMainInputs[index];
-                const targetInput = targetInputs[index];
-
-                // ตรวจสอบ selectedGoalID
-                if (!selectedGoalID) {
-                    // ถ้าไม่มี selectedGoalID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-                    const noKPIMainOption = document.createElement('option');
-                    noKPIMainOption.value = '';
-                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                    KPIMainSelect.appendChild(noKPIMainOption);
-                    KPIMainSelect.disabled = true;
-                    countMainInput.value = 'ไม่มีหน่วยนับ';
-                    targetInput.value = 'ไม่มีค่าเป้าหมาย';
-                } else {
-                    // กรอง KPI ที่ตรงกับ selectedGoalID และเพิ่มเข้าไปใน dropdown
-                    const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-
-                    if (filteredKPIMains.length === 0) {
-                        const noKPIMainOption = document.createElement('option');
-                        noKPIMainOption.value = '';
-                        noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                        KPIMainSelect.appendChild(noKPIMainOption);
-                        KPIMainSelect.disabled = true;
-                        countMainInput.value = 'ไม่มีหน่วยนับ';
-                        targetInput.value = 'ไม่มีค่าเป้าหมาย';
-                    } else {
-                        KPIMainSelect.disabled = false;
-                        filteredKPIMains.forEach(KPIMain => {
-                            const option = document.createElement('option');
-                            option.value = KPIMain.KPIMainID;
-                            option.textContent = KPIMain.name;
-                            KPIMainSelect.appendChild(option);
-                        });
-
-                        // กำหนดค่าเริ่มต้นให้กับ input
-                        const firstKPIMain = filteredKPIMains[0];
-                        countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-                        targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                    }
-                }
-            });
-        }
-
-        // Event listener สำหรับเลือก KPI
-        // document.getElementById('KPIMain').addEventListener('change', function() {
-        //     const selectedKPIMainID = this.value;
-
-        //     // ค้นหาข้อมูล KPIMain ที่เลือก
-        //     const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
-
-        //     // ถ้ามีตัวเลือกที่เลือก ก็อัพเดตค่า count และ target
-        //     if (selectedKPIMain) {
-        //         document.getElementById('countMain13').value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-        //         document.getElementById('targetMain13').value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-        //     }
-        // });
-
-        document.querySelectorAll('[id^="KPIMain_"]').forEach(selectElement => {
-            selectElement.addEventListener('change', function() {
-                const selectedKPIMainID = this.value;
-                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
-
-                if (selectedKPIMain) {
-                    // ค้นหาจาก id ของ <input> ที่ตรงกับ <select> ปัจจุบัน
-                    const countMainInput = document.getElementById(`countMain_${this.id.split('_')[1]}`);
-                    const targetInput = document.getElementById(`targetMain_${this.id.split('_')[1]}`);
-
-                    countMainInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                }
-            });
-        });
-
-
-        function KPIMainNone() {
-            // var select = document.querySelectorAll('[id^="straID_"]');
-            var select = document.getElementById("straID");
-            var KPIMainNone = document.getElementById("KPIMainNone");
-            var KPIMainDigitalNone = document.getElementById("KPIMainDigitalNone");
-
-            if (select.value === '1') {
-                KPIMainNone.style.display = "flex";
-                KPIMainDigitalNone.style.display = "none";
-
-            } else if (select.value === '4') {
-                KPIMainDigitalNone.style.display = "flex";
-                KPIMainNone.style.display = "none";
-            } else {
-                KPIMainNone.style.display = "none";
-                KPIMainDigitalNone.style.display = "none";
-            }
-        }
-
-
-
         function updateExpenseDropdown(selectedPlanID) {
             console.log(selectedPlanID);
 

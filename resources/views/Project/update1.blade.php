@@ -401,7 +401,7 @@
                                     @if (isset($KPIMain2LVMapFirst[$index]) && $KPIMain2LVMapFirst[$index]->SFA2LVID == $SFA2LVMap[$index])
                                         @foreach ($KPIMain2LVMaps as $KPIMap)
                                             @if ($KPIMap->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                            <div class="col-md-12 col-sm-12">
+                                            <div class="row col-md-12 col-sm-12">
                                                 <div class="col-md-4 col-sm-4 m-1">
                                                     <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]"
                                                         class="form-control" required>
@@ -446,12 +446,21 @@
                                                         @endif @endforeach
                                                         readonly>
                                                 </div>
+
+                                                @if ($KPIMap->KPIMain2LVID == $KPIMain2LVMapFirst[$index]->KPIMain2LVID)
                                                 <div class="col-md-1 col-sm-1 m-1">
                                                     <button type='button' class="btn btn-primary insert-kpi2LV-button"
                                                         data-index="{{ $index }}">เพิ่ม
                                                     </button>
-        
                                                 </div>
+                                                @else
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type="button" class="btn btn-danger "
+                                                        onclick="this.closest('.row').remove()">ลบ</button>
+
+                                                </div>
+                                                @endif
+                                               
                                             </div>
                                             @endif
                                         @endforeach                                     
@@ -855,7 +864,7 @@
         function insertKPIMain2(index) {
             // const i=1;
             const mainContainer = document.createElement('div');
-            mainContainer.classList.add('col-md-12', 'col-sm-12');
+            mainContainer.classList.add('row','col-md-12', 'col-sm-12');
 
             const colKPI = document.createElement('div');
             colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');

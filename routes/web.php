@@ -106,6 +106,9 @@ Route::post('/projectcount_target3LV', [ProjectController::class,'count_target_K
 Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
 Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
+
+Route::post('/projectEXP', [ProjectController::class,'EXP']);
+
 Route::any('/projectcreate2', [ProjectController::class,'create2']);
 // Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
 Route::post('/projectSave1', [ProjectController::class,'save1']);

@@ -32,7 +32,7 @@ use App\Models\Target1Level;
 use App\Models\BadgetType;
 use App\Models\UniPlan;
 use App\Models\Funds;
-use App\Models\ExpenseBadgets;
+use App\Models\Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);;
 use App\Models\CostTypes;
 use App\Models\Objectives;
 use App\Models\Steps;
@@ -139,6 +139,10 @@ class ProjectController extends Controller
         $data['count_target2LV']=KPIMain2Level::where('KPIMain2LVID',$request->KPIMain2LVID)->get(['count','target']);
         return response()->json($data);
     }
+
+    fucntion EXP(Request $request){
+        $exp['exp']=Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
+    }Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 
 
     function send1(Request $request){
@@ -940,7 +944,10 @@ class ProjectController extends Controller
         $target=Targets::all();
         $badgetType=BadgetType::all();
         $uniplan=UniPlan::all();
+
         $fund=Funds::all();
+        // $fund =DB::table('funds')->where('planID',$project->planID)->first();
+        // dd($fund);
         $expanses = ExpenseBadgets::all();
         $costTypes=CostTypes::all();
         $obj = Objectives::all();
@@ -1641,12 +1648,13 @@ class ProjectController extends Controller
         }
 
         $files = DB::table('files')->where('proID',$id)->get();
-        $fileIDs =  $files->pluck('fileID')->toArray();
+        $oldfileIDs =  $files->pluck('fileID')->toArray();
+        $oldfileID = $request->oldfileID;
 
         $fileID = $request->fileID ?? [];
         $file = $request->file ?? [];
-        // dd($file);
-         if(isset($file)){
+        // dd($oldfileID);
+        if(isset($file)){
         foreach($file as $index => $file){
            
                
@@ -1661,7 +1669,8 @@ class ProjectController extends Controller
                 $file->move(public_path('files'),$file->getClientOriginalName());
             }
         }
-        $fileIDToDelete = array_diff($fileIDs,$fileID);
+
+        $fileIDToDelete = array_diff($oldfileIDs,$oldfileID);
         if(!empty($fileIDToDelete)){
             DB::table('files')
             ->where('proID',$id)
