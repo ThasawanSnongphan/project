@@ -92,7 +92,7 @@
                                         class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                             class="required">*</span></label>
                                     <div class="col-md-8 col-sm-8">
-                                        <input type="text" value="{{$SFA3LVMap[$index] ?? ''}}">
+                                        {{-- <input type="text" value="{{$SFA3LVMap[$index] ?? ''}}"> --}}
 
                                         <select id="SFA3LVID_{{ $index }}" name="SFA3LVID[]" class="form-control"
                                             required>
@@ -397,59 +397,69 @@
                                             <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 col-sm-12">
-                                        <div class="col-md-4 col-sm-4 m-1">
-                                            <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]"
-                                                class="form-control" required>
-                                                <option value="">--เลือกตัวชี้วัด--</option>
-                                                @foreach ($KPIMain2LV as $KPI)
-                                                    @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                                        @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
-                                                            <option value="{{ $KPI->KPIMain2LVID }}" selected>
-                                                                {{ $KPI->name }}</option>
-                                                        @else
-                                                            <option value="{{ $KPI->KPIMain2LVID }}">
-                                                                {{ $KPI->name }}</option>
-                                                        @endif
-                                                    @endif
-                                                @endforeach
 
-                                            </select>
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
-
-                                            <input class="form-control" type="text" name="countMain2LV[]"
-                                                id="count2LV_{{ $index }}"
-                                                @foreach ($KPIMain2LV as $KPI)
-                                                @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
-                                                        value="{{ $KPI->count ?? '-' }}"
-                                                   
-                                                    @endif
-                                                @endif @endforeach
-                                                readonly>
-
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
-                                            <input class="form-control" type="text" name="targetMain2LV[]"
-                                                id="target2LV_{{ $index }}"
-                                                @foreach ($KPIMain2LV as $KPI)
-                                                @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain2LVID == $KPIMain2LVMap[$index])
-                                                        value="{{ $KPI->target ?? '-' }}"
-                                                    
-                                                    @endif
-                                                @endif @endforeach
-                                                readonly>
-                                        </div>
-                                        <div class="col-md-1 col-sm-1 m-1">
-                                            <button type='button' class="btn btn-primary insert-kpi-button"
-                                                data-index="{{ $index }}">เพิ่ม
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                    <div id="insertKPIMain_{{ $index }}"></div>
+                                    @if (isset($KPIMain2LVMapFirst[$index]) && $KPIMain2LVMapFirst[$index]->SFA2LVID == $SFA2LVMap[$index])
+                                        @foreach ($KPIMain2LVMaps as $KPIMap)
+                                            @if ($KPIMap->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="col-md-4 col-sm-4 m-1">
+                                                    <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]"
+                                                        class="form-control" required>
+                                                        <option value="">--เลือกตัวชี้วัด--</option>
+                                                        @foreach ($KPIMain2LV as $KPI)
+                                                            @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
+                                                                @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
+                                                                    <option value="{{ $KPI->KPIMain2LVID }}" selected>
+                                                                        {{ $KPI->name }}</option>
+                                                                @else
+                                                                    <option value="{{ $KPI->KPIMain2LVID }}">
+                                                                        {{ $KPI->name }}</option>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+        
+                                                    </select>
+                                                </div>
+                                                <div class=" col-md-3 col-sm-3 m-1">
+        
+                                                    <input class="form-control" type="text" name="countMain2LV[]"
+                                                        id="count2LV_{{ $index }}"
+                                                        @foreach ($KPIMain2LV as $KPI)
+                                                        @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
+                                                            @if ($KPI->KPIMain2LVID == ($KPIMap->KPIMain2LVID ?? ''))
+                                                                value="{{ $KPI->count ?? '-' }}"
+                                                           
+                                                            @endif
+                                                        @endif @endforeach
+                                                        readonly>
+        
+                                                </div>
+                                                <div class=" col-md-3 col-sm-3 m-1">
+                                                    <input class="form-control" type="text" name="targetMain2LV[]"
+                                                        id="target2LV_{{ $index }}"
+                                                        @foreach ($KPIMain2LV as $KPI)
+                                                        @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
+                                                            @if ($KPI->KPIMain2LVID == ($KPIMap->KPIMain2LVID))
+                                                                value="{{ $KPI->target ?? '-' }}"
+                                                            
+                                                            @endif
+                                                        @endif @endforeach
+                                                        readonly>
+                                                </div>
+                                                <div class="col-md-1 col-sm-1 m-1">
+                                                    <button type='button' class="btn btn-primary insert-kpi2LV-button"
+                                                        data-index="{{ $index }}">เพิ่ม
+                                                    </button>
+        
+                                                </div>
+                                            </div>
+                                            @endif
+                                        @endforeach                                     
+                                    @else
+                                        
+                                    @endif
+                                    
+                                    <div id="insertKPIMain2_{{ $index }}"></div>
                                 </div>
                             </div>
                             @php

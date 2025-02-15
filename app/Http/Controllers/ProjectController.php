@@ -845,8 +845,11 @@ class ProjectController extends Controller
         $strategic2LVMap = DB::table('strategic2_level_map_projects')->where('proID',$id)->get();
         $SFA2LVMap=$strategic2LVMap->pluck('SFA2LVID')->toArray();
         $tac2LVMap = $strategic2LVMap->pluck('tac2LVID')->toArray();
+
         $KPIMain2LVMaps = DB::table('k_p_i_main2_level_map_projects')->where('proID',$id)->get();
         $KPIMain2LVMap =  $KPIMain2LVMaps->pluck('KPIMain2LVID')->toArray();
+        $KPIMain2LVMapFirst = $KPIMain2LVMaps->unique('SFA2LVID')->values();
+        // dd($KPIMain2LVMapFirst);
         // dd($strategic2LVMap);
 
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() :  Strategic2Level::all();
@@ -867,7 +870,7 @@ class ProjectController extends Controller
         return view('Project.update1',
         compact('selectYear','year','project','strategic3LVMap','stra3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMapFirst','KPIMain3LVMaps','KPIMain3LVMap',
                 'SFA3LVs','strategic3Level','selectStra3LV','goal3Level','tactics3LV','KPIMain3LV',
-                'strategic2LVMap','SFA2LVMap','tac2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMap',
+                'strategic2LVMap','SFA2LVMap','tac2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMaps','KPIMain2LVMap','KPIMain2LVMapFirst',
                 'strategic1Level','strategic1LVMap','target1LVMap','target1LV'));
     }
     function sendUpdate1(Request $request,$id){
@@ -1127,7 +1130,7 @@ class ProjectController extends Controller
                     DB::table('k_p_i_main_map_projects')->insert(
                         [
                             'KPIMain3LVID' => $KPIMain3LV,
-                            'stra3LVID' => $stra3LVID[$index],
+                            'goal3LVID' => $goal3LVID[$index],
                             'proID' => $id,
                             'updated_at' => now(), 
                             'created_at' => now() 
@@ -1139,7 +1142,7 @@ class ProjectController extends Controller
                 DB::table('k_p_i_main_map_projects')->insert(
                     [
                         'KPIMain3LVID' => $KPIMain3LV,
-                        'stra3LVID' => $stra3LVID[$index],
+                        'goal3LVID' => $goal3LVID[$index],
                         'proID' => $id,
                         'updated_at' => now(), 
                         'created_at' => now() 
@@ -1222,6 +1225,8 @@ class ProjectController extends Controller
         $KPIMain2LVIDs = $KPIMain2LVMap->pluck('KPIMain2LVID')->toArray();
 
         $KPIMain2LVID = $request->KPIMain2LVID ?? [];
+        $SFAMap = $request->SFAMap ?? [];
+        // dd($SFAMap);
 
         foreach($KPIMain2LVID as $index => $KPIMain2LV){
             if(isset($KPIMain2LV)){
@@ -1241,7 +1246,7 @@ class ProjectController extends Controller
                     DB::table('k_p_i_main2_level_map_projects')->insert(
                         [
                             'KPIMain2LVID' => $KPIMain2LV,
-                            'stra2LVID' => $stra2LVID[$index],
+                            'SFA2LVID' => $SFAMap[$index],
                             'proID' => $id,
                             'updated_at' => now(), 
                             'created_at' => now() 
@@ -1252,7 +1257,7 @@ class ProjectController extends Controller
                 DB::table('k_p_i_main2_level_map_projects')->insert(
                     [
                         'KPIMain2LVID' => $KPIMain2LV,
-                        'stra2LVID' => $stra2LVID[$index],
+                        'SFA2LVID' => $SFAMap[$index],
                         'proID' => $id,
                         'updated_at' => now(), 
                         'created_at' => now() 

@@ -152,7 +152,7 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($SFAs as $SFA)
                                                 @if (session()->has('SFA3LVID') && is_array(session('SFA3LVID')))
                                                     @foreach (session('SFA3LVID') as $SFA3LVID)
@@ -172,7 +172,7 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($goals as $goal)
                                                 @if (session()->has('goal3LVID') && is_array(session('goal3LVID')))
                                                     @foreach (session('goal3LVID') as $goal3LVID)
@@ -191,7 +191,7 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($tactics as $tactic)
                                                 @if (session()->has('tac3LVID') && is_array(session('tac3LVID')))
                                                     @foreach (session('tac3LVID') as $tac3LVID)
@@ -210,12 +210,13 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ตัวชีวัดของแผน<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8 d-flex ">
+                                        <div class="row col-md-8 col-sm-8">
 
                                             @foreach ($KPIMains as $KPI)
                                                 @if (session()->has('KPIMain3LVID') && is_array(session('KPIMain3LVID')))
                                                     @foreach (session('KPIMain3LVID') as $KPIMain3LVID)
                                                         @if ($KPI->KPIMain3LVID == $KPIMain3LVID && $KPI->goal3LVID == session('goal3LVID')[$index])
+                                                        <div class="mt-2 d-flex">
                                                             <input type="hidden" name="KPIMain3LVID[]"
                                                                 value="{{ $KPI->KPIMain3LVID }}">
                                                             <input class="form-control mr-2" type="text"
@@ -225,6 +226,7 @@
                                                                 value="{{ $KPI->count }}" readonly>
                                                             <input class="form-control" type="text" name="target3LVID"
                                                                 id="target3LVID" value="{{ $KPI->target }}" readonly>
+                                                            </div>
                                                         @endif
                                                     @endforeach
                                                 @endif
@@ -351,7 +353,7 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($SFA2Lv as $SFA)
                                                 @if (session()->has('SFA2LVID') && is_array(session('SFA2LVID')))
                                                     @foreach (session('SFA2LVID') as $SFA2LVID)
@@ -371,7 +373,7 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($tactics2LV as $tactic)
                                                 @if (session()->has('tac2LVID') && is_array(session('tac2LVID')))
                                                     @foreach (session('tac2LVID') as $tac2LVID)
@@ -391,11 +393,13 @@
                                         <label for="title"
                                             class="col-form-label col-md-3 col-sm-3  label-align">ตัวชีวัดของแผน<span
                                                 class="required">*</span></label>
-                                        <div class="col-md-8 col-sm-8 d-flex">
+                                        <div class="row col-md-8 col-sm-8">
                                             @foreach ($KPIMain2LV as $KPI)
                                                 @if (session()->has('KPIMain2LVID') && is_array(session('KPIMain2LVID')))
                                                     @foreach (session('KPIMain2LVID') as $KPIMain2LVID)
                                                         @if ($KPI->KPIMain2LVID == $KPIMain2LVID)
+                                                        <div class="mt-2 d-flex">
+                                                            <input type="hidden" name="SFAMap[]" value="{{$KPI->SFA2LVID}}">
                                                             <input type="hidden" name="KPIMain2LVID[]"
                                                                 value="{{ $KPI->KPIMain2LVID }}">
                                                             <input class="form-control mr-2" type="text"
@@ -406,6 +410,7 @@
                                                             <input class="form-control" type="text"
                                                                 name="target2LVID[]" id="target2LVID"
                                                                 value="{{ $KPI->target ?? '-' }}" readonly>
+                                                            </div>
                                                         @endif
                                                     @endforeach
                                                 @endif
