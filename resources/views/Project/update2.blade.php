@@ -589,7 +589,7 @@
                                 <select id="type" name="proTypeID" class="form-control" required>
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
-                                            @if ($project->proTypeId == $item->proTypeID) selected @endif>{{ $item->name }}</option>
+                                            @if ($project->proTypeID == $item->proTypeID) selected @endif>{{ $item->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -618,14 +618,14 @@
                                 </select>
                             </div>
                         </div>
-                        {{-- @if ($selectProjectIntegrat === '6') --}}
+                       
                         <div class="row field item form-group align-items-center" style="none;" id="otherTextContainer">
                             <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
                             <div class="col-md-6 col-sm-6">
-                                <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail ?? '' }}</textarea>
+                                <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail }}</textarea>
                             </div>
                         </div>
-                        {{-- @endif --}}
+                       
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
@@ -1017,7 +1017,8 @@
                                     <div class="exp-group">
                                         <div class="row col-md-12 col-sm-12">
                                             <div class="row col-md-3 col-sm-3 mr-1">
-                                                <select id="expID_{{$index}}" name="expID[]" class="form-control" required >
+                                                <select id="expID_{{ $index }}" name="expID[]"
+                                                    class="form-control" required>
                                                     @foreach ($expanses as $exp)
                                                         <option value="{{ $exp->expID }}"
                                                             @if ($exp->expID == $item->expID) selected @endif>
@@ -1028,7 +1029,8 @@
                                         </div>
                                         <div class="row col-md-12 col-sm-12 mt-2">
                                             <div class="row col-md-3 col-sm-3 mr-1">
-                                                <select id="costType_{{$index}}" name="costID[]" class="form-control" required>
+                                                <select id="costType_{{ $index }}" name="costID[]"
+                                                    class="form-control" required>
                                                     @foreach ($costTypes as $cost)
                                                         @if ($cost->expID == $item->expID)
                                                             <option value="{{ $cost->costID }}"
@@ -1199,8 +1201,25 @@
                 var dropdownID = $(this).attr('id');
                 var idIndex = dropdownID.split("_")[1];
                 // alert(idIndex);
-                
+                $('[id^="costType_"]')
+                $.ajax({
+                    url: "/projectcostType",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        expID: expID,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        $('#costType_' + idIndex).html('');
+                        $.each(response.costType, function(index, val) {
+                            $('#costType_' + idIndex).append('<option value="' + val
+                                .costID + '">' + val.name + '</option>');
+                        });
+                    }
+                });
             });
+            
         });
 
 
@@ -1475,9 +1494,10 @@
 
 
         let dropdownCount = 10;
+
         function insertCostType() {
-           
-            
+
+
             const dropdownCount = document.querySelectorAll('.Expense').length + 1;
 
             const mainExpenseContainer = document.createElement('div');
@@ -1493,7 +1513,7 @@
             ExpenseDropdown.name = 'expID[]';
             // ExpenseDropdown.innerHTML = '';
             console.log("Dropdown ID:", ExpenseDropdown.id);
-            
+
 
             const selectedPlanID = document.getElementById('planID').value;
 
@@ -1536,7 +1556,7 @@
             costTypeDropdown.innerHTML = '';
 
             console.log("Dropdown ID:", costTypeDropdown.id);
-           
+
             const updateCostTypeDropdown = () => {
                 const selectedEXPID = ExpenseDropdown.value;
                 costTypeDropdown.innerHTML = '';
@@ -1641,6 +1661,8 @@
                 otherTextContainer.style.display = "flex";
             } else {
                 otherTextContainer.style.display = "none";
+                var textarea = document.getElementById('proInDetail');
+                textarea.value = ''; 
             }
         }
 
@@ -1730,6 +1752,7 @@
             document.getElementById('insertFile').appendChild(mainContainer);
 
         }
+
         function updateExpenseDropdown(selectedPlanID) {
             console.log(selectedPlanID);
 

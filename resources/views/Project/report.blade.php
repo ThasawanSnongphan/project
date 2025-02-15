@@ -18,7 +18,8 @@
         <table class="table table-bordered">
             <tr>
                 <th style="width: 25%;">สถานะ</th>
-                
+
+                <td>{{$status->name}}</td>
 
             </tr>
             <tr>

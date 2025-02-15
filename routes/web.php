@@ -107,7 +107,7 @@ Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
 Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
 
-Route::post('/projectEXP', [ProjectController::class,'EXP']);
+Route::post('/projectcostType', [ProjectController::class,'costType']);
 
 Route::any('/projectcreate2', [ProjectController::class,'create2']);
 // Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
