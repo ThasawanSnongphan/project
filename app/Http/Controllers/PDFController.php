@@ -476,8 +476,8 @@ class PDFController extends Controller
             $counter = 1; // ตัวแปรเก็บลำดับ
             foreach ($objects as $object) {
                 $htmlContent .= '
-                        &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->detail . ' <br>
-                    ';
+                    &nbsp;&nbsp;&nbsp;&nbsp;7.' . $counter . ' ' . $object->detail . ' <br>
+                ';
                 $counter++;
             }
         }

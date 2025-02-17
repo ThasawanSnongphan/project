@@ -15,11 +15,16 @@ use App\Models\StrategicMap;
 use App\Models\Tactic2Level;
 use App\Models\Tactics;
 use App\Models\Target1Level;
+use App\Models\Users;
+use App\Models\UsersMapProject;
 use App\Models\Year;
 use Illuminate\Http\Request;
 use Mpdf\Mpdf;
 use DateTime;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+Carbon::setLocale('th');
 
 class PDFKPIController extends Controller
 {
@@ -34,6 +39,8 @@ class PDFKPIController extends Controller
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $projects = Projects::where('proID', $id)->first();
         $years = Year::all();
+        $users_map = UsersMapProject::all();
+        $users = Users::all();
 
         $strategic_maps = StrategicMap::all();
         $strategic1_level_maps = Strategic1LevelMapProject::all();
@@ -225,38 +232,234 @@ class PDFKPIController extends Controller
             }
         }
 
+        // สร้างอาร์เรย์สำหรับเก็บข้อมูลสังกัดและชื่อผู้รับผิดชอบ
+        $departments = [];
+        $responsibleNames = [];
+        $names = [];  // เพิ่มอาร์เรย์เพื่อเก็บชื่อ
 
-        $htmlContent .= '
-            <b>3. ส่วนงานที่รับผิดชอบ : </b><br>
-        ';
+
+        // วนลูปเพื่อดึงข้อมูลจาก users_map และ users
+        foreach ($users_map as $user_map) {
+            if ($projects->proID == $user_map->proID) {
+                foreach ($users as $user) {
+                    if ($user->userID == $user_map->userID) {
+                        // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
+                        if (!in_array($user->department_name, $departments)) {
+                            $departments[] = $user->department_name;
+                        }
+                        // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
+                        $responsibleNames[] = $user->username;
+                        $names[] = $user->username;
+                        // dd($names);
+                    }
+                }
+            }
+        }
+
+        // ตรวจสอบว่ามีข้อมูลหรือไม่
+        if (empty($departments) && empty($responsibleNames)) {
+            $htmlContent .= 'ไม่มีข้อมูล <br>';
+        } else {
+
+            // แสดงข้อมูลสังกัด
+            foreach ($departments as $department) {
+                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</b><br>';
+            }
+        }
 
         $htmlContent .= '
             <b>4. วิธีการดำเนินโครงการ : </b><br>
         ';
 
+
+        $pro_steps = DB::table('steps')->where('proID', $id)->get();
+
+        $minStartDate = null; // เก็บวันที่เริ่มต้นที่น้อยที่สุด
+        $maxEndDate = null;   // เก็บวันที่สิ้นสุดที่มากที่สุด
+
+        foreach ($pro_steps as $step) {
+            $startDate = $step->start ?? null; // วันที่เริ่มต้น
+            $endDate = $step->end ?? null;    // วันที่สิ้นสุด
+
+            if ($startDate) {
+                $start = Carbon::parse($startDate);
+                // อัปเดต $minStartDate ถ้า $start น้อยกว่า หรือ $minStartDate ยังเป็น null
+                if (!$minStartDate || $start->lessThan($minStartDate)) {
+                    $minStartDate = $start;
+                }
+            }
+
+            if ($endDate) {
+                $end = Carbon::parse($endDate);
+                // อัปเดต $maxEndDate ถ้า $end มากกว่า หรือ $maxEndDate ยังเป็น null
+                if (!$maxEndDate || $end->greaterThan($maxEndDate)) {
+                    $maxEndDate = $end;
+                }
+            }
+        }
+
+        // ตรวจสอบผลลัพธ์
+        if ($minStartDate) {
+            $startDay = $minStartDate->day;
+            $startMonth = $minStartDate->translatedFormat('F');
+            $startYear = $minStartDate->year + 543;
+            $formattedStartDate = "{$startDay} {$startMonth} {$startYear}";
+        } else {
+            $formattedStartDate = 'ไม่มีวันที่เริ่มต้น';
+        }
+
+        if ($maxEndDate) {
+            $endDay = $maxEndDate->day;
+            $endMonth = $maxEndDate->translatedFormat('F');
+            $endYear = $maxEndDate->year + 543;
+            $formattedEndDate = "{$endDay} {$endMonth} {$endYear}";
+        } else {
+            $formattedEndDate = 'ไม่มีวันที่สิ้นสุด';
+        }
+
         $htmlContent .= '
-            <b>5. ระยะเวลาในการดำเนินงาน : </b><br>
+            <b>5. ระยะเวลาในการดำเนินงาน : </b>เริ่มต้น ' . $formattedStartDate . ' สิ้นสุด ' . $formattedEndDate . ' <br>
         ';
 
         $htmlContent .= '
             <b>6. วัตถุประสงค์</b><br>
         ';
 
+
+        if (DB::table('objectives')->where('proID', $id)->exists()) {
+            // ดึงข้อมูลที่ตรงกับ proID
+            $objects = DB::table('objectives')->where('proID', $id)->get();
+            $s = 1;
+            $counter = 1; // ตัวแปรเก็บลำดับ
+            foreach ($objects as $object) {
+                if($s == 1){
+                    $checked = '✓';
+                } else{
+                    $checked = '&nbsp;&nbsp;';
+                }
+                $htmlContent .= '
+                    <div style="text-indent: 20px;">
+                        6.' . $counter . ' ' . $object->detail . ' <br>
+                    </div>
+                    <div style="text-indent: 20px;">
+                        <span>( ' . ($s == 1 ? '✓' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($s != 1 ? '&nbsp;&nbsp;' : '✓') . ' ) ไม่บรรลุ</span>
+                    </div>
+                ';
+                $counter++;
+            }
+        }
+
+        $status = 1; // กำหนดค่า 1 หรือ 0 ตามสถานะจริง
         $htmlContent .= '
-            <b>7. ผลการดำเนินงาน</b><br>
+            <div class="checkbox" style="page-break-inside: avoid;">
+                <b>7. ผลการดำเนินงาน</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) ดำเนินการแล้วเสร็จตามระยะเวลาที่กำหนดไว้ในโครงการ<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) ไม่เป็นไปตามระยะเวลาที่กำหนดไว้ในโครงการ<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) ขอเลื่อนการดำเนินการ<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) เสนอขอยกเลิก<br>
+            </div>
         ';
 
         $htmlContent .= '
             <b>8. ผลการดำเนินงานตามตัวชี้วัด (KPIs)</b><br>
         ';
 
+        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+            // ดึงข้อมูลจาก k_p_i_projects
+            $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
+
+            // ดึงข้อมูลจากตารางหน่วยนับ 
+            $countKPI_pros = DB::table('count_k_p_i_projects')->get();
+
+            $counter = 1;
+            foreach ($KPI_pros as $KPI_pro) {
+                // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่
+                foreach ($countKPI_pros as $countKPI_pro) {
+                    if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
+                        // $unitName = $countKPI_pro->name;
+                        $htmlContent .= '
+                            &nbsp;&nbsp;&nbsp;&nbsp;8.' . $counter . ' ตัวชี้วัดโครงการ ' . $KPI_pro->name . ' <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $KPI_pro->target . ' <br>
+                        ';
+                        $counter++;
+                        break;
+                    }
+                }
+            }
+        }
+
         $htmlContent .= '
-            <b>9. งบประมาณที่ใช้ดำเนินการ</b><br>
+            <div class="checkbox" style="page-break-inside: avoid;">
+                <b>9. งบประมาณที่ใช้ดำเนินการ</b><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) งบประมาณแผนดิน<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) งบประมาณเงินรายได้ส่วนงาน<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) อื่นๆ ..............................................<br>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
+                </span> 
+                ) ไม่ได้ใช้งบประมาณ<br>
+            </div>
         ';
 
         $htmlContent .= '
             <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
         ';
+
+        $bnfs = DB::table('benefits')->where('proID', $id)->get(); // ดึงข้อมูลที่ตรงกับ proID
+
+        if ($bnfs->isNotEmpty()) { // ถ้ามีข้อมูล
+            $counter = 1;
+            foreach ($bnfs as $bnf) {
+                $htmlContent .= '
+                    <div style="text-align: justify;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;10.' . $counter . ' ' . nl2br($bnf->detail) . ' <br>
+                    </div>
+                ';
+                $counter++;
+            }
+        } else {
+            $htmlContent .= '
+                <div style="text-align: justify;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;ไม่มีข้อมูล<br>
+                </div>
+            '; // ถ้าไม่มีข้อมูล
+        }
 
         $htmlContent .= '
             <b>11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ</b><br>
