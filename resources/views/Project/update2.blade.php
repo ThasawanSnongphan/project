@@ -216,6 +216,7 @@
                                                     @foreach (session('KPIMain3LVID') as $KPIMain3LVID)
                                                         @if ($KPI->KPIMain3LVID == $KPIMain3LVID && $KPI->goal3LVID == session('goal3LVID')[$index])
                                                             <div class="mt-2 d-flex">
+                                                                <input type="hidden" name="goalMap[]" value="{{$KPI->goal3LVID}}">
                                                                 <input type="hidden" name="KPIMain3LVID[]"
                                                                     value="{{ $KPI->KPIMain3LVID }}">
                                                                 <input class="form-control mr-2" type="text"

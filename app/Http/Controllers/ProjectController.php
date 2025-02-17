@@ -1797,7 +1797,7 @@ class ProjectController extends Controller
                     DB::table('strategic_maps')->updateOrInsert(
                         [
                             'proID' => $id,
-                            'straMapID' => $currentstraMapID
+                            'stra3LVID' => $currentstraMapID
                         ],
                         [
                             'proID' => $id,
@@ -1811,9 +1811,8 @@ class ProjectController extends Controller
                 }else{
                     DB::table('strategic_maps')->insert(
                         [
-                            'straMapID' => $straMap,
                             'proID' => $id,
-                            'stra3LVID' => $stra3LVID[$index],
+                            'stra3LVID' => $straMap,
                             'SFA3LVID' => $SFA3LVID[$index],
                             'goal3LVID' => $goal3LVID[$index],
                             'tac3LVID' => $tac3LVID[$index],
@@ -1826,9 +1825,8 @@ class ProjectController extends Controller
             }else{
                 DB::table('strategic_maps')->insert(
                     [
-                        'straMapID' => $straMap,
                         'proID' => $id,
-                        'stra3LVID' => $stra3LVID[$index],
+                        'stra3LVID' => $straMap,
                         'SFA3LVID' => $SFA3LVID[$index],
                         'goal3LVID' => $goal3LVID[$index],
                         'tac3LVID' => $tac3LVID[$index],
@@ -1849,7 +1847,8 @@ class ProjectController extends Controller
         $KPIMain3LVIDs = $KPIMain3LVMap->pluck('KPIMain3LVID')->toArray();
         
         $KPIMain3LVID = $request->KPIMain3LVID ?? [];
-       
+        $goalMap = $request->goalMap;
+
         foreach ($KPIMain3LVID as $index => $KPIMain3LV){
             if(isset($KPIMain3LV)){
                 $currentKPIMain3LLVID = $KPIMain3LV;
@@ -1869,7 +1868,7 @@ class ProjectController extends Controller
                     DB::table('k_p_i_main_map_projects')->insert(
                         [
                             'KPIMain3LVID' => $KPIMain3LV,
-                            'goal3LVID' => $goal3LVID[$index],
+                            'goal3LVID' => $goalMap[$index],
                             'proID' => $id,
                             'updated_at' => now(), 
                             'created_at' => now() 
@@ -1881,7 +1880,7 @@ class ProjectController extends Controller
                 DB::table('k_p_i_main_map_projects')->insert(
                     [
                         'KPIMain3LVID' => $KPIMain3LV,
-                        'goal3LVID' => $goal3LVID[$index],
+                        'goal3LVID' => $goalMap[$index],
                         'proID' => $id,
                         'updated_at' => now(), 
                         'created_at' => now() 
@@ -1922,7 +1921,8 @@ class ProjectController extends Controller
                             'stra2LVID' => $stra2LV,
                             'SFA2LVID' => $SFA2LVID[$index],
                             'tac2LVID' => $tac2LVID[$index],
-                            'updated_at' => now()
+                            'updated_at' => now(),
+                            'created_at' => now() 
                         ]
                         );
                 }
@@ -2372,7 +2372,7 @@ class ProjectController extends Controller
 
         $files = DB::table('files')->where('proID',$id)->get();
         $oldfileIDs =  $files->pluck('fileID')->toArray();
-        $oldfileID = $request->oldfileID;
+        $oldfileID = $request->oldfileID ?? [];
 
         $fileID = $request->fileID ?? [];
         $file = $request->file ?? [];
@@ -2427,31 +2427,31 @@ class ProjectController extends Controller
 
 
     function report($id){
-        
-        $user=Users::all();
-        $userMap = UsersMapProject::with('users')->get();
         $project=DB::table('projects')->where('proID',$id)->first();
+        $user=Users::all();
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
         $status = DB::table('statuses')->where('statusID',$project->statusID)->first();
-        $strategicMap=StrategicMap::all();
-        $strategic = Strategic3Level::all();
-        $SFA = StrategicIssues::all();
-        $goal = Goals::all();
-        $tactics = Tactics::all();
+        $strategic3LVMap=StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
+        $KPI3LVMap = KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
+        $strategic2LVMap=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
+        $KPI2LVMap = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
+        $strategic1LVMap = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
+        $KPIProject = KPIProjects::with('count')->where('proId',$id)->get();
         $projectYear=Year::all();
-        
         $projectType=ProjectType::all();
         $projectCharector=ProjectCharec::all();
         $projectIntegrat=ProjectIntegrat::all();
         $projectOBJ=Objectives::all();
         $projectTarget=Targets::all();
-        $projectStep=Steps::all();
+        $projectStep=DB::table('steps')->where('proID',$id)->get();
         $projectBadgetType=BadgetType::all();
         $projectUniPlan=UniPlan::all();
-        $projectCostQuarter=CostQuarters::all();
+        $projectCostQuarter=CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
         $peojectEXP=ExpenseBadgets::all();
         $projectCostType=CostTypes::all();
-        $projectBenefit=Benefits::all();
-        return view('Project.report',compact('status','user','userMap','project','strategicMap','strategic','SFA','goal','tactics','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit'));
+        $projectBenefit=DB::table('benefits')->where('proID',$id)->get();
+        $file = DB::table('files')->where('proID',$id)->get();
+        return view('Project.report',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file'));
     }
 
 

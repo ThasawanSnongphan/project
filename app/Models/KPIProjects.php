@@ -9,4 +9,8 @@ class KPIProjects extends Model
 {
     use HasFactory;
     protected $primaryKey = 'KPIProID';
+    public function count()
+    {
+        return $this->belongsTo(CountKPIProjects::class, 'countKPIProID','countKPIProID');
+    }
 }
