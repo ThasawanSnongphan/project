@@ -331,6 +331,7 @@ class PDFKPIController extends Controller
             $objects = DB::table('objectives')->where('proID', $id)->get();
             $s = 1;
             $counter = 1; // ตัวแปรเก็บลำดับ
+            $checked = '';
             foreach ($objects as $object) {
                 if($s == 1){
                     $checked = '✓';
@@ -343,6 +344,7 @@ class PDFKPIController extends Controller
                     </div>
                     <div style="text-indent: 20px;">
                         <span>( ' . ($s == 1 ? '✓' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
+                        <span>( ' . $checked . ') บรรลุ</span>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($s != 1 ? '&nbsp;&nbsp;' : '✓') . ' ) ไม่บรรลุ</span>
                     </div>
                 ';
