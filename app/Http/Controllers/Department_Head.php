@@ -28,6 +28,7 @@ use App\Models\Steps;
 use App\Models\CostQuarters;
 use App\Models\Benefits;
 use App\Models\Files;
+use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 
 class Department_Head extends Controller
@@ -66,7 +67,9 @@ class Department_Head extends Controller
         $projectCostType=CostTypes::all();
         $projectBenefit=DB::table('benefits')->where('proID',$id)->get();
         $file = DB::table('files')->where('proID',$id)->get();
-        return view('Department_Head.detail',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file'));
+        $comment = Comment::with('user')->where('proID',$id)->get();
+
+        return view('Department_Head.detail',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file','comment'));
     }
 
     function departmentPass(Request $request, $id){

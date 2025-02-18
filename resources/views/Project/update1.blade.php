@@ -26,7 +26,23 @@
                 <div class="x_content">
                     <form id="actionForm" method="POST" action="" novalidate enctype="multipart/form-data">
                         @csrf
-
+                       
+                        @if (count($comment) > 0)
+                            <div class="row field item form-group align-items-center">
+                                <label for="title"
+                                    class="col-form-label col-md-3 col-sm-3 label-align">ข้อเสนอแนะ</label>
+                                <div class="col-md-6 col-sm-6">
+                                    <table border="1" width="100%" >
+                                        <td style="padding: 2px">
+                                            @foreach ($comment as $item)
+                                                 {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
+                                                 {{ $item->detail }} <br>
+                                            @endforeach
+                                        </td>
+                                    </table>
+                                </div>
+                            </div>
+                        @endif
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
@@ -56,7 +72,7 @@
 
                         @php
                             $index = 0;
-                            
+
                         @endphp
 
                         {{-- @if (!empty($selectYear)) --}}
@@ -67,18 +83,16 @@
                                     class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
                                         class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6 d-flex">
-                                    
+
                                     <input type="checkbox" name="stra3LVID[]" value="{{ $item->stra3LVID }}"
                                         @foreach ($strategic3LVMap as $map)
                                             @if ($item->stra3LVID == $map->stra3LVID)
                                                     checked 
-                                                     
-                                            @endif 
-                                            @endforeach>
+                                            @endif @endforeach>
 
-                                           
-                                                
-                                          
+
+
+
                                     <input class="ml-2 form-control" type="text" id="straID_{{ $index }}"
                                         required='required' data-validate-length-range="8,20" readonly
                                         value="{{ $item->name }}">
@@ -178,14 +192,12 @@
                                             <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                         </div>
                                     </div>
-
-
                                     @if (isset($KPIMain3LVMapFirst[$index]) && $KPIMain3LVMapFirst[$index]->goal3LVID == $goal3LVMap[$index])
                                         @foreach ($KPIMain3LVMaps as $KPIMap)
                                             @if ($KPIMap->goal3LVID == ($goal3LVMap[$index] ?? ''))
                                                 <div class="row col-md-12 col-sm-12">
                                                     <div class="col-md-4 col-sm-4 m-1">
-
+                                                        <input type="hidden" name="goal3LVID[]"   value="{{$goal3LVMap[$index]}}">
                                                         <select id="KPIMain3LVID_{{ $index }}"
                                                             name="KPIMain3LVID[]" class="form-control" required>
                                                             <option value="">--เลือกตัวชี้วัด--</option>
@@ -246,23 +258,14 @@
                                                 {{-- @else --}}
                                             @endif
                                         @endforeach
-                                        @else
+                                    @else
                                         <div class="row col-md-12 col-sm-12">
                                             <div class="col-md-4 col-sm-4 m-1">
+                                                {{-- <input type="text" value="{{$goal3LVMap[$index]}}"> --}}
                                                 <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]"
                                                     class="form-control" required>
                                                     <option value="">--เลือกตัวชี้วัด--</option>
-                                                    {{-- @foreach ($KPIMain3LV as $KPI)
-                                                        @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                            @if ($KPI->KPIMain3LVID == $KPIMain3LVMapFirst)
-                                                                <option value="{{ $KPI->KPIMain3LVID }}" selected>
-                                                                    {{ $KPI->name }}</option>
-                                                            @else
-                                                                <option value="{{ $KPI->KPIMain3LVID }}">
-                                                                    {{ $KPI->name }}</option>
-                                                            @endif
-                                                        @endif
-                                                    @endforeach --}}
+                                                   
 
                                                 </select>
                                             </div>
@@ -401,73 +404,107 @@
                                     @if (isset($KPIMain2LVMapFirst[$index]) && $KPIMain2LVMapFirst[$index]->SFA2LVID == $SFA2LVMap[$index])
                                         @foreach ($KPIMain2LVMaps as $KPIMap)
                                             @if ($KPIMap->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                            <div class="row col-md-12 col-sm-12">
-                                                <div class="col-md-4 col-sm-4 m-1">
-                                                    <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]"
-                                                        class="form-control" required>
-                                                        <option value="">--เลือกตัวชี้วัด--</option>
-                                                        @foreach ($KPIMain2LV as $KPI)
-                                                            @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                                                @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
-                                                                    <option value="{{ $KPI->KPIMain2LVID }}" selected>
-                                                                        {{ $KPI->name }}</option>
-                                                                @else
-                                                                    <option value="{{ $KPI->KPIMain2LVID }}">
-                                                                        {{ $KPI->name }}</option>
+                                                <div class="row col-md-12 col-sm-12">
+                                                    <div class="col-md-4 col-sm-4 m-1">
+                                                        
+                                                        <select id="KPIMain2LVID_{{ $index }}"
+                                                            name="KPIMain2LVID[]" class="form-control" required>
+                                                            <option value="">--เลือกตัวชี้วัด--</option>
+                                                            @foreach ($KPIMain2LV as $KPI)
+                                                                @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
+                                                                    @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
+                                                                        <option value="{{ $KPI->KPIMain2LVID }}" selected>
+                                                                            {{ $KPI->name }}</option>
+                                                                    @else
+                                                                        <option value="{{ $KPI->KPIMain2LVID }}">
+                                                                            {{ $KPI->name }}</option>
+                                                                    @endif
                                                                 @endif
-                                                            @endif
-                                                        @endforeach
-        
-                                                    </select>
-                                                </div>
-                                                <div class=" col-md-3 col-sm-3 m-1">
-        
-                                                    <input class="form-control" type="text" name="countMain2LV[]"
-                                                        id="count2LV_{{ $index }}"
-                                                        @foreach ($KPIMain2LV as $KPI)
+                                                            @endforeach
+
+                                                        </select>
+                                                    </div>
+                                                    <div class=" col-md-3 col-sm-3 m-1">
+
+                                                        <input class="form-control" type="text" name="countMain2LV[]"
+                                                            id="count2LV_{{ $index }}"
+                                                            @foreach ($KPIMain2LV as $KPI)
                                                         @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                             @if ($KPI->KPIMain2LVID == ($KPIMap->KPIMain2LVID ?? ''))
                                                                 value="{{ $KPI->count ?? '-' }}"
                                                            
                                                             @endif
                                                         @endif @endforeach
-                                                        readonly>
-        
-                                                </div>
-                                                <div class=" col-md-3 col-sm-3 m-1">
-                                                    <input class="form-control" type="text" name="targetMain2LV[]"
-                                                        id="target2LV_{{ $index }}"
-                                                        @foreach ($KPIMain2LV as $KPI)
+                                                            readonly>
+
+                                                    </div>
+                                                    <div class=" col-md-3 col-sm-3 m-1">
+                                                        <input class="form-control" type="text" name="targetMain2LV[]"
+                                                            id="target2LV_{{ $index }}"
+                                                            @foreach ($KPIMain2LV as $KPI)
                                                         @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
-                                                            @if ($KPI->KPIMain2LVID == ($KPIMap->KPIMain2LVID))
+                                                            @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
                                                                 value="{{ $KPI->target ?? '-' }}"
                                                             
                                                             @endif
                                                         @endif @endforeach
-                                                        readonly>
-                                                </div>
+                                                            readonly>
+                                                    </div>
 
-                                                @if ($KPIMap->KPIMain2LVID == $KPIMain2LVMapFirst[$index]->KPIMain2LVID)
-                                                <div class="col-md-1 col-sm-1 m-1">
-                                                    <button type='button' class="btn btn-primary insert-kpi2LV-button"
-                                                        data-index="{{ $index }}">เพิ่ม
-                                                    </button>
-                                                </div>
-                                                @else
-                                                <div class="col-md-1 col-sm-1 m-1">
-                                                    <button type="button" class="btn btn-danger "
-                                                        onclick="this.closest('.row').remove()">ลบ</button>
+                                                    @if ($KPIMap->KPIMain2LVID == $KPIMain2LVMapFirst[$index]->KPIMain2LVID)
+                                                        <div class="col-md-1 col-sm-1 m-1">
+                                                            <button type='button'
+                                                                class="btn btn-primary insert-kpi2LV-button"
+                                                                data-index="{{ $index }}">เพิ่ม
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        <div class="col-md-1 col-sm-1 m-1">
+                                                            <button type="button" class="btn btn-danger "
+                                                                onclick="this.closest('.row').remove()">ลบ</button>
+
+                                                        </div>
+                                                    @endif
 
                                                 </div>
-                                                @endif
-                                               
-                                            </div>
                                             @endif
-                                        @endforeach                                     
+                                        @endforeach
                                     @else
-                                        
+                                    <div class="row col-md-12 col-sm-12">
+                                        <div class="col-md-4 col-sm-4 m-1">
+                                           
+                                            <select id="KPIMain2LVID_{{ $index }}"
+                                                name="KPIMain2LVID[]" class="form-control" required>
+                                                <option value="">--เลือกตัวชี้วัด--</option>
+                                            </select>
+                                        </div>
+                                        <div class=" col-md-3 col-sm-3 m-1">
+
+                                            <input class="form-control" type="text" name="countMain2LV[]"
+                                                id="count2LV_{{ $index }}"
+                                               
+                                                readonly>
+
+                                        </div>
+                                        <div class=" col-md-3 col-sm-3 m-1">
+                                            <input class="form-control" type="text" name="targetMain2LV[]"
+                                                id="target2LV_{{ $index }}"
+                                                
+                                                readonly>
+                                        </div>
+
+                                       
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type='button'
+                                                    class="btn btn-primary insert-kpi2LV-button"
+                                                    data-index="{{ $index }}">เพิ่ม
+                                                </button>
+                                            </div>
+                                       
+
+                                    </div>
                                     @endif
-                                    
+
                                     <div id="insertKPIMain2_{{ $index }}"></div>
                                 </div>
                             </div>
@@ -798,10 +835,15 @@
             const targetInput = document.createElement('input');
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
-            // targetInput.id = `targetMain_${Date.now()}`;
             targetInput.id = `target3LV_${index}_${Date.now()}`;
             targetInput.name = 'targetMain3LV[]';
             targetInput.readOnly = true;
+
+            const goalInput = document.createElement('input');
+            goalInput.classList.add('form-control');
+            goalInput.type = 'hidden';
+            goalInput.name = 'goal3LVID[]';
+            goalInput.readOnly = true;
 
             const selectedGoalID = document.getElementById('goal3LVID_' + index).value;
 
@@ -824,6 +866,7 @@
                 if (selectedKPIMain) {
                     countInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
                     targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+                    goalInput.value = selectedKPIMain.goal3LVID || '';
                 }
             });
 
@@ -848,6 +891,7 @@
             colKPI.appendChild(KPIDropdown);
             colCount.appendChild(countInput);
             colTarget.appendChild(targetInput);
+            colTarget.appendChild(goalInput);
             colDelete.appendChild(deleteButton);
             // เพิ่มปุ่มลบลงใน mainContainer
             // document.getElementById('insertKPIMain').appendChild(mainContainer);
@@ -864,7 +908,7 @@
         function insertKPIMain2(index) {
             // const i=1;
             const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row','col-md-12', 'col-sm-12');
+            mainContainer.classList.add('row', 'col-md-12', 'col-sm-12');
 
             const colKPI = document.createElement('div');
             colKPI.classList.add('col-md-4', 'col-sm-4', 'm-1');
@@ -909,6 +953,11 @@
             targetInput.name = 'targetMain2LV[]';
             targetInput.readOnly = true;
 
+            const SFAInput = document.createElement('input');
+            SFAInput.classList.add('form-control');
+            SFAInput.type = 'hidden';
+            SFAInput.name = 'SFA2LVID[]';
+
             const selectedSFAID = document.getElementById('SFA2LVID_' + index).value;
 
             const filteredKPIMains = KPIMain2LVs.filter(KPIMain => KPIMain.SFA2LVID == selectedSFAID);
@@ -930,6 +979,7 @@
                 if (selectedKPIMain) {
                     countInput.value = selectedKPIMain.count || '-';
                     targetInput.value = selectedKPIMain.target || '-';
+                    SFAInput.value = selectedKPIMain.SFA2LVID || '';
                 }
             });
 
@@ -954,6 +1004,7 @@
             colKPI.appendChild(KPIDropdown);
             colCount.appendChild(countInput);
             colTarget.appendChild(targetInput);
+            colTarget.appendChild(SFAInput);
             colDelete.appendChild(deleteButton);
             // เพิ่มปุ่มลบลงใน mainContainer
             // document.getElementById('insertKPIMain').appendChild(mainContainer);
@@ -969,7 +1020,7 @@
         function submitButton(action, proID) {
             var form = document.getElementById('actionForm');
             if (action === 'saveUpdate1') {
-                form.action = "/projectSave2/" + proID;
+                form.action = "/projectsaveUpdate1/" + proID;
             } else if (action === 'sendUpdate1') {
                 form.action = "/projectsendUpdate1/" + proID;
             }

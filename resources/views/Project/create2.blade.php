@@ -356,10 +356,10 @@
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
                                 <select id="type" name="proTypeID" class="form-control"
-                                    onchange="this.form.submit()" required>
+                                     required>
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
-                                            {{ isset($selectProjectType) && $selectProjectType == $item->proTypeID ? 'selected' : '' }}>
+                                            >
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>
@@ -370,7 +370,7 @@
                                 <select id="charecter" name="proChaID" class="form-control" required>
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
-                                            {{ isset($selectProjectCharec) && $selectProjectCharec == $item->proChaID ? 'selected' : '' }}>
+                                            >
                                             {{ $item->name }}</option>
                                     @endforeach
                                 </select>

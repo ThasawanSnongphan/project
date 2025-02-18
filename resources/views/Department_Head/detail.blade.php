@@ -138,17 +138,17 @@
                 </tr>
             @endif
             @if (!empty($strategic1LVMap))
-            @foreach ($strategic1LVMap as $item)
-                <tr>
-                    <th>แผนยุทธศาสตร์</th>
-                    <td colspan="5">{{ $item->stra1LV->name }}</td>
-                </tr>
-                <tr>
-                    <th>เป้าหมาย</th>
-                    <td colspan="5">{{ $item->tar1LV->name }}</td>
-                </tr>
-            @endforeach
-        @endif
+                @foreach ($strategic1LVMap as $item)
+                    <tr>
+                        <th>แผนยุทธศาสตร์</th>
+                        <td colspan="5">{{ $item->stra1LV->name }}</td>
+                    </tr>
+                    <tr>
+                        <th>เป้าหมาย</th>
+                        <td colspan="5">{{ $item->tar1LV->name }}</td>
+                    </tr>
+                @endforeach
+            @endif
             <tr>
                 <th>ประเภทโครงการ</th>
                 @foreach ($projectType as $item)
@@ -281,12 +281,12 @@
             <tr>
                 <td>
                     @foreach ($projectCostQuarter as $item)
-                        - {{$item->exp->name}} <br>
+                        - {{ $item->exp->name }} <br>
                     @endforeach
                 </td>
                 <td>
                     @foreach ($projectCostQuarter as $item)
-                        - {{$item->cost->name}} <br>
+                        - {{ $item->cost->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -335,31 +335,48 @@
                 </td>
             </tr>
         </table>
-            {{-- <div class="ln_solid"> --}}
-            <form id="actionForm" method="POST" >
-                @csrf
-                <div class="">
+        {{-- <div class="ln_solid"> --}}
+        <form id="actionForm" method="POST">
+            @csrf
+            @if (!empty($comment))
+                <div class="row m-2">
                     <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
                     <div class="col-md-6 col-sm-6">
-                        <textarea name="comment" id="comment" class="form-control"></textarea>
+                        @foreach ($comment as $item)
+                        <table>
+                            <tr>
+                                <td>
+                                    {{$item->user->firstname_en}} {{$item->user->lastname_en}} : {{$item->detail}}
+                                </td>
+                            </tr>
+                        </table>
+                            
+                        @endforeach
                     </div>
-                    @error('comment')
+                </div>
+                @endif
+            <div class="row m-2">
+                <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+                <div class="col-md-6 col-sm-6">
+                    <textarea name="comment" id="comment" class="form-control"></textarea>
+                </div>
+                @error('comment')
                     <div class="m-2">
                         <span class="text text-danger">{{ $message }}</span>
                     </div>
                 @enderror
-                </div>
-                <div class="form-group mt-2">
-                    <div class="col-md-6 offset-md-3">
+            </div>
+            <div class="form-group mt-2">
+                <div class="col-md-6 offset-md-3">
 
-                        <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
-                        <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+                    <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
+                    <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
 
-                    </div>
                 </div>
-            </form>
-    
-        
+            </div>
+        </form>
+
+
     </div>
     <div class="col-md-1 col-sm-1"></div>
 
