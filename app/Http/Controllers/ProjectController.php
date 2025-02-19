@@ -48,7 +48,11 @@ class ProjectController extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
+        $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+        $proIDs = $user->pluck('proID');
+        // dd($proIDs);
+        $project=DB::table('projects')->whereIn('proID',$proIDs)->get();
+        // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Project.index',compact('users','project','status','year','projectYear'));

@@ -93,7 +93,7 @@
                                             <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
                                             {{-- ดูได้แค่ชื่อกับสถานะ --}}
 
-                                            <li><a href="/project">รายชื่อโครงการทั้งหมด</a></li> 
+                                            <li><a href="/projectAll">รายชื่อโครงการทั้งหมด</a></li> 
 
                                         </ul>
                                     </li>
@@ -154,6 +154,17 @@
                                         </li>
                                     </ul>
                                 @endif
+                                @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
+                                <ul class="nav side-menu">
+                                    <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
+                                                class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+
+                                            <li><a href="/DepartmentHeadProject">จัดการข้อมูลโครงการ</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
                                     <ul class="nav side-menu">
                                         <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span
@@ -162,8 +173,8 @@
 
                                                 <li><a href="/PlanningAnalystProject">รายชื่อโครงการ</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
-                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
-                                                <li><a href="/project">รายชื่อโครงการนอกแผน</a></li>
+                                                <li><a href="/PlanningAnalystProjectCancel">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผน</a></li>
 
                                                 
 
@@ -171,17 +182,7 @@
                                         </li>
                                     </ul>
                                 @endif
-                                @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
-                                    <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
-                                                    class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-
-                                                <li><a href="/DepartmentHeadProject">จัดการข้อมูลโครงการ</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                @endif
+                               
                                 @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
                                     <ul class="nav side-menu">
                                         <li><a><i class="fa fa-home"></i> ผู้บริหาร <span
@@ -202,7 +203,7 @@
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
-                                                <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                <li><a href="/SupplyAnalystProject">รายชื่อโครงการ</a></li>
                                             </ul>
                                         </li>
                                     </ul>

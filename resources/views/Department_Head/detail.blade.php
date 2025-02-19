@@ -338,7 +338,7 @@
         {{-- <div class="ln_solid"> --}}
         <form id="actionForm" method="POST">
             @csrf
-            @if (!empty($comment))
+            @if (count($comment) > 0)
                 <div class="row m-2">
                     <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
                     <div class="col-md-6 col-sm-6">

@@ -4,7 +4,6 @@
     {{-- @include('Project.create') --}}
 
 
-    <h3>โครงการประจำปี</h3>
 
     <div class="field item form-group ">
         <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
@@ -30,13 +29,13 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                <th>สถานะ</th>
-                @if (Auth::check() && auth()->user())
+                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                    <th>สถานะ</th>
                     <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
                     <th>ไตรมาส 4</th>
-                    <th></th>
+                   
                 @endif
 
             </tr>
@@ -47,20 +46,22 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
+                @if  (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
+                    @continue
+                @endif
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 16 || $item->statusID == 14)
+                        {{-- @if ($item->statusID == 5)
                             {{ $item->name }}
-                        @else
-                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
-                        @endif
+                        @else --}}
+                            <a href="{{ route('PlanningAnalyst.detail', $item->proID) }}">{{ $item->name }}</a>
+                        {{-- @endif --}}
                     </td>
-                    
+                    @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                        @if (Auth::check() && auth()->user() )
+                        {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                         <td>
-                            
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
@@ -73,7 +74,7 @@
 
                             @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>
@@ -97,15 +98,7 @@
                                         เขียน</i></a>
                             @endif
                         </td>
-                        <td>
-                            @if ($item->statusID == 16 || $item->statusID == 14)
-                                <a href="{{ route('project.edit1', $item->proID) }}"><i
-                                        class="fa fa-pencil btn btn-warning"></i></a>
-                                <a href="{{ route('project.delete', $item->proID) }}"
-                                    onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                        class="fa fa-times btn btn-danger"></i></a>
-                            @endif
-                        </td>
+                        
                     @endif
                 </tr>
                 @php
@@ -114,15 +107,7 @@
             @endforeach
         </tbody>
     </table>
-    {{-- <script>
-        import DataTable from 'datatables.net-dt';
-        import 'datatables.net-responsive-dt';
-
-        let table = new DataTable('#myTable', {
-            responsive: true
-        });
-    </script> --}}
-    {{-- <a type='submit' class="btn btn-primary" href="/projectcreate">สร้างโปรเจค</a> --}}
+   
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
         document.getElementById('yearID').addEventListener('change', function() {
@@ -141,8 +126,8 @@
                 if (cell) {
                     const projectID = cell.getAttribute('data-project');
                     const project = projectYear.find(project => project.proID == projectID);
-                    // console.log(projectID);
-                    // console.log(project);
+                    console.log(projectID);
+                    console.log(project);
 
                     // Check if the row should be displayed
                     if (project && (year === "" || year === "ทั้งหมด" || project.yearID == year)) {

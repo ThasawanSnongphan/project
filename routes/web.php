@@ -23,6 +23,7 @@ use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\QuarterReportController;
 
 use App\Http\Controllers\Strategic2LevelController;
 use App\Http\Controllers\SFA2LevelController;
@@ -41,6 +42,7 @@ use App\Http\Controllers\KPIMainController;
 use App\Http\Controllers\CountKPIProject;
 use App\Http\Controllers\PlanningAnalyst;
 use App\Http\Controllers\Department_Head;
+use App\Http\Controllers\SupplyAnalystController;
 use App\Http\Controllers\Executive;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\WordController;
@@ -78,6 +80,8 @@ Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('count
 Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
 Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('countKPI.update');
 
+Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']);
+
 Route::get('/ExecutiveProjectlist', [Executive::class,'index']);
 Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
 Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'report'])->name('Executive.detail');
@@ -86,6 +90,8 @@ Route::post('/ExecutiveEdit/{id}', [Executive::class,'ExecutiveEdit'])->name('Ex
 Route::post('/ExecutiveDenied/{id}', [Executive::class,'ExecutiveDenied'])->name('ExecutiveDenied');
 
 Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
+Route::get('/PlanningAnalystProjectOutPlan', [PlanningAnalyst::class,'projectOutPlan']);
+Route::get('/PlanningAnalystProjectCancel', [PlanningAnalyst::class,'projectCancel']);
 Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'report'])->name('PlanningAnalyst.detail');
 Route::post('planningPass/{id}', [PlanningAnalyst::class,'planningPass'])->name('planningPass');
 Route::post('/planningEdit/{id}', [PlanningAnalyst::class,'planningEdit'])->name('planningEdit');
@@ -127,6 +133,7 @@ Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
+Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
 
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
@@ -294,4 +301,5 @@ Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.upda
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('admin');
 Route::get('/dashboard', [AuthController::class, 'someFunction']);
+Route::get('/projectAll', [HomeController::class, 'projectAll']);
 

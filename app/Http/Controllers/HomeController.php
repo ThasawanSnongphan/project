@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Year;
+use App\Models\Status;
+use App\Models\Projects;
+use App\Models\Users;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -29,5 +34,16 @@ class HomeController extends Controller
     public function adminHome()
     {
         return view('/');
+    }
+
+    public function projectAll()
+    {
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $project=Projects::all();
+        // dd($project);
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        return view('Home.projectAll',compact('users','project','status','year','projectYear'));
     }
 }

@@ -49,4 +49,9 @@ class Projects extends Model
     {
         return $this->belongsToMany(KPIMains::class, 'k_p_i_main_map_projects', 'proID', 'KPIMain3LVID');
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'statusID','statusID');
+    }
 }

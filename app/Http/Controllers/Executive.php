@@ -81,7 +81,7 @@ class Executive extends Controller
         return view('Executive.projectDetail',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file','comment'));
     }
 
-    function departmentPass(Request $request, $id){
+    function ExecutivePass(Request $request, $id){
         DB::table('projects')->where('proID',$id)->update(['statusID' => '7']);
         $detail = $request->input('comment');
         if(!empty($detail)){
