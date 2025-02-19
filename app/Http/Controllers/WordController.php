@@ -238,96 +238,166 @@ class WordController extends Controller
                 $section->addText($department, $boldTextStyle, $indentationMin);
             }
             if (!empty($responsibleNames)) {
-                $section->addText('ผู้รับผิดชอบ : ' . implode(', ', $responsibleNames), [], $indentationMin);
+                $textRun = $section->addTextRun($indentationMin);
+                $textRun->addText('ผู้รับผิดชอบ : ', $boldTextStyle);
+                $textRun->addText(implode(', ', $responsibleNames));
             }
         }
 
-        $section->addText('3. ความเชื่อมโยงสอดคล้องกับ', $boldTextStyle);
-        $index = 1;
 
+        $all_strategic_plans = [];
+
+        // รวมแผนทุกระดับที่ proID ตรงกัน
         foreach ($strategic_maps as $strategic_map) {
             if ($projects->proID == $strategic_map->proID) {
-                foreach ($strategics as $strategic) {
-                    if ($strategic->straID == $strategic_map->straID) {
-                        $section->addText("3.$index $strategic->name", $boldTextStyle, $indentationMin);
-                        $index++;
-                        break;
-                    }
-                }
-                foreach ($strategic_issues as $strategic_issue) {
-                    if ($strategic_issue->SFAID == $strategic_map->SFAID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("ประเด็นยุทธศาสตร์ที่ ", $boldTextStyle);
-                        $textRun->addText($strategic_issue->name);
-                        break;
-                    }
-                }
-                foreach ($goals as $goal) {
-                    if ($goal->goalID == $strategic_map->goalID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("เป้าประสงค์ที่ ", $boldTextStyle);
-                        $textRun->addText($goal->name);
-                        break;
-                    }
-                }
-                foreach ($tactics as $tactic) {
-                    if ($tactic->tacID == $strategic_map->tacID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("กลยุทธ์ที่ ", $boldTextStyle);
-                        $textRun->addText($tactic->name);
-                        break;
-                    }
-                }
+                $all_strategic_plans[] = [
+                    'name' => collect($strategics)->firstWhere('straID', $strategic_map->straID)?->name,
+                    'strategic_issue' => collect($strategic_issues)->firstWhere('SFAID', $strategic_map->SFAID)?->name,
+                    'goal' => collect($goals)->firstWhere('goalID', $strategic_map->goalID)?->name,
+                    'tactic' => collect($tactics)->firstWhere('tacID', $strategic_map->tacID)?->name
+                ];
             }
         }
 
         foreach ($strategic2_level_maps as $strategic2_level_map) {
             if ($projects->proID == $strategic2_level_map->proID) {
-                foreach ($strategic2_levels as $strategic2_level) {
-                    if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
-                        $section->addText("3.$index $strategic2_level->name", $boldTextStyle, $indentationMin);
-                        $index++;
-                        break;
-                    }
-                }
-                foreach ($strategic_issue2_levels as $strategic_issue2_level) {
-                    if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("ประเด็นยุทธศาสตร์ที่ ", $boldTextStyle);
-                        $textRun->addText($strategic_issue2_level->name);
-                        break;
-                    }
-                }
-                foreach ($tactic2_levels as $tactic2_level) {
-                    if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("กลยุทธ์ที่ ", $boldTextStyle);
-                        $textRun->addText($tactic2_level->name);
-                        break;
-                    }
-                }
+                $all_strategic_plans[] = [
+                    'name' => collect($strategic2_levels)->firstWhere('stra2LVID', $strategic2_level_map->stra2LVID)?->name,
+                    'strategic_issue' => collect($strategic_issue2_levels)->firstWhere('SFA2LVID', $strategic2_level_map->SFA2LVID)?->name,
+                    'tactic' => collect($tactic2_levels)->firstWhere('tac2LVID', $strategic2_level_map->tac2LVID)?->name
+                ];
             }
         }
 
         foreach ($strategic1_level_maps as $strategic1_level_map) {
             if ($projects->proID == $strategic1_level_map->proID) {
-                foreach ($strategic1_levels as $strategic1_level) {
-                    if ($strategic1_level->stra1LVID == $strategic1_level_map->stra1LVID) {
-                        $section->addText("3.$index $strategic1_level->name", $boldTextStyle, $indentationMin);
-                        $index++;
-                        break;
-                    }
-                }
-                foreach ($target1_levels as $target1_level) {
-                    if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
-                        $textRun = $section->addTextRun($indentationMax);
-                        $textRun->addText("เป้าหมายที่ ", $boldTextStyle);
-                        $textRun->addText($target1_level->name);
-                        break;
-                    }
-                }
+                $all_strategic_plans[] = [
+                    'name' => collect($strategic1_levels)->firstWhere('stra1LVID', $strategic1_level_map->stra1LVID)?->name,
+                    'target' => collect($target1_levels)->firstWhere('tac1LVID', $strategic1_level_map->tac1LVID)?->name
+                ];
             }
         }
+
+        // เช็คจำนวนแผนทั้งหมด
+        $totalPlans = count($all_strategic_plans);
+        $index = 1;
+
+        if ($totalPlans === 1) {
+            // ถ้ามีแค่ 1 แผน ให้แสดงชื่อแผนในบรรทัดเดียวกับหัวข้อ
+            $plan = $all_strategic_plans[0];
+            $section->addText("3. ความเชื่อมโยงสอดคล้องกับ {$plan['name']}", $boldTextStyle);
+        } else {
+            $section->addText('3. ความเชื่อมโยงสอดคล้องกับ', $boldTextStyle);
+        }
+
+        // แสดงรายละเอียดของแต่ละแผน
+        foreach ($all_strategic_plans as $plan) {
+            if ($totalPlans > 1) {
+                $section->addText("3.$index {$plan['name']}", $boldTextStyle, $indentationMin);
+                $index++;
+            }
+
+            if (!empty($plan['strategic_issue'])) {
+                $textRun = $section->addTextRun($indentationMax);
+                $textRun->addText("ประเด็นยุทธศาสตร์ที่ ", $boldTextStyle);
+                $textRun->addText($plan['strategic_issue']);
+            }
+
+            if (!empty($plan['goal'])) {
+                $textRun = $section->addTextRun($indentationMax);
+                $textRun->addText("เป้าประสงค์ที่ ", $boldTextStyle);
+                $textRun->addText($plan['goal']);
+            }
+
+            if (!empty($plan['tactic'])) {
+                $textRun = $section->addTextRun($indentationMax);
+                $textRun->addText("กลยุทธ์ที่ ", $boldTextStyle);
+                $textRun->addText($plan['tactic']);
+            }
+
+            if (!empty($plan['target'])) {
+                $textRun = $section->addTextRun($indentationMax);
+                $textRun->addText("เป้าหมายที่ ", $boldTextStyle);
+                $textRun->addText($plan['target']);
+            }
+        }
+
+
+
+        // $section->addText('3. ความเชื่อมโยงสอดคล้องกับ', $boldTextStyle);
+        // $all_strategic_plans = [];
+
+        // // เช็คแผนระดับแรก
+        // foreach ($strategic_maps as $strategic_map) {
+        //     if ($projects->proID == $strategic_map->proID) {
+        //         $all_strategic_plans[] = [
+        //             'name' => collect($strategics)->firstWhere('straID', $strategic_map->straID)?->name,
+        //             'strategic_issue' => collect($strategic_issues)->firstWhere('SFAID', $strategic_map->SFAID)?->name,
+        //             'goal' => collect($goals)->firstWhere('goalID', $strategic_map->goalID)?->name,
+        //             'tactic' => collect($tactics)->firstWhere('tacID', $strategic_map->tacID)?->name
+        //         ];
+        //     }
+        // }
+
+        // // เช็คแผนระดับที่สอง
+        // foreach ($strategic2_level_maps as $strategic2_level_map) {
+        //     if ($projects->proID == $strategic2_level_map->proID) {
+        //         $all_strategic_plans[] = [
+        //             'name' => collect($strategic2_levels)->firstWhere('stra2LVID', $strategic2_level_map->stra2LVID)?->name,
+        //             'strategic_issue' => collect($strategic_issue2_levels)->firstWhere('SFA2LVID', $strategic2_level_map->SFA2LVID)?->name,
+        //             'tactic' => collect($tactic2_levels)->firstWhere('tac2LVID', $strategic2_level_map->tac2LVID)?->name
+        //         ];
+        //     }
+        // }
+
+        // // เช็คแผนระดับที่สาม
+        // foreach ($strategic1_level_maps as $strategic1_level_map) {
+        //     if ($projects->proID == $strategic1_level_map->proID) {
+        //         $all_strategic_plans[] = [
+        //             'name' => collect($strategic1_levels)->firstWhere('stra1LVID', $strategic1_level_map->stra1LVID)?->name,
+        //             'target' => collect($target1_levels)->firstWhere('tac1LVID', $strategic1_level_map->tac1LVID)?->name
+        //         ];
+        //     }
+        // }
+
+        // // เช็คจำนวนแผนทั้งหมด
+        // $totalPlans = count($all_strategic_plans);
+        // $index = 1;
+
+        // // แสดงผล
+        // foreach ($all_strategic_plans as $plan) {
+        //     if ($totalPlans > 1) {
+        //         $section->addText("3.$index {$plan['name']}", $boldTextStyle, $indentationMin);
+        //         $index++;
+        //     } else {
+        //         $section->addText("3. {$plan['name']}", $boldTextStyle, $indentationMin);
+        //     }
+
+        //     if (!empty($plan['strategic_issue'])) {
+        //         $textRun = $section->addTextRun($indentationMax);
+        //         $textRun->addText("ประเด็นยุทธศาสตร์ที่ ", $boldTextStyle);
+        //         $textRun->addText($plan['strategic_issue']);
+        //     }
+
+        //     if (!empty($plan['goal'])) {
+        //         $textRun = $section->addTextRun($indentationMax);
+        //         $textRun->addText("เป้าประสงค์ที่ ", $boldTextStyle);
+        //         $textRun->addText($plan['goal']);
+        //     }
+
+        //     if (!empty($plan['tactic'])) {
+        //         $textRun = $section->addTextRun($indentationMax);
+        //         $textRun->addText("กลยุทธ์ที่ ", $boldTextStyle);
+        //         $textRun->addText($plan['tactic']);
+        //     }
+
+        //     if (!empty($plan['target'])) {
+        //         $textRun = $section->addTextRun($indentationMax);
+        //         $textRun->addText("เป้าหมายที่ ", $boldTextStyle);
+        //         $textRun->addText($plan['target']);
+        //     }
+        // }
+
 
 
         $section->addText('4. ลักษณะโครงการ / กิจกรรม', $boldTextStyle);
@@ -363,7 +433,7 @@ class WordController extends Controller
         // เพิ่มข้อความพร้อมกำหนดสไตล์
         $textRun = $section->addTextRun($paragraphStyle);
         $textRun->addText($projects->princiDetail, null);
-        
+
 
         $section->addText('7. วัตถุประสงค์', $boldTextStyle);
 
