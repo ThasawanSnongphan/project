@@ -485,10 +485,10 @@ class PDFController extends Controller
         $htmlContent .= '</div>';
 
         $htmlContent .= '
-
+            <div style="page-break-inside: avoid;">
             <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ (Output/Outcome) และ ค่าเป้าหมาย (ระบุหน่วยนับ)</b> <br>';
 
-        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+            if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
@@ -498,12 +498,12 @@ class PDFController extends Controller
             // เริ่มสร้าง HTML ตาราง
             $htmlContent .= '
                 <body>
-                    <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+                    <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; ">
                         <thead>
                             <tr>
-                                <th style="padding: 8px; width: 60%; ">ตัวชี้วัดความสำเร็จ</th>
-                                <th style="padding: 8px; width: 20%; ">หน่วยนับ</th>
-                                <th style="padding: 8px; width: 20%; ">ค่าเป้าหมาย</th>
+                                <th style="padding: 8px; width: 60%; font-size: 18pt;">ตัวชี้วัดความสำเร็จ</th>
+                                <th style="padding: 8px; width: 20%; font-size: 18pt;">หน่วยนับ</th>
+                                <th style="padding: 8px; width: 20%; font-size: 18pt;">ค่าเป้าหมาย</th>
                             </tr>
                         </thead>
                     <tbody>
@@ -525,16 +525,17 @@ class PDFController extends Controller
                 // เพิ่มแถวในตาราง
                 $htmlContent .= '
                     <tr>
-                        <td style="padding: 8px; text-align: left;">' . $KPI_pro->name . '</td>
-                        <td style="padding: 8px; text-align: left;">' . $unitName . '</td>
-                        <td style="padding: 8px; text-align: left;">' . $KPI_pro->target . '</td>
+                        <td style="padding: 8px; text-align: left; font-size: 18pt;">' . $KPI_pro->name . '</td>
+                        <td style="padding: 8px; text-align: left; font-size: 18pt;">' . $unitName . '</td>
+                        <td style="padding: 8px; text-align: left; font-size: 18pt;">' . $KPI_pro->target . '</td>
                     </tr>';
             }
 
             $htmlContent .= '
-                    </tbody>
-                    </table>
-                </body>
+                        </tbody>
+                        </table>
+                    </body>
+                </div>
             ';
         }
 
@@ -748,7 +749,6 @@ class PDFController extends Controller
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>13. ประมาณค่าใช้จ่าย : ( หน่วย : บาท ) </b><br>
-            </div>
         ';
 
         $htmlContent .= '
@@ -904,6 +904,8 @@ class PDFController extends Controller
             </table>
         </div>
         ';
+
+        $htmlContent .= '</div>';
 
 
         $htmlContent .= '
