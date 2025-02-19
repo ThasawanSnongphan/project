@@ -16,7 +16,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 
 class WordQ4Controller extends Controller
 {
-    public function createWordDocFromDB()
+    public function word_gen()
     {
         // สร้างเอกสารใหม่
         $phpWord = new PhpWord();
