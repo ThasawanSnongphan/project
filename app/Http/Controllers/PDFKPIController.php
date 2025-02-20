@@ -155,7 +155,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก SFAID
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ ' . $strategic_issue->name . '<br>';
                         break;
                     }
                 }
@@ -163,7 +163,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก goalID
                 foreach ($goals as $goal) {
                     if ($goal->goalID == $strategic_map->goalID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ ' . $goal->name . '<br>';
                         break;
                     }
                 }
@@ -171,7 +171,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก tacID
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic->name . '<br>';
                         break;
                     }
                 }
@@ -194,7 +194,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก SFA2LVID
                 foreach ($strategic_issue2_levels as $strategic_issue2_level) {
                     if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic2_level->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ ' . $strategic2_level->name . '<br>';
                         break;
                     }
                 }
@@ -202,7 +202,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก tac2LVID
                 foreach ($tactic2_levels as $tactic2_level) {
                     if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic2_level->name . '<br>';
                         break;
                     }
                 }
@@ -225,7 +225,7 @@ class PDFKPIController extends Controller
                 // เช็คชื่อจาก tar1LVID
                 foreach ($target1_levels as $target1_level) {
                     if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name . '<br>';
+                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ ' . $target1_level->name . '<br>';
                         break;
                     }
                 }
@@ -268,7 +268,9 @@ class PDFKPIController extends Controller
         }
 
         $htmlContent .= '
-            <b>4. วิธีการดำเนินโครงการ : </b><br>
+            <div style="page-break-inside: avoid;">   
+                <b>4. วิธีการดำเนินโครงการ : </b><br>
+            </div>
         ';
 
 
@@ -322,35 +324,30 @@ class PDFKPIController extends Controller
         ';
 
         $htmlContent .= '
-            <b>6. วัตถุประสงค์</b><br>
+            <div style="page-break-inside: avoid;">
+                <b>6. วัตถุประสงค์</b><br>
+            </div>
         ';
-
 
         if (DB::table('objectives')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $objects = DB::table('objectives')->where('proID', $id)->get();
             $s = 1;
             $counter = 1; // ตัวแปรเก็บลำดับ
-            $checked = '';
             foreach ($objects as $object) {
-                if($s == 1){
-                    $checked = '✓';
-                } else{
-                    $checked = '&nbsp;&nbsp;';
-                }
                 $htmlContent .= '
                     <div style="text-indent: 20px;">
                         6.' . $counter . ' ' . $object->detail . ' <br>
                     </div>
                     <div style="text-indent: 20px;">
-                        <span>( ' . ($s == 1 ? '✓' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
-                        <span>( ' . $checked . ') บรรลุ</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($s != 1 ? '&nbsp;&nbsp;' : '✓') . ' ) ไม่บรรลุ</span>
+                        <span>( ' . ($s == 1 ? '<span style="font-family: \'DejaVu Sans\';">✓</span>' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($s != 1 ? '&nbsp;&nbsp;' : '<span style="font-family: \'DejaVu Sans\';">✓</span>') . ' ) ไม่บรรลุ</span>
                     </div>
                 ';
                 $counter++;
             }
         }
+
 
         $status = 1; // กำหนดค่า 1 หรือ 0 ตามสถานะจริง
         $htmlContent .= '
@@ -383,7 +380,8 @@ class PDFKPIController extends Controller
         ';
 
         $htmlContent .= '
-            <b>8. ผลการดำเนินงานตามตัวชี้วัด (KPIs)</b><br>
+            <div style="page-break-inside: avoid;">
+                <b>8. ผลการดำเนินงานตามตัวชี้วัด (KPIs)</b><br>
         ';
 
         if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
@@ -409,6 +407,8 @@ class PDFKPIController extends Controller
                 }
             }
         }
+
+        $htmlContent .= '</div>';
 
         $htmlContent .= '
             <div class="checkbox" style="page-break-inside: avoid;">
@@ -440,7 +440,8 @@ class PDFKPIController extends Controller
         ';
 
         $htmlContent .= '
-            <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
+            <div style="page-break-inside: avoid;">
+                <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
         ';
 
         $bnfs = DB::table('benefits')->where('proID', $id)->get(); // ดึงข้อมูลที่ตรงกับ proID
@@ -463,42 +464,49 @@ class PDFKPIController extends Controller
             '; // ถ้าไม่มีข้อมูล
         }
 
+        $htmlContent .='</div>';
+
         $htmlContent .= '
-            <b>11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ</b><br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
+            <div style="page-break-inside: avoid;">
+                <b>11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ</b><br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+        
+            </div>
         ';
 
         $htmlContent .= '
-            <b>12. แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b><br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
-            .........................................................................................................................................................................................<br>
+            <div style="page-break-inside: avoid;">
+                <b>12. แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b><br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+                .........................................................................................................................................................................................<br>
+            </div>
         ';
 
         $htmlContent .= '
+            <div style="page-break-before: avoid;">
             <br><br><br><br>
             <div>
                 <div style="width: 300px; text-align: center; float: left;">
                     ลงชื่อ ................................................. <br>
-                    (               ) <br>
+                    (  '.  $names[0] .'  ) <br>
                     ผู้รับผิดชอบโครงการ <br>
                     วันที่ ........../......................./..........
                 </div>
                 <div style="width: 300px; text-align: center; float: right;">
                     ลงชื่อ ................................................. <br>
-                    (               ) <br>
+                    ( ................................................. ) <br>
                     ผู้อำนวยการ <br>
                     วันที่ ........../......................./..........
                 </div>
             </div>
-
-            
         ';
 
+        $htmlContent .= '</div>';
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
