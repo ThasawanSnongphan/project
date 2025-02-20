@@ -46,7 +46,7 @@
                 $currentMonth = now()->month;
                 $i = 1;
             @endphp
-            @foreach ($project as $item)
+            @foreach ($project as $index => $item)
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
@@ -73,7 +73,16 @@
 
                             @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                {{-- {{dd($report)}} --}}
+                                {{-- {{dd($proID)}} --}}
+                                @if (!empty($report) && ($proID[$index] ?? '') === $item->proID)
+                                 {{-- <input type="text" value="{{$item->proID}}"> --}}
+                                 <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                                    
+                                @else
+                                    <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                    {{-- <input type="text" value="{{$item->proID}}"> --}}
+                                @endif
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>

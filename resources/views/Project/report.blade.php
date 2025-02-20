@@ -16,6 +16,7 @@
     <div class="col-md-1 col-sm-1"></div>
     <div class="col-md-10 col-sm-10">
         <table class="table table-bordered">
+            
             <tr>
                 <th style="width: 15%">สถานะ</th>
                 <td colspan="5">{{ $status->name }}</td>

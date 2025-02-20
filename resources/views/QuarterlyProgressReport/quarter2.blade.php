@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form action="">
+                    <form action="{{route('quarter2.save',$data['project']->proID)}}">
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ :
                             </label>
@@ -38,7 +38,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">งบประมาณที่จัดสรร :
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                {{-- {{$project->badgetTotal}} --}}
+                                {{ $data['project']->badgetTotal }}
                                 {{-- <input class="form-control" type="text" name="project_name" id="peoject_name"
                                     data-validate-length-range="8,20" value="{{ $project->name }}" disabled /> --}}
                             </div>
@@ -48,32 +48,67 @@
                             </label>
                             <div class="col-md-6 col-sm-6">
 
-                                <input class="form-control" type="text" name="" id=""
-                                    data-validate-length-range="8,20" />
+                                <input class="form-control" type="text" name="costResult" id=""
+                                    data-validate-length-range="8,20" required />
+                               
                             </div>
                         </div>
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผลตามตัวชี้วัด :
                             </label>
-                            <div class="col-md-6 col-sm-6">
-                                <table class="table table-bordered" >
+                            <div class="col-md-8 col-sm-8">
+                                <table class="table table-bordered">
                                     <tr style="text-align: center">
                                         <th>ตัวชี้วัด</th>
                                         <th>เป้า</th>
                                         <th>ผล</th>
-                                        <th>บรรลุตามตัวชี้วัด</th>
+                                        {{-- <th>บรรลุตามตัวชี้วัด</th> --}}
                                     </tr>
-
+                                    @foreach ($data['KPIMain3LV'] as $item)
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="KPIMain3LVID[]"
+                                                    value="{{ $item->KPI->KPIMain3LVID }}">
+                                                {{ $item->KPI->name }}
+                                            </td>
+                                            <td style="text-align: center">{{ $item->KPI->target }}</td>
+                                            <td style="text-align: center">
+                                                <input type="text" name="result3LV[]" required>
+                                            </td>
+                                            {{-- <td style="text-align: center">
+                                                <input type="checkbox">
+                                            </td> --}}
+                                        </tr>
+                                    @endforeach
+                                    @foreach ($data['KPIMain2LV'] as $item)
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="KPIMain2LVID[]"
+                                                    value="{{ $item->KPI->KPIMain2LVID }}">
+                                                {{ $item->KPI->name }}
+                                            </td>
+                                            <td style="text-align: center">{{ $item->KPI->target ?? '-' }}</td>
+                                            <td style="text-align: center">
+                                                <input type="text" name="result2LV[]" required>
+                                            </td>
+                                            {{-- <td style="text-align: center">
+                                                <input type="checkbox">
+                                            </td> --}}
+                                        </tr>
+                                    @endforeach
                                     @foreach ($data['KPI'] as $item)
                                         <tr>
-                                            <td> {{ $item->name }}</td>
+                                            <td>
+                                                <input type="hidden" name="KPIProID[]" value="{{ $item->KPIProID }}">
+                                                {{ $item->name }}
+                                            </td>
                                             <td style="text-align: center">{{ $item->target }}</td>
                                             <td style="text-align: center">
-                                                <input type="text">
+                                                <input type="text" name="result[]" required>
                                             </td>
-                                            <td style="text-align: center">
+                                            {{-- <td style="text-align: center">
                                                 <input type="checkbox">
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
 
@@ -105,8 +140,8 @@
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดความก้าวหน้า : </label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="" id=""
-                                    data-validate-length-range="8,20" />
+                                <input class="form-control" type="text" name="detail[]" id=""
+                                    data-validate-length-range="8,20" required />
                             </div>
 
                             <div class=" col-md-1 col-sm-1 m-1">
@@ -121,19 +156,15 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ปัญหา/อุปสรรค :
                             </label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="problem[]" id=""
-                                    data-validate-length-range="8,20" />
+                                <input class="form-control" type="text" name="problem" id=""
+                                    data-validate-length-range="8,20" required />
                             </div>
-                            <div class="col-md-1 col-sm-1 m-1">
-                                <button type='button' class="btn btn-primary" onclick="insertProblem()">เพิ่ม
-                                </button>
 
-                            </div>
                         </div>
                         <div id="insertProblem"></div>
                         <div class="col-md-6 offset-md-3 ">
-                            <button type="submit" class="btn btn-primary"
-                                onclick="submitButton('send1')">ส่งรายงานความก้าวหน้า</button>
+
+                            <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>
                         </div>
                     </form>
                 </div>
@@ -172,37 +203,6 @@
             colMD6.appendChild(InputDetail);
 
             document.getElementById('insertDetail').appendChild(mainContainer);
-        }
-
-        function insertProblem() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const colMD3 = document.createElement('div');
-            colMD3.classList.add('col-md-3', 'col-sm-3');
-
-            const colMD6 = document.createElement('div');
-            colMD6.classList.add('col-md-6', 'col-sm-6');
-
-            const InputProblem = document.createElement('input');
-            InputProblem.classList.add('form-control');
-            InputProblem.type = 'text';
-            InputProblem.name = 'detail[]';
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger', 'ml-3');
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove();
-            }
-
-            mainContainer.appendChild(colMD3);
-            mainContainer.appendChild(colMD6);
-            mainContainer.appendChild(deleteButton);
-            colMD6.appendChild(InputProblem);
-
-            document.getElementById('insertProblem').appendChild(mainContainer);
         }
     </script>
 @endsection

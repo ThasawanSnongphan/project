@@ -134,6 +134,7 @@ Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('pr
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
 Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
+Route::get('saveQuarter2/{id}', [QuarterReportController::class,'saveQuarter2'])->name('quarter2.save');
 
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');

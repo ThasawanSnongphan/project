@@ -32,11 +32,11 @@
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3 label-align">ข้อเสนอแนะ</label>
                                 <div class="col-md-6 col-sm-6">
-                                    <table border="1" width="100%" >
+                                    <table >
                                         <td style="padding: 2px">
                                             @foreach ($comment as $item)
                                                  {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
-                                                 {{ $item->detail }} <br>
+                                                 {{ $item->detail }} <br> เมื่อ {{$item->created_at}}<br>
                                             @endforeach
                                         </td>
                                     </table>

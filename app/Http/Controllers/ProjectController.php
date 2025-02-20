@@ -55,7 +55,10 @@ class ProjectController extends Controller
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        return view('Project.index',compact('users','project','status','year','projectYear'));
+        $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
+        $proID = $report->pluck('proID') ;
+        // dd($proID);
+        return view('Project.index',compact('users','project','status','year','projectYear','report','proID'));
     }
     
     function create1(Request $request){

@@ -1,66 +1,68 @@
 @extends('layout')
 @section('title', 'Project')
 @section('content')
-    {{-- @include('Project.create') --}}
+    {{-- @include('Project.create') --}}\
+    <div class="col-md-1 col-sm-1"></div>
+    <div class="col-md-10 col-sm-10">
 
 
 
-    <div class="field item form-group ">
-        <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
-        <div class="col-md-2 col-sm-2 m-2 ">
-            <select name="year" id="yearID" class="form-control">
-                <option data-year="ทั้งหมด">ทั้งหมด</option>
-                @foreach ($year as $year)
-                    <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
-                        {{ $year->year }}</option>
-                @endforeach
-            </select>
-        </div>
-        {{-- <div class="ml-auto">
+        <div class="field item form-group ">
+            <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
+            <div class="col-md-2 col-sm-2 m-2 ">
+                <select name="year" id="yearID" class="form-control">
+                    <option data-year="ทั้งหมด">ทั้งหมด</option>
+                    @foreach ($year as $year)
+                        <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
+                            {{ $year->year }}</option>
+                    @endforeach
+                </select>
+            </div>
+            {{-- <div class="ml-auto">
 
             <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
         </div> --}}
 
-    </div>
+        </div>
 
-    <table id="example" class="display">
-        <thead>
+        <table id="example" class="display">
+            <thead>
 
-            <tr>
-                <th>#</th>
-                <th>ชื่อโครงการ</th>
-                {{-- @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1  ) --}}
+                <tr>
+                    <th>#</th>
+                    <th>ชื่อโครงการ</th>
+                    {{-- @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1) --}}
                     <th>สถานะ</th>
                     {{-- <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
                     <th>ไตรมาส 4</th> --}}
-                   
-                {{-- @endif --}}
 
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $currentMonth = now()->month;
-                $i = 1;
-            @endphp
-            @foreach ($project as $item)
-                {{-- @if  (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
+                    {{-- @endif --}}
+
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $currentMonth = now()->month;
+                    $i = 1;
+                @endphp
+                @foreach ($project as $item)
+                    {{-- @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
                     @continue
                 @endif --}}
-                <tr>
-                    <td>{{ $i }}</td>
-                    <td data-project="{{ $item->proID }}">
-                        {{-- @if ($item->statusID == 5)
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td data-project="{{ $item->proID }}">
+                            {{-- @if ($item->statusID == 5)
                             {{ $item->name }}
                         @else --}}
                             <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
-                        {{-- @endif --}}
-                    </td>
-                    {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
+                            {{-- @endif --}}
+                        </td>
+                        {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
                         {{-- <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td> --}}
-                        <td>{{$item->status->name }}</td>
+                        <td>{{ $item->status->name }}</td>
                         {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                         {{-- <td>
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
@@ -99,16 +101,18 @@
                                         เขียน</i></a>
                             @endif
                         </td> --}}
-                        
-                    {{-- @endif --}}
-                </tr>
-                @php
-                    $i++;
-                @endphp
-            @endforeach
-        </tbody>
-    </table>
-   
+
+                        {{-- @endif --}}
+                    </tr>
+                    @php
+                        $i++;
+                    @endphp
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-1 col-sm-1"></div>
+
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
         document.getElementById('yearID').addEventListener('change', function() {
