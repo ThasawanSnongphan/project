@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\DB;
 
 Carbon::setLocale('th');
 
-class PDFKPIController extends Controller
+class PDFClosedController extends Controller
 {
     public function pdf_gen($id)
     {

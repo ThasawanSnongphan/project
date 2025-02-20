@@ -2,7 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BadgetType;
+use App\Models\CostQuarters;
+use App\Models\CostTypes;
+use App\Models\CountKPIProjects;
+use App\Models\ExpenseBadgets;
+use App\Models\Funds;
+use App\Models\Goals;
+use App\Models\KPIMain2Level;
+use App\Models\KPIProjects;
+use App\Models\Objectives;
+use App\Models\ProjectCharec;
+use App\Models\ProjectIntegrat;
 use App\Models\Projects;
+use App\Models\Strategic1Level;
+use App\Models\Strategic1LevelMapProject;
+use App\Models\Strategic2Level;
+use App\Models\Strategic2LevelMapProject;
+use App\Models\Strategic3Level;
+use App\Models\StrategicIssues;
+use App\Models\StrategicIssues2Level;
+use App\Models\StrategicMap;
+use App\Models\Tactic2Level;
+use App\Models\Tactics;
+use App\Models\Target1Level;
+use App\Models\UniPlan;
+use App\Models\Users;
+use App\Models\UsersMapProject;
+use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -67,56 +94,149 @@ class PDFPlanController extends Controller
 
         </style>";
 
+
+        // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
+        // $projects = Projects::where('proID', $id)->first();
         $projects = Projects::all();
+        $years = Year::all();
+        $users_map = UsersMapProject::all();
+        $users = Users::all();
 
-        // ตั้งค่าระยะห่าง (แก้ปัญหา Header ทับตาราง)
-        // $mpdf->SetMargins(10, 40, 10); // (ซ้าย, บน, ขวา)
+        $strategic_maps = StrategicMap::all();
+        $strategic1_level_maps = Strategic1LevelMapProject::all();
+        $strategic2_level_maps = Strategic2LevelMapProject::all();
 
-        $mpdf->SetHTMLHeader('
-            <h1 style="text-align: center; margin-bottom: 8px;">แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567</h1>
-        ');
+        $strategic_issues = StrategicIssues::all();
+        $strategic_issue2_levels = StrategicIssues2Level::all();
+
+        $strategics = Strategic3Level::all();
+        $strategic2_levels = Strategic2Level::all();
+        $strategic1_levels = Strategic1Level::all();
 
 
-        // $htmlContent = '
-        //     <h1 style="text-align: center; margin-bottom: 8px;">แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567</h1><br>
-        // ';
+        $goals = Goals::all();
+        $target1_levels = Target1Level::all();
+
+        $tactics = Tactics::all();
+        $tactic2_levels = Tactic2Level::all();
+
+        $KPI_pros = KPIProjects::all();
+        $KPI_main2_levels = KPIMain2Level::all();
+
+
+        $plans = UniPlan::all();
+        $funds = Funds::all();
+        $badget_types = BadgetType::all();
+        $expense_badgets = ExpenseBadgets::all();
+        $cost_quarters = CostQuarters::all();
+        $cost_types = CostTypes::all();
+
+        $badget_types = BadgetType::all();
+
+        $countKPI_pros = CountKPIProjects::all();
+        $project_integrats = ProjectIntegrat::all();
+        $project_charecs = ProjectCharec::all();
+        $objects = Objectives::all();
+
 
         $htmlContent = '
-            <br><br><br>
+            <div style="text-align: center; margin-bottom: 8px;">
+                <b> แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567 <br>
+                    สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ
+                </b>
+            </div>
+        ';
+
+        $htmlContent .= '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
                 <tr>
-                    <td rowspan="2" style="width: 45%;">Project</td>
-                    <td colspan="3">พ.ศ.2566</td>
-                    <td colspan="9">พ.ศ.2567</td>
+                    <th rowspan="3">ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์</th>
+                    <th rowspan="3">กลยุทธ์<br>(หน่วยงาน)</th>
+                    <th rowspan="3">โครงการ / ตัวชี้วัดโครงการ</th>
+                    <th rowspan="3">ค่าเป้าหมายโครงการ</th>
+                    <th colspan="3">งบประมาณ (บาท)</th>
+                    <th colspan="12">ระยะเวลาดำเนินงาน</th>
+                    <th rowspan="3">ผู้รับผิดชอบ</th>
                 </tr>
 
                 <tr>
-                    <td>ต.ค.</td>
-                    <td>พ.ย.</td>
-                    <td>ธ.ค.</td>
-                    <td>ม.ค.</td>
-                    <td>ก.พ.</td>
-                    <td>มี.ค.</td>
-                    <td>เม.ย.</td>
-                    <td>พ.ค.</td>
-                    <td>มิ.ย.</td>
-                    <td>ก.ค.</td>
-                    <td>ส.ค.</td>
-                    <td>ก.ย.</td>
-                </tr>';
+                    <th rowspan="2">เงินเหลือจาก มจพ.</th>
+                    <th rowspan="2">เงินรายได้ประจำปี</th>
+                    <th rowspan="2">เงินเหลือจ่ายสนง.</th>
+                    <th colspan="3">พ.ศ.</th>
+                    <th colspan="9">พ.ศ.</th>
+                </tr>
 
-        foreach ($projects as $project) {
+                <tr>
+                    <th>ต.ค.</th>
+                    <th>พ.ย.</th>
+                    <th>ธ.ค.</th>
+                    <th>ม.ค.</th>
+                    <th>ก.พ.</th>
+                    <th>มี.ค.</th>
+                    <th>เม.ย.</th>
+                    <th>พ.ค.</th>
+                    <th>มิ.ย.</th>
+                    <th>ก.ค.</th>
+                    <th>ส.ค.</th>
+                    <th>ก.ย.</th>
+                </tr>
             
-            $htmlContent .= '<tr>';
-            $htmlContent .= '<td style="text-align: left;">' . $project->name . '</td>'; 
-            for ($i = 0; $i < 12; $i++) {
-                $htmlContent .= '<td></td>'; // คอลัมน์เดือนว่าง
+        ';
+
+        // ดึงปีปัจจุบัน
+        $currentYear = date("Y");
+        foreach ($strategic_maps as $strategic_map) {
+            foreach ($goals as $goal) {
+                $htmlContent .= '
+                    <tr>
+                        <th colspan="20">' . $strategic_map->name . '</th>
+                        
+                    </tr>
+                ';
             }
-            $htmlContent .= '</tr>';
         }
+        // <th colspan="20">' . $goal->name . '</th>
+
+
 
         $htmlContent .= '</table>';
-        
+
+        // $htmlContent .= '
+        //     <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+        //         <tr>
+        //             <td rowspan="2" style="width: 45%;">Project</td>
+        //             <td colspan="3">พ.ศ.2566</td>
+        //             <td colspan="9">พ.ศ.2567</td>
+        //         </tr>
+
+        //         <tr>
+        //             <td>ต.ค.</td>
+        //             <td>พ.ย.</td>
+        //             <td>ธ.ค.</td>
+        //             <td>ม.ค.</td>
+        //             <td>ก.พ.</td>
+        //             <td>มี.ค.</td>
+        //             <td>เม.ย.</td>
+        //             <td>พ.ค.</td>
+        //             <td>มิ.ย.</td>
+        //             <td>ก.ค.</td>
+        //             <td>ส.ค.</td>
+        //             <td>ก.ย.</td>
+        //         </tr>';
+
+        // foreach ($projects as $project) {
+
+        //     $htmlContent .= '<tr>';
+        //     $htmlContent .= '<td style="text-align: left;">' . $project->name . '</td>'; 
+        //     for ($i = 0; $i < 12; $i++) {
+        //         $htmlContent .= '<td></td>'; // คอลัมน์เดือนว่าง
+        //     }
+        //     $htmlContent .= '</tr>';
+        // }
+
+        // $htmlContent .= '</table>';
+
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
         $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
