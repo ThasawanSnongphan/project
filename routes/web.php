@@ -4,6 +4,7 @@ use App\Http\Controllers\PDFAllResultsController;
 use App\Http\Controllers\PDFKPIController;
 use App\Http\Controllers\PDFPlanController;
 use App\Http\Controllers\PDFQ4Controller;
+use App\Http\Controllers\WordKPIController;
 use App\Http\Controllers\WordQ4Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -55,10 +56,14 @@ Route::get('/pdfPlan', [PDFPlanController::class, 'pdf_gen']);
 Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
+//Word
+Route::get('/gen-word-db/{id}', [WordController::class, 'word_gen']);
+Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
+Route::get('/gen-word-KPI/{id}', [WordKPIController::class, 'word_gen']);
 
-Route::get('/gen-word-db/{$id}', [WordController::class, 'createWordDocFromDB']); //db
-Route::get('/gen-word-Q4', [WordQ4Controller::class, 'createWordDocFromDB']); //db
 
+
+//Excel
 Route::get('/excelAllResults', [ExcelAllResultsController::class, 'exportExcel']);
 
 
@@ -138,7 +143,7 @@ Route::get('saveQuarter2/{id}', [QuarterReportController::class,'saveQuarter2'])
 
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
-Route::get('projectWord/{id}',[WordController::class,'createWordDocFromDB'])->name('project.Word');
+Route::get('projectWord/{id}',[WordController::class,'word_gen'])->name('project.Word');
 
 
 Route::get('create',[NewsController::class,'create']);
