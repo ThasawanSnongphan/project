@@ -16,7 +16,16 @@
     <div class="col-md-1 col-sm-1"></div>
     <div class="col-md-10 col-sm-10">
         <table class="table table-bordered">
-            
+            @if (count($comment) > 0)
+                <tr>
+                    <th>ข้อเสนอเเนะ</th>
+                    <td colspan="5" >
+                        @foreach ($comment as $item)
+                            {{$item->user->firstname_en}} {{$item->user->lastname_en}} : {{$item->detail}} <br> เมื่อ {{$item->created_at}} <br>
+                        @endforeach 
+                    </td>
+                </tr>
+            @endif
             <tr>
                 <th style="width: 15%">สถานะ</th>
                 <td colspan="5">{{ $status->name }}</td>
@@ -333,7 +342,7 @@
                 <th>ไฟล์เอกสารประกอบโครงการ</th>
                 <td colspan="5">
                     @foreach ($file as $item)
-                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name }}</a> <br>
+                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name ?? '-'}}</a> <br>
                     @endforeach
 
                 </td>

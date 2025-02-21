@@ -24,8 +24,8 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-3 col-sm-3"></div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-10 col-sm-10">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>เป้าประสงค์ </h2>
@@ -234,7 +234,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-1 col-sm-1"></div>
                     </div>
                 </div>
             </div>

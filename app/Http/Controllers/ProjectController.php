@@ -848,6 +848,7 @@ class ProjectController extends Controller
         // dd($SFA3LVs);
         // $sfa3LVIDs = $SFA3LVs->pluck('SFA3LVID');
         $goal3Level = Goals::all();
+        
         // $goal3Level = DB::table('goals')->whereIn('SFA3LVID',$sfa3LVIDs)->get();
         // dd($goal3Level);
         // $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
@@ -2758,7 +2759,9 @@ class ProjectController extends Controller
         $projectCostType=CostTypes::all();
         $projectBenefit=DB::table('benefits')->where('proID',$id)->get();
         $file = DB::table('files')->where('proID',$id)->get();
-        return view('Project.report',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file'));
+        $comment = Comment::with('user')->where('proID',$id)->get();
+        // dd($comment);
+        return view('Project.report',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file','comment'));
     }
 
 

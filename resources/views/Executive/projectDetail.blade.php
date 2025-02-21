@@ -15,7 +15,9 @@
 
     <div class="col-md-1 col-sm-1"></div>
     <div class="col-md-10 col-sm-10">
+       
         <table class="table table-bordered">
+            
             <tr>
                 <th style="width: 15%">สถานะ</th>
                 <td colspan="5">{{ $status->name }}</td>
@@ -332,54 +334,57 @@
                 </td>
             </tr>
         </table>
-        
-      
-           {{-- เอาคอมเม้นมาโชว์ถ้ามี --}}
 
-            {{-- <div class="ln_solid"> --}}
-            <form id="actionForm" method="POST" >
-                @csrf
-                @if (!empty($comment))
+
+        {{-- เอาคอมเม้นมาโชว์ถ้ามี --}}
+
+        {{-- <div class="ln_solid"> --}}
+        <form id="actionForm" method="POST">
+            @csrf
+            @if (count($comment) > 0)
                 <div class="row m-2">
-                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ :</label>
                     <div class="col-md-6 col-sm-6">
                         @foreach ($comment as $item)
-                        <table>
-                            <tr>
-                                <td>
-                                    {{$item->user->firstname_en}} {{$item->user->lastname_en}} : {{$item->detail}}
-                                </td>
-                            </tr>
-                        </table>
-                            
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
+                                        {{ $item->detail }} <br> เมื่อ {{ $item->created_at }} <br>
+                                    </td>
+                                </tr>
+                            </table>
                         @endforeach
+                        <textarea name="comment" id="comment" class="form-control"></textarea>
                     </div>
                 </div>
-                @endif
+            @else
                 <div class="row m-2">
                     <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
                     <div class="col-md-6 col-sm-6">
                         <textarea name="comment" id="comment" class="form-control"></textarea>
                     </div>
-                    @error('comment')
-                    <div class="m-2">
-                        <span class="text text-danger">{{ $message }}</span>
-                    </div>
-                @enderror
-                </div>
-                <div class="form-group mt-2">
-                    <div class="col-md-6 offset-md-3">
+                    {{-- @error('comment')
+                        <div class="m-2">
+                            <span class="text text-danger">{{ $message }}</span>
+                        </div>
+                    @enderror --}}
+            @endif
 
-                        <button type="submit" class="btn btn-success" onclick="submitButton('pass')">อนุมัติ</button>
-                        <button type="submit" class="btn btn-danger" onclick="submitButton('Denied')">ไม่อนุมัติ</button>
-                        <button type="submit" class="btn btn-warning" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+    </div>
+    <div class="form-group mt-2">
+        <div class="col-md-6 offset-md-3">
+
+            <button type="submit" class="btn btn-success" onclick="submitButton('pass')">อนุมัติ</button>
+            <button type="submit" class="btn btn-danger" onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+            <button type="submit" class="btn btn-warning" onclick="submitButton('edit')">กลับไปแก้ไข</button>
 
 
-                    </div>
-                </div>
-            </form>
-    
-        
+        </div>
+    </div>
+    </form>
+
+
     </div>
     <div class="col-md-1 col-sm-1"></div>
 
@@ -388,12 +393,22 @@
             var form = document.getElementById('actionForm');
             if (action === 'pass') {
                 form.action = "{{ route('ExecutivePass', $project->proID) }}";
+                form.submit();
             } else if (action === 'edit') {
-                form.action = "{{ route('ExecutiveEdit', $project->proID) }}";
-            }else{
-                form.action = "{{ route('ExecutiveDenied', $project->proID) }}";
+                document.getElementById('comment').required = true;
+                var comment = document.getElementById('comment').value.trim();
+                if (comment !== "") {
+                    form.action = "{{ route('ExecutiveEdit', $project->proID) }}";
+                    form.submit();
+                }
+            } else {
+                document.getElementById('comment').required = true;
+                var comment = document.getElementById('comment').value.trim();
+                if (comment !== ""){
+                    form.action = "{{ route('ExecutiveDenied', $project->proID) }}";
+                    form.submit();
+                }  
             }
-            form.submit();
         }
     </script>
 

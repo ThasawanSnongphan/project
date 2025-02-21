@@ -49,7 +49,7 @@ class SFAController extends Controller
         $strategic = Strategic3Level::where('stra3LVID',$request->input('stra3LVID'))->first();
         
         $SFA=[
-            'stra3LVID'=>$request->straID,
+            'stra3LVID'=>$request->stra3LVID,
             'name'=>$request->name
         ];
         DB::table('strategic_issues')->where('SFA3LVID',$id)->update($SFA);

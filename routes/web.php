@@ -138,8 +138,9 @@ Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
-Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
-Route::get('saveQuarter2/{id}', [QuarterReportController::class,'saveQuarter2'])->name('quarter2.save');
+Route::get('reportQuarter/{id}{quarter}', [QuarterReportController::class, 'reportQuarter'])->name('report.quarter');
+// Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
+Route::get('saveReportQuarter/{id}{quarter}', [QuarterReportController::class,'saveReportQuarter'])->name('reportQuarter.save');
 
 
 Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');

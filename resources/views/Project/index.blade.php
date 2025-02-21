@@ -63,7 +63,7 @@
                             
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                <a href="{{ route('report.quarter',[$item->proID,1]) }}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>
@@ -77,10 +77,10 @@
                                 {{-- {{dd($proID)}} --}}
                                 @if (!empty($report) && ($proID[$index] ?? '') === $item->proID)
                                  {{-- <input type="text" value="{{$item->proID}}"> --}}
-                                 <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                                 <a href="{{route('report.quarter',[$item->proID,2])}}"><i class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
                                     
                                 @else
-                                    <a href="{{route('quarter2.report',$item->proID)}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                    <a href="{{route('report.quarter',[$item->proID,2])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                                     {{-- <input type="text" value="{{$item->proID}}"> --}}
                                 @endif
                             @else
@@ -91,7 +91,7 @@
                         <td>
                             @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                <a href="{{route('report.quarter',[$item->proID,3])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>
@@ -100,7 +100,7 @@
                         <td>
                             @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                <a href="{{route('report.quarter',[$item->proID,4])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>

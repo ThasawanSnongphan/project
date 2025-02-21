@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 18, 2025 at 07:07 AM
+-- Generation Time: Feb 20, 2025 at 02:02 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -64,11 +64,12 @@ CREATE TABLE `benefits` (
 --
 
 INSERT INTO `benefits` (`bnfID`, `detail`, `proID`, `created_at`, `updated_at`) VALUES
-(167, 'benefit1', 377, '2025-02-15 03:24:42', '2025-02-15 03:24:42'),
 (170, 'benefit1', 378, '2025-02-17 01:44:24', '2025-02-17 01:44:24'),
-(172, 'benefit1', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(173, 'benefit2', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(174, 'benefit1', 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(173, 'benefit1', 379, '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(180, 'benefit1', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(181, 'benefit2', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(182, 'benefit1', 377, '2025-02-18 22:54:23', '2025-02-18 22:54:23'),
+(183, 'benefit2', 379, '2025-02-20 02:25:23', '2025-02-20 02:25:23');
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,11 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`commentID`, `proID`, `detail`, `userID`, `created_at`, `updated_at`) VALUES
-(8, 377, 'ดี', 10, '2025-02-17 05:23:41', '2025-02-17 05:23:41');
+(8, 377, 'แก้แผน', 10, '2025-02-17 05:23:41', '2025-02-17 05:23:41'),
+(9, 377, 'แก้ตามหัวหน้า', 10, '2025-02-18 00:08:05', '2025-02-18 00:08:05'),
+(10, 377, 'แก้แผน', 10, '2025-02-18 00:29:18', '2025-02-18 00:29:18'),
+(11, 377, 'แก้ตัวชี้วัด', 10, '2025-02-18 00:42:07', '2025-02-18 00:42:07'),
+(12, 379, 'แก้ไฟล์', 10, '2025-02-20 02:16:39', '2025-02-20 02:16:39');
 
 -- --------------------------------------------------------
 
@@ -116,13 +121,14 @@ CREATE TABLE `cost_quarters` (
 --
 
 INSERT INTO `cost_quarters` (`costQuID`, `costQu1`, `costQu2`, `costQu3`, `costQu4`, `proID`, `expID`, `costID`, `created_at`, `updated_at`) VALUES
-(202, 1200, 1200, 1200, 1200, 377, 1, 1, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(212, 1200, 1200, 1200, 1200, 377, 3, 3, '2025-02-15 01:58:45', '2025-02-15 03:24:42'),
-(213, 1200, 1200, 1200, 1200, 377, 6, 8, '2025-02-15 02:52:16', '2025-02-15 03:24:42'),
+(202, 1200, 1200, 1200, 1200, 377, 1, 1, '2025-02-14 23:52:35', '2025-02-18 22:54:23'),
+(212, 1200, 1200, 1200, 1200, 377, 3, 3, '2025-02-15 01:58:45', '2025-02-18 22:54:23'),
+(213, 1200, 1200, 1200, 1200, 377, 6, 8, '2025-02-15 02:52:16', '2025-02-18 22:54:23'),
 (214, 2000, 2000, 3000, 4000, 378, 1, 1, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(215, 2000, 2000, 3000, 4000, 379, 1, 1, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(216, 2000, 2000, 2000, 4000, 379, 3, 3, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(217, 2000, 2000, 3000, 4000, 380, 1, 1, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(215, 2000, 2000, 3000, 4000, 379, 1, 1, '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(216, 2000, 2000, 2000, 4000, 379, 3, 3, '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(217, 2000, 2000, 3000, 4000, 380, 3, 3, '2025-02-17 03:09:54', '2025-02-18 22:51:42'),
+(218, 1200, 1200, 1200, 1200, 380, 6, 8, '2025-02-18 22:51:42', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -221,7 +227,8 @@ CREATE TABLE `files` (
 INSERT INTO `files` (`fileID`, `name`, `proID`, `created_at`, `updated_at`) VALUES
 (157, '1ชุด ขาว-ดำ.pdf', 377, '2025-02-15 01:45:17', '2025-02-15 01:45:17'),
 (160, 'DIP_Dilation_Erosion.ipynb', 378, '2025-02-17 01:44:24', '2025-02-17 01:44:24'),
-(161, 'document_348.docx', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25');
+(162, '1.pdf', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(163, 'image (2).png', 379, '2025-02-20 02:25:23', '2025-02-20 02:25:23');
 
 -- --------------------------------------------------------
 
@@ -338,6 +345,10 @@ CREATE TABLE `k_p_i_main2_level_map_projects` (
   `SFA2LVID` bigint(20) UNSIGNED NOT NULL,
   `KPIMain2LVID` bigint(20) UNSIGNED NOT NULL,
   `proID` bigint(20) UNSIGNED NOT NULL,
+  `result1` varchar(20) NOT NULL,
+  `result2` varchar(20) NOT NULL,
+  `result3` varchar(20) NOT NULL,
+  `result4` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -346,15 +357,17 @@ CREATE TABLE `k_p_i_main2_level_map_projects` (
 -- Dumping data for table `k_p_i_main2_level_map_projects`
 --
 
-INSERT INTO `k_p_i_main2_level_map_projects` (`KPIMain2mapProjectID`, `SFA2LVID`, `KPIMain2LVID`, `proID`, `created_at`, `updated_at`) VALUES
-(11, 1, 4, 377, '2025-02-15 00:03:56', '2025-02-15 03:24:42'),
-(12, 1, 5, 377, '2025-02-15 00:07:04', '2025-02-15 03:24:42'),
-(14, 1, 6, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(15, 1, 8, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(16, 1, 19, 378, '2025-02-17 01:43:39', '2025-02-17 01:44:24'),
-(17, 1, 4, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(18, 1, 5, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(19, 1, 19, 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25');
+INSERT INTO `k_p_i_main2_level_map_projects` (`KPIMain2mapProjectID`, `SFA2LVID`, `KPIMain2LVID`, `proID`, `result1`, `result2`, `result3`, `result4`, `created_at`, `updated_at`) VALUES
+(11, 1, 4, 377, '', '10', '', '', '2025-02-15 00:03:56', '2025-02-18 22:54:23'),
+(12, 1, 5, 377, '', '10', '', '', '2025-02-15 00:07:04', '2025-02-18 22:54:23'),
+(14, 1, 6, 378, '', '', '', '', '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
+(15, 1, 8, 378, '', '', '', '', '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
+(16, 1, 19, 378, '', '', '', '', '2025-02-17 01:43:39', '2025-02-17 01:44:24'),
+(17, 1, 4, 379, '', '', '', '', '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(18, 1, 5, 379, '', '', '', '', '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(19, 1, 19, 379, '', '', '', '', '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(20, 1, 3, 380, '', '', '', '', '2025-02-18 02:08:49', '2025-02-18 22:51:42'),
+(23, 1, 19, 380, '', '', '', '', '2025-02-18 02:10:46', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -456,6 +469,10 @@ CREATE TABLE `k_p_i_main_map_projects` (
   `KPIMain3LVID` bigint(20) UNSIGNED NOT NULL,
   `goal3LVID` bigint(20) UNSIGNED DEFAULT NULL,
   `proID` bigint(20) UNSIGNED NOT NULL,
+  `result1` varchar(20) NOT NULL,
+  `result2` varchar(20) NOT NULL,
+  `result3` varchar(20) NOT NULL,
+  `result4` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -464,16 +481,18 @@ CREATE TABLE `k_p_i_main_map_projects` (
 -- Dumping data for table `k_p_i_main_map_projects`
 --
 
-INSERT INTO `k_p_i_main_map_projects` (`KPIMainmapProjectID`, `KPIMain3LVID`, `goal3LVID`, `proID`, `created_at`, `updated_at`) VALUES
-(124, 53, 19, 377, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(125, 54, 19, 377, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(126, 11, 2, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(127, 19, 2, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(128, 21, 2, 378, '2025-02-17 01:43:39', '2025-02-17 01:44:24'),
-(129, 54, 19, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(130, 55, 19, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(131, 56, 19, 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(132, 43, 17, 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+INSERT INTO `k_p_i_main_map_projects` (`KPIMainmapProjectID`, `KPIMain3LVID`, `goal3LVID`, `proID`, `result1`, `result2`, `result3`, `result4`, `created_at`, `updated_at`) VALUES
+(124, 53, 19, 377, '', '20', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(125, 54, 19, 377, '', '8', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(126, 11, 2, 378, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(127, 19, 2, 378, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(128, 21, 2, 378, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(129, 54, 19, 379, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 02:25:23'),
+(130, 55, 19, 379, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 02:25:23'),
+(131, 56, 19, 379, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 02:25:23'),
+(133, 56, 19, 377, '', '140', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(135, 9, 2, 380, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07'),
+(137, 19, 2, 380, '', '', '', '', '2025-02-20 01:49:07', '2025-02-20 01:49:07');
 
 -- --------------------------------------------------------
 
@@ -627,6 +646,10 @@ CREATE TABLE `k_p_i_projects` (
   `countKPIProID` bigint(50) UNSIGNED DEFAULT NULL,
   `target` float DEFAULT NULL,
   `proID` bigint(20) UNSIGNED NOT NULL,
+  `result1` varchar(50) NOT NULL,
+  `result2` varchar(20) NOT NULL,
+  `result3` varchar(20) NOT NULL,
+  `result4` varchar(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -635,14 +658,15 @@ CREATE TABLE `k_p_i_projects` (
 -- Dumping data for table `k_p_i_projects`
 --
 
-INSERT INTO `k_p_i_projects` (`KPIProID`, `name`, `countKPIProID`, `target`, `proID`, `created_at`, `updated_at`) VALUES
-(240, 'kpi1', 3, 3.51, 377, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(241, 'kpi2', 1, 3.51, 377, '2025-02-15 00:59:36', '2025-02-15 03:24:42'),
-(242, 'kpi', 1, 3.51, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(243, 'kpi2', 3, 4, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(244, 'kpi', 1, 3.51, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(245, 'kpi2', 1, 4, 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(246, 'kpi', 1, 3.51, 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+INSERT INTO `k_p_i_projects` (`KPIProID`, `name`, `countKPIProID`, `target`, `proID`, `result1`, `result2`, `result3`, `result4`, `created_at`, `updated_at`) VALUES
+(240, 'kpi1', 3, 3.51, 377, '', '3.51', '', '', '2025-02-14 23:52:35', '2025-02-18 22:54:23'),
+(241, 'kpi2', 1, 3.51, 377, '', '2.1', '', '', '2025-02-15 00:59:36', '2025-02-18 22:54:23'),
+(242, 'kpi', 1, 3.51, 378, '', '', '', '', '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
+(243, 'kpi2', 3, 4, 378, '', '', '', '', '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
+(244, 'kpi', 1, 3.51, 379, '', '', '', '', '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(245, 'kpi2', 1, 4, 379, '', '', '', '', '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(246, 'kpi1', 1, 3.51, 380, '', '', '', '', '2025-02-17 03:09:54', '2025-02-18 22:51:42'),
+(247, 'kpi2', 3, 4, 380, '', '', '', '', '2025-02-18 22:51:42', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -719,7 +743,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (56, '2025_01_30_071148_rename_strategics_to_strategic3_levels', 51),
 (57, '2025_01_30_075551_create_strategic2_level_map_projects_table', 52),
 (58, '2025_01_30_115042_create_k_p_i_main2_level_map_projects_table', 53),
-(59, '2025_01_30_122457_create_strategic1_level_map_projects_table', 54);
+(59, '2025_01_30_122457_create_strategic1_level_map_projects_table', 54),
+(60, '2025_02_20_072245_create_quarters_table', 55),
+(61, '2025_02_20_072633_create_progress_details_table', 56),
+(62, '2025_02_20_072652_create_report_quarters_table', 56);
 
 -- --------------------------------------------------------
 
@@ -763,12 +790,13 @@ CREATE TABLE `objectives` (
 --
 
 INSERT INTO `objectives` (`objID`, `detail`, `proID`, `created_at`, `updated_at`) VALUES
-(373, 'obj1', 377, '2025-02-15 03:16:58', '2025-02-15 03:24:42'),
-(375, 'obj2', 377, '2025-02-15 03:24:42', '2025-02-15 03:24:42'),
 (377, 'obj1', 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
 (379, 'obj2', 378, '2025-02-17 01:44:24', '2025-02-17 01:44:24'),
-(381, 'obj1', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(382, 'obj1', 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(383, 'obj1', 377, '2025-02-18 00:30:35', '2025-02-18 22:54:23'),
+(388, 'obj1', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(389, 'obj2', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(390, 'obj2', 377, '2025-02-18 22:54:23', '2025-02-18 22:54:23'),
+(391, 'obj1', 379, '2025-02-20 02:25:23', '2025-02-20 02:25:23');
 
 -- --------------------------------------------------------
 
@@ -781,6 +809,28 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `progress_details`
+--
+
+CREATE TABLE `progress_details` (
+  `DetailID` bigint(20) UNSIGNED NOT NULL,
+  `detail` varchar(255) NOT NULL,
+  `reportID` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `progress_details`
+--
+
+INSERT INTO `progress_details` (`DetailID`, `detail`, `reportID`, `created_at`, `updated_at`) VALUES
+(24, 'detail1', 30, '2025-02-20 02:08:00', '2025-02-20 02:08:00'),
+(25, 'detail2', 30, '2025-02-20 02:08:00', '2025-02-20 02:08:00');
 
 -- --------------------------------------------------------
 
@@ -800,7 +850,7 @@ CREATE TABLE `projects` (
   `proInDetail` varchar(255) DEFAULT NULL,
   `tarID` bigint(20) UNSIGNED DEFAULT NULL,
   `badID` bigint(20) UNSIGNED DEFAULT NULL,
-  `badgetTotal` double DEFAULT NULL,
+  `badgetTotal` float DEFAULT NULL,
   `planID` bigint(20) UNSIGNED DEFAULT NULL,
   `statusID` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -812,10 +862,10 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`proID`, `name`, `format`, `princiDetail`, `proTypeID`, `yearID`, `proChaID`, `proInID`, `proInDetail`, `tarID`, `badID`, `badgetTotal`, `planID`, `statusID`, `created_at`, `updated_at`) VALUES
-(377, 'test', 'department', 'หลักการ', 4, 5, 4, 6, 'มหาวิทยาลัย', 3, 2, 14400, 6, 5, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(378, 'test', 'department', 'หลักการ', 3, 5, 2, 3, NULL, 2, 2, 11000, 6, 1, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(379, 'test', 'team', 'หลักการ', 3, 5, 2, 2, NULL, 2, 2, 21000, 6, 1, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(380, 'test', 'team', 'หลักการ', 3, 5, 2, 2, NULL, 2, 2, 11000, 6, 16, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(377, 'test', 'department', 'หลักการ', 4, 5, 4, 6, 'มหาวิทยาลัย', 2, 2, 14400, 6, 7, '2025-02-14 23:52:35', '2025-02-18 22:54:23'),
+(378, 'test', 'department', 'หลักการ', 3, 5, 2, 3, NULL, 2, 2, 11000, 6, 7, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
+(379, 'test', 'team', 'หลักการ', 3, 5, 2, 2, NULL, 2, 2, 21000, 6, 1, '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(380, 'test', 'department', 'หลักการ', 4, 5, 2, 3, NULL, 2, 2, 15800, 6, 1, '2025-02-17 03:09:54', '2025-02-18 22:51:41');
 
 -- --------------------------------------------------------
 
@@ -885,6 +935,52 @@ CREATE TABLE `project_types` (
 INSERT INTO `project_types` (`proTypeID`, `name`, `created_at`, `updated_at`) VALUES
 (3, 'โครงการในแผน', '2024-09-02 01:43:27', '2024-09-02 01:43:27'),
 (4, 'โครงการนอกแผน', '2024-09-02 01:54:40', '2024-09-02 01:54:40');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quarters`
+--
+
+CREATE TABLE `quarters` (
+  `quarID` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `quarters`
+--
+
+INSERT INTO `quarters` (`quarID`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'ไตรมาส1', NULL, NULL),
+(2, 'ไตรมาส2', NULL, NULL),
+(3, 'ไตรมาส3', NULL, NULL),
+(4, 'ไตรมาส4', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_quarters`
+--
+
+CREATE TABLE `report_quarters` (
+  `reportID` bigint(20) UNSIGNED NOT NULL,
+  `quarID` bigint(20) UNSIGNED NOT NULL,
+  `proID` bigint(20) UNSIGNED NOT NULL,
+  `costResult` int(11) NOT NULL,
+  `problem` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `report_quarters`
+--
+
+INSERT INTO `report_quarters` (`reportID`, `quarID`, `proID`, `costResult`, `problem`, `created_at`, `updated_at`) VALUES
+(30, 2, 377, 3000, 'problem', '2025-02-20 02:08:00', '2025-02-20 02:08:00');
 
 -- --------------------------------------------------------
 
@@ -963,12 +1059,13 @@ CREATE TABLE `steps` (
 --
 
 INSERT INTO `steps` (`stepID`, `name`, `start`, `end`, `proID`, `created_at`, `updated_at`) VALUES
-(340, 'step1', '2025-02-10', '2025-02-16', 377, '2025-02-15 03:24:42', '2025-02-15 03:24:42'),
 (342, 'step1', '2025-02-10', '2025-02-13', 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
 (344, 'step2', '2025-02-21', '2025-02-22', 378, '2025-02-17 01:44:24', '2025-02-17 01:44:24'),
-(346, 'step1', '2025-02-10', '2025-02-13', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(347, 'step1', '2025-02-17', '2025-02-21', 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25'),
-(348, 'step1', '2025-02-10', '2025-02-22', 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(347, 'step1', '2025-02-10', '2025-02-13', 379, '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(354, 'step1', '2025-02-10', '2025-02-22', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(355, 'step2', '2025-02-24', '2025-02-28', 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42'),
+(356, 'step1', '2025-02-10', '2025-02-16', 377, '2025-02-18 22:54:23', '2025-02-18 22:54:23'),
+(357, 'step1', '2025-02-17', '2025-02-21', 379, '2025-02-20 02:25:23', '2025-02-20 02:25:23');
 
 -- --------------------------------------------------------
 
@@ -1012,7 +1109,8 @@ CREATE TABLE `strategic1_level_map_projects` (
 
 INSERT INTO `strategic1_level_map_projects` (`stra1LVMapProID`, `stra1LVID`, `tar1LVID`, `proID`, `created_at`, `updated_at`) VALUES
 (5, 1, 1, 378, '2025-02-17 01:43:39', '2025-02-17 01:44:24'),
-(6, 1, 1, 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25');
+(6, 1, 1, 379, '2025-02-17 01:53:25', '2025-02-20 02:25:23'),
+(7, 1, 1, 380, '2025-02-18 02:10:02', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -1056,9 +1154,10 @@ CREATE TABLE `strategic2_level_map_projects` (
 --
 
 INSERT INTO `strategic2_level_map_projects` (`stra2LVMapProID`, `stra2LVID`, `SFA2LVID`, `tac2LVID`, `proID`, `created_at`, `updated_at`) VALUES
-(11, 2, 1, 7, 377, '2025-02-15 00:01:45', '2025-02-15 03:24:42'),
+(11, 2, 1, 7, 377, '2025-02-18 22:54:23', '2025-02-18 22:54:23'),
 (12, 2, 1, 7, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(13, 2, 1, 7, 379, '2025-02-17 01:53:25', '2025-02-17 01:53:25');
+(13, 2, 1, 7, 379, '2025-02-20 02:25:23', '2025-02-20 02:25:23'),
+(14, 2, 1, 7, 380, '2025-02-18 22:51:42', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -1151,10 +1250,10 @@ CREATE TABLE `strategic_maps` (
 --
 
 INSERT INTO `strategic_maps` (`straMapID`, `proID`, `stra3LVID`, `SFA3LVID`, `goal3LVID`, `tac3LVID`, `created_at`, `updated_at`) VALUES
-(323, 377, 1, 23, 19, 75, '2025-02-14 23:52:35', '2025-02-15 03:16:58'),
+(323, 377, 1, 23, 19, 75, '2025-02-14 23:52:35', '2025-02-18 22:54:23'),
 (324, 378, 1, 2, 2, 46, '2025-02-17 01:38:14', '2025-02-17 01:38:14'),
-(325, 379, 1, 23, 19, 75, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(326, 380, 1, 2, 17, 61, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(325, 379, 1, 23, 19, 75, '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(326, 380, 1, 2, 2, 44, '2025-02-17 03:09:54', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -1385,12 +1484,12 @@ CREATE TABLE `users_map_projects` (
 --
 
 INSERT INTO `users_map_projects` (`userMapID`, `userID`, `proID`, `created_at`, `updated_at`) VALUES
-(114, 10, 377, '2025-02-14 23:52:35', '2025-02-15 03:24:42'),
-(115, 11, 377, '2025-02-15 00:01:45', '2025-02-15 03:24:42'),
-(116, 15, 377, '2025-02-15 03:24:00', '2025-02-15 03:24:42'),
+(114, 10, 377, '2025-02-14 23:52:35', '2025-02-18 22:54:23'),
+(115, 11, 377, '2025-02-15 00:01:45', '2025-02-18 22:54:23'),
+(116, 15, 377, '2025-02-15 03:24:00', '2025-02-18 22:54:23'),
 (117, 10, 378, '2025-02-17 01:38:14', '2025-02-17 01:44:24'),
-(118, 10, 379, '2025-02-17 01:52:24', '2025-02-17 01:53:25'),
-(119, 10, 380, '2025-02-17 03:09:54', '2025-02-17 03:09:54');
+(118, 10, 379, '2025-02-17 01:52:24', '2025-02-20 02:25:23'),
+(119, 10, 380, '2025-02-17 03:09:54', '2025-02-18 22:51:42');
 
 -- --------------------------------------------------------
 
@@ -1567,6 +1666,13 @@ ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
+-- Indexes for table `progress_details`
+--
+ALTER TABLE `progress_details`
+  ADD PRIMARY KEY (`DetailID`),
+  ADD KEY `progress_details_ibfk_1` (`reportID`);
+
+--
 -- Indexes for table `projects`
 --
 ALTER TABLE `projects`
@@ -1597,6 +1703,20 @@ ALTER TABLE `project_integrats`
 --
 ALTER TABLE `project_types`
   ADD PRIMARY KEY (`proTypeID`);
+
+--
+-- Indexes for table `quarters`
+--
+ALTER TABLE `quarters`
+  ADD PRIMARY KEY (`quarID`);
+
+--
+-- Indexes for table `report_quarters`
+--
+ALTER TABLE `report_quarters`
+  ADD PRIMARY KEY (`reportID`),
+  ADD KEY `report_quarters_quarid_foreign` (`quarID`),
+  ADD KEY `report_quarters_proid_foreign` (`proID`);
 
 --
 -- Indexes for table `sessions`
@@ -1759,19 +1879,19 @@ ALTER TABLE `badget_types`
 -- AUTO_INCREMENT for table `benefits`
 --
 ALTER TABLE `benefits`
-  MODIFY `bnfID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `bnfID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `commentID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `commentID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `cost_quarters`
 --
 ALTER TABLE `cost_quarters`
-  MODIFY `costQuID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=218;
+  MODIFY `costQuID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
 
 --
 -- AUTO_INCREMENT for table `cost_types`
@@ -1795,7 +1915,7 @@ ALTER TABLE `expense_badgets`
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `fileID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `fileID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
 
 --
 -- AUTO_INCREMENT for table `funds`
@@ -1819,7 +1939,7 @@ ALTER TABLE `k_p_i_main2_levels`
 -- AUTO_INCREMENT for table `k_p_i_main2_level_map_projects`
 --
 ALTER TABLE `k_p_i_main2_level_map_projects`
-  MODIFY `KPIMain2mapProjectID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `KPIMain2mapProjectID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `k_p_i_mains`
@@ -1831,7 +1951,7 @@ ALTER TABLE `k_p_i_mains`
 -- AUTO_INCREMENT for table `k_p_i_main_map_projects`
 --
 ALTER TABLE `k_p_i_main_map_projects`
-  MODIFY `KPIMainmapProjectID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `KPIMainmapProjectID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- AUTO_INCREMENT for table `k_p_i_main_map_tactics`
@@ -1843,13 +1963,13 @@ ALTER TABLE `k_p_i_main_map_tactics`
 -- AUTO_INCREMENT for table `k_p_i_projects`
 --
 ALTER TABLE `k_p_i_projects`
-  MODIFY `KPIProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `KPIProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=248;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `news`
@@ -1861,7 +1981,13 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT for table `objectives`
 --
 ALTER TABLE `objectives`
-  MODIFY `objID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=383;
+  MODIFY `objID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=392;
+
+--
+-- AUTO_INCREMENT for table `progress_details`
+--
+ALTER TABLE `progress_details`
+  MODIFY `DetailID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `projects`
@@ -1888,6 +2014,18 @@ ALTER TABLE `project_types`
   MODIFY `proTypeID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `quarters`
+--
+ALTER TABLE `quarters`
+  MODIFY `quarID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `report_quarters`
+--
+ALTER TABLE `report_quarters`
+  MODIFY `reportID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
 -- AUTO_INCREMENT for table `statuses`
 --
 ALTER TABLE `statuses`
@@ -1897,7 +2035,7 @@ ALTER TABLE `statuses`
 -- AUTO_INCREMENT for table `steps`
 --
 ALTER TABLE `steps`
-  MODIFY `stepID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=349;
+  MODIFY `stepID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=358;
 
 --
 -- AUTO_INCREMENT for table `strategic1_levels`
@@ -1909,7 +2047,7 @@ ALTER TABLE `strategic1_levels`
 -- AUTO_INCREMENT for table `strategic1_level_map_projects`
 --
 ALTER TABLE `strategic1_level_map_projects`
-  MODIFY `stra1LVMapProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `stra1LVMapProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `strategic2_levels`
@@ -1921,7 +2059,7 @@ ALTER TABLE `strategic2_levels`
 -- AUTO_INCREMENT for table `strategic2_level_map_projects`
 --
 ALTER TABLE `strategic2_level_map_projects`
-  MODIFY `stra2LVMapProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `stra2LVMapProID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `strategic3_levels`
@@ -2109,6 +2247,12 @@ ALTER TABLE `objectives`
   ADD CONSTRAINT `objectives_ibfk_1` FOREIGN KEY (`proID`) REFERENCES `projects` (`proID`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `progress_details`
+--
+ALTER TABLE `progress_details`
+  ADD CONSTRAINT `progress_details_ibfk_1` FOREIGN KEY (`reportID`) REFERENCES `report_quarters` (`reportID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `projects`
 --
 ALTER TABLE `projects`
@@ -2120,6 +2264,13 @@ ALTER TABLE `projects`
   ADD CONSTRAINT `projects_statusid_foreign` FOREIGN KEY (`statusID`) REFERENCES `statuses` (`statusID`) ON DELETE CASCADE,
   ADD CONSTRAINT `projects_tarid_foreign` FOREIGN KEY (`tarID`) REFERENCES `targets` (`tarID`) ON DELETE CASCADE,
   ADD CONSTRAINT `projects_yearid_foreign` FOREIGN KEY (`yearID`) REFERENCES `years` (`yearID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `report_quarters`
+--
+ALTER TABLE `report_quarters`
+  ADD CONSTRAINT `report_quarters_proid_foreign` FOREIGN KEY (`proID`) REFERENCES `projects` (`proID`),
+  ADD CONSTRAINT `report_quarters_quarid_foreign` FOREIGN KEY (`quarID`) REFERENCES `quarters` (`quarID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `steps`

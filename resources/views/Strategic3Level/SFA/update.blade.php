@@ -24,8 +24,8 @@
                     <div class="clearfix"></div>
 
                     <div class="row">
-                        <div class="col-md-3 col-sm-3"></div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-10 col-sm-10">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>ประเด็นยุทธศาสตร์ </h2>
@@ -68,7 +68,7 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="straID" name="straID" class="form-control" required>
+                                                <select id="stra3LVID" name="stra3LVID" class="form-control" required>
 
                                                 </select>
                                             </div>
@@ -93,7 +93,7 @@
                                             const strategic = @json($strategic);
 
                                             function updatePlanDropdown(selectedYearID) {
-                                                const planSelect = document.getElementById('straID');
+                                                const planSelect = document.getElementById('stra3LVID');
                                                 planSelect.innerHTML = '';
 
                                                 const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
@@ -108,9 +108,9 @@
                                                     planSelect.disabled = false;
                                                     filteredPlans.forEach(plan => {
                                                         const option = document.createElement('option');
-                                                        option.value = plan.straID;
+                                                        option.value = plan.stra3LVID;
                                                         option.textContent = plan.name;
-                                                        if (plan.straID == '{{ $SFA->straID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
+                                                        if (plan.stra3LVID == '{{ $SFA->stra3LVID }}') { // ตั้งค่าให้ตรงกับแผนที่เลือกไว้
                                                             option.selected = true;
                                                         }
                                                         planSelect.appendChild(option);
@@ -119,7 +119,7 @@
                                             }
                                             window.onload = function() {
                                                 const yearSelect = document.getElementById('yearID');
-                                                const planSelect = document.getElementById('straID');
+                                                const planSelect = document.getElementById('stra3LVID');
 
                                                 // เมื่อเปลี่ยนปีงบประมาณ
                                                 yearSelect.addEventListener('change', function() {
@@ -150,7 +150,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-1 col-sm-1"></div>
                     </div>
                 </div>
             </div>

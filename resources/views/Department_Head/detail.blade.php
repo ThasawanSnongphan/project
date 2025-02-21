@@ -340,41 +340,50 @@
             @csrf
             @if (count($comment) > 0)
                 <div class="row m-2">
-                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ : </label>
                     <div class="col-md-6 col-sm-6">
                         @foreach ($comment as $item)
-                        <table>
-                            <tr>
-                                <td>
-                                    {{$item->user->firstname_en}} {{$item->user->lastname_en}} : {{$item->detail}}
-                                </td>
-                            </tr>
-                        </table>
-                            
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-            <div class="row m-2">
-                <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
-                <div class="col-md-6 col-sm-6">
-                    <textarea name="comment" id="comment" class="form-control"></textarea>
-                </div>
-                @error('comment')
-                    <div class="m-2">
-                        <span class="text text-danger">{{ $message }}</span>
-                    </div>
-                @enderror
-            </div>
-            <div class="form-group mt-2">
-                <div class="col-md-6 offset-md-3">
+                            <table>
+                                <tr>
+                                    <td>
+                                        {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
+                                        {{ $item->detail }} <br> เมื่อ {{ $item->created_at }} <br>
+                                    </td>
+                                </tr>
+                            </table>
+                            <textarea name="comment" id="comment" class="form-control"></textarea>
 
-                    <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
-                    <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
-
-                </div>
+                            {{-- @error('comment')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror --}}
+                    </div>
+            @endforeach
+    </div>
+@else
+    <div class="row m-2">
+        <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
+        <div class="col-md-6 col-sm-6">
+            <textarea name="comment" id="comment" class="form-control"></textarea>
+        </div>
+        {{-- @error('comment')
+            <div class="m-2">
+                <span class="text text-danger">{{ $message }}</span>
             </div>
-        </form>
+        @enderror --}}
+    </div>
+    @endif
+
+    <div class="form-group mt-2">
+        <div class="col-md-6 offset-md-3">
+
+            <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
+            <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+
+        </div>
+    </div>
+    </form>
 
 
     </div>
@@ -385,10 +394,16 @@
             var form = document.getElementById('actionForm');
             if (action === 'pass') {
                 form.action = "{{ route('departmentPass', $project->proID) }}";
+                form.submit();
             } else if (action === 'edit') {
-                form.action = "{{ route('departmentEdit', $project->proID) }}";
+                document.getElementById('comment').required = true;
+                var comment = document.getElementById('comment').value.trim();
+                if (comment !== "") {
+                    form.action = "{{ route('departmentEdit', $project->proID) }}";
+                    form.submit();
+                }
+
             }
-            form.submit();
         }
     </script>
 

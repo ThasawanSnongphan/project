@@ -55,7 +55,7 @@
                         {{-- @if ($item->statusID == 5)
                             {{ $item->name }}
                         @else --}}
-                            <a href="{{ route('Executive.detail', $item->proID) }}">{{ $item->name }}</a>
+                            <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
                         {{-- @endif --}}
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)

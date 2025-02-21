@@ -172,14 +172,17 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                 class="required">*</span></label>
                                         <div class="row col-md-8 col-sm-8">
+                                            {{-- <input type="text" value="{{session('goal3LVID')[$index]}}"> --}}
                                             @foreach ($goals as $goal)
                                                 @if (session()->has('goal3LVID') && is_array(session('goal3LVID')))
+                                                
                                                     @foreach (session('goal3LVID') as $goal3LVID)
                                                         @if ($goal->goal3LVID == $goal3LVID && $goal->SFA3LVID == session('SFA3LVID')[$index])
                                                             <input type="hidden" name="goal3LVID[]"
                                                                 value="{{ $goal->goal3LVID }}">
                                                             <input class="form-control" type="text" id="goal3LVID"
-                                                                value="{{ $goal->name }}" readonly>
+                                                                value="{{ $goal->name }}" 
+                                                                readonly>
                                                         @endif
                                                     @endforeach
                                                 @endif
