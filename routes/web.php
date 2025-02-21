@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\PDFAllResultsController;
-use App\Http\Controllers\PDFKPIController;
+use App\Http\Controllers\PDFClosedController;
 use App\Http\Controllers\PDFPlanController;
-use App\Http\Controllers\PDFQ4Controller;
-use App\Http\Controllers\WordKPIController;
+use App\Http\Controllers\PDFProjectController;
+use App\Http\Controllers\WordProjectController;
 use App\Http\Controllers\WordQ4Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -45,23 +45,18 @@ use App\Http\Controllers\PlanningAnalyst;
 use App\Http\Controllers\Department_Head;
 use App\Http\Controllers\SupplyAnalystController;
 use App\Http\Controllers\Executive;
-use App\Http\Controllers\PDFController;
-use App\Http\Controllers\WordController;
 use App\Http\Controllers\ExcelAllResultsController;
 
 
 //PDF
-Route::get('/pdfKPI/{id}', [PDFKPIController::class, 'pdf_gen']);
+Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
 Route::get('/pdfPlan', [PDFPlanController::class, 'pdf_gen']);
-Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
+// Route::get('/pdfQ4', [PDFQ4Controller::class, 'pdf_gen']);
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
 //Word
-Route::get('/gen-word-db/{id}', [WordController::class, 'word_gen']);
+// Route::get('/gen-word-db/{id}', [WordController::class, 'word_gen']);
 Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
-Route::get('/gen-word-KPI/{id}', [WordKPIController::class, 'word_gen']);
-
-
 
 //Excel
 Route::get('/excelAllResults', [ExcelAllResultsController::class, 'exportExcel']);
@@ -142,9 +137,9 @@ Route::get('reportQuarter/{id}{quarter}', [QuarterReportController::class, 'repo
 // Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
 Route::get('saveReportQuarter/{id}{quarter}', [QuarterReportController::class,'saveReportQuarter'])->name('reportQuarter.save');
 
-
-Route::get('projectPDF/{id}',[PDFController::class,'db_gen'])->name('project.PDF');
-Route::get('projectWord/{id}',[WordController::class,'word_gen'])->name('project.Word');
+//Report
+Route::get('projectPDF/{id}',[PDFProjectController::class,'db_gen'])->name('project.PDF');
+Route::get('projectWord/{id}',[WordProjectController::class,'word_gen'])->name('project.Word');
 
 
 Route::get('create',[NewsController::class,'create']);
