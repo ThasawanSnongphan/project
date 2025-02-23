@@ -184,19 +184,74 @@ class PDFPlanController extends Controller
             
         ';
 
-        // ดึงปีปัจจุบัน
-        $currentYear = date("Y");
-        foreach ($strategic_maps as $strategic_map) {
-            foreach ($goals as $goal) {
-                $htmlContent .= '
-                    <tr>
-                        <th colspan="20">' . $strategic_map->name . '</th>
-                        
-                    </tr>
-                ';
+        $currentYear = intval(date("Y")) + 543;
+        // foreach ($strategic_issues as $strategic_issue) {
+        //     $hasCurrentYear = false;
+
+        //     foreach ($strategics as $strategic) {
+        //         if (isset($strategic->year->year) && intval($strategic->year->year) === $currentYear) {
+        //             // dd($strategic->year->year);
+        //             $hasCurrentYear = true;
+        //             // break;
+        //         }
+        //     }
+
+        //     if ($hasCurrentYear) {
+        //         $htmlContent .= '
+        //             <tr>
+        //                 <th colspan="20" style="text-align: left;">ประเด็น' . htmlspecialchars($strategic_issue->name) . '</th>
+        //             </tr>
+        //         ';
+        //     }
+
+        //     foreach($goals as $goal){
+        //         $htmlContent .= '
+        //             <tr>
+        //                 <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . htmlspecialchars($goal->name) . '</th>
+        //             </tr>
+        //         ';
+        //     }
+        // }
+
+        // foreach($strategic_maps as $strategic_map){
+        foreach ($strategics as $strategic) {
+            if ($strategic->year->year == $currentYear) {
+                // dd($strategic->year->year);
+                foreach ($strategic_issues as $strategic_issue) {
+                    if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
+                        $htmlContent .= '
+                                <tr>
+                                    <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . htmlspecialchars($strategic_issue->name) . '</th>
+                                </tr>
+                            ';
+                    }
+                    foreach ($goals as $goal) {
+                        if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
+                            $htmlContent .= '
+                                    <tr>
+                                        <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . htmlspecialchars($goal->name) . '</th>
+                                    </tr>
+                                ';
+                        }
+                        foreach ($tactics as $tactic) {
+                            if ($goal->goal3LVID == $tactic->goal3LVID) {
+                                $htmlContent .= '
+                                    <tr>
+                                        <td></td>
+                                        <td style="text-align: left;">' . htmlspecialchars($tactic->name) . '</td>
+                                    </tr>
+                                ';
+                            }
+                        }
+                    }
+                }
             }
         }
-        // <th colspan="20">' . $goal->name . '</th>
+        // }
+
+
+
+
 
 
 
