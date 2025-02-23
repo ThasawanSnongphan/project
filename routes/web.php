@@ -23,7 +23,10 @@ use App\Http\Controllers\ProjectIntegratController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectEvalutionController;
+
 use App\Http\Controllers\QuarterReportController;
 
 use App\Http\Controllers\Strategic2LevelController;
@@ -132,6 +135,8 @@ Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
+
+Route::get('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
 
 Route::get('reportQuarter/{id}{quarter}', [QuarterReportController::class, 'reportQuarter'])->name('report.quarter');
 // Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');

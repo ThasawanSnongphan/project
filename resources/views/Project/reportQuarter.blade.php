@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form action="{{ route('reportQuarter.save', [$data['project']->proID,$data['quarter']]) }}">
+                    <form id="actionForm" action="{{ route('reportQuarter.save', [$data['project']->proID,$data['quarter']]) }}">
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ :
                             </label>
@@ -194,9 +194,9 @@
                         <div id="insertProblem"></div>
                         <div class="col-md-6 offset-md-3 ">
                             @if (!empty($data['quarterReport']))
-                                <button type="submit" class="btn btn-danger">เสนอปิดโครงการ</button>
+                                <button type="button" class="btn btn-danger" onclick="submitButton('evaluation',{{$data['project']->proID}})">เสนอปิดโครงการ</button>
                             @else
-                                <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>
+                                <button type="submit" class="btn btn-primary" >ส่งรายงานความก้าวหน้า</button>
                             @endif
                         </div>
                     </form>
@@ -236,6 +236,14 @@
             colMD6.appendChild(InputDetail);
 
             document.getElementById('insertDetail').appendChild(mainContainer);
+        }
+
+        function submitButton(action, proID) {
+            var form = document.getElementById('actionForm');
+            if (action === 'evaluation') {
+                form.action = "/projectEvaluation/" + proID;
+            } 
+            form.submit();
         }
     </script>
 @endsection

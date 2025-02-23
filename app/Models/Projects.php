@@ -54,4 +54,9 @@ class Projects extends Model
     {
         return $this->belongsTo(Status::class, 'statusID','statusID');
     }
+
+    public function badgetType()
+    {
+        return $this->belongsTo(BadgetType::class,'badID',   'badID');
+    }
 }
