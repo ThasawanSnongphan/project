@@ -221,7 +221,7 @@ class PDFProjectController extends Controller
             if ($projects->proID == $strategic_map->proID) {
                 $planDetails = [];
                 foreach ($strategics as $strategic) {
-                    if ($strategic->straID == $strategic_map->straID) {
+                    if ($strategic->stra3LVID == $strategic_map->stra3LVID) {
                         $planDetails[] = '<b>' . $strategic->name . '</b>';
                         break;
                     }
