@@ -21,23 +21,6 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    
-                        {{-- <table class="table table-bordered" style="text-align: center">
-                            <tr>
-                                <th colspan="2" style="text-align: left">uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</th>
-                            </tr>
-                            <tr>
-                                <th>upload เอกสารที่เกี่ยวข้อง</th>
-                                <td>
-                                    <input type="file" class="form-control">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>เอกสารที่เกี่ยวข้อง</th>
-                                <td></td>
-                            </tr>
-                        </table> --}}
-
                         <form method="POST">
                             @csrf
                             <h6>uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6>
@@ -50,18 +33,17 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   
                                 </div>
                             </div>
 
                         </form>
-                        <form method="POST">
+                        <form method="POST"  action="/projectSaveEvaluation/{{$data['project']->proID}}">
                             @csrf
                             <h6>เขียนเอกสารประเมินโครงการ</h6>
                             <div class="row field item form-group">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>คำชี้แจง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                    <textarea name="name" id="" class="form-control" style="height:auto; min-height: 130px; max-height: 1000px; font-size: 12px;">การประเมินโครงการในรอบ 12 เดือนนี้จัดทำเพื่อศึกษา ติดตามและวิเคราห์ถึงผลลัพธ์ของแผนงาน/โครงการตามที่มหาวิทยาลัยได้จัดสรรงยประมาณให้ ว่าสามารถดำเนินการตามที่กำหนดไว้ได้หรือไม่รวมทั้งเป็นการศึกษาปัญหาอุปสรรคของการดำเนินงานแผนงาน/โครงการ การหาแนวทางการแก้ไขปัญหา การเตรียมความพร้อมสำหรับการดำเนินงานแผนงาน/โครงการครั้งต่อไป และเป็นข้อมูลประกอบการตัดสินใจสำหรับผู้บริหารในการจัดสรรงบประมาณโครงการในปีงบประมาณต่อไปด้วย ในการนี้ สำนักคอมพิวเตอร์ฯ จึงใคร่ขอความกรุณารายงานแบบประเมินผลดำเนินงาน/โครงการ ดังนี้</textarea>
+                                    <textarea name="statement" id="statement" class="form-control" style="height:auto; min-height: 130px; max-height: 1000px; font-size: 12px;">การประเมินโครงการในรอบ 12 เดือนนี้จัดทำเพื่อศึกษา ติดตามและวิเคราห์ถึงผลลัพธ์ของแผนงาน/โครงการตามที่มหาวิทยาลัยได้จัดสรรงยประมาณให้ ว่าสามารถดำเนินการตามที่กำหนดไว้ได้หรือไม่รวมทั้งเป็นการศึกษาปัญหาอุปสรรคของการดำเนินงานแผนงาน/โครงการ การหาแนวทางการแก้ไขปัญหา การเตรียมความพร้อมสำหรับการดำเนินงานแผนงาน/โครงการครั้งต่อไป และเป็นข้อมูลประกอบการตัดสินใจสำหรับผู้บริหารในการจัดสรรงบประมาณโครงการในปีงบประมาณต่อไปด้วย ในการนี้ สำนักคอมพิวเตอร์ฯ จึงใคร่ขอความกรุณารายงานแบบประเมินผลดำเนินงาน/โครงการ ดังนี้</textarea>
                                 </div>
                             </div>
                             <div class="row field item form-group">
@@ -100,7 +82,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>วิธีการดำเนินโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7" >
-                                   <textarea name="" id="" class="form-control" style="min-height: 100px; height: auto;"></textarea>
+                                   <textarea name="implement" id="implement" class="form-control" style="min-height: 100px; height: auto;" required></textarea>
                                 </div>
                             </div>
 
@@ -116,7 +98,7 @@
                                 <div class="col-md-8 col-sm-8">
                                    @foreach ($data['obj'] as $item)
                                        -{{$item->detail}} <br> 
-                                       <input type="radio" name="obj"> บรรลุ  <input type="radio" name="obj"> ไม่บรรลุ <br>
+                                       <input type="radio" name="obj_{{$item->objID}}" value="1"> บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0"> ไม่บรรลุ <br>
                                    @endforeach
                                 </div>
                             </div>
@@ -124,7 +106,15 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการดำเนินงาน</b></label>
                                 <div class="col-md-8 col-sm-8">
-                                   
+                                    @foreach ($data['operating'] as $item)
+                                        <input type="radio" name="operating" value="{{$item->operID}}"  onchange="operatingRadio(this)" required> {{$item->name}} <br>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="row field item form-group ">
+                                <label class="col-form-lable col-md-3 col-sm-3 label-align"></label>
+                                <div class="col-md-7 col-sm-7 d-flex">
+                                        <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput" style="display: none;"> 
                                 </div>
                             </div>
 
@@ -133,7 +123,7 @@
                                 <div class="col-md-7 col-sm-7">
                                    @foreach ($data['KPIProject'] as $item)
                                        -{{$item->name}} <br>
-                                       <textarea class="form-control" style="height: auto; min-height: 100px;"></textarea>
+                                       <textarea name="result_eva[]" class="form-control" style="height: auto; min-height: 100px;" required></textarea>
                                    @endforeach
                                 </div>
                             </div>
@@ -155,28 +145,28 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ใช้จริง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <input type="text" class="form-control">
+                                   <input type="text" class="form-control" name="badget_use" required>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ประโยชน์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดโครงการ)</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="" id="" class="form-control" style="min-height: 100px"></textarea>
+                                   <textarea name="benefit" id="benefit" class="form-control" style="min-height: 100px" required></textarea>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ปัญหาและอุปสรรคในการดำเนินโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="" id="" class="form-control" style="min-height: 100px"></textarea>
+                                   <textarea name="problem" id="problem" class="form-control" style="min-height: 100px" required></textarea>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="" id="" class="form-control" style="min-height: 100px"></textarea>
+                                   <textarea name="corrective" id="corrective" class="form-control" style="min-height: 100px" required></textarea>
                                 </div>
                             </div>
 
@@ -195,4 +185,17 @@
         </div>
         <div class="col-md-1 col-sm-1"></div>
     </div>
+    <script>
+        function operatingRadio(radio){
+            console.log(radio);
+            
+            var operatingInput = document.getElementById("operatingInput");
+            if(radio.value !== '1'){
+                operatingInput.style.display = "flex";
+                operatingInput.required = true;
+            }else{
+                operatingInput.style.display = "none";
+            }
+        }
+    </script>
 @endsection

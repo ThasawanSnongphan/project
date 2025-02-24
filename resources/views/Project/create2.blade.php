@@ -381,7 +381,7 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control" toggleTextarea();" required>
+                                <select id="integrat" name="proInID" class="form-control" onclick="toggleTextarea()"  required>
                                     @foreach ($projectIntegrat as $item)
                                         <option value="{{ $item->proInID }}"
                                             {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>

@@ -24,7 +24,8 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" action="{{ route('reportQuarter.save', [$data['project']->proID,$data['quarter']]) }}">
+                    <form id="actionForm" method="POST" action="{{ route('reportQuarter.save', [$data['project']->proID,$data['quarter']]) }}">
+                        @csrf
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ :
                             </label>
