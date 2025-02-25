@@ -56,9 +56,12 @@ class ProjectController extends Controller
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
-        $proID = $report->pluck('proID') ;
+        $proID = $report->pluck('proID');
+
+        $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+        // dd($evaluation);
         // dd($proID);
-        return view('Project.index',compact('users','project','status','year','projectYear','report','proID'));
+        return view('Project.index',compact('users','project','status','year','projectYear','report','proID','evaluation'));
     }
     
     function create1(Request $request){

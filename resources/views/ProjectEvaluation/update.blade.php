@@ -6,7 +6,7 @@
         <div class="col-md-10 col-sm-10">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>เขียนเอกสารประเมินโครงการ</h2>
+                    <h2>แก้ไขเอกสารประเมินโครงการ</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                         <li class="dropdown">
@@ -21,29 +21,35 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                        <form method="POST">
+                        <form method="POST" action="" enctype="multipart/form-data">
                             @csrf
-                            <h6>uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6>
+                            <h6>uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6> <hr>
                             <div class="row field item form-group ">
-                                <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>pload เอกสารที่เกี่ยวข้อง</b></label>
-                                <div class="col-md-7 col-sm-7">
-                                   <input type="file" class="form-control">
+                                <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>upload เอกสารที่เกี่ยวข้อง</b></label>
+                                <div class="col-md-7 col-sm-7 d-flex">
+                                   <input type="file" class="form-control" name="file" required>
+                                   <button type="submit" class="btn btn-primary">upload</button>
                                 </div>
                             </div>
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
                                 <div class="col-md-7 col-sm-7">
+                                    @foreach ($data['file'] as $item)
+                                    <a href="{{ asset('files/' . $item->name) }}"
+                                        target="_blank">{{ $item->name }}</a> <br>
+
+                                    @endforeach
                                 </div>
                             </div>
 
                         </form>
-                        <form method="POST"  action="/projectSaveEvaluation/{{$data['project']->proID}}">
+                        <form method="POST"  id="actionForm">
                             @csrf
-                            <h6>เขียนเอกสารประเมินโครงการ</h6>
+                            <h6>เขียนเอกสารประเมินโครงการ</h6> <hr>
                             <div class="row field item form-group">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>คำชี้แจง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                    <textarea name="statement" id="statement" class="form-control" style="height:auto; min-height: 130px; max-height: 1000px; font-size: 12px;">การประเมินโครงการในรอบ 12 เดือนนี้จัดทำเพื่อศึกษา ติดตามและวิเคราห์ถึงผลลัพธ์ของแผนงาน/โครงการตามที่มหาวิทยาลัยได้จัดสรรงยประมาณให้ ว่าสามารถดำเนินการตามที่กำหนดไว้ได้หรือไม่รวมทั้งเป็นการศึกษาปัญหาอุปสรรคของการดำเนินงานแผนงาน/โครงการ การหาแนวทางการแก้ไขปัญหา การเตรียมความพร้อมสำหรับการดำเนินงานแผนงาน/โครงการครั้งต่อไป และเป็นข้อมูลประกอบการตัดสินใจสำหรับผู้บริหารในการจัดสรรงบประมาณโครงการในปีงบประมาณต่อไปด้วย ในการนี้ สำนักคอมพิวเตอร์ฯ จึงใคร่ขอความกรุณารายงานแบบประเมินผลดำเนินงาน/โครงการ ดังนี้</textarea>
+                                    <textarea name="statement" id="statement" class="form-control" style="height:auto; min-height: 130px; max-height: 1000px; font-size: 12px;">{{$data['evaluation']->statement}}</textarea>
                                 </div>
                             </div>
                             <div class="row field item form-group">
@@ -82,7 +88,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>วิธีการดำเนินโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7" >
-                                   <textarea name="implement" id="implement" class="form-control" style="min-height: 100px; height: auto;" required></textarea>
+                                   <textarea name="implement" id="implement" class="form-control" style="min-height: 100px; height: auto;" required>{{$data['evaluation']->implementation}}</textarea>
                                 </div>
                             </div>
 
@@ -98,7 +104,12 @@
                                 <div class="col-md-8 col-sm-8">
                                    @foreach ($data['obj'] as $item)
                                        -{{$item->detail}} <br> 
-                                       <input type="radio" name="obj_{{$item->objID}}" value="1"> บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0"> ไม่บรรลุ <br>
+                                       @if ($item->achieve == 1)
+                                            <input type="radio" name="obj_{{$item->objID}}" value="1" checked> บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0"> ไม่บรรลุ <br>
+                                       @else
+                                       <input type="radio" name="obj_{{$item->objID}}" value="1" > บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0" checked> ไม่บรรลุ <br>
+                                       @endif
+                                      
                                    @endforeach
                                 </div>
                             </div>
@@ -107,23 +118,31 @@
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการดำเนินงาน</b></label>
                                 <div class="col-md-8 col-sm-8">
                                     @foreach ($data['operating'] as $item)
-                                        <input type="radio" name="operating" value="{{$item->operID}}"  onchange="operatingRadio(this)" required> {{$item->name}} <br>
+                                        <input type="radio" name="operating" value="{{$item->operID}}"  onchange="operatingRadio(this)"  
+                                        @if ($data['evaluation']->operID === $item->operID) checked @endif> {{$item->name}} <br>
+                                        
                                     @endforeach
                                 </div>
                             </div>
+                           
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"></label>
                                 <div class="col-md-7 col-sm-7 d-flex">
-                                        <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput" style="display: none;"> 
+                                        <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput"
+                                        @if (!empty($data['evaluation']->since)) value="{{$data['evaluation']->since}}" style="display: flex;"  
+                                        @else style="display: none;" @endif > 
                                 </div>
                             </div>
+                           
+                           
+                            
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการดำเนินงานตามตัวชี้วัดโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7">
                                    @foreach ($data['KPIProject'] as $item)
                                        -{{$item->name}} <br>
-                                       <textarea name="result_eva[]" class="form-control" style="height: auto; min-height: 100px;" required></textarea>
+                                       <textarea name="result_eva[]" class="form-control" style="height: auto; min-height: 100px;" required>{{$item->result_eva}}</textarea>
                                    @endforeach
                                 </div>
                             </div>
@@ -145,35 +164,36 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ใช้จริง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <input type="text" class="form-control" name="badget_use" required>
+                                   <input type="text" class="form-control" name="badget_use" required value="{{$data['evaluation']->badget_use}}">
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ประโยชน์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดโครงการ)</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="benefit" id="benefit" class="form-control" style="min-height: 100px" required></textarea>
+                                   <textarea name="benefit" id="benefit" class="form-control" style="min-height: 100px" required>{{$data['evaluation']->benefit}}</textarea>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ปัญหาและอุปสรรคในการดำเนินโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="problem" id="problem" class="form-control" style="min-height: 100px" required></textarea>
+                                   <textarea name="problem" id="problem" class="form-control" style="min-height: 100px" required>{{$data['evaluation']->problem}}</textarea>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="corrective" id="corrective" class="form-control" style="min-height: 100px" required></textarea>
+                                   <textarea name="corrective" id="corrective" class="form-control" style="min-height: 100px" required>{{$data['evaluation']->corrective_actions}}</textarea>
                                 </div>
                             </div>
 
                             <div class="ln_solid">
                                 <div class="form-group">
                                     <div class="col-md-6 offset-md-3">
-                                        <button type='submit' class="btn btn-primary">บันทึก</button>
+                                        <button type='button' class="btn btn-primary" onclick="submitButton('update',{{$data['project']->proID}})">บันทึก</button>
+                                        <button type='button' class="btn btn-primary" onclick="submitButton('send',{{$data['project']->proID}})">ส่ง</button>
                                     </div>
                                 </div>
                             </div>
@@ -187,15 +207,26 @@
     </div>
     <script>
         function operatingRadio(radio){
-            console.log(radio);
-            
             var operatingInput = document.getElementById("operatingInput");
             if(radio.value !== '1'){
                 operatingInput.style.display = "flex";
                 operatingInput.required = true;
+                operatingInput.value = '';
             }else{
                 operatingInput.style.display = "none";
+                operatingInput.required = false;   
             }
+        }
+       
+
+        function submitButton(action,proID){
+            var form = document.getElementById('actionForm');
+            if(action === 'update'){
+                form.action = "/UpdateEvaluation/" + proID;
+            }else{
+                form.action = "/SendEvaluation/" + proID;
+            }
+            form.submit();
         }
     </script>
 @endsection

@@ -75,10 +75,13 @@
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 {{-- {{dd($report)}} --}}
                                 {{-- {{dd($proID)}} --}}
-                                @if (!empty($report) && ($proID[$index] ?? '') === $item->proID)
+                                @if (!empty($evaluation) && ($evaluation[$index]->proID ?? '') === $item->proID)
+                                 <a href="{{route('edit.evaluation',$item->proID)}}"><i class="fa fa-pencil btn btn-warning"> แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+
+                                @elseif (!empty($report) && ($proID[$index] ?? '') === $item->proID)
                                  {{-- <input type="text" value="{{$item->proID}}"> --}}
                                  <a href="{{route('report.quarter',[$item->proID,2])}}"><i class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
-                                    
+
                                 @else
                                     <a href="{{route('report.quarter',[$item->proID,2])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                                     {{-- <input type="text" value="{{$item->proID}}"> --}}

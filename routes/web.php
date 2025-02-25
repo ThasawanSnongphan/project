@@ -136,8 +136,13 @@ Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
-Route::post('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
+Route::any('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
 Route::post('projectSaveEvaluation/{id}',[ProjectEvalutionController::class,'save']);
+Route::post('fileEvaluation/{id}',[ProjectEvalutionController::class,'savefile']);
+Route::any('EditEvaluation/{id}',[ProjectEvalutionController::class,'edit'])->name('edit.evaluation');
+Route::any('UpdateEvaluation/{id}',[ProjectEvalutionController::class,'update']);
+Route::any('SendEvaluation/{id}',[ProjectEvalutionController::class,'send']);
+
 
 Route::get('reportQuarter/{id}{quarter}', [QuarterReportController::class, 'reportQuarter'])->name('report.quarter');
 // Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
