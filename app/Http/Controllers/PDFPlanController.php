@@ -46,6 +46,9 @@ class PDFPlanController extends Controller
         $config = include(config_path('configPDF_H.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
 
+        // เพิ่มขนาด backtrack_limit (แก้ปัญหาขนาด HTML เกิน)
+        ini_set("pcre.backtrack_limit", "10000000");
+
         $stylesheet = "
         <style>
             table {
@@ -141,9 +144,8 @@ class PDFPlanController extends Controller
 
         $htmlContent = '
             <div style="text-align: center; margin-bottom: 8px;">
-                <b> แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567 <br>
-                    สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ
-                </b>
+                <b>แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567 <br>
+                สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ</b>
             </div>
         ';
 
@@ -185,35 +187,7 @@ class PDFPlanController extends Controller
         ';
 
         $currentYear = intval(date("Y")) + 543;
-        // foreach ($strategic_issues as $strategic_issue) {
-        //     $hasCurrentYear = false;
 
-        //     foreach ($strategics as $strategic) {
-        //         if (isset($strategic->year->year) && intval($strategic->year->year) === $currentYear) {
-        //             // dd($strategic->year->year);
-        //             $hasCurrentYear = true;
-        //             // break;
-        //         }
-        //     }
-
-        //     if ($hasCurrentYear) {
-        //         $htmlContent .= '
-        //             <tr>
-        //                 <th colspan="20" style="text-align: left;">ประเด็น' . htmlspecialchars($strategic_issue->name) . '</th>
-        //             </tr>
-        //         ';
-        //     }
-
-        //     foreach($goals as $goal){
-        //         $htmlContent .= '
-        //             <tr>
-        //                 <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . htmlspecialchars($goal->name) . '</th>
-        //             </tr>
-        //         ';
-        //     }
-        // }
-
-        // foreach($strategic_maps as $strategic_map){
         foreach ($strategics as $strategic) {
             if ($strategic->year->year == $currentYear) {
                 // dd($strategic->year->year);
@@ -221,7 +195,7 @@ class PDFPlanController extends Controller
                     if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
                         $htmlContent .= '
                                 <tr>
-                                    <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . htmlspecialchars($strategic_issue->name) . '</th>
+                                    <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . $strategic_issue->name . '</th>
                                 </tr>
                             ';
                     }
@@ -229,7 +203,7 @@ class PDFPlanController extends Controller
                         if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
                             $htmlContent .= '
                                     <tr>
-                                        <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . htmlspecialchars($goal->name) . '</th>
+                                        <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . $goal->name . '</th>
                                     </tr>
                                 ';
                         }
@@ -238,63 +212,55 @@ class PDFPlanController extends Controller
                                 $htmlContent .= '
                                     <tr>
                                         <td></td>
-                                        <td style="text-align: left;">' . htmlspecialchars($tactic->name) . '</td>
-                                    </tr>
+                                        <td style="text-align: left;">' . $tactic->name . '</td>
+                                    
                                 ';
+                            }
+                            foreach ($strategic_maps as $strategic_map) {
+                                foreach ($projects as $project) {
+                                    if ($project->proID == $strategic_map->proID)
+                                        $htmlContent .= '
+                                            <td>' . $project->name . '</td>
+                                        </tr>
+                                        ';
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        // }
-
-
-
-
-
-
 
         $htmlContent .= '</table>';
 
-        // $htmlContent .= '
-        //     <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
-        //         <tr>
-        //             <td rowspan="2" style="width: 45%;">Project</td>
-        //             <td colspan="3">พ.ศ.2566</td>
-        //             <td colspan="9">พ.ศ.2567</td>
-        //         </tr>
+        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
+        // $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
 
-        //         <tr>
-        //             <td>ต.ค.</td>
-        //             <td>พ.ย.</td>
-        //             <td>ธ.ค.</td>
-        //             <td>ม.ค.</td>
-        //             <td>ก.พ.</td>
-        //             <td>มี.ค.</td>
-        //             <td>เม.ย.</td>
-        //             <td>พ.ค.</td>
-        //             <td>มิ.ย.</td>
-        //             <td>ก.ค.</td>
-        //             <td>ส.ค.</td>
-        //             <td>ก.ย.</td>
-        //         </tr>';
+        // ตรวจสอบขนาดของ HTML ก่อน
+        if (strlen($htmlContent) > 3000000) {
+            throw new \Exception("HTML content too large: " . strlen($htmlContent));
+        }
 
-        // foreach ($projects as $project) {
-
-        //     $htmlContent .= '<tr>';
-        //     $htmlContent .= '<td style="text-align: left;">' . $project->name . '</td>'; 
-        //     for ($i = 0; $i < 12; $i++) {
-        //         $htmlContent .= '<td></td>'; // คอลัมน์เดือนว่าง
-        //     }
-        //     $htmlContent .= '</tr>';
+        // $chunks = str_split($htmlContent, 30000);
+        // foreach ($chunks as $chunk) {
+        //     $mpdf->WriteHTML($chunk, 2);
         // }
 
-        // $htmlContent .= '</table>';
+        $chunks = str_split($htmlContent, 30000); // แบ่งเป็น 50,000 ตัวอักษรต่อครั้ง
+        foreach ($chunks as $chunk) {
+            $mpdf->WriteHTML($chunk, 2);
+        }
 
 
-        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
-        $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
+
+
+        // // แบ่ง HTML ออกเป็นชิ้นๆ และใส่ทีละส่วน
+        // $chunks = str_split($htmlContent, 50000);
+        // foreach ($chunks as $chunk) {
+        //     ob_start();
+        //     echo $chunk;
+        //     $mpdf->WriteHTML(ob_get_clean(), 2);
+        // }
 
         $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567');
         return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
