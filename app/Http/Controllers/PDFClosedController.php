@@ -59,6 +59,7 @@ class PDFClosedController extends Controller
         $tactics = Tactics::all();
         $tactic2_levels = Tactic2Level::all();
 
+
         $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
         $mpdf->SetY(60);
@@ -424,6 +425,8 @@ class PDFClosedController extends Controller
                 ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
                 </span> 
                 ) งบประมาณเงินรายได้ส่วนงาน<br>
+
+                <span style="margin-left: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ที่ได้รับจัดสรร       บาท&nbsp;&nbsp;&nbsp;ใช้จริง       บาท</span><br>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;(
                 <span style="font-family: DejaVu Sans, Arial, sans-serif;">
