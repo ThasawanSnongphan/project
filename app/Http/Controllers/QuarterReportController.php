@@ -7,6 +7,7 @@ use App\Models\KPIMain2LevelMapProject;
 use App\Models\ProgressDetails;
 use App\Models\ReportQuarters;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class QuarterReportController extends Controller
@@ -58,6 +59,7 @@ class QuarterReportController extends Controller
         $report=[
             'quarID'=>$quarter,
             'proID'=>$project->proID,
+            'userID'=> Auth::id(),
             'costResult'=>$request->costResult,
             'problem'=>$request->problem,
             'created_at'=>now(),

@@ -162,18 +162,18 @@
                                         {{ $item->detail }} <br>
                                     @endforeach
                                 @else
-                                    <input class="form-control" type="text" name="detail[]" id=""
-                                        data-validate-length-range="8,20" required />
+                                    <textarea class="form-control" type="text" name="detail[]" id=""
+                                         required ></textarea>
                                 @endif
 
                             </div>
-                            @if (empty($data['quarterReport']))
+                            {{-- @if (empty($data['quarterReport']))
                                 <div class=" col-md-1 col-sm-1 m-1">
                                     <button type='button' class="btn btn-primary" onclick="insertDetail()">เพิ่ม
                                     </button>
 
                                 </div>
-                            @endif
+                            @endif --}}
 
                         </div>
                         <div id="insertDetail"></div>
@@ -195,7 +195,7 @@
                         <div id="insertProblem"></div>
                         <div class="col-md-6 offset-md-3 ">
                             @if (!empty($data['quarterReport']))
-                                <button type="button" class="btn btn-danger" onclick="submitButton('evaluation',{{$data['project']->proID}})">เสนอปิดโครงการ</button>
+                                <button type="button" class="btn btn-primary" onclick="submitButton('evaluation',{{$data['project']->proID}})">กรอกข้อมูลประเมินโครงการ</button>
                             @else
                                 <button type="submit" class="btn btn-primary" >ส่งรายงานความก้าวหน้า</button>
                             @endif
@@ -218,7 +218,7 @@
             const colMD6 = document.createElement('div');
             colMD6.classList.add('col-md-6', 'col-sm-6');
 
-            const InputDetail = document.createElement('input');
+            const InputDetail = document.createElement('textarea');
             InputDetail.classList.add('form-control');
             InputDetail.type = 'text';
             InputDetail.name = 'detail[]';

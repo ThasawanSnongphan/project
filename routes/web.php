@@ -146,7 +146,7 @@ Route::any('SendEvaluation/{id}',[ProjectEvalutionController::class,'send']);
 
 Route::get('reportQuarter/{id}{quarter}', [QuarterReportController::class, 'reportQuarter'])->name('report.quarter');
 // Route::get('quarter2/{id}', [QuarterReportController::class,'quarter2'])->name('quarter2.report');
-Route::get('saveReportQuarter/{id}{quarter}', [QuarterReportController::class,'saveReportQuarter'])->name('reportQuarter.save');
+Route::post('saveReportQuarter/{id}{quarter}', [QuarterReportController::class,'saveReportQuarter'])->name('reportQuarter.save');
 
 //Report
 Route::get('projectPDF/{id}',[PDFProjectController::class,'db_gen'])->name('project.PDF');

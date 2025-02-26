@@ -129,7 +129,7 @@
                                 <div class="col-md-7 col-sm-7">
                                    @foreach ($data['KPIProject'] as $item)
                                        -{{$item->name}} <br>
-                                       <textarea name="result_eva[]" class="form-control" style="height: auto; min-height: 100px;" required></textarea>
+                                       <input name="result_eva[]" class="form-control"  value="{{$item->result2}}">
                                    @endforeach
                                 </div>
                             </div>
@@ -148,10 +148,22 @@
                                 </div>
                             </div>
 
+                            {{-- <div class="row field item form-group ">
+                                <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการใช้จ่าย</b></label>
+                                <div class="col-md-8 col-sm-8">
+                                    @foreach ($data['report_quarter'] as $item)
+                                        ไตรมาส{{$item->quarID}} <br>  {{$item->costResult}} บาท
+                                    @endforeach
+                                </div>
+                            </div> --}}
+
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ใช้จริง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <input type="text" class="form-control" name="badget_use" required>
+                                   <input type="text" class="form-control" name="badget_use" required
+                                   {{-- @foreach ($data['report_quarter'] as $item) --}}
+                                        value="{{$data['costResult']}} " readonly>
+                                    {{-- @endforeach  readonly> --}}
                                 </div>
                             </div>
 
@@ -179,7 +191,7 @@
                             <div class="ln_solid">
                                 <div class="form-group">
                                     <div class="col-md-6 offset-md-3">
-                                        <button type='submit' class="btn btn-primary">บันทึก</button>
+                                        <button type='submit' class="btn btn-primary">ส่งข้อมูลปิดโครงการ</button>
                                     </div>
                                 </div>
                             </div>

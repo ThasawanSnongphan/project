@@ -36,7 +36,8 @@ class Department_Head extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
+        $project= DB::table('projects')->whereIn('statusID',[1,20])->get();
+        // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Department_Head.project',compact('users','project','status','year','projectYear'));
