@@ -130,7 +130,7 @@ class PDFClosedController extends Controller
         if (strlen($projects->name) > 30) { // คุณสามารถปรับตัวเลขนี้ตามความยาวที่คุณต้องการ
             $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;' . $projects->name . '<br>'; // ถ้าชื่อโครงการยาวเกิน 30 ตัวอักษร จะแสดงในบรรทัดใหม่
         } else {
-            $htmlContent .= $projects->name; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
+            $htmlContent .= $projects->name . '<br>'; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
         }
 
         $htmlContent .= '
@@ -263,7 +263,7 @@ class PDFClosedController extends Controller
 
             // แสดงข้อมูลสังกัด
             foreach ($departments as $department) {
-                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</b><br>';
+                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</br><br>';
             }
         }
 

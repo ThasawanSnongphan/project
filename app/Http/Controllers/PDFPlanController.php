@@ -150,7 +150,7 @@ class PDFPlanController extends Controller
         ';
 
         $htmlContent .= '
-            <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px;">
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
                 <tr>
                     <th rowspan="3">ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์</th>
                     <th rowspan="3">กลยุทธ์<br>(หน่วยงาน)</th>
@@ -234,33 +234,9 @@ class PDFPlanController extends Controller
         $htmlContent .= '</table>';
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
-        // $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
-
-        // ตรวจสอบขนาดของ HTML ก่อน
-        if (strlen($htmlContent) > 3000000) {
-            throw new \Exception("HTML content too large: " . strlen($htmlContent));
-        }
-
-        // $chunks = str_split($htmlContent, 30000);
-        // foreach ($chunks as $chunk) {
-        //     $mpdf->WriteHTML($chunk, 2);
-        // }
-
-        $chunks = str_split($htmlContent, 30000); // แบ่งเป็น 50,000 ตัวอักษรต่อครั้ง
-        foreach ($chunks as $chunk) {
-            $mpdf->WriteHTML($chunk, 2);
-        }
+        $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
 
 
-
-
-        // // แบ่ง HTML ออกเป็นชิ้นๆ และใส่ทีละส่วน
-        // $chunks = str_split($htmlContent, 50000);
-        // foreach ($chunks as $chunk) {
-        //     ob_start();
-        //     echo $chunk;
-        //     $mpdf->WriteHTML(ob_get_clean(), 2);
-        // }
 
         $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567');
         return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
