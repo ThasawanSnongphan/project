@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BadgetType;
 use App\Models\Goals;
+use App\Models\OperatingResults;
+use App\Models\ProjectEvaluation;
 use App\Models\Projects;
 use App\Models\Strategic1Level;
 use App\Models\Strategic1LevelMapProject;
@@ -38,6 +41,7 @@ class PDFClosedController extends Controller
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $projects = Projects::where('proID', $id)->first();
+        $project_evaluations = ProjectEvaluation::all();
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
@@ -58,6 +62,10 @@ class PDFClosedController extends Controller
 
         $tactics = Tactics::all();
         $tactic2_levels = Tactic2Level::all();
+
+        $operating_results = OperatingResults::all();
+        $badget_types = BadgetType::all();
+
 
         $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
@@ -120,9 +128,34 @@ class PDFClosedController extends Controller
             return redirect()->back()->with('error', 'ไม่พบข้อมูลโครงการ');
         }
 
-        $htmlContent .= '
-            <b>คำชี้แจง</b><br>
-        ';
+        foreach ($project_evaluations as $project_evaluation) {
+            if ($projects->proID == $project_evaluation->proID) {
+                $htmlContent .= '
+                    <div style="page-break-inside: avoid;">
+                        <b>คำชี้แจง</b><br>
+                        <div style="text-align: justify; text-indent: 2em;">
+                            ' . nl2br($project_evaluation->statement) . ' <br>
+                        </div>
+                    </div>
+                ';
+                $implementation = $project_evaluation->implementation;
+                $problem = $project_evaluation->problem;
+                $benefit = $project_evaluation->benefit;
+                $corrective_actions = $project_evaluation->corrective_actions;
+                // dd($implementation);
+            }
+            // foreach($users as $user){
+            //     if($project_evaluation->userID == $user->userID){
+            //         // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
+            //         if (!in_array($user->department_name, $departments)) {
+            //             $departments[] = $user->department_name;
+            //         }
+            //         $responsibleNames[] = $user->username;
+            //         $names[] = $user->username;
+            //     }
+            // }
+
+        }
 
         $htmlContent .= '
             <b>1. ชื่อโครงการ / กิจกรรม : </b>';
@@ -130,7 +163,7 @@ class PDFClosedController extends Controller
         if (strlen($projects->name) > 30) { // คุณสามารถปรับตัวเลขนี้ตามความยาวที่คุณต้องการ
             $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;' . $projects->name . '<br>'; // ถ้าชื่อโครงการยาวเกิน 30 ตัวอักษร จะแสดงในบรรทัดใหม่
         } else {
-            $htmlContent .= $projects->name; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
+            $htmlContent .= $projects->name . '<br>'; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
         }
 
         $htmlContent .= '
@@ -256,6 +289,7 @@ class PDFClosedController extends Controller
             }
         }
 
+
         // ตรวจสอบว่ามีข้อมูลหรือไม่
         if (empty($departments) && empty($responsibleNames)) {
             $htmlContent .= 'ไม่มีข้อมูล <br>';
@@ -263,13 +297,13 @@ class PDFClosedController extends Controller
 
             // แสดงข้อมูลสังกัด
             foreach ($departments as $department) {
-                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</b><br>';
+                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</br><br>';
             }
         }
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">   
-                <b>4. วิธีการดำเนินโครงการ : </b><br>
+                <b>4. วิธีการดำเนินโครงการ : </b> ' . $implementation . '<br>
             </div>
         ';
 
@@ -326,58 +360,55 @@ class PDFClosedController extends Controller
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>6. วัตถุประสงค์</b><br>
-            </div>
+            
         ';
 
         if (DB::table('objectives')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $objects = DB::table('objectives')->where('proID', $id)->get();
-            $s = 1;
             $counter = 1; // ตัวแปรเก็บลำดับ
             foreach ($objects as $object) {
-                $htmlContent .= '
-                    <div style="text-indent: 20px;">
-                        6.' . $counter . ' ' . $object->detail . ' <br>
-                    </div>
-                    <div style="text-indent: 20px;">
-                        <span>( ' . ($s == 1 ? '<span style="font-family: \'DejaVu Sans\';">✓</span>' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($s != 1 ? '&nbsp;&nbsp;' : '<span style="font-family: \'DejaVu Sans\';">✓</span>') . ' ) ไม่บรรลุ</span>
-                    </div>
-                ';
-                $counter++;
+                if ($projects->proID == $object->proID) {
+                    $htmlContent .= '
+                        <div style="page-break-inside: avoid;">
+                            <div style="text-indent: 20px;">
+                                6.' . $counter . ' ' . $object->detail . ' <br>
+                            </div>
+                            <div style="text-indent: 20px;">
+                                <span>( ' . ($object->achieve == 1 ? '<span style="font-family: \'DejaVu Sans\';">✓</span>' : '&nbsp;&nbsp;') . ' ) บรรลุ</span>
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( ' . ($object->achieve == 1 ? '&nbsp;&nbsp;' : '<span style="font-family: \'DejaVu Sans\';">✓</span>') . ' ) ไม่บรรลุ</span>
+                            </div>
+                        </div>
+                    ';
+                    $counter++;
+                }
             }
         }
 
+        $htmlContent .= '</div>';
 
-        $status = 1; // กำหนดค่า 1 หรือ 0 ตามสถานะจริง
         $htmlContent .= '
             <div class="checkbox" style="page-break-inside: avoid;">
                 <b>7. ผลการดำเนินงาน</b><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) ดำเนินการแล้วเสร็จตามระยะเวลาที่กำหนดไว้ในโครงการ<br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) ไม่เป็นไปตามระยะเวลาที่กำหนดไว้ในโครงการ<br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) ขอเลื่อนการดำเนินการ<br>
-
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) เสนอขอยกเลิก<br>
-            </div>
         ';
+
+        foreach ($operating_results as $operating_result) {
+            $checked = '';
+            foreach ($project_evaluations as $project_evaluation) {
+                if ($project_evaluation->operID == $operating_result->operID) {
+                    $checked = '✓';
+                    break; // หยุด loop ทันทีเมื่อเจอค่า match
+                }
+            }
+            $htmlContent .= '
+                &nbsp;&nbsp;&nbsp;&nbsp;(
+                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                    ' . ($checked ?: '&nbsp;&nbsp;') . '
+                </span> ) ' . $operating_result->name . ' <br>
+            ';
+        }
+
+        $htmlContent .= '</div>';
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
@@ -399,7 +430,7 @@ class PDFClosedController extends Controller
                         // $unitName = $countKPI_pro->name;
                         $htmlContent .= '
                             &nbsp;&nbsp;&nbsp;&nbsp;8.' . $counter . ' ตัวชี้วัดโครงการ ' . $KPI_pro->name . ' <br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $KPI_pro->target . ' <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $KPI_pro->result_eva . ' <br>
                         ';
                         $counter++;
                         break;
@@ -411,102 +442,74 @@ class PDFClosedController extends Controller
         $htmlContent .= '</div>';
 
         $htmlContent .= '
-            <div class="checkbox" style="page-break-inside: avoid;">
+            <div style="page-break-inside: avoid;">
                 <b>9. งบประมาณที่ใช้ดำเนินการ</b><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) งบประมาณแผนดิน<br>
+        ';
 
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) งบประมาณเงินรายได้ส่วนงาน<br>
+        if (!empty($projects) && isset($projects->badID)) { // ตรวจสอบว่า $projects มีค่า
+            foreach ($badget_types as $badget_type) {
+                $checked = (isset($badget_type->badID) && $projects->badID == $badget_type->badID) ? '✓' : '&nbsp;&nbsp;';
 
+                $htmlContent .= '
                 &nbsp;&nbsp;&nbsp;&nbsp;(
                 <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) อื่นๆ ..............................................<br>
+                    ' . $checked . '
+                </span> ) ' . htmlspecialchars($badget_type->name) . ' <br>
+            ';
+            }
+        } else {
+            $htmlContent .= '<i>ไม่มีข้อมูลงบประมาณ</i><br>';
+        }
 
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
-                </span> 
-                ) ไม่ได้ใช้งบประมาณ<br>
+        $htmlContent .= '</div>';
+
+
+        $htmlContent .= '
+            <div style="page-break-inside: avoid;">
+                <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
+                <div style="text-align: justify; text-indent: 2em;">
+                    ' . nl2br($benefit) . ' <br>
+                </div>
             </div>
         ';
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
-        ';
-
-        $bnfs = DB::table('benefits')->where('proID', $id)->get(); // ดึงข้อมูลที่ตรงกับ proID
-
-        if ($bnfs->isNotEmpty()) { // ถ้ามีข้อมูล
-            $counter = 1;
-            foreach ($bnfs as $bnf) {
-                $htmlContent .= '
-                    <div style="text-align: justify;">
-                        &nbsp;&nbsp;&nbsp;&nbsp;10.' . $counter . ' ' . nl2br($bnf->detail) . ' <br>
-                    </div>
-                ';
-                $counter++;
-            }
-        } else {
-            $htmlContent .= '
-                <div style="text-align: justify;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;ไม่มีข้อมูล<br>
-                </div>
-            '; // ถ้าไม่มีข้อมูล
-        }
-
-        $htmlContent .='</div>';
-
-        $htmlContent .= '
-            <div style="page-break-inside: avoid;">
                 <b>11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ</b><br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
-        
+                <div style="text-align: justify; text-indent: 2em;">
+                    ' . nl2br($problem) . ' <br>
+                </div>
             </div>
         ';
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>12. แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b><br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
-                .........................................................................................................................................................................................<br>
+                <div style="text-align: justify; text-indent: 2em;">
+                    ' . nl2br($corrective_actions) . ' <br>
+                </div>
             </div>
         ';
 
         $htmlContent .= '
             <div style="page-break-before: avoid;">
-            <br><br><br><br>
-            <div>
-                <div style="width: 300px; text-align: center; float: left;">
-                    ลงชื่อ ................................................. <br>
-                    (  '.  $names[0] .'  ) <br>
-                    ผู้รับผิดชอบโครงการ <br>
-                    วันที่ ........../......................./..........
-                </div>
-                <div style="width: 300px; text-align: center; float: right;">
-                    ลงชื่อ ................................................. <br>
-                    ( ................................................. ) <br>
-                    ผู้อำนวยการ <br>
-                    วันที่ ........../......................./..........
+                <br><br><br><br>
+                <div>
+                    <div style="width: 300px; text-align: center; float: left;">
+                        ลงชื่อ ................................................. <br>
+                        (  ' .  $names[0] . '  ) <br>
+                        ผู้รับผิดชอบโครงการ <br>
+                        วันที่ ........../......................./..........
+                    </div>
+                    <div style="width: 300px; text-align: center; float: right;">
+                        ลงชื่อ ................................................. <br>
+                        ( ................................................. ) <br>
+                        ผู้อำนวยการ <br>
+                        วันที่ ........../......................./..........
+                    </div>
                 </div>
             </div>
         ';
-
-        $htmlContent .= '</div>';
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  

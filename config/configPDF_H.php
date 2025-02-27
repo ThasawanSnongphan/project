@@ -19,8 +19,8 @@ return [
     'default_font_size' => 16,
     'format' => 'A4',
     'orientation' => 'L',     // แนวกระดาษ (P = แนวตั้ง, L = แนวนอน)
-    'margin_top' => 16,       // ระยะขอบบน (หน่วยเป็น mm)
-    'margin_bottom' => 16,    // ระยะขอบล่าง
-    'margin_left' => 20,      // ระยะขอบซ้าย
-    'margin_right' => 20,     // ระยะขอบขวา
+    'margin_top' => 10,       // ระยะขอบบน (หน่วยเป็น mm)
+    'margin_bottom' => 10,    // ระยะขอบล่าง
+    'margin_left' => 8,      // ระยะขอบซ้าย
+    'margin_right' => 8,     // ระยะขอบขวา
 ];
