@@ -38,6 +38,7 @@ class PDFClosedController extends Controller
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $projects = Projects::where('proID', $id)->first();
+        $project_evaluations = 
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
@@ -58,6 +59,7 @@ class PDFClosedController extends Controller
 
         $tactics = Tactics::all();
         $tactic2_levels = Tactic2Level::all();
+
 
         $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
@@ -130,7 +132,7 @@ class PDFClosedController extends Controller
         if (strlen($projects->name) > 30) { // คุณสามารถปรับตัวเลขนี้ตามความยาวที่คุณต้องการ
             $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;' . $projects->name . '<br>'; // ถ้าชื่อโครงการยาวเกิน 30 ตัวอักษร จะแสดงในบรรทัดใหม่
         } else {
-            $htmlContent .= $projects->name; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
+            $htmlContent .= $projects->name . '<br>'; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
         }
 
         $htmlContent .= '
@@ -263,7 +265,7 @@ class PDFClosedController extends Controller
 
             // แสดงข้อมูลสังกัด
             foreach ($departments as $department) {
-                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</b><br>';
+                $htmlContent .= '<b>3. ส่วนงานที่รับผิดชอบ : </b>' . $department . '</br><br>';
             }
         }
 
@@ -424,6 +426,8 @@ class PDFClosedController extends Controller
                 ' . ($status == 1 ? '✓' : '&nbsp;&nbsp;') . '
                 </span> 
                 ) งบประมาณเงินรายได้ส่วนงาน<br>
+
+                <span style="margin-left: 50px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ที่ได้รับจัดสรร       บาท&nbsp;&nbsp;&nbsp;ใช้จริง       บาท</span><br>
 
                 &nbsp;&nbsp;&nbsp;&nbsp;(
                 <span style="font-family: DejaVu Sans, Arial, sans-serif;">
