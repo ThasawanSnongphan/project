@@ -38,6 +38,7 @@ class PDFClosedController extends Controller
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $projects = Projects::where('proID', $id)->first();
+        $project_evaluations = 
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
