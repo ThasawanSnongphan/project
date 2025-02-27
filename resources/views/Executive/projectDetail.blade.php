@@ -59,7 +59,7 @@
                 <th>format</th>
                 <td colspan="5">{{ $project->format }}</td>
             </tr>
-            @if (!empty($strategic3LVMap))
+            @if (count($strategic3LVMap) > 0)
                 @foreach ($strategic3LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -101,7 +101,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic2LVMap))
+            @if (count($strategic2LVMap) > 0)
                 @foreach ($strategic2LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -139,7 +139,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic1LVMap))
+            @if (count($strategic1LVMap) > 0)
                 @foreach ($strategic1LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -187,9 +187,12 @@
             <tr>
                 <th>วัตถุประสงค์</th>
                 <td colspan="5">
+                    @php
+                        $index = 1;
+                    @endphp
                     @foreach ($projectOBJ as $item)
                         @if ($project->proID === $item->proID)
-                            {{ $item->detail }} <br>
+                            {{$index++}}. {{ $item->detail }} <br>
                         @endif
                     @endforeach
                 </td>
@@ -235,8 +238,11 @@
             </tr>
             <tr>
                 <td colspan="4">
+                    @php
+                        $index = 1;
+                    @endphp
                     @foreach ($projectStep as $item)
-                        - {{ $item->name }} <br>
+                        {{$index++}}. {{ $item->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -319,8 +325,11 @@
             <tr>
                 <th>ประโยชน์ที่คาดว่าจะได้รับ</th>
                 <td colspan="5">
+                    @php
+                        $index = 1;
+                    @endphp
                     @foreach ($projectBenefit as $item)
-                        - {{ $item->detail }} <br>
+                        {{$index++}}. {{ $item->detail }} <br>
                     @endforeach
                 </td>
             </tr>

@@ -137,6 +137,7 @@ Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('pr
 Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
 
 Route::any('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
+Route::get('projectDetailEvaluation/{id}',[ProjectEvalutionController::class,'Detail'])->name('detail.evaluation');
 Route::post('projectSaveEvaluation/{id}',[ProjectEvalutionController::class,'save']);
 Route::post('fileEvaluation/{id}',[ProjectEvalutionController::class,'savefile']);
 Route::any('EditEvaluation/{id}',[ProjectEvalutionController::class,'edit'])->name('edit.evaluation');

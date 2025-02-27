@@ -17,12 +17,13 @@
     <div class="col-md-10 col-sm-10">
         <table class="table table-bordered">
             @if (count($comment) > 0)
-                <tr>
+                <tr style="background-color: #FFF9B1; ">
                     <th>ข้อเสนอเเนะ</th>
-                    <td colspan="5" >
+                    <td colspan="5">
                         @foreach ($comment as $item)
-                            {{$item->user->firstname_en}} {{$item->user->lastname_en}} : {{$item->detail}} <br> เมื่อ {{$item->created_at}} <br>
-                        @endforeach 
+                            <b>{{ $item->user->firstname_en }} {{ $item->user->lastname_en }}</b> : {{ $item->detail }} <br>
+                            <b>เมื่อ</b> {{ $item->created_at }} <br>
+                        @endforeach
                     </td>
                 </tr>
             @endif
@@ -68,7 +69,7 @@
                 <td colspan="5">{{ $project->format }}</td>
             </tr>
 
-            @if (!empty($strategic3LVMap))
+            @if (count($strategic3LVMap) > 0)
                 @foreach ($strategic3LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -110,7 +111,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic2LVMap))
+            @if (count($strategic2LVMap) > 0)
                 @foreach ($strategic2LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -148,7 +149,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic1LVMap))
+            @if (count($strategic1LVMap) > 0)
                 @foreach ($strategic1LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -203,9 +204,12 @@
             <tr>
                 <th>วัตถุประสงค์</th>
                 <td colspan="5">
+                    @php
+                        $index = 1;
+                    @endphp
                     @foreach ($projectOBJ as $item)
                         @if ($project->proID === $item->proID)
-                            {{ $item->detail }} <br>
+                           {{$index++}}. {{ $item->detail }} <br>
                         @endif
                     @endforeach
                 </td>
@@ -252,8 +256,11 @@
             </tr>
             <tr>
                 <td colspan="4">
+                    @php
+                        $index =1;
+                    @endphp
                     @foreach ($projectStep as $item)
-                        - {{ $item->name }} <br>
+                        {{$index++}}. {{ $item->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -297,12 +304,12 @@
             <tr>
                 <td>
                     @foreach ($projectCostQuarter as $item)
-                        - {{$item->exp->name}} <br>
+                        - {{ $item->exp->name }} <br>
                     @endforeach
                 </td>
                 <td>
                     @foreach ($projectCostQuarter as $item)
-                        - {{$item->cost->name}} <br>
+                        - {{ $item->cost->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -333,8 +340,11 @@
             <tr>
                 <th>ประโยชน์ที่คาดว่าจะได้รับ</th>
                 <td colspan="5">
+                    @php
+                        $index=1;
+                    @endphp
                     @foreach ($projectBenefit as $item)
-                        - {{ $item->detail }} <br>
+                        {{$index++}}. {{ $item->detail }} <br>
                     @endforeach
                 </td>
             </tr>
@@ -342,7 +352,7 @@
                 <th>ไฟล์เอกสารประกอบโครงการ</th>
                 <td colspan="5">
                     @foreach ($file as $item)
-                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name ?? '-'}}</a> <br>
+                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name ?? '-' }}</a> <br>
                     @endforeach
 
                 </td>

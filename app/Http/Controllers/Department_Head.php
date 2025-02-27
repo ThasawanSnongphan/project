@@ -36,7 +36,7 @@ class Department_Head extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project= DB::table('projects')->whereIn('statusID',[1,20])->get();
+        $project= DB::table('projects')->whereIn('statusID',[1,5])->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
@@ -74,7 +74,7 @@ class Department_Head extends Controller
     }
 
     function departmentPass(Request $request, $id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '5']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '2']);
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
@@ -94,7 +94,7 @@ class Department_Head extends Controller
         $request->validate([
             'comment'=>'required'
         ]);
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '14']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '12']);
         $detail = $request->input('comment');
         $userID = Auth::id();
         DB::table('comments')->insert(

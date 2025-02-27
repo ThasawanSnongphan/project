@@ -58,7 +58,7 @@
 
                             </div>
                         </div>
-                        <div class="row field item form-group align-items-center">
+                        <div class="row field item form-group">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผลตามตัวชี้วัด :
                             </label>
                             <div class="col-md-8 col-sm-8">
@@ -133,7 +133,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row field item form-group align-items-center">
+                        <div class="row field item form-group">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ขั้นตอนการดำเนินการ
                                 : </label>
                             <div class="col-md-6 col-sm-6">
@@ -153,7 +153,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row field item form-group align-items-center">
+                        <div class="row field item form-group">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดความก้าวหน้า : </label>
                             <div class="col-md-6 col-sm-6">

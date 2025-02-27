@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action=""novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="/projectSave2"  enctype="multipart/form-data">
                         @csrf
                         {{-- <input type="hidden" id="proID" name="proID" value="{{$project->proID}}"> --}}
                         <div class="row field item form-group align-items-center">
@@ -55,7 +55,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
-                                <input class="form-control" type="text" name="user" id="user" required='required'
+                                <input class="form-control" type="text" name="user" id="user" 
                                     value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
 
                             </div>
@@ -74,7 +74,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สังกัด<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="faculty" id="faculty" required='required'
+                                <input class="form-control" type="text" name="faculty" id="faculty" 
                                     data-validate-length-range="8,20" disabled value="{{ Auth::user()->faculty_name }}" />
                             </div>
 
@@ -83,7 +83,7 @@
                             <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="format" name="format" class="form-control" required>
+                                <select id="format" name="format" class="form-control" >
                                     <option value="team"
                                         {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
                                     <option value="department"
@@ -356,7 +356,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
                                 <select id="type" name="proTypeID" class="form-control"
-                                     required>
+                                     >
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
                                             >
@@ -367,7 +367,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control" required>
+                                <select id="charecter" name="proChaID" class="form-control" >
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
                                             >
@@ -381,36 +381,35 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control" onclick="toggleTextarea()"  required>
+                                <select id="integrat" name="proInID" class="form-control" onclick="toggleTextarea()"  >
                                     @foreach ($projectIntegrat as $item)
-                                        <option value="{{ $item->proInID }}"
-                                            {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                        <option value="{{ $item->proInID }}">
+                                            {{ $item->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        @if ($selectProjectIntegrat === '6')
-                            <div class="row field item form-group align-items-center">
+                       
+                            <div class="row field item form-group align-items-center" style="display: none" id="otherTextContainer">
                                 <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-6 col-sm-6" >
                                     <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง"></textarea>
                                 </div>
                             </div>
-                        @endif
+                        
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">หลักการและเหตุผล<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 d-flex">
-                                <textarea class="form-control" name="principle" id="principle" required='required'
-                                    data-validate-length-range="8,20"></textarea>
-                                @error('principle')
+                                <textarea class="form-control" name="principle" id="principle" required></textarea>
+                                {{-- @error('principle')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                         </div>
 
@@ -420,12 +419,12 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="obj[]" id="obj"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('obj.*')
+                                    required />
+                                {{-- @error('obj.*')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
@@ -457,7 +456,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="KPIProject[]" id="">
+                                        <input class="form-control" type="text" name="KPIProject[]" id="" required>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <select id="countKPIProject" name="countKPIProject[]" class="form-control"
@@ -472,7 +471,7 @@
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="text" name="targetProject[]"
-                                            id="">
+                                            id="" required>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -521,7 +520,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="stepName[]" id="">
+                                        <input class="form-control" type="text" name="stepName[]" id="" required>
                                         @error('stepName.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -529,7 +528,7 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepStart[]" id="">
+                                        <input class="form-control" type="date" name="stepStart[]" id="" required>
                                         @error('stepStart.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -537,7 +536,7 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepEnd[]" id="">
+                                        <input class="form-control" type="date" name="stepEnd[]" id="" required>
                                         @error('stepEnd.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -638,52 +637,51 @@
                                 <div class="col-md-12 col-sm-12 ">
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="expID" name="expID[]" class="form-control" required>
+                                        <select id="expID" name="expID[]" class="form-control" >
 
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="costType" name="costID[]" class="form-control" required>
+                                        <select id="costType" name="costID[]" class="form-control" >
 
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control cost-input" type="text" name="costQu1[]"
-                                            id="">
-                                        @error('costQu1.*')
+                                        <input class="form-control cost-input" type="text" name="costQu1[]" id="" required pattern="^\d+(\.\d{1,2})?$" >
+                                        {{-- @error('costQu1.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu2[]"
-                                            id="">
-                                        @error('costQu2.*')
+                                            id="" required>
+                                        {{-- @error('costQu2.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu3[]"
-                                            id="">
-                                        @error('costQu3.*')
+                                            id="" required>
+                                        {{-- @error('costQu3.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu4[]"
                                             id="">
-                                        @error('costQu4.*')
+                                        {{-- @error('costQu4.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -705,13 +703,13 @@
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
                                 <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
-                                    required='required' data-validate-length-range="8,20" readonly
+                                    data-validate-length-range="8,20" readonly
                                     oninput="updateText()" />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
                                 <input class="form-control" type="text" name="badgetTotalText" id="badgetTotalText"
-                                    required='required' data-validate-length-range="8,20" disabled />
+                                     data-validate-length-range="8,20" disabled />
 
                             </div>
 
@@ -722,13 +720,12 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประโยชน์ที่คาดว่าจะได้รับ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('benefit.*')
+                                <input class="form-control" type="text" name="benefit[]" id="benefit" required >
+                                {{-- @error('benefit.*')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertBenefit()">เพิ่ม</button>
@@ -741,13 +738,12 @@
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="file" name="file[]" id="file"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('file')
+                                <input class="form-control" type="file" name="file[]" id="file">
+                                {{-- @error('file')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
 
                             </div>
                             {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
@@ -761,7 +757,7 @@
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary"
-                                        onclick="submitButton('save2')">บันทึก</button>
+                                        >บันทึก</button>
                                     {{-- <button type='button' class="btn btn-primary"
                                         onclick="submitButton('send2')">ส่ง</button> --}}
                                 </div>
@@ -775,6 +771,7 @@
     </div>
 
     <script>
+        
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
@@ -1463,16 +1460,17 @@
             document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
         }
 
-        // function toggleTextarea() {
-        //     var select = document.getElementById("integrat");
-        //     var otherTextContainer = document.getElementById("otherTextContainer");
+        function toggleTextarea() {
+            var select = document.getElementById("integrat");
+            var otherTextContainer = document.getElementById("otherTextContainer");
 
-        //     if (select.value === '6') {
-        //         otherTextContainer.style.display = "flex";
-        //     } else {
-        //         otherTextContainer.style.display = "none";
-        //     }
-        // }
+            if (select.value === '6') {
+                otherTextContainer.style.display = "flex";
+                otherTextContainer.required = true; 
+            } else {
+                otherTextContainer.style.display = "none";
+            }
+        }
 
 
         function insertBenefit() {
@@ -1922,15 +1920,13 @@
             }
         }
 
-        function submitButton(action) {
-            var form = document.getElementById('actionForm');
-            if (action === 'save2') {
-                form.action = "/projectSave2";
-            } else if (action === 'send2') {
-                form.action = "/projectSend2";
-            }
-            form.submit();
-        }
+        // function submitButton(action) {
+        //     var form = document.getElementById('actionForm');
+        //     if (action === 'save2') {
+        //         form.action = "/projectSave2";
+        //     } 
+        //     form.submit();
+        // }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ
         window.onload = function() {

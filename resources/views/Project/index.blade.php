@@ -35,7 +35,7 @@
                     <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
-                    <th>ไตรมาส 4</th>
+                    <th>ไตรมาส 4</th>                   
                     <th></th>
                 @endif
 
@@ -50,18 +50,21 @@
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 16 || $item->statusID == 14)
+                        @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
                             {{ $item->name }}
-                        @else
+                        @elseif ($item->statusID == 1 || $item->statusID == 2 || $item->statusID == 3 || $item->statusID == 4)
                             <a href="{{ route('project.report', $item->proID) }}">{{ $item->name }}</a>
+                        @else
+                            <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
+                            
                         @endif
                     </td>
                     
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                        @if (Auth::check() && auth()->user() )
+                        @if (Auth::check() && auth()->user()  )
                         <td>
                             
-                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
+                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID == 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href="{{ route('report.quarter',[$item->proID,1]) }}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
@@ -71,7 +74,7 @@
                         </td>
                         <td>
 
-                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
+                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID == 4 )
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 {{-- {{dd($report)}} --}}
                                 {{-- {{dd($proID)}} --}}
@@ -92,7 +95,7 @@
                             @endif
                         </td>
                         <td>
-                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
+                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID == 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href="{{route('report.quarter',[$item->proID,3])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
@@ -101,7 +104,7 @@
                             @endif
                         </td>
                         <td>
-                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
+                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID == 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href="{{route('report.quarter',[$item->proID,4])}}"><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
@@ -109,15 +112,18 @@
                                         เขียน</i></a>
                             @endif
                         </td>
-                        <td>
-                            @if ($item->statusID == 16 || $item->statusID == 14)
+                         <td>
+                            @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
+                               
                                 <a href="{{ route('project.edit1', $item->proID) }}"><i
                                         class="fa fa-pencil btn btn-warning"></i></a>
+                                        
                                 <a href="{{ route('project.delete', $item->proID) }}"
                                     onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
                                         class="fa fa-times btn btn-danger"></i></a>
+                           
                             @endif
-                        </td>
+                                    
                     @endif
                 </tr>
                 @php

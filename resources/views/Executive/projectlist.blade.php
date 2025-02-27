@@ -16,10 +16,6 @@
                 @endforeach
             </select>
         </div>
-        {{-- <div class="ml-auto">
-
-            <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
-        </div> --}}
 
     </div>
 
@@ -46,9 +42,7 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                @if  (Auth::check() && auth()->user() && auth()->user()->Executive == 1 && $item->statusID != 6)
-                    @continue
-                @endif
+                
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">

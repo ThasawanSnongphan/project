@@ -488,7 +488,7 @@ class ProjectController extends Controller
         $project = new Projects();
         $project->yearID = $year->yearID;
         $project->name = $request->input('name');
-        $project->statusID =  16;
+        $project->statusID =  14;
         $project->save(); 
 
         $project = $project->fresh();
@@ -569,26 +569,26 @@ class ProjectController extends Controller
     }
 
     function save2(Request $request){
-        $request->validate(
+        // $request->validate(
            
-                [
-                    'principle' => 'required',
-                    'obj.*' => 'required',
-                    'stepName.*' => 'required',
-                    'stepStart.*' => 'required',
-                    'stepEnd.*' => 'required',
-                    'costQu1.*' => 'required',
-                    'costQu2.*' => 'required',
-                    'costQu3.*' => 'required',
-                    'costQu4.*' => 'required',
-                    'benefit.*' => 'required',
+        //         [
+        //             'principle' => 'required',
+        //             'obj.*' => 'required',
+        //             'stepName.*' => 'required',
+        //             'stepStart.*' => 'required',
+        //             'stepEnd.*' => 'required',
+        //             'costQu1.*' => 'required',
+        //             'costQu2.*' => 'required',
+        //             'costQu3.*' => 'required',
+        //             'costQu4.*' => 'required',
+        //             'benefit.*' => 'required',
                     
-                ],
-                [
-                    'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
-            ]
+        //         ],
+        //         [
+        //             'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
+        //     ]
 
-        );
+        // );
         $projects=[
             'yearID'=>$request->yearID,
             'name'=>$request->project_name,
@@ -602,7 +602,7 @@ class ProjectController extends Controller
             'badID'=>$request->badID,
             'badgetTotal'=>$request->badgetTotal,
             'planID'=>$request->planID,
-            'statusID'=>16,
+            'statusID'=>14,
             'created_at' => now(),
             'updated_at' => now()
         ];

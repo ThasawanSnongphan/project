@@ -29,7 +29,7 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
                     <th>สถานะ</th>
                     <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
@@ -46,9 +46,7 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                @if  (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
-                    @continue
-                @endif
+               
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">

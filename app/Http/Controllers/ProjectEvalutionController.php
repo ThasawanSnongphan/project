@@ -8,6 +8,8 @@ use App\Models\StrategicMap;
 use App\Models\Strategic2LevelMapProject;
 use App\Models\Strategic1LevelMapProject;
 use App\Models\OperatingResults;
+use App\Models\ProjectEvaluation;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +69,7 @@ class ProjectEvalutionController extends Controller
     }
     public function save(Request $request, $id)
     {
-        $data['project'] = DB::table('projects')->where('proID',$id)->update(['statusID'=>20]);
+        $data['project'] = DB::table('projects')->where('proID',$id)->update(['statusID'=>5]);
         $evaluation = [
             'proID' => $id,
             'userID' =>  Auth::id(),
@@ -100,6 +102,42 @@ class ProjectEvalutionController extends Controller
         // dd($obj_achieve);
 
         return  redirect('/project');
+    }
+
+    public function detail($id){
+        // $data['evaluation'] = DB::table('project_evaluations')->where('proID',$id)->first();
+       $data['evaluation']=ProjectEvaluation::with('operating')->where('proID',$id)->first();
+
+        $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
+        $data['status'] = DB::table('statuses')->where('statusID',$data['project']->statusID)->first();
+        // dd($data['project']);
+        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารปิดโครงการ')->get();
+       
+
+        $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
+        $data['stra2LVMap']=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
+        $data['stra1LVMap'] = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
+        
+        $data['stepStart'] = DB::table('steps')->where('proID',$id)->orderBy('start' ,'ASC')->first();
+        $data['stepStartFormat'] = Carbon::parse($data['stepStart']->start)
+        ->locale('th')  // ตั้งค่าภาษาไทย
+        ->translatedFormat('j F Y');
+        
+        $data['stepEnd']= DB::table('steps')->where('proID',$id)->orderBy('end' ,'desc')->first();
+        $data['stepEndFormat'] = Carbon::parse($data['stepEnd']->end)
+        ->locale('th')  // ตั้งค่าภาษาไทย
+        ->translatedFormat('j F Y');
+        
+        // dd($data['stepStart'],$data['stepEnd']);
+        $data['obj']=DB::table('objectives')->where('proID',$id)->get();
+        $data['operating'] = OperatingResults::all();
+        $data['KPIProject']=DB::table('k_p_i_projects')->where('proID',$id)->get();
+
+        $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
+        $data['costResult']=$data['report_quarter']->sum('costResult');
+        // dd($data['costResult']);
+
+        return view('ProjectEvaluation.detail',compact('data'));
     }
 
     public function edit($id){

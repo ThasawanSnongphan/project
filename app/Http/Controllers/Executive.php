@@ -36,7 +36,7 @@ class Executive extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
+        $project=DB::table('projects')->whereIn('statusID',[3,7])->get();
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Executive.projectlist',compact('users','project','status','year','projectYear'));
@@ -82,7 +82,7 @@ class Executive extends Controller
     }
 
     function ExecutivePass(Request $request, $id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '7']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => 4]);
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
@@ -102,7 +102,7 @@ class Executive extends Controller
         $request->validate([
             'comment'=>'required'
         ]);
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '17']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => 15]);
         $detail = $request->input('comment');
         $userID = Auth::id();
         
@@ -121,7 +121,7 @@ class Executive extends Controller
         $request->validate([
             'comment'=>'required'
         ]);
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '14']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '12']);
         $detail = $request->input('comment');
         $userID = Auth::id();
         DB::table('comments')->insert(

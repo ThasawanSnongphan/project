@@ -99,7 +99,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic2LVMap))
+            @if (count($strategic2LVMap) > 0)
                 @foreach ($strategic2LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -222,7 +222,7 @@
                 <th>กลุ่มเป้าหมาย</th>
                 @foreach ($projectTarget as $item)
                     @if ($project->tarID === $item->tarID)
-                        <td colspan="3">{{ $item->name }}</td>
+                        <td colspan="5">{{ $item->name }}</td>
                     @endif
                 @endforeach
             </tr>
@@ -237,7 +237,7 @@
             <tr>
                 <td colspan="4">
                     @foreach ($projectStep as $item)
-                        - {{ $item->name }} <br>
+                    {{ $loop->iteration }}. {{ $item->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -321,7 +321,7 @@
                 <th>ประโยชน์ที่คาดว่าจะได้รับ</th>
                 <td colspan="5">
                     @foreach ($projectBenefit as $item)
-                        - {{ $item->detail }} <br>
+                    {{ $loop->iteration }}. {{ $item->detail }} <br>
                     @endforeach
                 </td>
             </tr>

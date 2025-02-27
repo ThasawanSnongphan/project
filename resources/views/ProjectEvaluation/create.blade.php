@@ -23,7 +23,7 @@
                 <div class="x_content">
                         <form method="POST" action="/fileEvaluation/{{$data['project']->proID}}" enctype="multipart/form-data">
                             @csrf
-                            <h6>uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6> <hr>
+                            <h6>upload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6> <hr>
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>upload เอกสารที่เกี่ยวข้อง</b></label>
                                 <div class="col-md-7 col-sm-7 d-flex">

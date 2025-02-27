@@ -36,7 +36,7 @@ class PlanningAnalyst extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
+        $project=DB::table('projects')->whereIn('statusID',[2,6])->get();
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Planning_Analyst.project',compact('users','project','status','year','projectYear'));
@@ -55,7 +55,7 @@ class PlanningAnalyst extends Controller
     function projectCancel(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where('statusID','17')->get();
+        $project=DB::table('projects')->where('statusID','15')->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
@@ -93,7 +93,7 @@ class PlanningAnalyst extends Controller
     }
 
     function planningPass(Request $request,$id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '6']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '3']);
         $detail = $request->input('comment');
         $userID = Auth::id();
         if(!empty($detail)){
