@@ -54,12 +54,11 @@ class PDFPlanController extends Controller
             table {
                 border-collapse: collapse;
                 width: 100%;
-                margin-bottom: 7px;
+                margin-bottom: 5px;
 
             }
             table, th, td {
                 border: 1px solid black;
-                font-size: 16pt;
             }
             th, td {
                 padding: 8px;
@@ -216,15 +215,15 @@ class PDFPlanController extends Controller
                                     
                                 ';
                             }
-                            foreach ($strategic_maps as $strategic_map) {
-                                foreach ($projects as $project) {
-                                    if ($project->proID == $strategic_map->proID)
-                                        $htmlContent .= '
-                                            <td>' . $project->name . '</td>
-                                        </tr>
-                                        ';
-                                }
-                            }
+                            // foreach ($strategic_maps as $strategic_map) {
+                            //     foreach ($projects as $project) {
+                            //         if ($project->proID == $strategic_map->proID)
+                            //             $htmlContent .= '
+                            //                 <td>' . $project->name . '</td>
+                            //             </tr>
+                            //             ';
+                            //     }
+                            // }
                         }
                     }
                 }
