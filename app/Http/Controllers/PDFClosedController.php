@@ -154,7 +154,6 @@ class PDFClosedController extends Controller
             //         $names[] = $user->username;
             //     }
             // }
-
         }
 
         $htmlContent .= '
@@ -166,102 +165,92 @@ class PDFClosedController extends Controller
             $htmlContent .= $projects->name . '<br>'; // ถ้าชื่อโครงการไม่ยาวเกิน จะแสดงในบรรทัดเดียวกัน
         }
 
-        $htmlContent .= '
-            <b>2. โครงการ / กิจกรรมนี้ตอบสนอง</b><br>
-        ';
-
-        $index = 1;
+        $htmlContent .= '<b>2. โครงการ / กิจกรรมนี้ตอบสนอง</b>';
+        $plans = [];
 
         foreach ($strategic_maps as $strategic_map) {
             if ($projects->proID == $strategic_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก straID
+                $planDetails = [];
                 foreach ($strategics as $strategic) {
-                    if ($strategic->straID == $strategic_map->straID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.' . $index . ' ' . $strategic->name . '</b> <br>';
-                        $index++;
+                    if ($strategic->stra3LVID == $strategic_map->stra3LVID) {
+                        $planDetails[] = '<b>' . $strategic->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก SFAID
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ ' . $strategic_issue->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็น' . $strategic_issue->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก goalID
                 foreach ($goals as $goal) {
                     if ($goal->goalID == $strategic_map->goalID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ ' . $goal->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ ' . $goal->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tacID
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
             }
         }
 
         foreach ($strategic2_level_maps as $strategic2_level_map) {
             if ($projects->proID == $strategic2_level_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก stra2LVID
+                $planDetails = [];
                 foreach ($strategic2_levels as $strategic2_level) {
                     if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.' . $index . ' ' . $strategic2_level->name . '</b> <br>';
-                        $index++;
+                        $planDetails[] = '<b>' . $strategic2_level->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก SFA2LVID
                 foreach ($strategic_issue2_levels as $strategic_issue2_level) {
                     if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ ' . $strategic2_level->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็น' . $strategic_issue2_level->name;
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tac2LVID
                 foreach ($tactic2_levels as $tactic2_level) {
                     if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic2_level->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ ' . $tactic2_level->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
             }
         }
 
         foreach ($strategic1_level_maps as $strategic1_level_map) {
             if ($projects->proID == $strategic1_level_map->proID) {
-                // $htmlContent .= '<b>ข้อมูลสำหรับโครงการที่ ' . $strategic_map->proID . '</b><br>';
-
-                // เช็คชื่อจาก stra1LVID
+                $planDetails = [];
                 foreach ($strategic1_levels as $strategic1_level) {
                     if ($strategic1_level->stra1LVID == $strategic1_level_map->stra1LVID) {
-                        $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.' . $index . ' ' . $strategic->name . '</b> <br>';
-                        $index++;
+                        $planDetails[] = '<b>' . $strategic1_level->name . '</b>';
                         break;
                     }
                 }
-
-                // เช็คชื่อจาก tar1LVID
                 foreach ($target1_levels as $target1_level) {
                     if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
-                        $htmlContent .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ ' . $target1_level->name . '<br>';
+                        $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ ' . $target1_level->name;
                         break;
                     }
                 }
+                $plans[] = implode('<br>', $planDetails);
+            }
+        }
+
+        if (count($plans) == 1) {
+            $htmlContent .= $plans[0] . '<br>';
+        } elseif (count($plans) > 1) {
+            $htmlContent .= '<br>';
+            $index = 1;
+            foreach ($plans as $plan) {
+                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.' . $index . ' ' . '</b>' . $plan . '<br>';
+                $index++;
             }
         }
 
@@ -446,22 +435,38 @@ class PDFClosedController extends Controller
                 <b>9. งบประมาณที่ใช้ดำเนินการ</b><br>
         ';
 
-        if (!empty($projects) && isset($projects->badID)) { // ตรวจสอบว่า $projects มีค่า
+        // ตรวจสอบว่ามีข้อมูลโครงการหรือไม่
+        if (!empty($projects) && isset($projects->badID)) {
             foreach ($badget_types as $badget_type) {
                 $checked = (isset($badget_type->badID) && $projects->badID == $badget_type->badID) ? '✓' : '&nbsp;&nbsp;';
 
                 $htmlContent .= '
-                &nbsp;&nbsp;&nbsp;&nbsp;(
-                <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                    ' . $checked . '
-                </span> ) ' . htmlspecialchars($badget_type->name) . ' <br>
-            ';
+                    &nbsp;&nbsp;&nbsp;&nbsp;(
+                    <span style="font-family: DejaVu Sans, Arial, sans-serif;">
+                        ' . $checked . '
+                    </span> ) ' . htmlspecialchars($badget_type->name);
+
+                // ตรวจสอบว่าชื่อเป็น "ไม่ได้ใช้งบประมาณ" หรือไม่
+                if (isset($badget_type->badID) && $projects->badID == $badget_type->badID && $badget_type->name !== "ไม่ได้ใช้งบประมาณ") {
+                    // ดึงงบที่ได้รับจัดสรรและที่ใช้จริง
+                    $allocated = isset($projects->badgetTotal) ? number_format($projects->badgetTotal, 2) : "0.00";
+                    $used = isset($project_evaluations[0]->badget_use) ? number_format($project_evaluations[0]->badget_use, 2) : "0.00";
+
+                    // แสดงงบประมาณ ถ้าไม่ได้เป็น "ไม่ได้ใช้งบประมาณ"
+                    $htmlContent .= ' <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ที่ได้รับจัดสรร ' . $allocated . ' บาท&nbsp;&nbsp;&nbsp;&nbsp;ใช้จริง ' . $used . ' บาท';
+                }
+
+                $htmlContent .= '<br>';
             }
         } else {
-            $htmlContent .= '<i>ไม่มีข้อมูลงบประมาณ</i><br>';
+            $htmlContent .= 'ไม่มีข้อมูลงบประมาณ<br>';
         }
 
         $htmlContent .= '</div>';
+
+
+
+
 
 
         $htmlContent .= '
