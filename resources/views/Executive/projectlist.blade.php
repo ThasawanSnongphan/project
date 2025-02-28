@@ -46,17 +46,17 @@
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        {{-- @if ($item->statusID == 5)
-                            {{ $item->name }}
-                        @else --}}
+                        @if ($item->statusID == 7)
+                            <a href="{{ route('Executive.detailEvaluation', $item->proID) }}">{{ $item->name }}</a>
+                        @elseif($item->statusID == 3)
                             <a href="{{ route('Executive.detail', $item->proID) }}">{{ $item->name }}</a>
-                        {{-- @endif --}}
+                        @endif
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                         {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                         <td>
-                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
+                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> ดูรายงาน</i></a>
                             @else
@@ -66,7 +66,7 @@
                         </td>
                         <td>
 
-                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
+                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
@@ -75,7 +75,7 @@
                             @endif
                         </td>
                         <td>
-                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
+                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else
@@ -84,7 +84,7 @@
                             @endif
                         </td>
                         <td>
-                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
+                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 4)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                             @else

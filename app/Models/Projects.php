@@ -59,4 +59,21 @@ class Projects extends Model
     {
         return $this->belongsTo(BadgetType::class,'badID',   'badID');
     }
+
+    public function projectType(){
+        return $this->belongsTo(ProjectType::class,'proTypeID','proTypeID');
+    }
+
+    public function projectCharecter(){
+        return $this->belongsTo(ProjectCharec::class,'proChaID','proChaID');
+    }
+
+    public function projectIntegrat(){
+        return $this->belongsTo(ProjectIntegrat::class,'proInID','proInID');
+    }
+
+    public function UniPlan(){
+        return $this->belongsTo(UniPlan::class,'planID','planID');
+
+    }
 }

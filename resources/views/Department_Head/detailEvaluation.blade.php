@@ -192,10 +192,25 @@
                                 {{ $data['evaluation']->corrective_actions }}
                             </div>
                         </div>
+                    </form>
 
+                    <form action="" method="POST" id="actionForm">
+                        @csrf
+                        <div class="row field item form-group ">
+                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
+                            <div class="col-md-6 col-sm-6">
+                                <textarea name="comment" id="comment" class="form-control"></textarea>
+                            </div>
+                        </div>
 
-
-
+                        <div class="form-group mt-2">
+                            <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                    
+                                <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
+                                <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
+                    
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -203,4 +218,21 @@
         <div class="col-md-1 col-sm-1"></div>
     </div>
 
+    <script>
+        function submitButton(action) {
+            var form = document.getElementById('actionForm');
+            if (action === 'pass') {
+                form.action = "{{ route('EvaluationPass', $data['project']->proID) }}";
+                form.submit();
+            } else if (action === 'edit') {
+                document.getElementById('comment').required = true;
+                var comment = document.getElementById('comment').value.trim();
+                if (comment !== "") {
+                    form.action = "{{ route('EvaluationEdit', $data['project']->proID) }}";
+                    form.submit();
+                }
+
+            }
+        }
+    </script>
 @endsection

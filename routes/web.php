@@ -85,24 +85,42 @@ Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('coun
 
 Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']);
 
+//ผู้บริหาร
 Route::get('/ExecutiveProjectlist', [Executive::class,'index']);
 Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
-Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'report'])->name('Executive.detail');
+//เสนอโครงการ
+Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'detail'])->name('Executive.detail');
 Route::post('ExecutivePass/{id}', [Executive::class,'ExecutivePass'])->name('ExecutivePass');
 Route::post('/ExecutiveEdit/{id}', [Executive::class,'ExecutiveEdit'])->name('ExecutiveEdit');
 Route::post('/ExecutiveDenied/{id}', [Executive::class,'ExecutiveDenied'])->name('ExecutiveDenied');
+//ประเมินโครงการ
+Route::get('ExecutiveProjectDetailEvaluation/{id}',[Executive::class,'detailEvaluation'])->name('Executive.detailEvaluation');
+Route::post('ExecutiveEvaluationPass/{id}', [Executive::class,'EvaluationPass'])->name('Executive.PassEvaluation');
+Route::post('/ExecutiveEvaluationEdit/{id}', [Executive::class,'EvaluationEdit'])->name('Executive.EditEvaluation');
+Route::post('/ExecutiveEvaluationDenied/{id}', [Executive::class,'EvaluationDenied'])->name('Executive.DeniedEvaluation');
 
+//เจ้าหน้าที่แผน
 Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
 Route::get('/PlanningAnalystProjectOutPlan', [PlanningAnalyst::class,'projectOutPlan']);
 Route::get('/PlanningAnalystProjectCancel', [PlanningAnalyst::class,'projectCancel']);
-Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'report'])->name('PlanningAnalyst.detail');
+//เสนอโครงการ
+Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'detail'])->name('PlanningAnalyst.detail');
 Route::post('planningPass/{id}', [PlanningAnalyst::class,'planningPass'])->name('planningPass');
-Route::post('/planningEdit/{id}', [PlanningAnalyst::class,'planningEdit'])->name('planningEdit');
+//ประเมินโครงการ
+Route::get('PlanningAnalystProjectDetailEvaluation/{id}',[PlanningAnalyst::class,'detailEvaluation'])->name('PlanningAnalyst.detailEvaluation');
+Route::post('EvaluationPass/{id}', [PlanningAnalyst::class,'EvaluationPass'])->name('PlanningAnalyst.EvaluationPass');
 
+//หัวหน้าฝ่าย
 Route::get('/DepartmentHeadProject', [Department_Head::class,'index']);
-Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'report'])->name('Department.detail');
+//เสนอโครงการ
+Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'detail'])->name('Department.detail');
 Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->name('departmentPass');
 Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->name('departmentEdit');
+//ประเมินโครงการ
+Route::get('DepartmentHeadProjectDetailEvaluation/{id}',[Department_Head::class,'detailEvaluation'])->name('Department.detailEvaluation');
+Route::post('departmentEvaluationPass/{id}', [Department_Head::class,'EvaluationPass'])->name('EvaluationPass');
+Route::post('/departmentEvaluationEdit/{id}', [Department_Head::class,'EvaluationEdit'])->name('EvaluationEdit');
+
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::any('/projectcreate1', [ProjectController::class,'create1']);

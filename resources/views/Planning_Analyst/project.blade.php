@@ -50,11 +50,11 @@
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        {{-- @if ($item->statusID == 5)
-                            {{ $item->name }}
-                        @else --}}
+                        @if ($item->statusID == 2)
                             <a href="{{ route('PlanningAnalyst.detail', $item->proID) }}">{{ $item->name }}</a>
-                        {{-- @endif --}}
+                        @elseif($item->statusID == 6)
+                            <a href="{{ route('PlanningAnalyst.detailEvaluation', $item->proID) }}">{{ $item->name }}</a>
+                        @endif
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>

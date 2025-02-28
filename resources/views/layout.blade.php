@@ -385,20 +385,21 @@
                 <div class="container py-5">
                     @yield('content')
                 </div>
+                <div class="clearfix"></div>
 
             </div>
             <!-- /page content -->
 
             <!-- footer content -->
-            <footer>
-                <div class="pull-right">
+            {{-- <footer> --}}
+                {{-- <div class="pull-right">
                     Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-                <div class="clearfix"></div>
+                </div> --}}
+                {{-- <div class="clearfix"></div>
 
 
 
-            </footer>
+            </footer> --}}
             <!-- /footer content -->
 
         </div>

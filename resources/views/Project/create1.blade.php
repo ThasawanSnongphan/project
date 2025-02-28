@@ -92,7 +92,8 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
-                                            <select id="SFA3LVID_{{ $index }}" name="SFA3LVID[]" class="form-control">
+                                            <select id="SFA3LVID_{{ $index }}" name="SFA3LVID[]"
+                                                class="form-control">
                                                 <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
                                                 @if (session()->has('SFA3LVID'))
                                                     @foreach ($SFA3LVs as $SFA)
@@ -121,7 +122,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
                                             <select id="goal3LVID_{{ $index }}" name="goal3LVID[]"
-                                                class="form-control" >
+                                                class="form-control">
 
                                                 @if (session()->has('goal3LVID'))
                                                     @foreach ($goal3Level as $goal)
@@ -145,7 +146,7 @@
                                                 class="required">*</span></label>
                                         <div class="col-md-8 col-sm-8">
                                             <select id="tac3LVID_{{ $index }}" name="tac3LVID[]"
-                                                class="form-control" >
+                                                class="form-control">
                                                 @if (session()->has('tac3LVID'))
                                                     @foreach ($tactics3LV as $tac)
                                                         @if ($tac->goal3LVID == session('goal3LVID')[$index])
@@ -188,7 +189,7 @@
                                         <div class="col-md-12 col-sm-12">
                                             <div class="col-md-4 col-sm-4 m-1">
                                                 <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]"
-                                                    class="form-control" >
+                                                    class="form-control">
                                                     @if (session()->has('KPIMain3LVID'))
                                                         @foreach ($KPIMain3LV as $KPI)
                                                             @if ($KPI->goal3LVID == session('goal3LVID')[$index])
@@ -206,25 +207,23 @@
                                             <div class=" col-md-3 col-sm-3 m-1">
                                                 <input class="form-control" type="text" name="countMain3LV[]"
                                                     id="count3LV_{{ $index }}"
-                                                    @if (session()->has('KPIMain3LVID')) 
-                                                        @foreach ($KPIMain3LV as $KPI)
+                                                    @if (session()->has('KPIMain3LVID')) @foreach ($KPIMain3LV as $KPI)
                                                             @if ($KPI->goal3LVID == session('goal3LVID')[$index])
                                                                 @if ($KPI->KPIMain3LVID == session('KPIMain3LVID')[$index]) value="{{ $KPI->count }}" @endif
                                                             @endif
-                                                        @endforeach
+                                                @endforeach
 
-                                                    @endif readonly>
+                        @endif readonly>
                 </div>
                 <div class=" col-md-3 col-sm-3 m-1">
                     <input class="form-control" type="text" name="targetMain3LV[]"
                         id="target3LV_{{ $index }}"
-                        @if (session()->has('KPIMain3LVID')) 
-                            @foreach ($KPIMain3LV as $KPI)
+                        @if (session()->has('KPIMain3LVID')) @foreach ($KPIMain3LV as $KPI)
                                     @if ($KPI->goal3LVID == session('goal3LVID')[$index])
                                         @if ($KPI->KPIMain3LVID == session('KPIMain3LVID')[$index]) value="{{ $KPI->target }}" @endif
-                                    @endif
-                            @endforeach
                         @endif
+                    @endforeach
+                    @endif
                     readonly>
                 </div>
                 <div class="col-md-1 col-sm-1 m-1">
@@ -269,7 +268,7 @@
                 <label label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
                         class="required">*</span></label>
                 <div class="col-md-8 col-sm-8">
-                    <select id="SFA2LVID_{{ $index }}" name="SFA2LVID[]" class="form-control" >
+                    <select id="SFA2LVID_{{ $index }}" name="SFA2LVID[]" class="form-control">
                         <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
                         @foreach ($SFA2LV as $SFA)
                             @if ($SFA->stra2LVID == $item->stra2LVID)
@@ -285,7 +284,7 @@
                 <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                         class="required">*</span></label>
                 <div class="col-md-8 col-sm-8">
-                    <select id="tac2LVID_{{ $index }}" name="tac2LVID[]" class="form-control" >
+                    <select id="tac2LVID_{{ $index }}" name="tac2LVID[]" class="form-control">
                         <option value="">--เลือกกลยุทธ์--</option>
 
                     </select>
@@ -310,8 +309,7 @@
                 </div>
                 <div class="col-md-12 col-sm-12">
                     <div class="col-md-4 col-sm-4 m-1">
-                        <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]" class="form-control"
-                            >
+                        <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]" class="form-control">
                             <option value="">--เลือกตัวชี้วัด--</option>
 
 
@@ -369,7 +367,7 @@
                 <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
                         class="required">*</span></label>
                 <div class="col-md-8 col-sm-8">
-                    <select id="tar1LVID_{{ $index }}" name="tar1LVID[]" class="form-control" >
+                    <select id="tar1LVID_{{ $index }}" name="tar1LVID[]" class="form-control">
                         <option value="">--เลือกเป้าหมาย--</option>
                         @foreach ($target1LV as $target)
                             @if ($target->stra1LVID == $item->stra1LVID)

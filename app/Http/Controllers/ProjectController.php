@@ -785,6 +785,7 @@ class ProjectController extends Controller
                 $files = new Files();
                 $files->name = $file->getClientOriginalName();
                 $files->proID = $project;
+                $files->type = 'เอกสารเสนอโครงการ';
                 $files->save();
                 // dd($file);
             }
@@ -2696,6 +2697,7 @@ class ProjectController extends Controller
                     [
                         'proID' => $id,
                         'name' => $file->getClientOriginalName(),
+                        'type' => 'เอกสารเสนอโครงการ',
                         'updated_at' => now(), 
                         'created_at' => now()
                     ]
