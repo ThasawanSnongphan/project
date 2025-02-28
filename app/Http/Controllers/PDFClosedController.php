@@ -465,10 +465,6 @@ class PDFClosedController extends Controller
         $htmlContent .= '</div>';
 
 
-
-
-
-
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>

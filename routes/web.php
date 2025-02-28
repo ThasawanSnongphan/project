@@ -59,8 +59,8 @@ Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
 //Word
 // Route::get('/gen-word-db/{id}', [WordController::class, 'word_gen']);
-Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
-Route::get('/genClosed/{id}', [WordClosedController::class, 'word_gen']);
+// Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
+Route::get('/wordClosed/{id}', [WordClosedController::class, 'word_gen']);
 
 //Excel
 Route::get('/excelAllResults', [ExcelAllResultsController::class, 'exportExcel']);
