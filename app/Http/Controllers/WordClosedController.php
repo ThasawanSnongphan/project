@@ -422,6 +422,74 @@ class WordClosedController extends Controller
         }
 
 
+        $section->addText('9. งบประมาณที่ใช้ดำเนินการ', $boldTextStyle);
+
+        // ตรวจสอบว่ามีข้อมูลโครงการหรือไม่
+        if (!empty($projects) && isset($projects->badID)) {
+            foreach ($badget_types as $badget_type) {
+                $checked = (isset($badget_type->badID) && $projects->badID == $badget_type->badID) ? '✓' : '  ';
+
+                $textRun = $section->addTextRun();
+                $textRun->addText("    ({$checked})   " . htmlspecialchars($badget_type->name));
+
+                // ตรวจสอบว่าชื่อเป็น "ไม่ได้ใช้งบประมาณ" หรือไม่
+                if (isset($badget_type->badID) && $projects->badID == $badget_type->badID && $badget_type->name !== "ไม่ได้ใช้งบประมาณ") {
+                    // ดึงงบที่ได้รับจัดสรรและที่ใช้จริง
+                    $allocated = isset($projects->badgetTotal) ? number_format($projects->badgetTotal, 2) : "0.00";
+                    $used = isset($project_evaluations[0]->badget_use) ? number_format($project_evaluations[0]->badget_use, 2) : "0.00";
+
+                    // แสดงงบประมาณ ถ้าไม่ได้เป็น "ไม่ได้ใช้งบประมาณ"
+                    $section->addText("        ที่ได้รับจัดสรร {$allocated} บาท    ใช้จริง {$used} บาท");
+                }
+            }
+        } else {
+            $section->addText('ไม่มีข้อมูลงบประมาณ');
+        }
+
+        // กำหนดสไตล์การจัดวางข้อความ
+        $paragraphStyle = [
+            'align' => 'both',       // จัดข้อความชิดซ้าย-ขวา
+            'spaceAfter' => 120,     // ระยะห่างระหว่างย่อหน้า (หน่วย twip)
+            'firstLineIndent' => 500  // ย่อหน้าแรกเข้าไป (0.5 ซม.)
+        ];
+
+        $section->addText('10. ประโยชน์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)', $boldTextStyle);
+
+        // เพิ่มเนื้อหาพร้อมจัดให้มีการเยื้องบรรทัดแรก
+        $textRun = $section->addTextRun($paragraphStyle);
+        $textRun->addText(htmlspecialchars($benefit), ['indentation' => ['firstLine' => 480]]);
+
+        $section->addText('11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ', $boldTextStyle);
+
+        $textRun = $section->addTextRun($paragraphStyle);
+        $textRun->addText(htmlspecialchars($problem), ['indentation' => ['firstLine' => 480]]);
+
+        $section->addText('12. แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ', $boldTextStyle);
+
+        $textRun = $section->addTextRun($paragraphStyle);
+        $textRun->addText(htmlspecialchars($corrective_actions), ['indentation' => ['firstLine' => 480]]);
+
+        $section->addTextBreak(4);
+
+        // สร้างตารางสำหรับลายเซ็น
+        $table = $section->addTable();
+
+        // สร้างแถวในตาราง
+        $table->addRow();
+
+        // คอลัมน์ซ้าย - ผู้รับผิดชอบโครงการ
+        $cellLeft = $table->addCell(4000, ['align' => 'center']);
+        $cellLeft->addText('ลงชื่อ .................................................', [], ['align' => 'center']);
+        $cellLeft->addText('( ' . $names[0] . ' )', [], ['align' => 'center']);
+        $cellLeft->addText('ผู้รับผิดชอบโครงการ', [], ['align' => 'center']);
+        $cellLeft->addText('วันที่ ........../......................./..........', [], ['align' => 'center']);
+
+        // คอลัมน์ขวา - ผู้อำนวยการ
+        $cellRight = $table->addCell(4000, ['align' => 'center']);
+        $cellRight->addText('ลงชื่อ .................................................', [], ['align' => 'center']);
+        $cellRight->addText('( ................................................. )', [], ['align' => 'center']);
+        $cellRight->addText('ผู้อำนวยการ', [], ['align' => 'center']);
+        $cellRight->addText('วันที่ ........../......................./..........', [], ['align' => 'center']);
 
 
 
