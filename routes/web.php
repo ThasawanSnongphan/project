@@ -49,7 +49,7 @@ use App\Http\Controllers\Department_Head;
 use App\Http\Controllers\SupplyAnalystController;
 use App\Http\Controllers\Executive;
 use App\Http\Controllers\ExcelAllResultsController;
-
+use App\Http\Controllers\WordClosedController;
 
 //PDF
 Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
@@ -59,7 +59,8 @@ Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
 //Word
 // Route::get('/gen-word-db/{id}', [WordController::class, 'word_gen']);
-Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
+// Route::get('/gen-word-Q4', [WordQ4Controller::class, 'word_gen']);
+Route::get('/wordClosed/{id}', [WordClosedController::class, 'word_gen']);
 
 //Excel
 Route::get('/excelAllResults', [ExcelAllResultsController::class, 'exportExcel']);
