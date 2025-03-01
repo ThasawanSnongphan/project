@@ -118,7 +118,7 @@ class Department_Head extends Controller
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         $data['status'] = DB::table('statuses')->where('statusID',$data['project']->statusID)->first();
         
-        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารปิดโครงการ')->get();
+        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารประเมินโครงการ')->get();
        
 
         $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
@@ -141,7 +141,8 @@ class Department_Head extends Controller
 
         $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
         $data['costResult']=$data['report_quarter']->sum('costResult');
-       
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารประเมินโครงการ']])->get();
+        
 
         return view('Department_Head.detailEvaluation',compact('data'));
     }

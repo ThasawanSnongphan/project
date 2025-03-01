@@ -23,6 +23,18 @@
                 </div>
 
                 <div class="x_content">
+                    @if (count($data['comment']) > 0)
+                    <div class="row field item form-group " style="background-color: #FFF9B1">
+                        <label
+                            class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
+                        <div class="col-md-7 col-sm-7">
+                            @foreach ($data['comment'] as $item)
+                                <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}} : </b> {{$item->detail}} <br>
+                                <b>เมื่อ</b> {{$item->created_at}} <br>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                     @if (count($data['file']) > 0)
                         <form method="POST" enctype="multipart/form-data">
                             @csrf
@@ -30,7 +42,7 @@
                             <hr>
                             <div class="row field item form-group ">
                                 <label
-                                    class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
+                                    class="col-form-lable col-md-4 col-sm-4 label-align"><b>เอกสารที่เกี่ยวข้อง :</b></label>
                                 <div class="col-md-7 col-sm-7">
                                     @foreach ($data['file'] as $item)
                                         <a href="{{ asset('files/' . $item->name) }}"

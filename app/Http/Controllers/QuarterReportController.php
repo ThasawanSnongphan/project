@@ -49,6 +49,9 @@ class QuarterReportController extends Controller
             $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
 
         }
+        
+        $data['evaluation'] = DB::table('project_evaluations')->where([['proID',$id]])->first();
+        // dd($data['evaluation']);
     //     // dd($data['detail']);
         return view('Project.reportQuarter',compact('data'));
     }

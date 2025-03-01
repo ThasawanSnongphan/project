@@ -46,17 +46,16 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                {{-- @if  (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
-                    @continue
-                @endif --}}
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        {{-- @if ($item->statusID == 5)
+                        @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
                             {{ $item->name }}
-                        @else --}}
-                            <a href="{{ route('PlanningAnalyst.detail', $item->proID) }}">{{ $item->name }}</a>
-                        {{-- @endif --}}
+                        @elseif($item->statusID == 1 || $item->statusID == 2 || $item->statusID == 3 || $item->statusID == 4)
+                            <a href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
+                        @else
+                            <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
+                        @endif
                     </td>
                     {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
                         <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>

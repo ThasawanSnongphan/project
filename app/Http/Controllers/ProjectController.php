@@ -2740,33 +2740,27 @@ class ProjectController extends Controller
 
 
     function report($id){
-        $project=DB::table('projects')->where('proID',$id)->first();
-        $user=Users::all();
-        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
-        $status = DB::table('statuses')->where('statusID',$project->statusID)->first();
-        $strategic3LVMap=StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
-        $KPI3LVMap = KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
-        $strategic2LVMap=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
-        $KPI2LVMap = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
-        $strategic1LVMap = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
-        $KPIProject = KPIProjects::with('count')->where('proId',$id)->get();
-        $projectYear=Year::all();
-        $projectType=ProjectType::all();
-        $projectCharector=ProjectCharec::all();
-        $projectIntegrat=ProjectIntegrat::all();
-        $projectOBJ=Objectives::all();
-        $projectTarget=Targets::all();
-        $projectStep=DB::table('steps')->where('proID',$id)->get();
-        $projectBadgetType=BadgetType::all();
-        $projectUniPlan=UniPlan::all();
-        $projectCostQuarter=CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
-        $peojectEXP=ExpenseBadgets::all();
-        $projectCostType=CostTypes::all();
-        $projectBenefit=DB::table('benefits')->where('proID',$id)->get();
-        $file = DB::table('files')->where('proID',$id)->get();
-        $comment = Comment::with('user')->where('proID',$id)->get();
+        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan'])->where('proID',$id)->first();
+        $data['user'] = UsersMapProject::with('users')->where('proID',$id)->get();
+
+        $data['obj'] = Db::table('objectives')->where('proID',$id)->get();
+        $data['benefit'] = DB::table('benefits')->where('proID',$id)->get();
+        $data['file'] = DB::table('files')->where([['proID',$id],['type','เอกสารเสนอโครงการ']])->get();
+        $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
+        $data['KPI3LVMap'] = KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
+        // dd($data['KPI3LVMap']);
+        $data['stra2LVMap']=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
+        $data['KPI2LVMap'] = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
+
+        $data['stra1LVMap'] = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
+
+        $data['KPIProject'] = KPIProjects::with('count')->where('proID',$id)->get();
+        $data['step'] = DB::table('steps')->where('proID',$id)->get();
+        $data['costQuarter'] = CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
+
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารเสนอโครงการ']])->get();
         // dd($comment);
-        return view('Project.report',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file','comment'));
+        return view('Project.detail',compact('data'));
     }
 
    

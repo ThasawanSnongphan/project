@@ -23,6 +23,7 @@
                 </div>
 
                 <div class="x_content">
+                   
                     @if (count($data['file']) > 0)
                         <form method="POST" enctype="multipart/form-data">
                             @csrf
@@ -30,7 +31,7 @@
                             <hr>
                             <div class="row field item form-group ">
                                 <label
-                                    class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
+                                    class="col-form-lable col-md-4 col-sm-4 label-align"><b>เอกสารที่เกี่ยวข้อง : </b></label>
                                 <div class="col-md-7 col-sm-7">
                                     @foreach ($data['file'] as $item)
                                         <a href="{{ asset('files/' . $item->name) }}"
@@ -116,9 +117,9 @@
                                 @foreach ($data['obj'] as $item)
                                     {{ $index++ }}.{{ $item->detail }} <br>
                                     @if ($item->achieve == 1)
-                                        บรรลุ
+                                        บรรลุ <br>
                                     @else
-                                        ไม่บรรลุ
+                                        ไม่บรรลุ <br>
                                     @endif
                                 @endforeach
                             </div>
@@ -129,7 +130,7 @@
                             <div class="col-md-8 col-sm-8">
                                 {{ $data['evaluation']->operating->name }} <br>
                                 @if ($data['evaluation']->since != null)
-                                    {{ $data['evaluation']->since }}
+                                  <b>เนื่องจาก</b>  {{ $data['evaluation']->since }}
                                 @endif
                             </div>
                         </div>
@@ -141,7 +142,7 @@
                             <div class="col-md-7 col-sm-7">
                                 @foreach ($data['KPIProject'] as $item)
                                     -{{ $item->name }} <br>
-                                    {{ $item->result_eva }}
+                                    {{ $item->result_eva }} <br>
                                 @endforeach
                             </div>
                         </div>
@@ -165,7 +166,7 @@
                         <div class="row field item form-group ">
                             <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>ใช้จริง :</b></label>
                             <div class="col-md-7 col-sm-7">
-                               {{ $data['costResult'] }}
+                               {{ $data['costResult'] }} บาท
                             </div>
                         </div>
 
@@ -193,11 +194,23 @@
                             </div>
                         </div>
                     </form>
-
+                    @if (count($data['comment']) > 0)
+                    <div class="row field item form-group " style="background-color: #FFF9B1">
+                        <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
+                        <div class="col-md-6 col-sm-6">
+                           @foreach ($data['comment'] as $item)
+                               <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}} : </b> {{$item->detail}} <br>
+                               <b>เมื่อ</b> {{$item->created_at}} <br>
+                           @endforeach
+                        </div>
+                    </div>
+                    @endif
                     <form action="" method="POST" id="actionForm">
                         @csrf
                         <div class="row field item form-group ">
-                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
+                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"> @if (count($data['comment']) == 0)
+                                <b>ข้อเสนอแนะ :</b>
+                            @endif</label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea name="comment" id="comment" class="form-control"></textarea>
                             </div>

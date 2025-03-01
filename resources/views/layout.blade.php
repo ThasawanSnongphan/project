@@ -90,7 +90,7 @@
                                     <li><a><i class="fa fa-home"></i> Home <span
                                                 class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                                            <li><a href="/news">ข่าวประชาสัมพันธ์</a></li>
                                             {{-- ดูได้แค่ชื่อกับสถานะ --}}
 
                                             <li><a href="/projectAll">รายชื่อโครงการทั้งหมด</a></li> 

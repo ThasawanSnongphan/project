@@ -316,7 +316,7 @@
                             @foreach ($data['comment'] as $item)
                                 <b>{{ $item->user->firstname_en }} {{ $item->user->lastname_en }}</b> :
                                 {{ $item->detail }} <br>
-                                <b>เมื่อ</b> {{ $item->created_at }}
+                                <b>เมื่อ</b> {{ $item->created_at }} <br>
                             @endforeach
                         </div>
                     </div>
@@ -325,7 +325,7 @@
                     @csrf
                     <div class="row field item form-group ">
                         <label for="comment" class="col-form-lable col-md-3 col-sm-3 label-align">
-                            @if (count($data['comment']) < 0)
+                            @if (count($data['comment']) == 0)
                                 <b>ข้อเสนอแนะ
                                     :</b>
                             @endif

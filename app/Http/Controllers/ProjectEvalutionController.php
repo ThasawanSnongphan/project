@@ -9,6 +9,7 @@ use App\Models\Strategic2LevelMapProject;
 use App\Models\Strategic1LevelMapProject;
 use App\Models\OperatingResults;
 use App\Models\ProjectEvaluation;
+use App\Models\Comment;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class ProjectEvalutionController extends Controller
     public function evaluation($id){
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         // dd($data['project']);
-        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารปิดโครงการ')->get();
+        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารประเมินโครงการ')->get();
 
         $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
         $data['stra2LVMap']=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
@@ -56,7 +57,7 @@ class ProjectEvalutionController extends Controller
             $files=[
                 'name' => $file->getClientOriginalName(),
                 'proID' => $id,
-                'type' => 'เอกสารปิดโครงการ',
+                'type' => 'เอกสารปนะเมินโครงการ',
                 'updated_at' => now(), 
                 'created_at' => now(),
             ];
@@ -111,7 +112,7 @@ class ProjectEvalutionController extends Controller
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         $data['status'] = DB::table('statuses')->where('statusID',$data['project']->statusID)->first();
         // dd($data['project']);
-        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารปิดโครงการ')->get();
+        $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารประเมินโครงการ')->get();
        
 
         $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
@@ -135,6 +136,8 @@ class ProjectEvalutionController extends Controller
 
         $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
         $data['costResult']=$data['report_quarter']->sum('costResult');
+
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารประเมินโครงการ']])->get();
         // dd($data['costResult']);
 
         return view('ProjectEvaluation.detail',compact('data'));
@@ -163,8 +166,11 @@ class ProjectEvalutionController extends Controller
         $data['operating'] = OperatingResults::all();
         $data['KPIProject']=DB::table('k_p_i_projects')->where('proID',$id)->get();
 
+        $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
+        $data['costResult']=$data['report_quarter']->sum('costResult');
 
-
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารประเมินโครงการ']])->get();
+        // dd($data['comment']);
         return view('ProjectEvaluation.update',compact('data'));
     }
 
@@ -199,7 +205,7 @@ class ProjectEvalutionController extends Controller
     }
 
     public function send(Request $request ,$id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '8']);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '5']);
 
         $evaluation = [
             'implementation' => $request->input('implement'),

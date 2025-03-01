@@ -136,6 +136,7 @@ class PlanningAnalyst extends Controller
 
         $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
         $data['costResult']=$data['report_quarter']->sum('costResult');
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารประเมินโครงการ']])->get();
        
 
         return view('Planning_Analyst.detailEvaluation',compact('data'));

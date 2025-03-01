@@ -320,10 +320,11 @@
                 <form action="" method="POST" id="actionForm">
                     @csrf
                     <div class="row field item form-group ">
-                        <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"> @if (count($data['comment']) < 0)
+                        <label for="comment" class="col-form-lable col-md-3 col-sm-3 label-align"> @if (count($data['comment']) == 0)
                             <b>ข้อเสนอแนะ
                                 :</b>
-                        @endif </label>
+                        @endif
+                             </label>
                         <div class="col-md-6 col-sm-6">
                             <textarea name="comment" id="comment" class="form-control"></textarea>
                         </div>

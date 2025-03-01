@@ -676,7 +676,7 @@
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu4[]"
-                                            id="">
+                                            id="" required>
                                         {{-- @error('costQu4.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>

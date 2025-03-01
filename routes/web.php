@@ -152,12 +152,14 @@ Route::post('projectSendUpdate2/{id}',[ProjectController::class,'sendUpdate2']);
 Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
-Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
+Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.detail');
 
+//เอกสารประเมินฌครงการ
 Route::any('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
 Route::get('projectDetailEvaluation/{id}',[ProjectEvalutionController::class,'Detail'])->name('detail.evaluation');
 Route::post('projectSaveEvaluation/{id}',[ProjectEvalutionController::class,'save']);
 Route::post('fileEvaluation/{id}',[ProjectEvalutionController::class,'savefile']);
+//แก้ไขเอกสารประเมินโครงการ
 Route::any('EditEvaluation/{id}',[ProjectEvalutionController::class,'edit'])->name('edit.evaluation');
 Route::any('UpdateEvaluation/{id}',[ProjectEvalutionController::class,'update']);
 Route::any('SendEvaluation/{id}',[ProjectEvalutionController::class,'send']);
@@ -333,5 +335,7 @@ Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.upda
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('admin');
 Route::get('/dashboard', [AuthController::class, 'someFunction']);
+
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
+Route::get('/news', [HomeController::class, 'news']);
 

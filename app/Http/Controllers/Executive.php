@@ -164,7 +164,7 @@ class Executive extends Controller
 
         $data['report_quarter'] = DB::table('report_quarters')->where('proID',$id)->get();
         $data['costResult']=$data['report_quarter']->sum('costResult');
-       
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารประเมินโครงการ']])->get();
 
         return view('Executive.detailEvaluation',compact('data'));
     }
@@ -195,6 +195,41 @@ class Executive extends Controller
                     'created_at' => now() 
                 ]);
         }
+        return redirect('/ExecutiveProjectlist');
+    }
+    function EvaluationEdit(Request $request,$id){
+        
+        DB::table('projects')->where('proID',$id)->update(['statusID' => '13']);
+        $detail = $request->input('comment');
+        $userID = Auth::id();
+        DB::table('comments')->insert(
+            [
+                'proID' => $id,
+                'detail' => $detail,
+                'type' => 'เอกสารประเมินโครงการ',
+                'userID' => $userID,
+                'updated_at' => now(), 
+                'created_at' => now() 
+            ]);
+        return redirect('/ExecutiveProjectlist');
+    }
+    function EvaluationDenied(Request $request,$id){
+        $request->validate([
+            'comment'=>'required'
+        ]);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => 15]);
+        $detail = $request->input('comment');
+        $userID = Auth::id();
+        
+        DB::table('comments')->insert(
+            [
+                'proID' => $id,
+                'detail' => $detail,
+                'type' => 'เอกสารประเมินโครงการ',
+                'userID' => $userID,
+                'updated_at' => now(), 
+                'created_at' => now() 
+            ]);
         return redirect('/ExecutiveProjectlist');
     }
 

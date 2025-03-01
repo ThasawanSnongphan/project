@@ -6,7 +6,7 @@
         <div class="col-md-10 col-sm-10">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{$data['quarter']}}</h2>
+                    <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
@@ -24,7 +24,8 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="{{ route('reportQuarter.save', [$data['project']->proID,$data['quarter']]) }}">
+                    <form id="actionForm" method="POST"
+                        action="{{ route('reportQuarter.save', [$data['project']->proID, $data['quarter']]) }}">
                         @csrf
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ชื่อโครงการ :
@@ -162,8 +163,7 @@
                                         {{ $item->detail }} <br>
                                     @endforeach
                                 @else
-                                    <textarea class="form-control" type="text" name="detail[]" id=""
-                                         required ></textarea>
+                                    <textarea class="form-control" type="text" name="detail[]" id="" required></textarea>
                                 @endif
 
                             </div>
@@ -195,9 +195,12 @@
                         <div id="insertProblem"></div>
                         <div class="col-md-6 offset-md-3 ">
                             @if (!empty($data['quarterReport']))
-                                <button type="button" class="btn btn-primary" onclick="submitButton('evaluation',{{$data['project']->proID}})">กรอกข้อมูลประเมินโครงการ</button>
+                                @if (empty($data['evaluation']))
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="submitButton('evaluation',{{ $data['project']->proID }})">กรอกข้อมูลประเมินโครงการ</button>
+                                @endif
                             @else
-                                <button type="submit" class="btn btn-primary" >ส่งรายงานความก้าวหน้า</button>
+                                <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>
                             @endif
                         </div>
                     </form>
@@ -243,7 +246,7 @@
             var form = document.getElementById('actionForm');
             if (action === 'evaluation') {
                 form.action = "/projectEvaluation/" + proID;
-            } 
+            }
             form.submit();
         }
     </script>
