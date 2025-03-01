@@ -34,6 +34,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Mpdf\Mpdf;
+
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+
 use DateTime;
 use Carbon\Carbon;
 
@@ -44,14 +48,26 @@ class PDFPlanController extends Controller
     public function pdf_gen()
     {
         $config = include(config_path('configPDF_H.php'));       // ดึงการตั้งค่าฟอนต์จาก config
-        $mpdf = new Mpdf($config);
 
-        // เพิ่มขนาด backtrack_limit (แก้ปัญหาขนาด HTML เกิน)
+        // ตั้งค่า Temp Directory เพื่อลดการใช้ RAM
+        $config['tempDir'] = storage_path('app/mpdf_tmp');
+
+        // ปรับขนาด backtrack_limit ให้สูงขึ้น
         ini_set("pcre.backtrack_limit", "10000000");
+        ini_set("memory_limit", "2048M"); // เพิ่ม memory limit
+
+        $customConfig = [
+            'tempDir' => storage_path('app/mpdf_tmp'), // ใช้ temp directory
+            'mode' => 'utf-8',
+            'allow_output_buffering' => true
+        ];
+
+        $mergedConfig = array_merge($config, $customConfig); // รวมค่า config
+        $mpdf = new \Mpdf\Mpdf($mergedConfig);
 
         $stylesheet = "
         <style>
-            table {
+            table { 
                 border-collapse: collapse;
                 width: 100%;
                 margin-bottom: 5px;
@@ -96,10 +112,12 @@ class PDFPlanController extends Controller
 
         </style>";
 
+        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS
+
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         // $projects = Projects::where('proID', $id)->first();
-        $projects = Projects::all();
+        $all_projects = Projects::all();
         $years = Year::all();
         $users_map = UsersMapProject::all();
         $users = Users::all();
@@ -141,14 +159,16 @@ class PDFPlanController extends Controller
         $objects = Objectives::all();
 
 
-        $htmlContent = '
+        $headerContent = '
             <div style="text-align: center; margin-bottom: 8px;">
                 <b>แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567 <br>
                 สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ</b>
             </div>
         ';
 
-        $htmlContent .= '
+        $mpdf->WriteHTML($headerContent, 2);
+
+        $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
                 <tr>
                     <th rowspan="3">ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์</th>
@@ -187,43 +207,49 @@ class PDFPlanController extends Controller
 
         $currentYear = intval(date("Y")) + 543;
 
-        foreach ($strategics as $strategic) {
-            if ($strategic->year->year == $currentYear) {
-                // dd($strategic->year->year);
-                foreach ($strategic_issues as $strategic_issue) {
-                    if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
-                        $htmlContent .= '
+        foreach ($strategic_maps as $strategic_map) {
+            foreach ($strategics as $strategic) {
+                if ($strategic->year->year == $currentYear) {
+                    // dd($strategic->year->year);
+                    foreach ($strategic_issues as $strategic_issue) {
+                        if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
+                            $htmlContent .= '
                                 <tr>
                                     <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . $strategic_issue->name . '</th>
                                 </tr>
-                            ';
-                    }
-                    foreach ($goals as $goal) {
-                        if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
-                            $htmlContent .= '
+                        ';
+                        }
+                        foreach ($goals as $goal) {
+                            if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
+                                $htmlContent .= '
                                     <tr>
                                         <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . $goal->name . '</th>
                                     </tr>
                                 ';
-                        }
-                        foreach ($tactics as $tactic) {
-                            if ($goal->goal3LVID == $tactic->goal3LVID) {
-                                $htmlContent .= '
+                            }
+                            foreach ($tactics as $tactic) {
+                                if ($goal->goal3LVID == $tactic->goal3LVID) {
+                                    $htmlContent .= '
                                     <tr>
                                         <td></td>
                                         <td style="text-align: left;">' . $tactic->name . '</td>
                                     
                                 ';
+                                }
+
+                                foreach ($strategic_maps as $strategic_map) {
+                                    if ($strategic_map->tac3LVID == $tactic->tac3LVID) {
+                                        foreach ($all_projects as $all_project) {
+                                            if ($all_project->proID == $strategic_map->proID) {
+                                                $htmlContent .= '
+                                                        <td>' . $all_project->name . '</td>
+                                                    </tr>
+                                                ';
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            // foreach ($strategic_maps as $strategic_map) {
-                            //     foreach ($projects as $project) {
-                            //         if ($project->proID == $strategic_map->proID)
-                            //             $htmlContent .= '
-                            //                 <td>' . $project->name . '</td>
-                            //             </tr>
-                            //             ';
-                            //     }
-                            // }
                         }
                     }
                 }
@@ -232,10 +258,7 @@ class PDFPlanController extends Controller
 
         $htmlContent .= '</table>';
 
-        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
         $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
-
-
 
         $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567');
         return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
