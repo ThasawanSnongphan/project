@@ -16,7 +16,7 @@ return [
         ],
     ],
     'default_font' => 'thsarabun', // กำหนดฟอนต์เริ่มต้นเป็น THSarabunNew
-    'default_font_size' => 16,
+    'default_font_size' => 14,
     'format' => 'A4',
     'orientation' => 'L',     // แนวกระดาษ (P = แนวตั้ง, L = แนวนอน)
     'margin_top' => 10,       // ระยะขอบบน (หน่วยเป็น mm)
