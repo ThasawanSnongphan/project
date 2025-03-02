@@ -122,7 +122,8 @@ class PDFPlanController extends Controller
         $users_map = UsersMapProject::all();
         $users = Users::all();
 
-        $strategic_maps = StrategicMap::all();
+        // $strategic_maps = StrategicMap::all();
+        $strategic_maps = StrategicMap::with(['SFA3LV', 'goal3LV', 'tac3LV'])->get();
         $strategic1_level_maps = Strategic1LevelMapProject::all();
         $strategic2_level_maps = Strategic2LevelMapProject::all();
 
@@ -158,10 +159,11 @@ class PDFPlanController extends Controller
         $project_charecs = ProjectCharec::all();
         $objects = Objectives::all();
 
+        $currentYear = date('Y');
 
         $headerContent = '
             <div style="text-align: center; margin-bottom: 8px;">
-                <b>แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567 <br>
+                <b>แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear + 543 . ' <br>
                 สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ</b>
             </div>
         ';
@@ -205,62 +207,269 @@ class PDFPlanController extends Controller
             
         ';
 
-        $currentYear = intval(date("Y")) + 543;
+        // แปลงข้อมูลเป็นอาร์เรย์
+        $data_strategic_maps = $strategic_maps->toArray();
+        $data_strategic_issues = $strategic_issues->toArray();
+        $data_strategic3_levels = $strategics->toArray();
+        $data_projects = $all_projects->toArray();
+        $data_years = $years->toArray();
+        $data_goals = $goals->toArray();
+        $data_tactics = $tactics->toArray();
+        $data_kpi_projects = $KPI_pros->toArray();
+        $data_count_kpi_projects = $countKPI_pros->toArray();
 
-        foreach ($strategic_maps as $strategic_map) {
-            foreach ($strategics as $strategic) {
-                if ($strategic->year->year == $currentYear) {
-                    // dd($strategic->year->year);
-                    foreach ($strategic_issues as $strategic_issue) {
-                        if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
-                            $htmlContent .= '
-                                <tr>
-                                    <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . $strategic_issue->name . '</th>
-                                </tr>
-                        ';
-                        }
-                        foreach ($goals as $goal) {
-                            if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
-                                $htmlContent .= '
-                                    <tr>
-                                        <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . $goal->name . '</th>
-                                    </tr>
-                                ';
-                            }
-                            foreach ($tactics as $tactic) {
-                                if ($goal->goal3LVID == $tactic->goal3LVID) {
-                                    $htmlContent .= '
-                                    <tr>
-                                        <td></td>
-                                        <td style="text-align: left;">' . $tactic->name . '</td>
-                                    
-                                ';
-                                }
 
-                                foreach ($strategic_maps as $strategic_map) {
-                                    if ($strategic_map->tac3LVID == $tactic->tac3LVID) {
-                                        foreach ($all_projects as $all_project) {
-                                            if ($all_project->proID == $strategic_map->proID) {
-                                                $htmlContent .= '
-                                                        <td>' . $all_project->name . '</td>
-                                                    </tr>
-                                                ';
+
+        foreach ($data_strategic_issues as $issue) {
+            // ดึง YearID ของ strategic_issues ผ่าน strategic3_levels
+            $yearID = null;
+            foreach ($data_strategic3_levels as $level) {
+                if ($level['stra3LVID'] == $issue['stra3LVID']) {
+                    $yearID = $level['yearID'];
+                    break;
+                }
+            }
+
+            // หา YearID ในตาราง years แล้วลบ 543
+            $year = null;
+            foreach ($data_years as $yearRow) {
+                if ($yearRow['yearID'] == $yearID) {
+                    $year = $yearRow['year'] - 543; //  ใช้ `year` ไม่ใช่ `yearID`
+                    break; //  จบลูปทันทีเมื่อเจอค่า
+                }
+            }
+
+            //  เช็คว่า Year ตรงกับปีปัจจุบันหรือไม่
+            if ($year == $currentYear) {
+                $htmlContent .= "
+                    <tbody>
+                        <tr>
+                            <th colspan='20' style='text-align: left; background-color: #ddd;'>ประเด็น: " . ($issue['name'] ?? '-') . "</th>
+                        </tr>";
+
+                //  ลูปข้อมูลเป้าประสงค์ที่สัมพันธ์กับประเด็นยุทธศาสตร์นี้
+                foreach ($data_goals as $goal) {
+                    if ($goal['SFA3LVID'] == $issue['SFA3LVID']) { // เชื่อมโยง FK
+                        $htmlContent .= "
+                        <tr>
+                            <th colspan='20' style='text-align: left;'>เป้าประสงค์ที่: " . ($goal['name'] ?? '-') . "</th>
+                        </tr>";
+
+                        //  ลูปข้อมูลกลยุทธ์ที่สัมพันธ์กับเป้าประสงค์นี้
+                        foreach ($data_tactics as $tactic) {
+                            if ($tactic['goal3LVID'] == $goal['goal3LVID']) { // เชื่อมโยง FK
+                                $projectRows = [];
+                        
+                                //  ลูปดึงข้อมูลจาก projects
+                                foreach ($data_projects as $project) {
+                                    foreach ($data_strategic_maps as $map) {
+                                        if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
+                        
+                                            //  ลูปดึงข้อมูลจาก k_p_i_projects
+                                            $kpiNames = [];
+                                            $kpiTargets = [];
+                                            foreach ($data_kpi_projects as $kpi) {
+                                                if ($kpi['proID'] == $project['proID']) {
+                                                    $kpiNames[] = '- ' . $kpi['name'] ?? '-';
+                        
+                                                    //  หาค่า name จาก count_k_p_i_projects
+                                                    $targetLabel = "";
+                                                    foreach ($data_count_kpi_projects as $countKpi) {
+                                                        if ($countKpi['countKPIProID'] == $kpi['countKPIProID']) {
+                                                            $targetLabel = '- ' . $countKpi['name'];
+                                                            break; // หาค่าแรกที่ตรงกันแล้วหยุด
+                                                        }
+                                                    }
+                        
+                                                    // คำนวณค่าเป้าหมายโครงการ
+                                                    $targetValue = "";
+                                                    if (!empty($targetLabel) && isset($kpi['target'])) {
+                                                        $targetValue = "$targetLabel " . number_format($kpi['target'], 2);
+                                                    }
+                                                    $kpiTargets[] = $targetValue;
+                                                }
                                             }
+                        
+                                            // รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
+                                            $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
+                                            $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
+                                            $projectRows[] = ['details' => $projectDetails, 'target' => $projectTargetDetails];
                                         }
                                     }
                                 }
+                        
+                                //  ใช้ rowspan ให้กลยุทธ์แค่แถวแรก และแสดง "" ในแถวถัดไป
+                                $firstRow = true;
+                                foreach ($projectRows as $projectData) {
+                                    $htmlContent .= "<tr>";
+                        
+                                    // แสดงกลยุทธ์แค่แถวแรกเท่านั้น บรรทัดต่อไปจะเป็นช่องว่าง
+                                    if ($firstRow) {
+                                        $htmlContent .= "<td></td><td style='text-align: left; vertical-align: top;'>" . ($tactic['name'] ?? '-') . "</td>";
+                                        $firstRow = false;
+                                    } else {
+                                        $htmlContent .= "<td></td><td></td>"; // ช่องว่างเมื่อเป็นแถวที่ 2 ขึ้นไป
+                                    }
+                        
+                                    // แสดงข้อมูลโครงการและตัวชี้วัด
+                                    $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['details']}</td>";
+                        
+                                    // แสดงค่าเป้าหมายโครงการ โดยให้บรรทัดแรกเป็นช่องว่าง
+                                    $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['target']}</td>";
+                        
+                                    $htmlContent .= "</tr>";
+                                }
+                        
+                                // ถ้าไม่มีโครงการเลย ให้แสดง "-" และไม่ใช้ rowspan
+                                if (empty($projectRows)) {
+                                    $htmlContent .= "<tr>
+                                        <td></td>
+                                        <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>";
+                                }
                             }
                         }
+                        
                     }
                 }
             }
         }
 
-        $htmlContent .= '</table>';
+        $htmlContent .= '</tbody></table>';
 
-        $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
+        $mpdf->WriteHTML($htmlContent, 2);
+        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.'. $year + 543);
+        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.'. ($year + 543) . '.pdf', 'I');
 
-        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567');
-        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.2567.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
+
+
+
+        // foreach ($strategic_maps as $strategic_map) {
+        //     foreach ($strategics as $strategic) {
+        //         if ($strategic->year->year == $currentYear) {// dd($strategic->year->year);                  
+        //             foreach ($strategic_issues as $strategic_issue) {
+        //                 if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
+        //                     $htmlContent .= '
+        //                         <tr>
+        //                             <th colspan="20" style="text-align: left; background-color:rgb(249, 241, 88);">ประเด็น' . $strategic_issue->name . '</th>
+        //                         </tr>
+        //                 ';
+        //                 }
+        //                 foreach ($goals as $goal) {
+        //                     if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
+        //                         $htmlContent .= '
+        //                             <tr>
+        //                                 <th colspan="20" style="text-align: left;">เป้าประสงค์ที่ ' . $goal->name . '</th>
+        //                             </tr>
+        //                         ';
+        //                     }
+        //                     foreach ($tactics as $tactic) {
+        //                         if ($goal->goal3LVID == $tactic->goal3LVID) {
+        //                             $htmlContent .= '
+        //                             <tr>
+        //                                 <td></td>
+        //                                 <td style="text-align: left;">' . $tactic->name . '</td>
+
+        //                         ';
+        //                         }
+
+        //                         // foreach ($strategic_maps as $strategic_map) {
+        //                         //     if ($strategic_map->tac3LVID == $tactic->tac3LVID) {
+        //                         //         // dd($strategic_map->tac3LVID);
+        //                         //         foreach ($all_projects as $all_project) {
+        //                         //             if ($all_project->proID == $strategic_map->proID) {
+        //                         //                 $htmlContent .= '
+        //                         //                         <td>' . $all_project->name . '</td>
+
+        //                         //                 ';
+        //                         //             }
+        //                         //         }
+        //                         //     } else{
+        //                         //         $htmlContent .= '
+        //                         //             <td></td>
+        //                         //             </tr>
+        //                         //         ';
+        //                         //     }
+
+        //                         // }
+
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // $htmlContent .= '</table>';
+
+        // $currentYear = intval(date("Y")) + 543;
+
+        // // เริ่มต้นสร้าง HTML
+        // $htmlContent = '<h2 style="text-align: center;">รายงานโครงการตามกลยุทธ์ ปี ' . $currentYear . '</h2>';
+        // $htmlContent .= '<table border="1" width="100%" cellpadding="5">
+        //             <thead>
+        //                 <tr style="background-color: #ddd;">
+        //                     <th>ประเด็นยุทธศาสตร์</th>
+        //                     <th>เป้าประสงค์</th>
+        //                     <th>กลยุทธ์</th>
+        //                     <th>ชื่อโครงการ</th>
+        //                 </tr>
+        //             </thead>
+        //             <tbody>';
+
+        // foreach ($strategics as $strategic) {
+        //     if ($strategic->year->year == $currentYear) { // ตรวจสอบว่าข้อมูลเป็นปีปัจจุบัน
+        //         foreach ($strategic_issues as $strategic_issue) {
+        //             if ($strategic->stra3LVID == $strategic_issue->stra3LVID) {
+        //                 // แสดงประเด็นยุทธศาสตร์
+        //                 $htmlContent .= '<tr><td colspan="4" style="background-color:rgb(249, 241, 88); font-weight:bold;">ประเด็น: ' . $strategic_issue->name . '</td></tr>';
+
+        //                 foreach ($goals as $goal) {
+        //                     if ($strategic_issue->SFA3LVID == $goal->SFA3LVID) {
+        //                         // แสดงเป้าประสงค์
+        //                         $htmlContent .= '<tr><td></td><td colspan="3" style="font-weight:bold;">เป้าประสงค์ที่: ' . $goal->name . '</td></tr>';
+
+        //                         foreach ($tactics as $tactic) {
+        //                             if ($goal->goal3LVID == $tactic->goal3LVID) {
+        //                                 // เริ่มต้นแถวกลยุทธ์
+        //                                 $htmlContent .= '<tr>
+        //                                             <td></td>
+        //                                             <td></td>
+        //                                             <td style="font-weight:bold;">' . $tactic->name . '</td>
+        //                                             <td>';
+
+        //                                 // หาโครงการที่เชื่อมโยงกับกลยุทธ์นี้
+        //                                 $projectNames = [];
+        //                                 foreach ($strategic_maps as $strategic_map) {
+        //                                     if ($strategic_map->tac3LVID == $tactic->tac3LVID) {
+        //                                         foreach ($all_projects as $all_project) {
+        //                                             if ($all_project->proID == $strategic_map->proID) {
+        //                                                 $projectNames[] = $all_project->name; // เก็บชื่อโครงการที่เกี่ยวข้อง
+        //                                             }
+        //                                         }
+        //                                     }
+        //                                 }
+
+        //                                 // แสดงชื่อโครงการในช่องสุดท้าย
+        //                                 if (!empty($projectNames)) {
+        //                                     $htmlContent .= implode('<br>', $projectNames);
+        //                                 } else {
+        //                                     $htmlContent .= '-'; // ถ้าไม่พบโครงการให้ใส่ "-"
+        //                                 }
+
+        //                                 $htmlContent .= '</td></tr>'; // ปิดแถว
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // $htmlContent .= '</tbody></table>';
+
+
     }
 }
