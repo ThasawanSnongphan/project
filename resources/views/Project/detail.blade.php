@@ -295,6 +295,7 @@
                         </div>
                     </div>
 
+                    @if (count($data['file']) > 0)
                     <div class="row field item form-group ">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
                                 :</b></label>
@@ -304,6 +305,8 @@
                             @endforeach
                         </div>
                     </div>
+                    @endif
+                    
                 </form>
                 
                 

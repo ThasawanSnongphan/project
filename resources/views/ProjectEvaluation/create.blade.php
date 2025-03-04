@@ -34,6 +34,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
                                 <div class="col-md-7 col-sm-7">
+                                    
                                     @foreach ($data['file'] as $item)
                                     <a href="{{ asset('files/' . $item->name) }}"
                                         target="_blank">{{ $item->name }}</a> <br>

@@ -6,7 +6,12 @@
         <div class="col-md-10 col-sm-10">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
+                    @if (!empty($data['quarterReport']))
+                        <h2>รายงานความก้าวหน้า ไตรมาส{{$data['quarter']}}</h2>
+                    @else
+                        <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
+
+                    @endif
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>

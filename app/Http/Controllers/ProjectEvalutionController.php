@@ -22,6 +22,7 @@ class ProjectEvalutionController extends Controller
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         // dd($data['project']);
         $data['file'] = DB::table('files')->where('proID',$id)->where('type','เอกสารประเมินโครงการ')->get();
+        // dd($data['file']);
 
         $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
         $data['stra2LVMap']=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
@@ -57,7 +58,7 @@ class ProjectEvalutionController extends Controller
             $files=[
                 'name' => $file->getClientOriginalName(),
                 'proID' => $id,
-                'type' => 'เอกสารปนะเมินโครงการ',
+                'type' => 'เอกสารปiะเมินโครงการ',
                 'updated_at' => now(), 
                 'created_at' => now(),
             ];

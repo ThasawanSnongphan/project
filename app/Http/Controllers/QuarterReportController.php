@@ -44,7 +44,7 @@ class QuarterReportController extends Controller
         $data['costQuarter']= DB::table('cost_quarters')->where('proID',$id)->get();
     //     // dd($data['costQuarter']);
 
-        $data['quarterReport']=DB::table('report_quarters')->where('proID',$id)->first();
+        $data['quarterReport']=DB::table('report_quarters')->where([['proID',$id],['quarID',$quarter]])->first();
         if(!empty($data['quarterReport'])){
             $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
 
