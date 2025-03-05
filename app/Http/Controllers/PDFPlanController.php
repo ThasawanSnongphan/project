@@ -265,6 +265,9 @@ class PDFPlanController extends Controller
                                     foreach ($data_strategic_maps as $map) {
                                         if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
 
+                                            // ดึง badgetTotal จาก projects
+                                            $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
+
                                             //  ลูปดึงข้อมูลจาก k_p_i_projects
                                             $kpiNames = [];
                                             $kpiTargets = [];
@@ -293,7 +296,7 @@ class PDFPlanController extends Controller
                                             // รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
                                             $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
                                             $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
-                                            $projectRows[] = ['details' => $projectDetails, 'target' => $projectTargetDetails];
+                                            $projectRows[] = ['details' => $projectDetails, 'target' => $projectTargetDetails, 'badgetTotal' => $badgetTotal];
                                         }
                                     }
                                 }
@@ -316,24 +319,26 @@ class PDFPlanController extends Controller
 
                                     // แสดงค่าเป้าหมายโครงการ โดยให้บรรทัดแรกเป็นช่องว่าง
                                     $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['target']}</td>";
-
+                                    $htmlContent .= "<td>-</td>";
+                                    $htmlContent .= "<td style='text-align: center; vertical-align: top;'>$projectData[badgetTotal]</td>";
+                                    $htmlContent .= "<td>-</td>";
 
                                     $htmlContent .= "</tr>";
                                 }
 
                                 // ถ้าไม่มีโครงการเลย ให้แสดง "-" และไม่ใช้ rowspan
                                 if (empty($projectRows)) {
-                                    $htmlContent .= "<tr>
-                                        <td></td>
-                                        <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>";
+                                    $htmlContent .= "
+                                        <tr>
+                                            <td></td>
+                                            <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>-</td>
+                                            <td></td>
+                                            <td>-</td>
+                                        </tr>";
                                 }
-                                $htmlContent .= "<td> - </td>";
-                                $htmlContent .= "<td>  </td>";
-                                $htmlContent .= "<td> - </td>";
-                                
                             }
                         }
                     }
