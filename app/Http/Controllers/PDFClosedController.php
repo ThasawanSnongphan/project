@@ -67,7 +67,7 @@ class PDFClosedController extends Controller
         $badget_types = BadgetType::all();
 
 
-        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
+        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config 
         $mpdf = new Mpdf($config);
         $mpdf->SetY(60);
 
@@ -144,16 +144,6 @@ class PDFClosedController extends Controller
                 $corrective_actions = $project_evaluation->corrective_actions;
                 // dd($implementation);
             }
-            // foreach($users as $user){
-            //     if($project_evaluation->userID == $user->userID){
-            //         // เพิ่มสังกัดในอาร์เรย์ หากยังไม่มี
-            //         if (!in_array($user->department_name, $departments)) {
-            //             $departments[] = $user->department_name;
-            //         }
-            //         $responsibleNames[] = $user->username;
-            //         $names[] = $user->username;
-            //     }
-            // }
         }
 
         $htmlContent .= '

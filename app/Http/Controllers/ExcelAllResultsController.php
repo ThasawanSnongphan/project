@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class ExcelAllResultsController extends Controller
 {
-    public function exportExcel()
+    public function excel_gen()
     {
         // ✅ ดึงข้อมูลพร้อมเปลี่ยน ID เป็นชื่อโครงการ และกำหนดลำดับเริ่มต้นที่ 1
         $projects = Projects::all()->map(function ($project, $index) {
