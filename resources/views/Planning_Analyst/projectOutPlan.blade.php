@@ -29,14 +29,11 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                    <th>สถานะ</th>
-                    <th>ไตรมาส 1</th>
-                    <th>ไตรมาส 2</th>
-                    <th>ไตรมาส 3</th>
-                    <th>ไตรมาส 4</th>
-                   
-                @endif
+                <th>สถานะ</th>
+                <th>ไตรมาส 1</th>
+                <th>ไตรมาส 2</th>
+                <th>ไตรมาส 3</th>
+                <th>ไตรมาส 4</th>
 
             </tr>
         </thead>
@@ -46,16 +43,13 @@
                 $i = 1;
             @endphp
             @foreach ($project as $item)
-                @if  (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1 && $item->statusID != 5)
-                    @continue
-                @endif
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
                         {{-- @if ($item->statusID == 5)
                             {{ $item->name }}
                         @else --}}
-                            <a href="{{ route('PlanningAnalyst.detail', $item->proID) }}">{{ $item->name }}</a>
+                        <a href="{{ route('PlanningAnalyst.detail', $item->proID) }}">{{ $item->name }}</a>
                         {{-- @endif --}}
                     </td>
                     @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
@@ -98,7 +92,6 @@
                                         เขียน</i></a>
                             @endif
                         </td>
-                        
                     @endif
                 </tr>
                 @php
@@ -107,7 +100,7 @@
             @endforeach
         </tbody>
     </table>
-   
+
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
         document.getElementById('yearID').addEventListener('change', function() {

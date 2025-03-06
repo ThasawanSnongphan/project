@@ -82,22 +82,31 @@
                     {{-- @php
                     dd(auth()->user());
                     @endphp --}}
-                    @if (Auth::check())
-                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                            <div class="menu_section">
-                                <ul class="nav side-menu">
-                                    {{-- สิทธิ์ผู้เขียนโครงการ --}}
-                                    <li><a><i class="fa fa-home"></i> Home <span
-                                                class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
-                                            <li><a href="/news">ข่าวประชาสัมพันธ์</a></li>
-                                            {{-- ดูได้แค่ชื่อกับสถานะ --}}
 
-                                            <li><a href="/projectAll">รายชื่อโครงการทั้งหมด</a></li> 
 
-                                        </ul>
-                                    </li>
-                                </ul>
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section">
+                            <ul class="nav side-menu">
+                                {{-- สิทธิ์ผู้เขียนโครงการ --}}
+                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="/news">ข่าวประชาสัมพันธ์</a></li>
+                                        {{-- ดูได้แค่ชื่อกับสถานะ --}}
+
+                                        <li><a href="/projectAll">รายชื่อโครงการทั้งหมด</a></li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="nav side-menu">
+                                {{-- สิทธิ์ผู้เขียนโครงการ --}}
+                                <li><a><i class="fa fa-home"></i> ผลการดำเนินงาน <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+
+                                    </ul>
+                                </li>
+                            </ul>
+                            @if (Auth::check())
                                 @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                     {{-- <h3>General</h3> --}}
                                     <ul class="nav side-menu">
@@ -106,21 +115,25 @@
                                             <ul class="nav child_menu">
                                                 <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
                                                 <li><a href="/users">Users</a></li>
-                                                <li><a href="/year">ปีงบประมาณ</a></li><hr>
+                                                <li><a href="/year">ปีงบประมาณ</a></li>
+                                                <hr>
                                                 <p>รูปแบบของแผน 3 ระดับ</p>
                                                 <li><a href="/strategic">แผนยุทธศาสตร์ </a></li>
                                                 <li><a href="/SFA">ประเด็นยุทธศาสตร์</a></li>
                                                 <li><a href="/goal">เป้าประสงค์</a></li>
                                                 <li><a href="/KPIMain">ตัวชี้วัดของแผน</a></li>
-                                                <li><a href="/tactics">กลยุทธ์</a></li><hr>
+                                                <li><a href="/tactics">กลยุทธ์</a></li>
+                                                <hr>
                                                 <p>รูปแบบของแผน 2 ระดับ</p>
                                                 <li><a href="/strategic2LV">แผนยุทธศาสตร์ </a></li>
                                                 <li><a href="/SFA2LV">ประเด็นยุทธศาสตร์</a></li>
                                                 <li><a href="/KPIMain2LV">ตัวชี้วัดของแผน</a></li>
-                                                <li><a href="/tactic2LV">กลยุทธ์</a></li><hr>
+                                                <li><a href="/tactic2LV">กลยุทธ์</a></li>
+                                                <hr>
                                                 <p>รูปแบบของแผน 1 ระดับ</p>
                                                 <li><a href="/strategic1LV">แผนยุทธศาสตร์ </a></li>
-                                                <li><a href="/target1LV">เป้าหมาย</a></li><hr>
+                                                <li><a href="/target1LV">เป้าหมาย</a></li>
+                                                <hr>
 
                                                 <li><a href="/plan">แผนงานมหาลัย</a></li>
                                                 <li><a href="/fund">กองทุน</a></li>
@@ -146,6 +159,7 @@
                                             <ul class="nav child_menu">
 
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
+                                                <li><a href="/projectOutPlan">รายชื่อโครงการนอกแผน</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                                 <li><a href="/projectcreate1">สร้างโครงการใหม่</a></li>
@@ -155,16 +169,20 @@
                                     </ul>
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
-                                <ul class="nav side-menu">
-                                    <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
-                                                class="fa fa-chevron-down"></span></a>
-                                        <ul class="nav child_menu">
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
 
-                                            <li><a href="/DepartmentHeadProject">จัดการข้อมูลโครงการ</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            @endif
+                                                <li><a href="/DepartmentHeadProject">รายชื่อโครงการ</a></li>
+
+                                                <li><a href="/DepartmentHeadProjectOutPlan">รายชื่อโครงการนอกแผน</a>
+                                                </li>
+                                                <li><a href="#">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
                                     <ul class="nav side-menu">
                                         <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span
@@ -172,17 +190,19 @@
                                             <ul class="nav child_menu">
 
                                                 <li><a href="/PlanningAnalystProject">รายชื่อโครงการ</a></li>
+                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผน</a>
+                                                </li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
-                                                <li><a href="/PlanningAnalystProjectCancel">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
-                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผน</a></li>
+                                                <li><a
+                                                        href="/PlanningAnalystProjectCancel">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a>
+                                                </li>
 
-                                                
 
                                             </ul>
                                         </li>
                                     </ul>
                                 @endif
-                               
+
                                 @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
                                     <ul class="nav side-menu">
                                         <li><a><i class="fa fa-home"></i> ผู้บริหาร <span
@@ -190,7 +210,10 @@
                                             <ul class="nav child_menu">
 
                                                 <li><a href="/ExecutiveProjectlist">รายชื่อโครงการ</a></li>
-                                                <li><a href="/ExecutiveProjectDenied">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="/ExecutiveProjectOutPlan">รายชื่อโครงการนอกแผน</a></li>
+                                                <li><a
+                                                        href="/ExecutiveProjectDenied">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a>
+                                                </li>
 
 
                                             </ul>
@@ -204,14 +227,16 @@
                                             <ul class="nav child_menu">
 
                                                 <li><a href="/SupplyAnalystProject">รายชื่อโครงการ</a></li>
+                                                <li><a href="/SupplyAnalystProjectOutPlan">รายชื่อโครงการนอกแผน</a>
+                                                </li>
                                             </ul>
                                         </li>
                                     </ul>
                                 @endif
-                            </div>
+                            @endif
                         </div>
-                    @else
-                        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    </div>
+                    {{-- <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                             <div class="menu_section">
                                 <h3>General</h3>
                                 <ul class="nav side-menu">
@@ -225,8 +250,8 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                    @endif
+                        </div> --}}
+
                     <!-- /sidebar menu -->
 
                     <!-- /menu footer buttons -->
@@ -392,10 +417,10 @@
 
             <!-- footer content -->
             {{-- <footer> --}}
-                {{-- <div class="pull-right">
+            {{-- <div class="pull-right">
                     Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
                 </div> --}}
-                {{-- <div class="clearfix"></div>
+            {{-- <div class="clearfix"></div>
 
 
 

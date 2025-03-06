@@ -84,10 +84,13 @@ Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('count
 Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
 Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('countKPI.update');
 
-Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']);
+//เจ้าหน้าที่พัสดุ
+Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']); //โครงการใรแผน
+Route::get('/SupplyAnalystProjectOutPlan', [SupplyAnalystController::class,'projectOutPlan']); //โครงการนอกแผน
 
 //ผู้บริหาร
 Route::get('/ExecutiveProjectlist', [Executive::class,'index']);
+Route::get('/ExecutiveProjectOutPlan', [Executive::class,'projectOutPlan']);
 Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
 //เสนอโครงการ
 Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'detail'])->name('Executive.detail');
@@ -112,7 +115,8 @@ Route::get('PlanningAnalystProjectDetailEvaluation/{id}',[PlanningAnalyst::class
 Route::post('EvaluationPass/{id}', [PlanningAnalyst::class,'EvaluationPass'])->name('PlanningAnalyst.EvaluationPass');
 
 //หัวหน้าฝ่าย
-Route::get('/DepartmentHeadProject', [Department_Head::class,'index']);
+Route::get('/DepartmentHeadProject', [Department_Head::class,'index']); //รายชื่อโครงการในแผน
+Route::get('/DepartmentHeadProjectOutPlan', [Department_Head::class,'projectOutPlan']); //รายชื่อโครงการนอกแผน
 //เสนอโครงการ
 Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'detail'])->name('Department.detail');
 Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->name('departmentPass');
@@ -124,6 +128,7 @@ Route::post('/departmentEvaluationEdit/{id}', [Department_Head::class,'Evaluatio
 
 
 Route::get('/project', [ProjectController::class,'index']);
+Route::get('/projectOutPlan', [ProjectController::class,'projectOutPlan']);
 Route::any('/projectcreate1', [ProjectController::class,'create1']);
 
 Route::post('/projectgoal3LV', [ProjectController::class,'goal3LV']);
@@ -135,7 +140,9 @@ Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
 Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
 
-Route::post('/projectcostType', [ProjectController::class,'costType']);
+Route::post('/fund', [ProjectController::class,'fund']); //กรองกองทุน
+Route::post('/exp', [ProjectController::class,'exp']); //กรองงบรายจ่าย
+Route::post('/projectcostType', [ProjectController::class,'costType']); //กรองหมวดรายจ่าย
 
 Route::any('/projectcreate2', [ProjectController::class,'create2']);
 // Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);

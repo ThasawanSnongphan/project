@@ -473,7 +473,7 @@
                 var idIndex = dropdownID.split("_")[1];
                 $('[id^="KPIMain3LVID_"]');
                 // $('[id^="KPIMain3LVID_' + idIndex + '"]').prop('disabled', false); // เปิดใช้งาน dropdown
-                console.log("เปลี่ยนค่า goal3LVID_", idIndex); // ตรวจสอบ idIndex
+                
                 $.ajax({
                     url: "/projectKPIMain3LV",
                     type: 'POST',

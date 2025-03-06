@@ -51,7 +51,7 @@ class ProjectController extends Controller
         $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
         $proIDs = $user->pluck('proID');
         // dd($proIDs);
-        $project=DB::table('projects')->whereIn('proID',$proIDs)->get();
+        $project=DB::table('projects')->where('proTypeID',3)->whereIn('proID',$proIDs)->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
@@ -62,6 +62,24 @@ class ProjectController extends Controller
         // dd($evaluation);
         // dd($proID);
         return view('Project.index',compact('users','project','status','year','projectYear','report','proID','evaluation'));
+    }
+    function projectOutPlan(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+        $proIDs = $user->pluck('proID');
+        // dd($proIDs);
+        $project=DB::table('projects')->where('proTypeID',4)->whereIn('proID',$proIDs)->get();
+        // dd($project);
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
+        $proID = $report->pluck('proID');
+
+        $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+        // dd($evaluation);
+        // dd($proID);
+        return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','evaluation'));
     }
     
     function create1(Request $request){
@@ -149,6 +167,14 @@ class ProjectController extends Controller
         $data['count_target2LV']=KPIMain2Level::where('KPIMain2LVID',$request->KPIMain2LVID)->get(['count','target']);
         return response()->json($data);
     } 
+
+    function fund(Request $requuest){
+        $data['fund'] = Funds::where('planID',$request->planID)->get('fundID');
+        dd($data['fund']);
+        return response()->json($data);
+    }
+
+    
     
     function costType(Request $request){
         $costType['costType']=CostTypes::where('expID',$request->expID)->get(['name','costID']);

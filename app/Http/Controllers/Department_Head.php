@@ -39,11 +39,21 @@ class Department_Head extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project= DB::table('projects')->whereIn('statusID',[1,5])->get();
+        $project= DB::table('projects')->where('proTypeID',3)->whereIn('statusID',[1,5])->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Department_Head.project',compact('users','project','status','year','projectYear'));
+    }
+
+    function projectOutPlan(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $project= DB::table('projects')->where('proTypeID',4)->whereIn('statusID',[1,5])->get();
+        // dd($project);
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        return view('Department_Head.projectOutPlan',compact('users','project','status','year','projectYear'));
     }
 
     function detail($id){

@@ -39,10 +39,19 @@ class Executive extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->whereIn('statusID',[3,7])->get();
+        $project=DB::table('projects')->where('proTypeID',3)->whereIn('statusID',[3,7])->get();
         $status=Status::all();
         $users = $users=DB::table('users')->get();
         return view('Executive.projectlist',compact('users','project','status','year','projectYear'));
+    }
+
+    function projectOutPlan(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $project=DB::table('projects')->where('proTypeID',4)->whereIn('statusID',[3,7])->get();
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        return view('Executive.projectOutPlan',compact('users','project','status','year','projectYear'));
     }
 
     function projectDenied(){
