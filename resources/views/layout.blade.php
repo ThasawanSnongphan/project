@@ -33,19 +33,6 @@
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     <title>@yield('title')</title>
 </head>
 
@@ -70,7 +57,7 @@
                             </div> --}}
                             <div class="profile_info">
                                 <span>Welcome,</span> <br>
-                                {{ Auth::user()->firstname_th }} {{ Auth::user()->lastname_th }}
+                                {{ Auth::user()->displayname }}
                             </div>
                         </div>
                     @endif
@@ -282,8 +269,7 @@
                     <nav class="nav navbar-nav ">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="navbar-left m-2">
-                                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                                @endif
+                               
                             </div>
                             <ul class=" navbar-right">
                                 @auth
@@ -291,7 +277,7 @@
                                         <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
                                             id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
                                             {{-- <img src="{{ asset('production/images/img.jpg') }}" alt=""> --}}
-                                            {{ Auth::user()->firstname_en }} {{ Auth::user()->lastname_en }}
+                                            {{ Auth::user()->displayname }}
                                         </a>
                                         <div class="dropdown-menu dropdown-usermenu pull-right"
                                             aria-labelledby="navbarDropdown">

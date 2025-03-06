@@ -294,7 +294,7 @@
                             @endforeach
                         </div>
                     </div>
-
+                    @if (count($data['file']) > 0)
                     <div class="row field item form-group ">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
                                 :</b></label>
@@ -304,10 +304,12 @@
                             @endforeach
                         </div>
                     </div>
+                    @endif
+                    
                 </form>
                 @if (count($data['comment']) > 0)
                 <div class="row field item form-group " >
-                    <label  for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ
+                    <label  for="comment" class="col-form-lable col-md-3 col-sm-3 label-align"><b>ข้อเสนอแนะ
                             :</b></label>
                     <div class="col-md-6 col-sm-6" style="background-color: #FFF9B1;">
                         @foreach ($data['comment'] as $item)

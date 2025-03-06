@@ -56,9 +56,12 @@
                                                         <input type="checkbox" id="check-all" class="flat">
                                                     </th>
                                                     <th class="column-title">username </th>
-                                                    <th class="column-title">firstname</th>
-                                                    <th class="column-title">lastname </th>
+                                                    <th class="column-title">name</th>
                                                     <th class="column-title">email</th>
+                                                    <th class="column-title">position_name</th>
+                                                    <th class="column-title">faculty_name</th>
+                                                    <th class="column-title">department_name</th>
+                                                    
                                                     
                                                     <th class="column-title no-link last"><span class="nobr">Action</span>
                                                     </th>
@@ -80,9 +83,12 @@
                                                             <input type="checkbox" class="flat" name="table_records">
                                                         </td>
                                                         <td class=" ">{{ $user->username }}</td>
-                                                        <td class=" ">{{ $user->firstname_en }}</td>
-                                                        <td class=" ">{{ $user->lastname_en }}</td>
+                                                        <td class=" ">{{ $user->displayname }}</td>
                                                         <td class=" ">{{ $user->email }}</td>
+
+                                                        <td class=" ">{{ $user->position_name }}</td>
+                                                        <td class=" ">{{ $user->faculty_name }}</td>
+                                                        <td class=" ">{{ $user->department_name }}</td>
                                                             <td class=" last"><a href="#">View </a>
                                                             </td>
                                                             <td>

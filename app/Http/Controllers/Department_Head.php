@@ -32,6 +32,8 @@ use App\Models\Comment;
 use App\Models\ProjectEvaluation;
 use App\Models\OperatingResults;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 use Carbon\Carbon;
 
 class Department_Head extends Controller
@@ -98,6 +100,26 @@ class Department_Head extends Controller
                     'created_at' => now() 
                 ]);
         }
+
+        $planningAnalyst = DB::table('users')->where('Planning_Analyst',1)->get();
+        foreach ($planningAnalyst as $index => $item) {
+            Mail::to($item->email)->send(new SendMail(
+                [
+                    'name' => 'หัวหน้าฝ่าย',
+                    'text' => 'รอเจ้าหน้าที่แผนตรวจสอบโครงการ'
+                ]
+                ));
+        } 
+
+        $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($users as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'ผู้รับผิดชอบโครงการ',
+                    'text' => 'รอเจ้าหน้าที่แผนตรวจสอบโครงการ'
+                ]
+            ));
+        }
         return redirect('/DepartmentHeadProject');
     }
 
@@ -117,6 +139,17 @@ class Department_Head extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+        $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($users as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'thatsawan',
+                    'text' => 'แก้ไขโครงการ'
+                ]
+                ));
+        }
+        // dd($users);
         return redirect('/DepartmentHeadProject');
     }
 

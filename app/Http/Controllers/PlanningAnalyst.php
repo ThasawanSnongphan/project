@@ -32,6 +32,8 @@ use App\Models\Comment;
 use App\Models\ProjectEvaluation;
 use App\Models\OperatingResults;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 use Carbon\Carbon;
 
 class PlanningAnalyst extends Controller
@@ -102,6 +104,27 @@ class PlanningAnalyst extends Controller
                     'updated_at' => now(), 
                     'created_at' => now() 
                 ]);
+        }
+
+        $Executive = DB::table('users')->where('Executive',1)->get();
+        // dd($Executive);
+        foreach ($Executive as $index => $item) {
+            Mail::to($item->email)->send(new SendMail(
+                [
+                    'name' => 'เจ้าหน้าที่แผน',
+                    'text' => 'รออนุมัติจากผู้บริหาร'
+                ]
+                ));
+        }
+
+        $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($users as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'ผู้รับผิดชอบโครงการ',
+                    'text' => 'รออนุมัติจากผู้บริหาร'
+                ]
+                ));
         }
         return redirect('/PlanningAnalystProject');
     }

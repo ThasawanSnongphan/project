@@ -41,6 +41,10 @@ use App\Models\Files;
 use App\Models\Comment;
 use App\Models\CountKPIProjects;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 class ProjectController extends Controller
@@ -2060,8 +2064,12 @@ class ProjectController extends Controller
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
+       
         
-        $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
+        $userMaps = UsersMapProject::with('users')->where('proID',$id)->get();
+
+
+
         //ดึงuserIDทัั้งหมดในuserMap
         $userMapIDs = $userMaps->pluck('userID')->toArray();
         // dd($userMapIDs);
@@ -2760,6 +2768,26 @@ class ProjectController extends Controller
             ]
         );
 
+        $Department = DB::table('users')->where('Department_head',1)->get();
+        
+        
+        foreach ($Department as $index => $item) {
+             Mail::to($item->email)->send(new SendMail(
+            [
+                'name' => 'หัวหน้าฝ่าย',
+                'text' => 'รอหัวหน้าฝ่ายพิจารณาโครงการ'
+            ]
+            ));
+        }
+
+        foreach ($userMaps as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'ผู้รับผิดชอบโครงการ',
+                    'text' => 'รอหัวหน้าฝ่ายพิจารณาโครงการ'
+                ]
+                ));
+        }
 
         return redirect('/project');
     }

@@ -1361,18 +1361,17 @@
         //     }
         // }
 
-        // function submitButton() {
-        //     var form = document.getElementById('actionForm');
-        //     var costID = document.getElementById('[id^="costType"]');
+        function submitButton() {
+            var form = document.getElementById('actionForm');
+            var costID = document.getElementById('[id^="costType"]');
 
-        //     console.log(costID);
+            console.log(costID);
             
-        //     if()
 
-        //     form.action = "/projectSave2";
+            form.action = "/projectSave2";
            
-        //     form.submit();
-        // }
+            form.submit();
+        }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ
         window.onload = function() {
