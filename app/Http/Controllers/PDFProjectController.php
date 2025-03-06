@@ -189,8 +189,8 @@ class PDFProjectController extends Controller
                             $departments[] = $user->department_name;
                         }
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
-                        $responsibleNames[] = $user->username;
-                        $names[] = $user->username;
+                        $responsibleNames[] = $user->firstname_th . ' ' .  $user->lastname_th;
+                        $names[] = $user->firstname_th . ' ' .  $user->lastname_th;
                         // dd($names);
                     }
                 }
