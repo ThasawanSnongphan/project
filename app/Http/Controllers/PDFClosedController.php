@@ -121,6 +121,7 @@ class PDFClosedController extends Controller
                             <b>ประจำปีงบประมาณ ' . $year->year . '</b><br>
                         </p>
                     ';
+                    $y = $year->year;
                     $mpdf->SetTitle('แบบประเมินโครงการที่ตอบสนองยุทธศาสตร์การพัฒนาสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศประจำปีงบประมาณ');
                 }
             }
@@ -345,7 +346,11 @@ class PDFClosedController extends Controller
         if (DB::table('objectives')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $objects = DB::table('objectives')->where('proID', $id)->get();
+
             $counter = 1; // ตัวแปรเก็บลำดับ
+            $data_obj_detail = [];  // เก็บรายละเอียดของแต่ละวัตถุประสงค์
+            $data_obj_achieve = []; // เก็บสถานะบรรลุหรือไม่บรรลุ
+
             foreach ($objects as $object) {
                 if ($projects->proID == $object->proID) {
                     $htmlContent .= '
@@ -359,6 +364,9 @@ class PDFClosedController extends Controller
                             </div>
                         </div>
                     ';
+                    $data_obj_detail[] = $object->detail;
+                    $data_obj_achieve[] = $object->achieve;
+
                     $counter++;
                 }
             }
@@ -500,7 +508,97 @@ class PDFClosedController extends Controller
                     </div>
                 </div>
             </div>
+            <pagebreak />
         ';
+
+        $htmlContent .= '
+            <div>
+                <b>การประเมินประสิทธิผล</b> โครงการ ' . $projects->name . '  
+                <span style="display: inline-block; margin-left: 20px;">ปีงบประมาณ พ.ศ. ' . $y . '</span>
+            </div>
+        ';
+
+
+        $htmlContent .= '
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+                    <tr>
+                        <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                        <th style="background-color:rgb(234, 246, 144);">วัตถุประสงค์</th>
+                        <th style="background-color:rgb(234, 246, 144);">บรรลุ / ไม่บรรลุ</th>
+                    </tr>
+        ';
+
+
+        $c = 1;
+        $totalObjectives = 0; // นับจำนวนวัตถุประสงค์ทั้งหมด
+        $achievedCount = 0; // นับจำนวนที่บรรลุ
+        $notAchievedCount = 0; // นับจำนวนที่ไม่บรรลุ
+
+        foreach ($data_obj_detail as $index => $obj) {
+            $achieveStatus = $data_obj_achieve[$index] == 1 ? '<span style="font-family: \'DejaVu Sans\';">✓</span>' : '<span style="font-family: \'DejaVu Sans\';">✗</span>';
+
+            // เพิ่มจำนวนในตัวแปรนับ
+            $totalObjectives++;
+            if ($data_obj_achieve[$index] == 1) {
+                $achievedCount++;
+            } else {
+                $notAchievedCount++;
+            }
+
+            $htmlContent .= '
+                <tr>
+                    <td style="width: 5px;">' . $c . '</td>
+                    <td style="width: 90px; text-align: left;">' . $obj . '</td>
+                    <td style="width: 10px;">' . $achieveStatus . '</td>
+                </tr>
+            ';
+            $c++;
+        }
+
+        $htmlContent .= '
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมวัตถุประสงค์ทั้งหมด</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $totalObjectives . '</th>
+            </tr>
+
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมที่บรรลุวัตถุประสงค์</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $achievedCount . '</th>
+            </tr>
+            
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมที่ไม่บรรลุวัตถุประสงค์</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $notAchievedCount . '</th>
+            </tr>
+        ';
+
+        $htmlContent .= '</table>';
+
+
+        $htmlContent .= '
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>ตัวชี้วัด</th>
+                    <th>หน่วย</th>
+                    <th>ค่าที่ได้</th>
+                    <th>ค่าเป้าหมาย</th>
+                    <th>รวม</th>
+                </tr>
+        ';
+        
+        $htmlContent .= '</table>';
+
+
+
+
+
+
+
+
+
+
+
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
