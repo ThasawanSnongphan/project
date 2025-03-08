@@ -522,18 +522,12 @@ class PDFClosedController extends Controller
         ';
 
         $htmlContent .= '
-    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; white-space: nowrap;">
-        <div style="font-weight: bold;">การประเมินประสิทธิผล</div>
-        <div style="flex: 1; text-align: center;">โครงการ '. $projects->name .'</div>
-        <div style="text-align: right;">ปีงบประมาณ พ.ศ. '. $y .'</div>
-    </div>
-';
-
-
-
-
-
-
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; white-space: nowrap;">
+                <span style="font-weight: bold;">การประเมินประสิทธิผล</span>
+                <span style="flex: 1; text-align: center;">โครงการ '. $projects->name .'</span>
+                <span style="text-align: right;">ปีงบประมาณ พ.ศ. '. $y .'</span>
+            </div>
+        ';
 
 
         $htmlContent .= '
@@ -602,12 +596,12 @@ class PDFClosedController extends Controller
         $htmlContent .= '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 40px;">
                 <tr>
-                    <th>ลำดับ</th>
-                    <th>ตัวชี้วัด</th>
-                    <th>หน่วย</th>
-                    <th>ค่าที่ได้</th>
-                    <th>ค่าเป้าหมาย</th>
-                    <th>รวม</th>
+                    <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                    <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
+                    <th style="background-color:rgb(234, 246, 144);">หน่วย</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าที่ได้</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าเป้าหมาย</th>
+                    <th style="background-color:rgb(234, 246, 144);">รวม</th>
                 </tr>
         ';
 
@@ -636,21 +630,21 @@ class PDFClosedController extends Controller
 
         $htmlContent .= '
             <tr>
-                <th colspan="4">รวมตัวชี้วัดทั้งหมด</th>
-                <th>' . $totalKPI . '</th>
-                <th>ตัวชี้วัด</th>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดทั้งหมด</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $totalKPI . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
             </tr>
 
             <tr>
-                <th colspan="4">รวมตัวชี้วัดที่บรรลุ</th>
-                <th>' . $countAchieved . '</th>
-                <th>ตัวชี้วัด</th>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดที่บรรลุ</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $countAchieved . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
             </tr>
 
             <tr>
-                <th colspan="4">รวมตัวชี้วัดที่ไม่บรรลุ</th>
-                <th>' . $countNotAchieved . '</th>
-                <th>ตัวชี้วัด</th>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดที่ไม่บรรลุ</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $countNotAchieved . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
             </tr>
         ';
 
@@ -659,9 +653,9 @@ class PDFClosedController extends Controller
         $htmlContent .= '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 40px;">
                 <tr>
-                    <th>ลำดับ</th>
-                    <th>รายการ</th>
-                    <th>ค่าที่ได้</th>
+                    <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                    <th style="background-color:rgb(234, 246, 144);">รายการ</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าที่ได้</th>
                 </tr>
 
                 <tr>
@@ -677,25 +671,13 @@ class PDFClosedController extends Controller
                 </tr>
 
                 <tr>
-                    <td>3</td>
-                    <th>ประสิทธิผลของโครงการ</th>
-                    <th></th>
+                    <td style="background-color:rgb(234, 246, 144);">3</td>
+                    <th style="background-color:rgb(234, 246, 144);">ประสิทธิผลของโครงการ</th>
+                    <th style="background-color:rgb(234, 246, 144);"></th>
                 </tr>
         ';
 
         $htmlContent .= '</table>';
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
