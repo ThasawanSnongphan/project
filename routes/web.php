@@ -49,6 +49,8 @@ use App\Http\Controllers\Department_Head;
 use App\Http\Controllers\SupplyAnalystController;
 use App\Http\Controllers\Executive;
 use App\Http\Controllers\ExcelAllResultsController;
+use App\Http\Controllers\ExcelClosedController;
+use App\Http\Controllers\ExcelEffectiveController;
 use App\Http\Controllers\ExcelPlanController;
 use App\Http\Controllers\WordClosedController;
 
@@ -66,6 +68,8 @@ Route::get('/wordClosed/{id}', [WordClosedController::class, 'word_gen']);
 //Excel
 Route::get('/excelAllResults', [ExcelAllResultsController::class, 'excel_gen']);
 Route::get('/excelPlan', [ExcelPlanController::class, 'excel_gen']);
+Route::get('/excelEffective/{id}', [ExcelEffectiveController::class, 'excel_gen']);
+
 
 
 
