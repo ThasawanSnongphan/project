@@ -279,75 +279,77 @@ class PDFPlanController extends Controller
                                 $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
 
                                 foreach ($data_projects as $project) {
-                                    foreach ($data_strategic_maps as $map) {
-                                        if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
-                                            // ✅ ดึง badgetTotal
-                                            $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
+                                    if ($project['yearID'] == $yearID) {
+                                        foreach ($data_strategic_maps as $map) {
+                                            if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
+                                                // ✅ ดึง badgetTotal
+                                                $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
 
-                                            // ✅ ลูปดึงข้อมูลจาก k_p_i_projects
-                                            $kpiNames = [];
-                                            $kpiTargets = [];
-                                            foreach ($data_kpi_projects as $kpi) {
-                                                if ($kpi['proID'] == $project['proID']) {
-                                                    $kpiNames[] = '- ' . ($kpi['name'] ?? '-');
+                                                // ✅ ลูปดึงข้อมูลจาก k_p_i_projects
+                                                $kpiNames = [];
+                                                $kpiTargets = [];
+                                                foreach ($data_kpi_projects as $kpi) {
+                                                    if ($kpi['proID'] == $project['proID']) {
+                                                        $kpiNames[] = '- ' . ($kpi['name'] ?? '-');
 
-                                                    // ✅ หาค่า name จาก count_k_p_i_projects
-                                                    $targetLabel = "";
-                                                    foreach ($data_count_kpi_projects as $countKpi) {
-                                                        if ($countKpi['countKPIProID'] == $kpi['countKPIProID']) {
-                                                            $targetLabel = '- ' . $countKpi['name'];
-                                                            break; // หาค่าแรกที่ตรงกันแล้วหยุด
+                                                        // ✅ หาค่า name จาก count_k_p_i_projects
+                                                        $targetLabel = "";
+                                                        foreach ($data_count_kpi_projects as $countKpi) {
+                                                            if ($countKpi['countKPIProID'] == $kpi['countKPIProID']) {
+                                                                $targetLabel = '- ' . $countKpi['name'];
+                                                                break; // หาค่าแรกที่ตรงกันแล้วหยุด
+                                                            }
                                                         }
+
+                                                        // ✅ คำนวณค่าเป้าหมายโครงการ
+                                                        $targetValue = "";
+                                                        if (!empty($targetLabel) && isset($kpi['target'])) {
+                                                            $targetValue = "$targetLabel " . number_format($kpi['target'], 2);
+                                                        }
+                                                        $kpiTargets[] = $targetValue;
                                                     }
+                                                }
 
-                                                    // ✅ คำนวณค่าเป้าหมายโครงการ
-                                                    $targetValue = "";
-                                                    if (!empty($targetLabel) && isset($kpi['target'])) {
-                                                        $targetValue = "$targetLabel " . number_format($kpi['target'], 2);
+                                                // ✅ ดึงข้อมูลจาก steps
+                                                $startMonth = null;
+                                                $endMonth = null;
+                                                foreach ($data_steps as $step) {
+                                                    if ($step['proID'] == $project['proID']) {
+                                                        // ✅ ใช้ปี ค.ศ. โดยตรง
+                                                        $startDate = new DateTime($step['start']);
+                                                        $endDate = new DateTime($step['end']);
+
+                                                        $startYear = (int)$startDate->format('Y'); // ใช้ ค.ศ.
+                                                        $endYear = (int)$endDate->format('Y');
+
+                                                        $startMonth = (int)$startDate->format('m');
+                                                        $endMonth = (int)$endDate->format('m');
                                                     }
-                                                    $kpiTargets[] = $targetValue;
                                                 }
+
+                                                // ✅ รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
+                                                $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
+                                                $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
+
+
+                                                // ✅ สร้างแถวของโปรเจค
+                                                $projectRows[] = [
+                                                    'details' => $projectDetails,
+                                                    'target' => $projectTargetDetails,
+                                                    'badgetTotal' => $badgetTotal,
+                                                    'startMonth' => $startMonth,
+                                                    'endMonth' => $endMonth,
+                                                    'startYear' => $startYear,
+                                                    'endYear' => $endYear
+                                                ];
                                             }
-
-                                            // ✅ ดึงข้อมูลจาก steps
-                                            $startMonth = null;
-                                            $endMonth = null;
-                                            foreach ($data_steps as $step) {
-                                                if ($step['proID'] == $project['proID']) {
-                                                    // ✅ ใช้ปี ค.ศ. โดยตรง
-                                                    $startDate = new DateTime($step['start']);
-                                                    $endDate = new DateTime($step['end']);
-
-                                                    $startYear = (int)$startDate->format('Y'); // ใช้ ค.ศ.
-                                                    $endYear = (int)$endDate->format('Y');
-
-                                                    $startMonth = (int)$startDate->format('m');
-                                                    $endMonth = (int)$endDate->format('m');
-                                                }
-                                            }
-
-                                            // ✅ รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
-                                            $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
-                                            $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
-                                            
-
-                                            // ✅ สร้างแถวของโปรเจค
-                                            $projectRows[] = [
-                                                'details' => $projectDetails,
-                                                'target' => $projectTargetDetails,
-                                                'badgetTotal' => $badgetTotal,
-                                                'startMonth' => $startMonth,
-                                                'endMonth' => $endMonth,
-                                                'startYear' => $startYear,
-                                                'endYear' => $endYear
-                                            ];
                                         }
-                                    }
-                                    foreach ($data_users_map as $user_map) {
-                                        if ($project['proID'] == $user_map['proID']) {
-                                            foreach ($data_users as $user) {
-                                                if ($user_map['userID'] == $user['userID']) {
-                                                    $name = $user['firstname_th'] . ' ' .  $user['lastname_th'];
+                                        foreach ($data_users_map as $user_map) {
+                                            if ($project['proID'] == $user_map['proID']) {
+                                                foreach ($data_users as $user) {
+                                                    if ($user_map['userID'] == $user['userID']) {
+                                                        $name = $user['firstname_th'] . ' ' .  $user['lastname_th'];
+                                                    }
                                                 }
                                             }
                                         }
@@ -412,14 +414,15 @@ class PDFPlanController extends Controller
                                 // ✅ ถ้าไม่มีโครงการเลย ให้แสดง "-"
                                 if (empty($projectRows)) {
                                     $htmlContent .= "
-        <tr>
-            <td></td>
-            <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
-            <td></td>
-            <td></td>
-            <td>-</td>
-            <td></td>
-            <td>-</td>";
+                                        <tr>
+                                            <td></td>
+                                            <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>-</td>
+                                            <td></td>
+                                            <td>-</td>
+                                    ";
 
                                     // ✅ ช่องเดือน (ต.ค. - ก.ย.)
                                     for ($i = 0; $i < count($months); $i++) {

@@ -121,6 +121,7 @@ class PDFClosedController extends Controller
                             <b>ประจำปีงบประมาณ ' . $year->year . '</b><br>
                         </p>
                     ';
+                    $y = $year->year;
                     $mpdf->SetTitle('แบบประเมินโครงการที่ตอบสนองยุทธศาสตร์การพัฒนาสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศประจำปีงบประมาณ');
                 }
             }
@@ -345,7 +346,11 @@ class PDFClosedController extends Controller
         if (DB::table('objectives')->where('proID', $id)->exists()) {
             // ดึงข้อมูลที่ตรงกับ proID
             $objects = DB::table('objectives')->where('proID', $id)->get();
+
             $counter = 1; // ตัวแปรเก็บลำดับ
+            $data_obj_detail = [];  // เก็บรายละเอียดของแต่ละวัตถุประสงค์
+            $data_obj_achieve = []; // เก็บสถานะบรรลุหรือไม่บรรลุ
+
             foreach ($objects as $object) {
                 if ($projects->proID == $object->proID) {
                     $htmlContent .= '
@@ -359,6 +364,9 @@ class PDFClosedController extends Controller
                             </div>
                         </div>
                     ';
+                    $data_obj_detail[] = $object->detail;
+                    $data_obj_achieve[] = $object->achieve;
+
                     $counter++;
                 }
             }
@@ -402,17 +410,27 @@ class PDFClosedController extends Controller
             $countKPI_pros = DB::table('count_k_p_i_projects')->get();
 
             $counter = 1;
+            $data_kpiName = []; // เก็บ ตัวชี้วัด
+            $data_kpiResult = []; // เก็บ ผลค่าเป้าหมายที่ได้
+            $data_kpiTarget = []; // เก็บ ค่าเป้าหมาย
+            $data_countKPI = []; // เก็บหน่วยนับ
+
             foreach ($KPI_pros as $KPI_pro) {
                 // เช็คว่ามีหน่วยนับที่ countKPIProID ตรงกันหรือไม่
                 foreach ($countKPI_pros as $countKPI_pro) {
                     if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
-                        // $unitName = $countKPI_pro->name;
+                        // เก็บค่า KPI name และ result_eva แยกกัน
+                        $data_kpiName[] = $KPI_pro->name;
+                        $data_kpiResult[] = $KPI_pro->result_eva;
+                        $data_kpiTarget[] = $KPI_pro->target;
+                        $data_countKPI[] = $countKPI_pro->name;
+
                         $htmlContent .= '
                             &nbsp;&nbsp;&nbsp;&nbsp;8.' . $counter . ' ตัวชี้วัดโครงการ ' . $KPI_pro->name . ' <br>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . $KPI_pro->result_eva . ' <br>
                         ';
                         $counter++;
-                        break;
+                        // break;
                     }
                 }
             }
@@ -500,7 +518,166 @@ class PDFClosedController extends Controller
                     </div>
                 </div>
             </div>
+            <pagebreak />
         ';
+
+        $htmlContent .= '
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; white-space: nowrap;">
+                <span style="font-weight: bold;">การประเมินประสิทธิผล</span>
+                <span style="flex: 1; text-align: center;">โครงการ '. $projects->name .'</span>
+                <span style="text-align: right;">ปีงบประมาณ พ.ศ. '. $y .'</span>
+            </div>
+        ';
+
+
+        $htmlContent .= '
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 30px;">
+                    <tr>
+                        <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                        <th style="background-color:rgb(234, 246, 144);">วัตถุประสงค์</th>
+                        <th style="background-color:rgb(234, 246, 144);">บรรลุ / ไม่บรรลุ</th>
+                        <th style="background-color:rgb(234, 246, 144);">หน่วย</th>
+                    </tr>
+        ';
+
+
+
+        $totalObjectives = 0; // นับจำนวนวัตถุประสงค์ทั้งหมด
+        $achievedCount = 0; // นับจำนวนที่บรรลุ
+        $notAchievedCount = 0; // นับจำนวนที่ไม่บรรลุ
+
+        foreach ($data_obj_detail as $index => $obj) {
+            $achieveStatus = $data_obj_achieve[$index] == 1 ? '<span style="font-family: \'DejaVu Sans\';">✓</span>' : '<span style="font-family: \'DejaVu Sans\';">✗</span>';
+
+            // เพิ่มจำนวนในตัวแปรนับ
+            $totalObjectives++;
+            if ($data_obj_achieve[$index] == 1) {
+                $achievedCount++;
+            } else {
+                $notAchievedCount++;
+            }
+
+            $htmlContent .= '
+                <tr>
+                    <td style="width: 5px;">' . ($index + 1) . '</td>
+                    <td style="width: 90px; text-align: left;">' . $obj . '</td>
+                    <td style="width: 10px;">' . $achieveStatus . '</td>
+                    <td style="width: 5px;">ข้อ</td>
+                </tr>
+            ';
+        }
+
+        $htmlContent .= '
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมวัตถุประสงค์ทั้งหมด</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $totalObjectives . '</th>
+                <td style="width: 5px; background-color:rgb(234, 246, 144);">ข้อ</td>
+            </tr>
+
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมที่บรรลุวัตถุประสงค์</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $achievedCount . '</th>
+                <td style="width: 5px; background-color:rgb(234, 246, 144);">ข้อ</td>
+            </tr>
+            
+            <tr>
+                <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมที่ไม่บรรลุวัตถุประสงค์</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $notAchievedCount . '</th>
+                <td style="width: 5px; background-color:rgb(234, 246, 144);">ข้อ</td>
+            </tr>
+
+        ';
+
+        $htmlContent .= '</table>';
+
+        $totalKPI = count($data_kpiName); // นับจำนวน KPI ทั้งหมด
+        $countAchieved = 0; // ตัวนับ KPI ที่บรรลุ
+        $countNotAchieved = 0; // ตัวนับ KPI ที่ไม่บรรลุ
+        $htmlContent .= '
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 40px;">
+                <tr>
+                    <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                    <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
+                    <th style="background-color:rgb(234, 246, 144);">หน่วย</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าที่ได้</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าเป้าหมาย</th>
+                    <th style="background-color:rgb(234, 246, 144);">รวม</th>
+                </tr>
+        ';
+
+        // dd($data_kpiName);
+        // dd($data_kpiResult);
+
+        foreach ($data_kpiName as $index => $kpiName) {
+            // ตรวจสอบว่า KPI บรรลุหรือไม่
+            if ($data_kpiResult[$index] >= $data_kpiTarget[$index]) {
+                $countAchieved++; // นับเป็นบรรลุ
+            } else {
+                $countNotAchieved++; // นับเป็นไม่บรรลุ
+            }
+
+            $htmlContent .= '
+                <tr>
+                    <td style="text-align: center;">' . ($index + 1) . '</td>
+                    <td style="text-align: left;">' . $kpiName . '</td>
+                    <td style="text-align: center;">' . $data_countKPI[$index] . '</td>
+                    <td style="text-align: right;">' . $data_kpiResult[$index] . '</td>
+                    <td style="text-align: right;">' . $data_kpiTarget[$index] . '</td>
+                    <td></td>
+                </tr>
+            ';
+        }
+
+        $htmlContent .= '
+            <tr>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดทั้งหมด</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $totalKPI . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
+            </tr>
+
+            <tr>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดที่บรรลุ</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $countAchieved . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
+            </tr>
+
+            <tr>
+                <th colspan="4" style="background-color:rgb(234, 246, 144);">รวมตัวชี้วัดที่ไม่บรรลุ</th>
+                <th style="background-color:rgb(234, 246, 144);">' . $countNotAchieved . '</th>
+                <th style="background-color:rgb(234, 246, 144);">ตัวชี้วัด</th>
+            </tr>
+        ';
+
+        $htmlContent .= '</table>';
+
+        $htmlContent .= '
+            <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 40px;">
+                <tr>
+                    <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
+                    <th style="background-color:rgb(234, 246, 144);">รายการ</th>
+                    <th style="background-color:rgb(234, 246, 144);">ค่าที่ได้</th>
+                </tr>
+
+                <tr>
+                    <td>1</td>
+                    <td>คะแนนวัตถุประสงค์</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td>คะแนนตัวชี้วัด</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td style="background-color:rgb(234, 246, 144);">3</td>
+                    <th style="background-color:rgb(234, 246, 144);">ประสิทธิผลของโครงการ</th>
+                    <th style="background-color:rgb(234, 246, 144);"></th>
+                </tr>
+        ';
+
+        $htmlContent .= '</table>';
 
 
         $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
