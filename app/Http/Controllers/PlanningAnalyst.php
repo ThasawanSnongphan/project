@@ -95,7 +95,7 @@ class PlanningAnalyst extends Controller
         $detail = $request->input('comment');
         $userID = Auth::id();
         if(!empty($detail)){
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -106,25 +106,38 @@ class PlanningAnalyst extends Controller
                 ]);
         }
 
-        $Executive = DB::table('users')->where('Executive',1)->get();
-        // dd($Executive);
-        foreach ($Executive as $index => $item) {
-            Mail::to($item->email)->send(new SendMail(
-                [
-                    'name' => 'เจ้าหน้าที่แผน',
-                    'text' => 'รออนุมัติจากผู้บริหาร'
-                ]
-                ));
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+            // dd($comment);
         }
+
+        $Executive = DB::table('users')->where([['Executive',1],['position_name','รองผู้อำนวยการ ฝ่ายบริหาร']])->first();
+        $status= DB::table('statuses')->where('statusID',3)->first();
+
+        // dd($Executive);
+        // foreach ($Executive as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($Executive->email)->send(new SendMail($mailData));
+        // }
 
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($users as $index => $item) {
-            Mail::to($item->users->email)->send(new SendMail(
-                [
-                    'name' => 'ผู้รับผิดชอบโครงการ',
-                    'text' => 'รออนุมัติจากผู้บริหาร'
-                ]
-                ));
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
         }
         return redirect('/PlanningAnalystProject');
     }
@@ -170,7 +183,7 @@ class PlanningAnalyst extends Controller
         $detail = $request->input('comment');
         $userID = Auth::id();
         if(!empty($detail)){
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -179,6 +192,40 @@ class PlanningAnalyst extends Controller
                     'updated_at' => now(), 
                     'created_at' => now() 
                 ]);
+        }
+
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+            // dd($comment);
+        }
+
+        $Executive = DB::table('users')->where([['Executive',1],['position_name','รองผู้อำนวยการ ฝ่ายบริหาร']])->first();
+        $status= DB::table('statuses')->where('statusID',7)->first();
+
+        // dd($Executive);
+        // foreach ($Executive as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($Executive->email)->send(new SendMail($mailData));
+        // }
+
+        $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($users as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
         }
         return redirect('/PlanningAnalystProject');
     }

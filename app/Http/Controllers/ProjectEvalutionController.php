@@ -10,10 +10,12 @@ use App\Models\Strategic1LevelMapProject;
 use App\Models\OperatingResults;
 use App\Models\ProjectEvaluation;
 use App\Models\Comment;
-
+use App\Models\UsersMapProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 use Carbon\Carbon;
 
 class ProjectEvalutionController extends Controller
@@ -71,7 +73,10 @@ class ProjectEvalutionController extends Controller
     }
     public function save(Request $request, $id)
     {
+       
         $data['project'] = DB::table('projects')->where('proID',$id)->update(['statusID'=>5]);
+
+
         $evaluation = [
             'proID' => $id,
             'userID' =>  Auth::id(),
@@ -99,6 +104,35 @@ class ProjectEvalutionController extends Controller
             $result_eva = $request->input('result_eva');
             DB::table('k_p_i_projects')->where('KPIProID',$item->KPIProID)->update(['result_eva' => $result_eva[$index]]);
         }
+
+        $data['userMap'] = UsersMapProject::with('users')->where('proID',$id)->get();
+        $data['status'] = Projects::with('status')->where('proID',$id)->first();
+        
+        foreach ($data['userMap'] as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'แจ้งเตือนสถานะโครงการ',
+                    'text' => $data['status']->status->name
+                ]
+                ));
+        }
+
+        
+        foreach ($data['userMap'] as $index => $item) {
+            $data['department'] = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+       
+        }
+        
+        foreach ($data['department'] as $index => $item) {
+            Mail::to($item->email)->send(new SendMail(
+            [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $data['status']->status->namme
+            ]
+        ));
+        }
+       
+       
         // dd($data['result_eva']);
        
         // dd($obj_achieve);
@@ -232,6 +266,33 @@ class ProjectEvalutionController extends Controller
         foreach($data['KPI'] as $index =>  $item){
             $result_eva = $request->input('result_eva');
             DB::table('k_p_i_projects')->where('KPIProID',$item->KPIProID)->update(['result_eva' => $result_eva[$index]]);
+        }
+
+        $data['userMap'] = UsersMapProject::with('users')->where('proID',$id)->get();
+        $data['status'] = Projects::with('status')->where('proID',$id)->first();
+        
+        foreach ($data['userMap'] as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'แจ้งเตือนสถานะโครงการ',
+                    'text' => $data['status']->status->name
+                ]
+                ));
+        }
+
+        
+        foreach ($data['userMap'] as $index => $item) {
+            $data['department'] = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+       
+        }
+        
+        foreach ($data['department'] as $index => $item) {
+            Mail::to($item->email)->send(new SendMail(
+            [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $data['status']->status->namme
+            ]
+        ));
         }
             
         return redirect('/project');

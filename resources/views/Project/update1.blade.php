@@ -39,7 +39,7 @@
                                     <table >
                                         <td style="padding: 2px">
                                             @foreach ($comment as $item)
-                                                 <b>{{ $item->user->firstname_en }} {{ $item->user->lastname_en }}</b> :
+                                                 <b>{{ $item->user->displayname }} {{ $item->user->lastname_en }}</b> :
                                                  {{ $item->detail }} <br> <b>เมื่อ</b> {{$item->created_at}}<br>
                                             @endforeach
                                         </td>

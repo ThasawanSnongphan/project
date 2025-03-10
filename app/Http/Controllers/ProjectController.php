@@ -2768,23 +2768,31 @@ class ProjectController extends Controller
             ]
         );
 
-        $Department = DB::table('users')->where('Department_head',1)->get();
+
+        $Responsible = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($Responsible as $index => $item) {
+            $Department = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+
+        }
         
-        
+        // dd($Department,$userMaps);
+        $mail = Projects::with('status')->where('proID',$id)->first();
+       
+        // dd($status);
         foreach ($Department as $index => $item) {
              Mail::to($item->email)->send(new SendMail(
             [
-                'name' => 'หัวหน้าฝ่าย',
-                'text' => 'รอหัวหน้าฝ่ายพิจารณาโครงการ'
+                'name' => $mail->name,
+                'text' => $mail->status->name
             ]
             ));
         }
 
-        foreach ($userMaps as $index => $item) {
+        foreach ($Responsible as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(
                 [
-                    'name' => 'ผู้รับผิดชอบโครงการ',
-                    'text' => 'รอหัวหน้าฝ่ายพิจารณาโครงการ'
+                    'name' => $mail->name,
+                    'text' => $mail->status->name
                 ]
                 ));
         }

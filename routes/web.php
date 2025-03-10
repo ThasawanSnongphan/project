@@ -51,6 +51,7 @@ use App\Http\Controllers\Executive;
 use App\Http\Controllers\ExcelAllResultsController;
 use App\Http\Controllers\ExcelPlanController;
 use App\Http\Controllers\WordClosedController;
+use App\Http\Controllers\PerformanceController;
 
 //PDF
 Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
@@ -79,6 +80,8 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken(); // ป้องกัน CSRF attacks
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
+
+Route::get('/Performance', [PerformanceController::class,'index']);
 
 Route::get('/countKPI', [CountKPIProject::class,'index']);
 Route::post('/countKPIInsert',[CountKPIProject::class,'insert']);

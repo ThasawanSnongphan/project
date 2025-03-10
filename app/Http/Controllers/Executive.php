@@ -32,6 +32,8 @@ use App\Models\Comment;
 use App\Models\ProjectEvaluation;
 use App\Models\OperatingResults;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 use Carbon\Carbon;
 
 class Executive extends Controller
@@ -90,10 +92,12 @@ class Executive extends Controller
     }
     function ExecutivePass(Request $request, $id){
         DB::table('projects')->where('proID',$id)->update(['statusID' => 4]);
+        $project = Projects::with('status')->where('proID',$id)->first();
+        // dd($project);
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -103,6 +107,23 @@ class Executive extends Controller
                     'created_at' => now() 
                 ]);
         }
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        }
+
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        
+        foreach ($userMap as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $project->status->name
+            ];
+            if(!empty($comment)){
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
+        }
+
         return redirect('/ExecutiveProjectlist');
     }
     function ExecutiveDenied(Request $request,$id){
@@ -113,7 +134,7 @@ class Executive extends Controller
         $detail = $request->input('comment');
         $userID = Auth::id();
         
-        DB::table('comments')->insert(
+        $commentID = DB::table('comments')->insertGetId(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -122,6 +143,22 @@ class Executive extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+        $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        $status = DB::table('statuses')->where('statusID',15)->first();
+
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($userMap as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'แจ้งเตือนสถานะโครงการ',
+                    'text' => $status->name,
+                    'comment' => $comment->detail
+                ]
+            ));
+        }
+
+
         return redirect('/ExecutiveProjectlist');
     }
     function ExecutiveEdit(Request $request,$id){
@@ -131,7 +168,7 @@ class Executive extends Controller
         DB::table('projects')->where('proID',$id)->update(['statusID' => '12']);
         $detail = $request->input('comment');
         $userID = Auth::id();
-        DB::table('comments')->insert(
+        $commentID = DB::table('comments')->insertGetID(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -140,6 +177,19 @@ class Executive extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+        $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        $status = DB::table('statuses')->where('statusID',12)->first();
+        foreach ($userMap as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => 'แจ้งเตือนสถานะโครงการ',
+                    'text' => $status->name,
+                    'comment' => $comment->detail
+                ]
+            ));
+        }
         return redirect('/ExecutiveProjectlist');
     }
     
@@ -179,6 +229,7 @@ class Executive extends Controller
     }
     function EvaluationPass(Request $request, $id){
         $data['evaluation'] = DB::table('project_evaluations')->where('proID',$id)->first();
+
         $data['statusID'] = '';
         if($data['evaluation']->operID == 1){
             $data['statusID'] = 8;
@@ -191,10 +242,11 @@ class Executive extends Controller
         }
 
         DB::table('projects')->where('proID',$id)->update(['statusID' => $data['statusID']]);
+        $data['project'] = Projects::with('status')->where('proID',$id)->first();
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -204,14 +256,33 @@ class Executive extends Controller
                     'created_at' => now() 
                 ]);
         }
+
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        }
+
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        
+        foreach ($userMap as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $data['project']->status->name
+            ];
+            if(!empty($comment)){
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
+        }
+
         return redirect('/ExecutiveProjectlist');
     }
     function EvaluationEdit(Request $request,$id){
         
         DB::table('projects')->where('proID',$id)->update(['statusID' => '13']);
+        $data['project'] = Projects::with('status')->where('proID',$id)->first();
         $detail = $request->input('comment');
         $userID = Auth::id();
-        DB::table('comments')->insert(
+        $commentID = DB::table('comments')->insertGetId(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -220,17 +291,30 @@ class Executive extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+            $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+            foreach ($userMap as $index => $item) {
+                Mail::to($item->users->email)->send(new SendMail(
+                    [
+                        'name' => 'แจ้งเตือนสถานะโครงการ',
+                        'text' => $data['project']->status->name,
+                        'comment' => $comment->detail
+                    ]
+                ));
+            }
         return redirect('/ExecutiveProjectlist');
     }
     function EvaluationDenied(Request $request,$id){
-        $request->validate([
-            'comment'=>'required'
-        ]);
+        // $request->validate([
+        //     'comment'=>'required'
+        // ]);
         DB::table('projects')->where('proID',$id)->update(['statusID' => 15]);
+        $data['status'] = Projects::with('status')->where('proID',$id)->first();
         $detail = $request->input('comment');
         $userID = Auth::id();
         
-        DB::table('comments')->insert(
+        $commentID = DB::table('comments')->insertGetId(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -239,6 +323,20 @@ class Executive extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+            $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+            foreach ($userMap as $index => $item) {
+                Mail::to($item->users->email)->send(new SendMail(
+                    [
+                        'name' => 'แจ้งเตือนสถานะโครงการ',
+                        'text' => $data['status']->status->name,
+                        'comment' => $comment->detail
+                    ]
+                ));
+            }
+            
+
         return redirect('/ExecutiveProjectlist');
     }
 

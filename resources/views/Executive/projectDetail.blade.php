@@ -64,8 +64,8 @@
                                 $index = 1;
                             @endphp
                             @foreach ($data['user'] as $item)
-                                {{ $index++ }}. {{ $item->users->firstname_en }} {{ $item->users->lastname_en }} สังกัด
-                                {{ $item->users->faculty_name }}<br>
+                                {{ $index++ }}. {{ $item->users->displayname }} <b>สังกัด</b>
+                                {{ $item->users->department_name }}<br>
                             @endforeach
                         </div>
                     </div>
@@ -311,7 +311,7 @@
                             :</b></label>
                     <div class="col-md-6 col-sm-6" style="background-color: #FFF9B1;">
                         @foreach ($data['comment'] as $item)
-                           <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}}</b> : {{$item->detail}} <br>
+                           <b>{{$item->user->displayname}} </b> : {{$item->detail}} <br>
                            <b>เมื่อ</b> {{$item->created_at}} <br>
                         @endforeach
                     </div>

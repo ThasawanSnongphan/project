@@ -64,8 +64,8 @@
                                 $index = 1;
                             @endphp
                             @foreach ($data['user'] as $item)
-                                {{ $index++ }}. {{ $item->users->firstname_en }} {{ $item->users->lastname_en }} สังกัด
-                                {{ $item->users->faculty_name }}<br>
+                                {{ $index++ }}. {{ $item->users->displayname }}  สังกัด
+                                {{ $item->users->department_name }}<br>
                             @endforeach
                         </div>
                     </div>
@@ -106,7 +106,6 @@
                             @endif
                             @if (count($data['stra2LVMap']) > 0)
                                 @foreach ($data['stra2LVMap'] as $item)
-                                    <br>
                                     <b>{{ $item->stra2LV->name }}</b> <br>
                                     <b>ประเด็นยุทธศาสตร์</b> {{ $item->SFA2LV->name }} <br>
                                     <b>กลยุทธ์</b> {{ $item->tac2LV->name }} <br> <br>
@@ -313,8 +312,8 @@
                             :</b></label>
                     <div class="col-md-6 col-sm-6" style="background-color: #FFF9B1;">
                         @foreach ($data['comment'] as $item)
-                           <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}}</b> : {{$item->detail}} <br>
-                           <b>เมื่อ</b> {{$item->created_at}}
+                           <b>{{$item->user->displayname}} {{$item->user->lastname_en}}</b> : {{$item->detail}} <br>
+                           <b>เมื่อ</b> {{$item->created_at}} <br>
                         @endforeach
                     </div>
                 </div>

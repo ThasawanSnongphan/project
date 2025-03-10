@@ -90,7 +90,7 @@ class Department_Head extends Controller
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -101,36 +101,58 @@ class Department_Head extends Controller
                 ]);
         }
 
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+           
+        }
+       
+
         $planningAnalyst = DB::table('users')->where('Planning_Analyst',1)->get();
+        $project= Projects::with('status')->where('proID',$id)->first();
+        // dd($planningAnalyst);
         foreach ($planningAnalyst as $index => $item) {
-            Mail::to($item->email)->send(new SendMail(
-                [
-                    'name' => 'หัวหน้าฝ่าย',
-                    'text' => 'รอเจ้าหน้าที่แผนตรวจสอบโครงการ'
-                ]
-                ));
+            $mailData = [
+                'name' => $project->name,
+                'text' => $project->status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+                $mailData['userComment']= Auth::user()->displayname;
+                $mailData['created_at']= $comment->created_at;
+            }
+            // dd($mailData);
+
+            Mail::to($item->email)->send(new SendMail($mailData));
         } 
 
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($users as $index => $item) {
-            Mail::to($item->users->email)->send(new SendMail(
-                [
-                    'name' => 'ผู้รับผิดชอบโครงการ',
-                    'text' => 'รอเจ้าหน้าที่แผนตรวจสอบโครงการ'
-                ]
-            ));
+            $mailData = [
+                    'name' => $project->name,
+                    'text' => $project->status->name
+            ];
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+                $mailData['userComment']= Auth::user()->displayname;
+                $mailData['created_at']= $comment->created_at;
+            }
+            // dd($mailData);
+            Mail::to($item->users->email)->send(new SendMail($mailData));
         }
         return redirect('/DepartmentHeadProject');
     }
 
     function departmentEdit(Request $request,$id){
-        $request->validate([
-            'comment'=>'required'
-        ]);
+        // $request->validate([
+        //     'comment'=>'required'
+        // ]);
         DB::table('projects')->where('proID',$id)->update(['statusID' => '12']);
         $detail = $request->input('comment');
         $userID = Auth::id();
-        DB::table('comments')->insert(
+        $userName = Auth::user()->displayname;
+        // dd($userName);
+        $commentID = DB::table('comments')->insertGetId(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -139,13 +161,21 @@ class Department_Head extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
-
+        
+        $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        
+        // dd($comment);
+        $project = Projects::with('status')->where('proID',$id)->first();
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        
         foreach ($users as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(
                 [
-                    'name' => 'thatsawan',
-                    'text' => 'แก้ไขโครงการ'
+                    'name' => $project->name,
+                    'text' => $project->status->name,
+                    'comment' => $comment->detail,
+                    'userComment' => $userName,
+                    'created_at' => $comment->created_at
                 ]
                 ));
         }
@@ -195,7 +225,7 @@ class Department_Head extends Controller
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
-            DB::table('comments')->insert(
+            $commentID = DB::table('comments')->insertGetId(
                 [
                     'proID' => $id,
                     'detail' => $detail,
@@ -205,6 +235,38 @@ class Department_Head extends Controller
                     'created_at' => now() 
                 ]);
         }
+
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        }
+
+        $planningAnalyst = DB::table('users')->where('Planning_Analyst',1)->get();
+        $status= DB::table('statuses')->where('statusID',6)->first();
+        // dd($planningAnalyst);
+        foreach ($planningAnalyst as $index => $item) {
+            $mailData = [
+                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'text' => $status->name
+            ];
+
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->email)->send(new SendMail($mailData));
+        } 
+
+        $users = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($users as $index => $item) {
+            $mailData = [
+                    'name' => 'แจ้งเตือนสถานะโครงการ',
+                    'text' => $status->name
+            ];
+            if(!empty($comment)) {
+                $mailData['comment'] = $comment->detail;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
+        }
+
         return redirect('/DepartmentHeadProject');
     }
 
@@ -213,7 +275,7 @@ class Department_Head extends Controller
         DB::table('projects')->where('proID',$id)->update(['statusID' => '13']);
         $detail = $request->input('comment');
         $userID = Auth::id();
-        DB::table('comments')->insert(
+        $commentID = DB::table('comments')->insertGetId(
             [
                 'proID' => $id,
                 'detail' => $detail,
@@ -222,6 +284,22 @@ class Department_Head extends Controller
                 'updated_at' => now(), 
                 'created_at' => now() 
             ]);
+
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        
+            // dd($comment);
+    
+            $users = UsersMapProject::with('users')->where('proID',$id)->get();
+            $status = DB::table('statuses')->where('statusID',13)->first();
+            foreach ($users as $index => $item) {
+                Mail::to($item->users->email)->send(new SendMail(
+                    [
+                        'name' => 'แจ้งเตือนสถานะโครงการ',
+                        'text' => $status->name,
+                        'comment' => $comment->detail
+                    ]
+                    ));
+            }
         return redirect('/DepartmentHeadProject');
     }
 }

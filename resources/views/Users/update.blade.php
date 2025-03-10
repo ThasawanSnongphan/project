@@ -74,30 +74,30 @@
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="password" name="password2" id="password2" data-validate-linked='password' required='required' value="{{$users->password}}" /></div>
                                     </div>
-                                    <div class="field item form-group">
+                                    {{-- <div class="field item form-group">
                                         <label for="account_type" class="col-form-label col-md-3 col-sm-3  label-align">account_type<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" name="account_type" id="account_type" data-validate-length-range="5,15" type="text" value="{{$users->account_type}}" /></div>
-                                    </div>
+                                    </div> --}}
                                     
-                                    <div class="field item form-group">
+                                    {{-- <div class="field item form-group">
                                         <label for="full_prefix_name_th" class="col-form-label col-md-3 col-sm-3  label-align">full_prefix_name_th<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="full_prefix_name_th" id="full_prefix_name_th" data-validate-linked='email' required='required' value="{{$users->full_prefix_name_th}}" /></div>
-                                    </div>
-                                    <div class="field item form-group">
+                                    </div> --}}
+                                    {{-- <div class="field item form-group">
                                         <label for="firstname_th" class="col-form-label col-md-3 col-sm-3  label-align">firstname_th<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text" name="firstname_th" id="firstname_th" data-validate-minmax="10,100" required='required' value="{{$users->firstname_th}}"></div>
-                                    </div>
-                                    
+                                    </div> --}}
+{{--                                     
                                     <div class="field item form-group">
                                         <label for="lastname_th" class="col-form-label col-md-3 col-sm-3  label-align">lastname_th<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"name="lastname_th" id="lastname_th" data-validate-minmax="10,100" required='required'  value="{{$users->lastname_th}}"></div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="field item form-group">
+                                    {{-- <div class="field item form-group">
                                         <label for="firstname_en" class="col-form-label col-md-3 col-sm-3  label-align">firstname_en<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="firstname_en" id="firstname_en" required='required' data-validate-length-range="8,20"  value="{{$users->firstname_en}}"/></div>
@@ -106,8 +106,8 @@
                                         <label for="lastname_en" class="col-form-label col-md-3 col-sm-3  label-align">lastname_en<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="lastname_en" id="lastname_en" required='required' data-validate-length-range="8,20"  value="{{$users->lastname_en}}" /></div>
-                                    </div>
-                                    <div class="field item form-group">
+                                    </div> --}}
+                                    {{-- <div class="field item form-group">
                                         <label for="personnel_type_id" class="col-form-label col-md-3 col-sm-3  label-align">personnel_type_id<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="personnel_type_id" id="personnel_type_id" required='required' data-validate-length-range="8,20" value="{{$users->personnel_type_id}}" /></div>
@@ -121,13 +121,13 @@
                                         <label for="position_id" class="col-form-label col-md-3 col-sm-3  label-align">position_id<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="position_id" id="position_id" required='required' data-validate-length-range="8,20" value="{{$users->position_id}}"/></div>
-                                    </div>
+                                    </div> --}}
                                     <div class="field item form-group">
                                         <label for="position_name" class="col-form-label col-md-3 col-sm-3  label-align">position_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="position_name" id="position_name" required='required' data-validate-length-range="8,20" value="{{$users->position_name}}"/></div>
                                     </div>
-                                    <div class="field item form-group">
+                                    {{-- <div class="field item form-group">
                                         <label for="position_type_id" class="col-form-label col-md-3 col-sm-3  label-align">position_type_id<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="position_type_id" id="position_type_id" required='required' data-validate-length-range="8,20" value="{{$users->position_type_id}}"/></div>
@@ -136,22 +136,22 @@
                                         <label for="position_type_th" class="col-form-label col-md-3 col-sm-3  label-align">position_type_th<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="position_type_th" id="position_type_th" required='required' data-validate-length-range="8,20" value="{{$users->position_type_th}}" /></div>
-                                    </div>
-                                    <div class="field item form-group">
+                                    </div> --}}
+                                    {{-- <div class="field item form-group">
                                         <label for="faculty_code" class="col-form-label col-md-3 col-sm-3  label-align">faculty_code<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="faculty_code" id="faculty_code" required='required' data-validate-length-range="8,20" value="{{$users->faculty_code}}" /></div>
-                                    </div>
+                                    </div> --}}
                                     <div class="field item form-group">
                                         <label for="faculty_name" class="col-form-label col-md-3 col-sm-3  label-align">faculty_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text"  name="faculty_name" id="faculty_name" required='required' data-validate-length-range="8,20" value="{{$users->faculty_name}}" /></div>
                                     </div>
-                                    <div class="field item form-group">
+                                    {{-- <div class="field item form-group">
                                         <label for="department_code" class="col-form-label col-md-3 col-sm-3  label-align">department_code<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="text" name="department_code" id="department_code" required='required' data-validate-length-range="8,20" value="{{$users->department_code}}" /></div>
-                                    </div>
+                                    </div> --}}
                                     <div class="field item form-group">
                                         <label for="department_name" class="col-form-label col-md-3 col-sm-3  label-align">department_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">

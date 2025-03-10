@@ -63,7 +63,7 @@
                             <div class="col-md-6 col-sm-6">
                                 <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
                                 <input class="form-control" type="text" name="user" id="user" 
-                                    value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
+                                    value="{{ Auth::user()->displayname }}" data-validate-length-range="8,20" disabled />
 
                             </div>
 
@@ -82,7 +82,7 @@
                                                 @if ($users->userID !== Auth::user()->userID)
                                                     <option value="{{ $users->userID }}"
                                                         @if ($users->userID === $item->userID) selected @endif>
-                                                        {{ $users->firstname_en }}</option>
+                                                        {{ $users->displayname }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -104,7 +104,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="faculty" id="faculty" 
-                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->faculty_name }}" />
+                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->department_name }}" />
                             </div>
 
                         </div>
@@ -1336,7 +1336,7 @@
                 if (user.userID != currentUserId) {
                     const option = document.createElement('option');
                     option.value = user.userID;
-                    option.textContent = user.firstname_th;
+                    option.textContent = user.displayname;
                     userDropdown.appendChild(option);
                 }
             });
