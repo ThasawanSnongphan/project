@@ -201,7 +201,7 @@
                             <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
                             <div class="col-md-6 col-sm-6">
                                 @foreach ($data['comment'] as $item)
-                                    <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}} : </b> {{$item->detail}} <br>
+                                    <b>{{$item->user->displayname}} : </b> {{$item->detail}} <br>
                                     <b>เมื่อ</b> {{$item->created_at}} <br>
                                 @endforeach
                                 

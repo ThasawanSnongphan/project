@@ -28,6 +28,14 @@
                             <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
                             <p class="card-text" style="text-align: right"></p>
                         </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="card border-secondary mb-3" style="width: 30%;">
@@ -37,7 +45,26 @@
                     <div class="card-body text-secondary">
                         <h5 class="card-title">{{ $data['projectInPlan'] }}</h5>
                         <hr>
-                        <p class="card-text"></p>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา</p>
+                            <p class="card-text" style="text-align: right">{{$data['projectEvaluation'] }}</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
                     </div>
                 </div>
                 <div class="card border-secondary mb-3" style="width: 30%;">
@@ -47,7 +74,26 @@
                     <div class="card-body text-secondary">
                         <h5 class="card-title">{{ $data['projectOutPlan'] }}</h5>
                         <hr>
-                        <p class="card-text"></p>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
+                            <p class="card-text" style="text-align: right"></p>
+                        </div>
                     </div>
                 </div>
             </div>

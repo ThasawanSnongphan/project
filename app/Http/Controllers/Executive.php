@@ -42,9 +42,13 @@ class Executive extends Controller
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
         $project=DB::table('projects')->where('proTypeID',3)->whereIn('statusID',[3,7])->get();
+        $proID = $project->pluck('proID');
+        // dd($proID);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        return view('Executive.projectlist',compact('users','project','status','year','projectYear'));
+        $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+        // dd($report_quarter);
+        return view('Executive.projectlist',compact('users','project','status','year','projectYear','report_quarter'));
     }
 
     function projectOutPlan(){
@@ -113,13 +117,16 @@ class Executive extends Controller
 
         $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
         
+        
         foreach ($userMap as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'name' => $project->name,
                 'text' => $project->status->name
             ];
             if(!empty($comment)){
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
@@ -145,15 +152,17 @@ class Executive extends Controller
             ]);
 
         $comment = DB::table('comments')->where('commentID',$commentID)->first();
-        $status = DB::table('statuses')->where('statusID',15)->first();
+        $project = Projects::with('status')->where('proID',$id)->first();
 
         $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($userMap as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(
                 [
-                    'name' => 'แจ้งเตือนสถานะโครงการ',
-                    'text' => $status->name,
-                    'comment' => $comment->detail
+                    'name' => $project->name,
+                    'text' => $project->status->name,
+                    'comment' => $comment->detail,
+                    'userComment' => Auth::user()->displayname,
+                    'created_at' => $comment->created_at
                 ]
             ));
         }
@@ -180,13 +189,15 @@ class Executive extends Controller
 
         $comment = DB::table('comments')->where('commentID',$commentID)->first();
         $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
-        $status = DB::table('statuses')->where('statusID',12)->first();
+        $project = Projects::with('status')->where('proID',$id)->first();
         foreach ($userMap as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(
                 [
-                    'name' => 'แจ้งเตือนสถานะโครงการ',
-                    'text' => $status->name,
-                    'comment' => $comment->detail
+                    'name' => $project->name,
+                    'text' => $project->status->name,
+                    'comment' => $comment->detail,
+                    'userComment' => Auth::user()->displayname,
+                    'created_at' => $comment->created_at
                 ]
             ));
         }
@@ -265,11 +276,13 @@ class Executive extends Controller
         
         foreach ($userMap as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
+                'name' => $data['project']->name,
                 'text' => $data['project']->status->name
             ];
             if(!empty($comment)){
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
@@ -297,9 +310,11 @@ class Executive extends Controller
             foreach ($userMap as $index => $item) {
                 Mail::to($item->users->email)->send(new SendMail(
                     [
-                        'name' => 'แจ้งเตือนสถานะโครงการ',
+                        'name' => $data['project']->name,
                         'text' => $data['project']->status->name,
-                        'comment' => $comment->detail
+                        'comment' => $comment->detail,
+                        'userComment' => Auth::user()->displayname,
+                        'created_at' => $comment->created_at
                     ]
                 ));
             }
@@ -310,7 +325,8 @@ class Executive extends Controller
         //     'comment'=>'required'
         // ]);
         DB::table('projects')->where('proID',$id)->update(['statusID' => 15]);
-        $data['status'] = Projects::with('status')->where('proID',$id)->first();
+        $data['project'] = Projects::with('status')->where('proID',$id)->first();
+        
         $detail = $request->input('comment');
         $userID = Auth::id();
         
@@ -329,9 +345,11 @@ class Executive extends Controller
             foreach ($userMap as $index => $item) {
                 Mail::to($item->users->email)->send(new SendMail(
                     [
-                        'name' => 'แจ้งเตือนสถานะโครงการ',
-                        'text' => $data['status']->status->name,
-                        'comment' => $comment->detail
+                        'name' => $data['project']->name,
+                        'text' => $data['project']->status->name,
+                        'comment' => $comment->detail,
+                        'userComment' => Auth::user()->displayname,
+                        'created_at' => $comment->created_at
                     ]
                 ));
             }

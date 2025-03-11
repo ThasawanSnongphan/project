@@ -74,9 +74,9 @@ class ProjectEvalutionController extends Controller
     public function save(Request $request, $id)
     {
        
-        $data['project'] = DB::table('projects')->where('proID',$id)->update(['statusID'=>5]);
-
-
+        DB::table('projects')->where('proID',$id)->update(['statusID'=>5]);
+        $data['project'] = Projects::with('status')->where('proID',$id)->first();
+        
         $evaluation = [
             'proID' => $id,
             'userID' =>  Auth::id(),
@@ -106,13 +106,12 @@ class ProjectEvalutionController extends Controller
         }
 
         $data['userMap'] = UsersMapProject::with('users')->where('proID',$id)->get();
-        $data['status'] = Projects::with('status')->where('proID',$id)->first();
         
         foreach ($data['userMap'] as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(
                 [
-                    'name' => 'แจ้งเตือนสถานะโครงการ',
-                    'text' => $data['status']->status->name
+                    'name' => $data['project']->name,
+                    'text' => $data['project']->status->name
                 ]
                 ));
         }
@@ -120,14 +119,13 @@ class ProjectEvalutionController extends Controller
         
         foreach ($data['userMap'] as $index => $item) {
             $data['department'] = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
-       
         }
         
         foreach ($data['department'] as $index => $item) {
             Mail::to($item->email)->send(new SendMail(
             [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $data['status']->status->namme
+                'name' => $data['project']->name,
+                'text' => $data['project']->status->name
             ]
         ));
         }

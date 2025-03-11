@@ -42,9 +42,13 @@ class PlanningAnalyst extends Controller
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
         $project=DB::table('projects')->where('proTypeID',3)->whereIn('statusID',[2,6])->get();
+        $proID = $project->pluck('proID');
+        // dd($proID);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        return view('Planning_Analyst.project',compact('users','project','status','year','projectYear'));
+        $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+        // dd($report_quarter);
+        return view('Planning_Analyst.project',compact('users','project','status','year','projectYear','report_quarter'));
     }
 
     function projectOutPlan(){
@@ -112,17 +116,19 @@ class PlanningAnalyst extends Controller
         }
 
         $Executive = DB::table('users')->where([['Executive',1],['position_name','รองผู้อำนวยการ ฝ่ายบริหาร']])->first();
-        $status= DB::table('statuses')->where('statusID',3)->first();
+        $project = Projects::with('status')->where('proID',$id)->first();
 
         // dd($Executive);
         // foreach ($Executive as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $status->name
+                'name' => $project->name,
+                'text' => $project->status->name
             ];
 
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($Executive->email)->send(new SendMail($mailData));
         // }
@@ -130,12 +136,14 @@ class PlanningAnalyst extends Controller
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($users as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $status->name
+                'name' => $project->name,
+                'text' => $project->status->name
             ];
 
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
@@ -200,17 +208,19 @@ class PlanningAnalyst extends Controller
         }
 
         $Executive = DB::table('users')->where([['Executive',1],['position_name','รองผู้อำนวยการ ฝ่ายบริหาร']])->first();
-        $status= DB::table('statuses')->where('statusID',7)->first();
+        $project = Projects::with('status')->where('proID',$id)->first();
 
         // dd($Executive);
         // foreach ($Executive as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $status->name
+                'name' => $project->name,
+                'text' => $project->status->name
             ];
 
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($Executive->email)->send(new SendMail($mailData));
         // }
@@ -218,12 +228,14 @@ class PlanningAnalyst extends Controller
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($users as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $status->name
+                'name' => $project->name,
+                'text' => $project->status->name
             ];
 
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }

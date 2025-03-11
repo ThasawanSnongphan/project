@@ -204,7 +204,7 @@
                                     :</b></label>
                             <div class="col-md-6 col-sm-6">
                                @foreach ($data['comment'] as $item)
-                                <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}} : </b> {{$item->detail}} <br>
+                                <b>{{$item->user->displayname}} : </b> {{$item->detail}} <br>
                                 <b>เมื่อ</b> {{$item->created_at}} <br>
                                @endforeach
                             </div>

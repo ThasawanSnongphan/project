@@ -45,7 +45,15 @@ class Department_Head extends Controller
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        return view('Department_Head.project',compact('users','project','status','year','projectYear'));
+        $proID = $project->pluck('proID');
+        // dd($proID);
+       
+        $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+           
+       
+        // dd($report_quarter);
+       
+        return view('Department_Head.project',compact('users','project','status','year','projectYear','report_quarter'));
     }
 
     function projectOutPlan(){
@@ -79,6 +87,7 @@ class Department_Head extends Controller
         $data['step'] = DB::table('steps')->where('proID',$id)->get();
         $data['costQuarter'] = CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
 
+        
         $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารเสนอโครงการ']])->get();
         // dd($data['comment']);
         // dd($data['KPIProject']);
@@ -241,16 +250,18 @@ class Department_Head extends Controller
         }
 
         $planningAnalyst = DB::table('users')->where('Planning_Analyst',1)->get();
-        $status= DB::table('statuses')->where('statusID',6)->first();
+        $project= Projects::with('status')->where('proID',$id)->first();
         // dd($planningAnalyst);
         foreach ($planningAnalyst as $index => $item) {
             $mailData = [
-                'name' => 'แจ้งเตือนสถานะโครงการ',
-                'text' => $status->name
+                'name' => $project->name,
+                'text' => $project->status->name
             ];
 
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment']= Auth::user()->displayname;
+                $mailData['created_at']= $comment->created_at;
             }
             Mail::to($item->email)->send(new SendMail($mailData));
         } 
@@ -258,11 +269,13 @@ class Department_Head extends Controller
         $users = UsersMapProject::with('users')->where('proID',$id)->get();
         foreach ($users as $index => $item) {
             $mailData = [
-                    'name' => 'แจ้งเตือนสถานะโครงการ',
-                    'text' => $status->name
+                    'name' => $project->name,
+                    'text' => $project->status->name
             ];
             if(!empty($comment)) {
                 $mailData['comment'] = $comment->detail;
+                $mailData['userComment']= Auth::user()->displayname;
+                $mailData['created_at']= $comment->created_at;
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
@@ -290,13 +303,15 @@ class Department_Head extends Controller
             // dd($comment);
     
             $users = UsersMapProject::with('users')->where('proID',$id)->get();
-            $status = DB::table('statuses')->where('statusID',13)->first();
+            $project = Projects::with('status')->where('proID',$id)->first();
             foreach ($users as $index => $item) {
                 Mail::to($item->users->email)->send(new SendMail(
                     [
-                        'name' => 'แจ้งเตือนสถานะโครงการ',
-                        'text' => $status->name,
-                        'comment' => $comment->detail
+                        'name' => $project->name,
+                        'text' => $project->status->name,
+                        'comment' => $comment->detail,
+                        'userComment' => Auth::user()->displayname,
+                        'created_at' => $comment->created_at
                     ]
                     ));
             }

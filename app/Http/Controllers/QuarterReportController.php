@@ -9,6 +9,8 @@ use App\Models\ReportQuarters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class QuarterReportController extends Controller
 {
@@ -109,6 +111,14 @@ class QuarterReportController extends Controller
             ->where('KPIProID',$KPI)
             ->update([$column=>$result[$index]]);
         }
+
+        $user = DB::table('users')->where('Planning_Analyst',1)->first();
+
+        Mail::to($user->email)->send(new SendMail([
+            'name' => $project->name ,
+            'text' => 'ผู้รับผิดชอบโครงการส่งรายงานไตรมาส'.$quarter
+        ] 
+        ));
 
 
         return redirect('/project');
