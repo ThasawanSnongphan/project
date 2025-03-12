@@ -21,6 +21,17 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
+                        @if (count($data['comment']) > 0)
+                            <div class="row field item form-group " style="background-color: #FFF9B1">
+                                <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ข้อเสนอแนะ :</b></label>
+                                <div class="col-md-7 col-sm-7 ">
+                                   @foreach ($data['comment'] as $item)
+                                       <b>{{$item->user->firstname_en}} {{$item->user->lastname_en}} : </b> {{$item->detail}} <br>
+                                       <b>เมื่อ</b> {{$item->created_at}} <br>
+                                   @endforeach
+                                </div>
+                            </div>
+                        @endif
                         <form method="POST" action="" enctype="multipart/form-data">
                             @csrf
                             <h6>uppload เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6> <hr>
@@ -142,7 +153,7 @@
                                 <div class="col-md-7 col-sm-7">
                                    @foreach ($data['KPIProject'] as $item)
                                        -{{$item->name}} <br>
-                                       <textarea name="result_eva[]" class="form-control" style="height: auto; min-height: 100px;" required>{{$item->result_eva}}</textarea>
+                                       <input name="result_eva[]" class="form-control"  required value="{{$item->result_eva}}">
                                    @endforeach
                                 </div>
                             </div>
@@ -164,7 +175,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ใช้จริง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <input type="text" class="form-control" name="badget_use" required value="{{$data['evaluation']->badget_use}}">
+                                   <input type="text" class="form-control" name="badget_use" required value="{{$data['costResult']}}" readonly>
                                 </div>
                             </div>
 

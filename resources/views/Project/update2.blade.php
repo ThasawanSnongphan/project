@@ -62,8 +62,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
-                                <input class="form-control" type="text" name="user" id="user" required='required'
-                                    value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
+                                <input class="form-control" type="text" name="user" id="user" 
+                                    value="{{ Auth::user()->displayname }}" data-validate-length-range="8,20" disabled />
 
                             </div>
 
@@ -82,7 +82,7 @@
                                                 @if ($users->userID !== Auth::user()->userID)
                                                     <option value="{{ $users->userID }}"
                                                         @if ($users->userID === $item->userID) selected @endif>
-                                                        {{ $users->firstname_en }}</option>
+                                                        {{ $users->displayname }}</option>
                                                 @endif
                                             @endforeach
                                         </select>
@@ -103,8 +103,8 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สังกัด<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="faculty" id="faculty" required='required'
-                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->faculty_name }}" />
+                                <input class="form-control" type="text" name="faculty" id="faculty" 
+                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->department_name }}" />
                             </div>
 
                         </div>
@@ -112,7 +112,7 @@
                             <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="format" name="format" class="form-control" required>
+                                <select id="format" name="format" class="form-control" >
                                     <option value="team" {{ $project->format == 'team' ? 'selected' : '' }}>team</option>
                                     <option value="department" {{ $project->format == 'department' ? 'selected' : '' }}>
                                         department
@@ -590,7 +590,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="type" name="proTypeID" class="form-control" required>
+                                <select id="type" name="proTypeID" class="form-control" >
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
                                             @if ($project->proTypeID == $item->proTypeID) selected @endif>{{ $item->name }}</option>
@@ -600,7 +600,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control" required>
+                                <select id="charecter" name="proChaID" class="form-control" >
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
                                             @if ($project->proChaID == $item->proChaID) selected @endif>{{ $item->name }}</option>
@@ -613,7 +613,7 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control" onchange=" toggleTextarea()"
+                                <select id="integrat" name="proInID" class="form-control" onchange="toggleTextarea()"
                                     required>
                                     @foreach ($projectIntegrat as $item)
                                         <option value="{{ $item->proInID }}"
@@ -622,8 +622,16 @@
                                 </select>
                             </div>
                         </div>
-                       
-                        <div class="row field item form-group align-items-center" style="none;" id="otherTextContainer">
+                        
+                        {{-- @if (!empty($project)->proInDetail)
+                        <div class="row field item form-group align-items-center" style="display: flex" id="otherTextContainer">
+                            <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
+                            <div class="col-md-6 col-sm-6">
+                                <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail }}</textarea>
+                            </div>
+                        </div>
+                        @endif --}}
+                        <div class="row field item form-group align-items-center" style="display: none" id="otherTextContainer">
                             <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง">{{ $project->proInDetail }}</textarea>
@@ -1328,7 +1336,7 @@
                 if (user.userID != currentUserId) {
                     const option = document.createElement('option');
                     option.value = user.userID;
-                    option.textContent = user.firstname_th;
+                    option.textContent = user.displayname;
                     userDropdown.appendChild(option);
                 }
             });

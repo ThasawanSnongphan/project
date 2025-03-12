@@ -26,6 +26,7 @@
 
     <table id="example" class="display">
         <thead>
+
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>

@@ -24,7 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action=""novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="/projectSave2"  enctype="multipart/form-data">
                         @csrf
                         {{-- <input type="hidden" id="proID" name="proID" value="{{$project->proID}}"> --}}
                         <div class="row field item form-group align-items-center">
@@ -55,8 +55,8 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input type="hidden" name="userID[]" value="{{ Auth::user()->userID }}" />
-                                <input class="form-control" type="text" name="user" id="user" required='required'
-                                    value="{{ Auth::user()->firstname_en }}" data-validate-length-range="8,20" disabled />
+                                <input class="form-control" type="text" name="user" id="user" 
+                                    value="{{ Auth::user()->displayname }}" data-validate-length-range="8,20" disabled />
 
                             </div>
 
@@ -74,8 +74,8 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สังกัด<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="faculty" id="faculty" required='required'
-                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->faculty_name }}" />
+                                <input class="form-control" type="text" name="faculty" id="faculty" 
+                                    data-validate-length-range="8,20" disabled value="{{ Auth::user()->department_name }}" />
                             </div>
 
                         </div>
@@ -83,7 +83,7 @@
                             <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="format" name="format" class="form-control" required>
+                                <select id="format" name="format" class="form-control" >
                                     <option value="team"
                                         {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
                                     <option value="department"
@@ -356,7 +356,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
                                 <select id="type" name="proTypeID" class="form-control"
-                                     required>
+                                     >
                                     @foreach ($projectType as $item)
                                         <option value="{{ $item->proTypeID }}"
                                             >
@@ -367,7 +367,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ลักษณะโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <select id="charecter" name="proChaID" class="form-control" required>
+                                <select id="charecter" name="proChaID" class="form-control" >
                                     @foreach ($projectCharec as $item)
                                         <option value="{{ $item->proChaID }}"
                                             >
@@ -381,36 +381,35 @@
                             <label for="integrat" class="col-form-label col-md-3 col-sm-3 label-align">การบูรณาการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="integrat" name="proInID" class="form-control" onclick="toggleTextarea()"  required>
+                                <select id="integrat" name="proInID" class="form-control" onclick="toggleTextarea()"  >
                                     @foreach ($projectIntegrat as $item)
-                                        <option value="{{ $item->proInID }}"
-                                            {{ isset($selectProjectIntegrat) && $selectProjectIntegrat == $item->proInID ? 'selected' : '' }}>
-                                            {{ $item->name }}</option>
+                                        <option value="{{ $item->proInID }}">
+                                            {{ $item->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        @if ($selectProjectIntegrat === '6')
-                            <div class="row field item form-group align-items-center">
+                       
+                            <div class="row field item form-group align-items-center" style="display: none" id="otherTextContainer">
                                 <label for="otherText" class="col-form-label col-md-3 col-sm-3 label-align"></label>
-                                <div class="col-md-6 col-sm-6">
+                                <div class="col-md-6 col-sm-6" >
                                     <textarea id="proInDetail" name="proInDetail" class="form-control" placeholder="เรื่อง"></textarea>
                                 </div>
                             </div>
-                        @endif
+                        
 
                         <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">หลักการและเหตุผล<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 d-flex">
-                                <textarea class="form-control" name="principle" id="principle" required='required'
-                                    data-validate-length-range="8,20"></textarea>
-                                @error('principle')
+                                <textarea class="form-control" name="principle" id="principle" required></textarea>
+                                {{-- @error('principle')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                         </div>
 
@@ -420,12 +419,12 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="obj[]" id="obj"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('obj.*')
+                                    required />
+                                {{-- @error('obj.*')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
@@ -457,7 +456,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="KPIProject[]" id="">
+                                        <input class="form-control" type="text" name="KPIProject[]" id="" required>
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <select id="countKPIProject" name="countKPIProject[]" class="form-control"
@@ -471,8 +470,8 @@
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="text" name="targetProject[]"
-                                            id="">
+                                        <input class="form-control" type="number" name="targetProject[]"
+                                            id="targetKPI" required>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -521,7 +520,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
-                                        <input class="form-control" type="text" name="stepName[]" id="">
+                                        <input class="form-control" type="text" name="stepName[]" id="" required>
                                         @error('stepName.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -529,7 +528,7 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepStart[]" id="">
+                                        <input class="form-control" type="date" name="stepStart[]" id="" required>
                                         @error('stepStart.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -537,7 +536,7 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepEnd[]" id="">
+                                        <input class="form-control" type="date" name="stepEnd[]" id="" required>
                                         @error('stepEnd.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
@@ -638,52 +637,55 @@
                                 <div class="col-md-12 col-sm-12 ">
 
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="expID" name="expID[]" class="form-control" required>
-
+                                        <select id="expID" name="expID[]" class="form-control" >
+                                            @foreach ($expanses as $item)
+                                                <option value="{{$item->expID}}">{{$item->name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="costType" name="costID[]" class="form-control" required>
-
+                                        <select id="costType" name="costID[]" class="form-control" >
+                                            @foreach ($costTypes as $item)
+                                                <option value="{{$item->costTypeID}}">{{$item->name}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
-                                        <input class="form-control cost-input" type="text" name="costQu1[]"
-                                            id="">
-                                        @error('costQu1.*')
+                                        <input class="form-control cost-input" type="text" name="costQu1[]" id="" required  >
+                                        {{-- @error('costQu1.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu2[]"
-                                            id="">
-                                        @error('costQu2.*')
+                                            id="" required>
+                                        {{-- @error('costQu2.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu3[]"
-                                            id="">
-                                        @error('costQu3.*')
+                                            id="" required>
+                                        {{-- @error('costQu3.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu4[]"
-                                            id="">
-                                        @error('costQu4.*')
+                                            id="" required>
+                                        {{-- @error('costQu4.*')
                                             <div class="m-2">
                                                 <span class="text text-danger">{{ $message }}</span>
                                             </div>
-                                        @enderror
+                                        @enderror --}}
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -705,13 +707,13 @@
                                     class="required">*</span></label>
                             <div class="col-md-3 col-sm-3">
                                 <input class="form-control" type="text" name="badgetTotal" id="badgetTotal"
-                                    required='required' data-validate-length-range="8,20" readonly
+                                    data-validate-length-range="8,20" readonly
                                     oninput="updateText()" />
 
                             </div>
                             <div class="col-md-5 col-sm-5">
                                 <input class="form-control" type="text" name="badgetTotalText" id="badgetTotalText"
-                                    required='required' data-validate-length-range="8,20" disabled />
+                                     data-validate-length-range="8,20" disabled />
 
                             </div>
 
@@ -722,13 +724,12 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ประโยชน์ที่คาดว่าจะได้รับ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('benefit.*')
+                                <input class="form-control" type="text" name="benefit[]" id="benefit" required >
+                                {{-- @error('benefit.*')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
                             </div>
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertBenefit()">เพิ่ม</button>
@@ -741,13 +742,12 @@
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="file" name="file[]" id="file"
-                                    required='required' data-validate-length-range="8,20" />
-                                @error('file')
+                                <input class="form-control" type="file" name="file[]" id="file">
+                                {{-- @error('file')
                                     <div class="m-2">
                                         <span class="text text-danger">{{ $message }}</span>
                                     </div>
-                                @enderror
+                                @enderror --}}
 
                             </div>
                             {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
@@ -760,10 +760,8 @@
                         <div class="ln_solid">
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
-                                    <button type='submit' class="btn btn-primary"
-                                        onclick="submitButton('save2')">บันทึก</button>
-                                    {{-- <button type='button' class="btn btn-primary"
-                                        onclick="submitButton('send2')">ส่ง</button> --}}
+                                    <button type='button' class="btn btn-primary" onclick="submitButton()"
+                                        >บันทึก</button>
                                 </div>
                             </div>
                         </div>
@@ -774,7 +772,9 @@
         <div class="col-md-1 col-sm-1"></div>
     </div>
 
-    <script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        
         const funds = @json($fund);
         const expenses = @json($expanses);
         const costTypes = @json($costTypes);
@@ -876,7 +876,7 @@
                 if (user.userID != currentUserId) {
                     const option = document.createElement('option');
                     option.value = user.userID;
-                    option.textContent = user.firstname_th;
+                    option.textContent = user.displayname;
                     userDropdown.appendChild(option);
                 }
             });
@@ -900,272 +900,7 @@
         }
 
 
-        function insertStrategic() {
-            const mainContainer = document.createElement('div');
-            mainContainer.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            // สร้าง label
-            const straLabel = document.createElement('label');
-            straLabel.setAttribute('for', 'strategicInput'); // ตั้งค่า for ให้ตรงกับ input หรือ select ที่จะใช้
-            straLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            straLabel.textContent = 'แผนยุทธศาสตร์'; // ตั้งข้อความใน label
-
-            // เพิ่ม label ลงใน mainContainer
-            mainContainer.appendChild(straLabel);
-
-            const divstraID = document.createElement('div');
-            divstraID.classList.add('col-md-6', 'col-sm-6');
-
-            const straDropdown = document.createElement('select');
-            straDropdown.classList.add('form-control');
-            // straDropdown.id = 'straID1';
-            const uniqueID = `straID_${Date.now()}`;
-            straDropdown.id = uniqueID;
-            straDropdown.name = 'straID[]';
-
-            const selectedYearID = document.getElementById('year').value;
-            // const planSelect = document.getElementById('straID1');
-            // planSelect.innerHTML = '';
-
-            const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-
-            if (filteredPlans.length === 0) {
-                const noPlanOption = document.createElement('option');
-                noPlanOption.value = '';
-                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
-                straDropdown.appendChild(noPlanOption);
-                straDropdown.disabled = true;
-                // updateSFADropdown();
-            } else {
-                straDropdown.disabled = false;
-                filteredPlans.forEach(plan => {
-                    const option = document.createElement('option');
-                    option.value = plan.straID;
-                    option.textContent = plan.name;
-                    straDropdown.appendChild(option);
-                });
-                // updateSFADropdown();
-            }
-
-            mainContainer.appendChild(divstraID);
-            divstraID.appendChild(straDropdown);
-
-            const mainContainer1 = document.createElement('div');
-            mainContainer1.classList.add('col-md-3');
-
-            const mainContainer2 = document.createElement('div');
-            mainContainer2.classList.add('col-md-9', 'border', 'mb-2', 'p-2');
-
-            const mainContainerSFA = document.createElement('div');
-            mainContainerSFA.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const SFALabel = document.createElement('label');
-            SFALabel.setAttribute('for', 'SFAInput');
-            SFALabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            SFALabel.textContent = 'ประเด็นยุทธศาสตร์';
-            mainContainerSFA.appendChild(SFALabel);
-
-            const divSFA = document.createElement('div');
-            divSFA.classList.add('col-md-6', 'col-sm-6');
-
-            const SFADropdown = document.createElement('select');
-            SFADropdown.classList.add('form-control');
-            SFADropdown.id = `SFA_${Date.now()}`;
-            SFADropdown.name = 'SFAID[]';
-            SFADropdown.innerHTML = '';
-
-            // ฟังก์ชันสำหรับอัปเดต SFADropdown
-            const updateSFADropdown = () => {
-                const selectedPlanID = straDropdown.value;
-
-                // ลบตัวเลือกเก่าใน SFADropdown
-                SFADropdown.innerHTML = '';
-
-                if (!selectedPlanID) {
-                    const noIssueOption = document.createElement('option');
-                    noIssueOption.value = '';
-                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                    SFADropdown.appendChild(noIssueOption);
-                    SFADropdown.disabled = true;
-                    updateGoalDropdown();
-                    return;
-                }
-
-                const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-
-                if (filteredIssues.length === 0) {
-                    const noIssueOption = document.createElement('option');
-                    noIssueOption.value = '';
-                    noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                    SFADropdown.appendChild(noIssueOption);
-                    SFADropdown.disabled = true;
-                    updateGoalDropdown();
-                } else {
-                    SFADropdown.disabled = false;
-                    filteredIssues.forEach(issue => {
-                        const option = document.createElement('option');
-                        option.value = issue.SFAID;
-                        option.textContent = issue.name;
-                        SFADropdown.appendChild(option);
-                    });
-                    // updateGoalDropdown();
-                }
-
-            };
-            // เพิ่ม event listener ให้ straDropdown
-            straDropdown.addEventListener('change', updateSFADropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateSFADropdown();
-
-            mainContainer2.appendChild(mainContainerSFA);
-            mainContainerSFA.appendChild(divSFA);
-            divSFA.appendChild(SFADropdown);
-
-            const mainContainerGoal = document.createElement('div');
-            mainContainerGoal.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const goalLabel = document.createElement('label');
-            goalLabel.setAttribute('for', 'goalInput');
-            goalLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            goalLabel.textContent = 'เป้าประสงค์';
-            mainContainerGoal.appendChild(goalLabel);
-
-            const divGoal = document.createElement('div');
-            divGoal.classList.add('col-md-6', 'col-sm-6');
-
-            const goalDropdown = document.createElement('select');
-            goalDropdown.classList.add('form-control');
-            goalDropdown.id = `goal_${Date.now()}`;
-            goalDropdown.name = 'goalID[]';
-            goalDropdown.innerHTML = '';
-
-            const updateGoalDropdown = () => {
-                const selectedSFAID = SFADropdown.value;
-
-                // ลบตัวเลือกเก่าใน SFADropdown
-                goalDropdown.innerHTML = '';
-
-                if (!selectedSFAID) {
-                    const noGoalOption = document.createElement('option');
-                    noGoalOption.value = '';
-                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                    goalDropdown.appendChild(noGoalOption);
-                    goalDropdown.disabled = true;
-                    updateTacticsDropdown();
-                    return;
-                }
-
-                const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
-
-                if (filteredGoals.length === 0) {
-                    const noGoalOption = document.createElement('option');
-                    noGoalOption.value = '';
-                    noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                    goalDropdown.appendChild(noGoalOption);
-                    goalDropdown.disabled = true;
-                    updateTacticsDropdown();
-                } else {
-                    goalDropdown.disabled = false;
-                    filteredGoals.forEach(goal => {
-                        const option = document.createElement('option');
-                        option.value = goal.goalID;
-                        option.textContent = goal.name;
-                        goalDropdown.appendChild(option);
-                    });
-                }
-            };
-
-            // เพิ่ม event listener ให้ straDropdown
-            SFADropdown.addEventListener('change', updateGoalDropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateGoalDropdown();
-
-            mainContainer2.appendChild(mainContainerGoal);
-            mainContainerGoal.appendChild(divGoal);
-            divGoal.appendChild(goalDropdown);
-
-            const mainContainerTactics = document.createElement('div');
-            mainContainerTactics.classList.add('row', 'field', 'item', 'form-group', 'align-items-center');
-
-            const tacticsLabel = document.createElement('label');
-            tacticsLabel.setAttribute('for', 'tacticsInput');
-            tacticsLabel.classList.add('col-form-label', 'col-md-3', 'col-sm-3', 'label-align');
-            tacticsLabel.textContent = 'กลยุทธ์';
-            mainContainerTactics.appendChild(tacticsLabel);
-
-            const divTactics = document.createElement('div');
-            divTactics.classList.add('col-md-6', 'col-sm-6');
-
-            const tacticsDropdown = document.createElement('select');
-            tacticsDropdown.classList.add('form-control');
-            tacticsDropdown.id = `tacID_${Date.now()}`;
-            tacticsDropdown.name = 'tacID[]';
-            tacticsDropdown.innerHTML = '';
-
-            const updateTacticsDropdown = () => {
-                const selectedGoalID = goalDropdown.value;
-                tacticsDropdown.innerHTML = '';
-
-                if (!selectedGoalID) {
-                    const noTacticsOption = document.createElement('option');
-                    noTacticsOption.value = '';
-                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                    tacticsDropdown.appendChild(noTacticsOption);
-                    tacticsDropdown.disabled = true;
-                    return;
-                }
-
-                // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-                const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-                if (filteredTactics.length === 0) {
-                    const noTacticsOption = document.createElement('option');
-                    noTacticsOption.value = '';
-                    noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                    tacticsDropdown.appendChild(noTacticsOption);
-                    tacticsDropdown.disabled = true;
-
-                } else {
-                    tacticsDropdown.disabled = false;
-                    filteredTactics.forEach(tactic => {
-                        const option = document.createElement('option');
-                        option.value = tactic.tacID;
-                        option.textContent = tactic.name;
-                        tacticsDropdown.appendChild(option);
-                    });
-
-                }
-            };
-
-            // เพิ่ม event listener ให้ straDropdown
-            goalDropdown.addEventListener('change', updateTacticsDropdown);
-            // เรียกครั้งแรกเพื่อเติมค่าเริ่มต้นใน SFADropdown
-            updateTacticsDropdown();
-
-
-            mainContainer2.appendChild(mainContainerTactics);
-            mainContainerTactics.appendChild(divTactics);
-            divTactics.appendChild(tacticsDropdown);
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
-            deleteButton.textContent = 'ลบ';
-            deleteButton.onclick = function() {
-                mainContainer.remove(); // ลบ mainContainer เมื่อคลิกปุ่ม
-                mainContainer1.remove();
-                mainContainer2.remove();
-            };
-            mainContainer.appendChild(deleteButton);
-
-
-            // ตอนนี้ mainContainer จะมีทั้ง label และ input
-            const container = document.getElementById('insertStrategic');
-            container.appendChild(mainContainer);
-            container.appendChild(mainContainer1);
-            container.appendChild(mainContainer2);
-            // หรือเพิ่มไปที่ container อื่น
-        }
+       
 
         function insertObj() {
             const mainContainer = document.createElement('div');
@@ -1309,7 +1044,28 @@
             document.getElementById('insertStep').appendChild(mainContainer);
         }
 
-
+        
+        $(document).ready(function(){
+            // $('planID').change(function(event){
+            //     var planID = this.value;
+            //     console.log(planID);
+            //     // $('[id^="expID_"]');
+            //     $('exp');
+            //     $.ajax({
+            //         url: "/projectfund",
+            //         type: "POST",
+            //         dataType: 'json',
+            //         data:{
+            //             planID: planID,
+            //             _token: "{{csrf_token()}}"
+            //         },
+            //         success: function(response) {
+            //             $('expID').html('<option value="">--</option>');
+            //         }
+            //     });
+            // })
+            
+        })
 
         function insertCostType() {
             const dropdownCount = document.querySelectorAll('.Expense').length + 1;
@@ -1463,16 +1219,17 @@
             document.getElementById('insertExpense').appendChild(mainCostTypeContainer);
         }
 
-        // function toggleTextarea() {
-        //     var select = document.getElementById("integrat");
-        //     var otherTextContainer = document.getElementById("otherTextContainer");
+        function toggleTextarea() {
+            var select = document.getElementById("integrat");
+            var otherTextContainer = document.getElementById("otherTextContainer");
 
-        //     if (select.value === '6') {
-        //         otherTextContainer.style.display = "flex";
-        //     } else {
-        //         otherTextContainer.style.display = "none";
-        //     }
-        // }
+            if (select.value === '6') {
+                otherTextContainer.style.display = "flex";
+                otherTextContainer.required = true; 
+            } else {
+                otherTextContainer.style.display = "none";
+            }
+        }
 
 
         function insertBenefit() {
@@ -1528,24 +1285,7 @@
             mainContainer.appendChild(colMD6);
             colMD6.appendChild(inputFile);
 
-            // const colMD1 = document.createElement('div');
-            // colMD1.classList.add('col-md-1', 'col-sm-1');
-
-            // const checkboxDiv = document.createElement('div');
-            // checkboxDiv.classList.add('checkbox');
-
-            // const checkboxLabel = document.createElement('label');
-            // const checkboxInput = document.createElement('input');
-            // checkboxInput.type = 'checkbox';
-            // checkboxInput.name = 'TOR[]';
-            // checkboxInput.value = 'TOR';
-
-            // mainContainer.appendChild(colMD1);
-            // colMD1.appendChild(checkboxDiv);
-            // checkboxDiv.appendChild(checkboxLabel);
-            // checkboxLabel.appendChild(checkboxInput);
-            // checkboxLabel.appendChild(document.createTextNode(' TOR'));
-
+          
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';
             deleteButton.classList.add('btn', 'btn-danger', 'ml-2'); // เพิ่มคลาส Bootstrap
@@ -1563,417 +1303,81 @@
 
 
 
-        // ฟังก์ชันอัปเดต dropdown ของแผน
-        function updatePlanDropdown(selectedYearID) {
-            const planSelect = document.getElementById('straID');
-            planSelect.innerHTML = '';
-
-            const filteredPlans = strategic.filter(plan => plan.yearID == selectedYearID);
-
-            if (filteredPlans.length === 0) {
-                const noPlanOption = document.createElement('option');
-                noPlanOption.value = '';
-                noPlanOption.textContent = 'ไม่มีแผนยุทธศาสตร์';
-                planSelect.appendChild(noPlanOption);
-                planSelect.disabled = true;
-                updateIssueDropdown(null);
-            } else {
-                planSelect.disabled = false;
-                filteredPlans.forEach(plan => {
-                    const option = document.createElement('option');
-                    option.value = plan.straID;
-                    option.textContent = plan.name;
-                    planSelect.appendChild(option);
-                });
-                updateIssueDropdown(filteredPlans[0].straID);
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของประเด็นยุทธศาสตร์
-        function updateIssueDropdown(selectedPlanID) {
-            const issueSelect = document.getElementById('SFAID');
-            issueSelect.innerHTML = '';
-
-            if (!selectedPlanID) {
-                const noIssueOption = document.createElement('option');
-                noIssueOption.value = '';
-                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสาตร์';
-                issueSelect.appendChild(noIssueOption);
-                issueSelect.disabled = true;
-                updateGoalDropdown(null);
-                return;
-            }
-
-            const filteredIssues = issues.filter(issue => issue.straID == selectedPlanID);
-
-            if (filteredIssues.length === 0) {
-                const noIssueOption = document.createElement('option');
-                noIssueOption.value = '';
-                noIssueOption.textContent = 'ไม่มีประเด็นยุทธศาสตร์';
-                issueSelect.appendChild(noIssueOption);
-                issueSelect.disabled = true;
-                updateGoalDropdown(null);
-            } else {
-                issueSelect.disabled = false;
-                filteredIssues.forEach(issue => {
-                    const option = document.createElement('option');
-                    option.value = issue.SFAID;
-                    option.textContent = issue.name;
-                    issueSelect.appendChild(option);
-                });
-                updateGoalDropdown(filteredIssues[0].SFAID);
-
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-        function updateGoalDropdown(selectedSFAID) {
-            const goalSelect = document.getElementById('goalID');
-            goalSelect.innerHTML = '';
-
-            if (!selectedSFAID) {
-                const noGoalOption = document.createElement('option');
-                noGoalOption.value = '';
-                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                goalSelect.appendChild(noGoalOption);
-                goalSelect.disabled = true;
-                updateTacticsDropdown(null);
-                updateKPIMain(null);
-                return;
-            }
-
-            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-            const filteredGoals = goals.filter(goal => goal.SFAID == selectedSFAID);
-
-            if (filteredGoals.length === 0) {
-                const noGoalOption = document.createElement('option');
-                noGoalOption.value = '';
-                noGoalOption.textContent = 'ไม่มีเป้าประสงค์';
-                goalSelect.appendChild(noGoalOption);
-                goalSelect.disabled = true;
-                updateTacticsDropdown(null);
-                updateKPIMain(null);
-            } else {
-                goalSelect.disabled = false;
-                filteredGoals.forEach(goal => {
-                    const option = document.createElement('option');
-                    option.value = goal.goalID;
-                    option.textContent = goal.name;
-                    goalSelect.appendChild(option);
-                });
-                updateTacticsDropdown(filteredGoals[0].goalID);
-                updateKPIMain(filteredGoals[0].goalID);
-
-            }
-        }
-
-        // ฟังก์ชันอัปเดต dropdown ของกลยุทธ์ผ่านการเชื่อมต่อจากประเด็นยุทธศาสตร์และเป้าประสงค์
-        function updateTacticsDropdown(selectedGoalID) {
-            const tacticsSelect = document.getElementById('tacID');
-            tacticsSelect.innerHTML = '';
-
-            if (!selectedGoalID) {
-                const noTacticsOption = document.createElement('option');
-                noTacticsOption.value = '';
-                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                tacticsSelect.appendChild(noTacticsOption);
-                tacticsSelect.disabled = true;
-                // updateKPIMain(null);
-                return;
-            }
-
-            // กรองประเด็นยุทธศาสตร์ที่เชื่อมกับแผนที่เลือก
-            const filteredTactics = tactics.filter(tactic => tactic.goalID == selectedGoalID);
-
-            if (filteredTactics.length === 0) {
-                const noTacticsOption = document.createElement('option');
-                noTacticsOption.value = '';
-                noTacticsOption.textContent = 'ไม่มีกลยุทธ์';
-                tacticsSelect.appendChild(noTacticsOption);
-                tacticsSelect.disabled = true;
-                // updateKPIMain(null);
-            } else {
-                tacticsSelect.disabled = false;
-                filteredTactics.forEach(tactic => {
-                    const option = document.createElement('option');
-                    option.value = tactic.tacID;
-                    option.textContent = tactic.name;
-                    tacticsSelect.appendChild(option);
-                });
-                // updateKPIMain(filteredTactics[0].tacID);
-            }
-            // แสดงกลยุทธ์ใน dropdown
-
-        }
+        // function updateExpenseDropdown(selectedPlanID) {
+        //     console.log(selectedPlanID);
 
 
-        function updateKPIMain(selectedGoalID) {
-            // console.log(selectedGoalID);
+        //     const expenseSelect = document.getElementById('expID');
+        //     expenseSelect.innerHTML = '';
 
-            // const KPIMainSelect = document.getElementById('KPIMain');
-            // const countMainInput = document.getElementById('countMain');
-            // const targetInput = document.getElementById('targetMain');
+        //     // กรองกองทุนที่เชื่อมกับแผน
+        //     const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
 
+        //     // กรองงบรายจ่ายตามกองทุนที่เชื่อมกับแผน
+        //     const filteredExpenses = expenses.filter(expense =>
+        //         relatedFunds.some(fund => fund.fundID == expense.fundID)
+        //     );
 
-            // ล้างค่าตัวเลือกใน KPIMain
-            // KPIMainSelect.innerHTML = '';
-            // countMainInput.innerHTML = '';
-            // targetInput.innerHTML = '';
-
-            // ถ้าไม่มี selectedtacID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-            //     if (!selectedGoalID) {
-            //         const noKPIMainOption = document.createElement('option');
-            //         noKPIMainOption.value = '';
-            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-            //         KPIMainSelect.appendChild(noKPIMainOption);
-            //         KPIMainSelect.disabled = true;
-            //         countMainInput.value = 'ไม่มีหน่วยนับ';
-            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            //         return;
-            //     }
-
-            //     // กรอง KPI ที่ตรงกับ selectedtacID และเพิ่มเข้าไปใน dropdown
-            //     const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-            //     // console.log(filteredKPIMains);
-            //     // const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedTacID);
-
-            //     if (filteredKPIMains.length === 0) {
-            //         const noKPIMainOption = document.createElement('option');
-            //         noKPIMainOption.value = '';
-            //         noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-            //         KPIMainSelect.appendChild(noKPIMainOption);
-            //         KPIMainSelect.disabled = true;
-            //         countMainInput.value = 'ไม่มีหน่วยนับ';
-            //         targetInput.value = 'ไม่มีค่าเป้าหมาย';
-            //     } else {
-            //         // เปิดใช้งาน dropdown และเพิ่ม KPI ในตัวเลือก
-            //         KPIMainSelect.disabled = false;
-            //         filteredKPIMains.forEach(KPIMain => {
-            //             const option = document.createElement('option');
-            //             option.value = KPIMain.KPIMainID;
-            //             option.textContent = KPIMain.name;
-            //             KPIMainSelect.appendChild(option);
-            //         });
-
-            //         // กำหนดค่าเริ่มต้นให้กับ input
-            //         const firstKPIMain = filteredKPIMains[0];
-            //         countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-            //         targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-            //     }
-            // }
-            const KPIMainSelects = document.querySelectorAll(
-                '[id^="KPIMain_"]'); // เลือก <select> ที่มี ID เริ่มต้นด้วย "KPIMain_"
-            const countMainInputs = document.querySelectorAll('[id^="countMain_"]'); // เลือก input count
-            const targetInputs = document.querySelectorAll('[id^="targetMain_"]'); // เลือก input target
-
-            // ล้างค่าตัวเลือกในแต่ละ KPIMainSelect
-            KPIMainSelects.forEach((KPIMainSelect, index) => {
-                KPIMainSelect.innerHTML = ''; // ลบตัวเลือกเก่าใน <select>
-                const countMainInput = countMainInputs[index];
-                const targetInput = targetInputs[index];
-
-                // ตรวจสอบ selectedGoalID
-                if (!selectedGoalID) {
-                    // ถ้าไม่มี selectedGoalID ให้แสดงตัวเลือกที่ไม่มีตัวชี้วัด
-                    const noKPIMainOption = document.createElement('option');
-                    noKPIMainOption.value = '';
-                    noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                    KPIMainSelect.appendChild(noKPIMainOption);
-                    KPIMainSelect.disabled = true;
-                    countMainInput.value = 'ไม่มีหน่วยนับ';
-                    targetInput.value = 'ไม่มีค่าเป้าหมาย';
-                } else {
-                    // กรอง KPI ที่ตรงกับ selectedGoalID และเพิ่มเข้าไปใน dropdown
-                    const filteredKPIMains = KPIMains.filter(KPIMain => KPIMain.goalID == selectedGoalID);
-
-                    if (filteredKPIMains.length === 0) {
-                        const noKPIMainOption = document.createElement('option');
-                        noKPIMainOption.value = '';
-                        noKPIMainOption.textContent = 'ไม่มีตัวชี้วัดของแผน';
-                        KPIMainSelect.appendChild(noKPIMainOption);
-                        KPIMainSelect.disabled = true;
-                        countMainInput.value = 'ไม่มีหน่วยนับ';
-                        targetInput.value = 'ไม่มีค่าเป้าหมาย';
-                    } else {
-                        KPIMainSelect.disabled = false;
-                        filteredKPIMains.forEach(KPIMain => {
-                            const option = document.createElement('option');
-                            option.value = KPIMain.KPIMainID;
-                            option.textContent = KPIMain.name;
-                            KPIMainSelect.appendChild(option);
-                        });
-
-                        // กำหนดค่าเริ่มต้นให้กับ input
-                        const firstKPIMain = filteredKPIMains[0];
-                        countMainInput.value = firstKPIMain.count || 'ไม่มีหน่วยนับ';
-                        targetInput.value = firstKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                    }
-                }
-            });
-        }
-
-        // Event listener สำหรับเลือก KPI
-        // document.getElementById('KPIMain').addEventListener('change', function() {
-        //     const selectedKPIMainID = this.value;
-
-        //     // ค้นหาข้อมูล KPIMain ที่เลือก
-        //     const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
-
-        //     // ถ้ามีตัวเลือกที่เลือก ก็อัพเดตค่า count และ target
-        //     if (selectedKPIMain) {
-        //         document.getElementById('countMain13').value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-        //         document.getElementById('targetMain13').value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
+        //     if (filteredExpenses.length === 0) {
+        //         const noExpenseOption = document.createElement('option');
+        //         noExpenseOption.value = '';
+        //         noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
+        //         expenseSelect.appendChild(noExpenseOption);
+        //         updateCostTypeDropdown(null);
+        //         expenseSelect.disabled = true; // Disable expense dropdown
+        //     } else {
+        //         expenseSelect.disabled = false; // Enable expense dropdown
+        //         filteredExpenses.forEach(expense => {
+        //             const option = document.createElement('option');
+        //             option.value = expense.expID;
+        //             option.textContent = expense.name;
+        //             expenseSelect.appendChild(option);
+        //         });
+        //         updateCostTypeDropdown(filteredExpenses[0].expID);
         //     }
-        // });
+        // }
 
-        document.querySelectorAll('[id^="KPIMain_"]').forEach(selectElement => {
-            selectElement.addEventListener('change', function() {
-                const selectedKPIMainID = this.value;
-                const selectedKPIMain = KPIMains.find(KPIMain => KPIMain.KPIMainID == selectedKPIMainID);
+        // function updateCostTypeDropdown(selectedEXPID) {
+        //     const costTypeSelect = document.getElementById('costType');
+        //     costTypeSelect.innerHTML = '';
 
-                if (selectedKPIMain) {
-                    // ค้นหาจาก id ของ <input> ที่ตรงกับ <select> ปัจจุบัน
-                    const countMainInput = document.getElementById(`countMain_${this.id.split('_')[1]}`);
-                    const targetInput = document.getElementById(`targetMain_${this.id.split('_')[1]}`);
+        //     // กรองกองทุนที่เชื่อมกับแผน
+        //     const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
 
-                    countMainInput.value = selectedKPIMain.count || 'ไม่มีหน่วยนับ';
-                    targetInput.value = selectedKPIMain.target || 'ไม่มีค่าเป้าหมาย';
-                }
-            });
-        });
+        //     if (filteredCostType.length === 0) {
+        //         const noCostTypeOption = document.createElement('option');
+        //         noCostTypeOption.value = '';
+        //         noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
+        //         costTypeSelect.appendChild(noCostTypeOption);
+        //         costTypeSelect.disabled = true; // Disable expense dropdown
+        //     } else {
+        //         costTypeSelect.disabled = false; // Enable expense dropdown
+        //         filteredCostType.forEach(costType => {
+        //             const option = document.createElement('option');
+        //             option.value = costType.costID;
+        //             option.textContent = costType.name;
+        //             costTypeSelect.appendChild(option);
+        //         });
+        //     }
+        // }
 
-
-        function KPIMainNone() {
-            // var select = document.querySelectorAll('[id^="straID_"]');
-            var select = document.getElementById("straID");
-            var KPIMainNone = document.getElementById("KPIMainNone");
-            var KPIMainDigitalNone = document.getElementById("KPIMainDigitalNone");
-
-            if (select.value === '1') {
-                KPIMainNone.style.display = "flex";
-                KPIMainDigitalNone.style.display = "none";
-
-            } else if (select.value === '4') {
-                KPIMainDigitalNone.style.display = "flex";
-                KPIMainNone.style.display = "none";
-            } else {
-                KPIMainNone.style.display = "none";
-                KPIMainDigitalNone.style.display = "none";
-            }
-        }
-
-
-
-        function updateExpenseDropdown(selectedPlanID) {
-            console.log(selectedPlanID);
-
-
-            const expenseSelect = document.getElementById('expID');
-            expenseSelect.innerHTML = '';
-
-            // กรองกองทุนที่เชื่อมกับแผน
-            const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
-
-            // กรองงบรายจ่ายตามกองทุนที่เชื่อมกับแผน
-            const filteredExpenses = expenses.filter(expense =>
-                relatedFunds.some(fund => fund.fundID == expense.fundID)
-            );
-
-            if (filteredExpenses.length === 0) {
-                const noExpenseOption = document.createElement('option');
-                noExpenseOption.value = '';
-                noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
-                expenseSelect.appendChild(noExpenseOption);
-                updateCostTypeDropdown(null);
-                expenseSelect.disabled = true; // Disable expense dropdown
-            } else {
-                expenseSelect.disabled = false; // Enable expense dropdown
-                filteredExpenses.forEach(expense => {
-                    const option = document.createElement('option');
-                    option.value = expense.expID;
-                    option.textContent = expense.name;
-                    expenseSelect.appendChild(option);
-                });
-                updateCostTypeDropdown(filteredExpenses[0].expID);
-            }
-        }
-
-        function updateCostTypeDropdown(selectedEXPID) {
-            const costTypeSelect = document.getElementById('costType');
-            costTypeSelect.innerHTML = '';
-
-            // กรองกองทุนที่เชื่อมกับแผน
-            const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
-
-            if (filteredCostType.length === 0) {
-                const noCostTypeOption = document.createElement('option');
-                noCostTypeOption.value = '';
-                noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
-                costTypeSelect.appendChild(noCostTypeOption);
-                costTypeSelect.disabled = true; // Disable expense dropdown
-            } else {
-                costTypeSelect.disabled = false; // Enable expense dropdown
-                filteredCostType.forEach(costType => {
-                    const option = document.createElement('option');
-                    option.value = costType.costID;
-                    option.textContent = costType.name;
-                    costTypeSelect.appendChild(option);
-                });
-            }
-        }
-
-        function submitButton(action) {
+        function submitButton() {
             var form = document.getElementById('actionForm');
-            if (action === 'save2') {
-                form.action = "/projectSave2";
-            } else if (action === 'send2') {
-                form.action = "/projectSend2";
-            }
+            var costID = document.getElementById('[id^="costType"]');
+
+            console.log(costID);
+            
+
+            form.action = "/projectSave2";
+           
             form.submit();
         }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ
         window.onload = function() {
-            // const yearSelect = document.getElementById('year');
-            // const StrategicSelect = document.getElementById('straID');
-            // const SFASelect = document.getElementById('SFAID');
-            // const goalSelect = document.getElementById('goalID');
-            // const tacSelect = document.getElementById('tacID');
+           
             const planSelect = document.getElementById('planID');
             const EXPSelect = document.getElementById('expID');
-
-
-
-            // เมื่อเปลี่ยนปีงบประมาณ
-            // yearSelect.addEventListener('change', function() {
-            //     const selectedYearID = this.value;
-            //     updatePlanDropdown(selectedYearID);
-            // });
-
-            // // เมื่อเปลี่ยนแผนยุทธศาสตร์
-            // StrategicSelect.addEventListener('change', function() {
-            //     const selectedStraID = this.value;
-            //     updateIssueDropdown(selectedStraID);
-
-            // });
-
-            // SFASelect.addEventListener('change', function() {
-            //     const selectedSFAID = this.value;
-            //     updateGoalDropdown(selectedSFAID);
-            // });
-
-            // goalSelect.addEventListener('change', function() {
-            //     const selectedGoalID = this.value;
-            //     updateTacticsDropdown(selectedGoalID);
-            //     updateKPIMain(selectedGoalID);
-            // });
-            // tacSelect.addEventListener('change',function(){
-            //     const selectedTacID = this.value;
-            //     updateKPIMain(selectedTacID);
-            // });
-
-
-
             planSelect.addEventListener('change', function() {
                 const selectedPlanID = this.value;
                 console.log(selectedPlanID);
@@ -1984,12 +1388,7 @@
                 updateCostTypeDropdown(selectedEXPID);
             });
 
-            // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
-            // const defaultYearID = yearSelect.value;
-            // if (defaultYearID) {
-            //     updatePlanDropdown(defaultYearID);
-            // }
-
+    
             const defaultPlanID = planSelect.value;
             if (defaultPlanID) {
                 updateExpenseDropdown(defaultPlanID);

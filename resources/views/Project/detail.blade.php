@@ -1,17 +1,20 @@
 @extends('layout')
 @section('title', 'Project')
 @section('content')
-    <div>
-        <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
-            <button type="submit" class="btn btn-danger">Export PDF</button>
-        </form>
-    </div>
+    @if (Auth::check())
+        <div>
+            <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
+                <button type="submit" class="btn btn-danger">Export PDF</button>
+            </form>
+        </div>
 
-    <div>
-        <form action="{{ route('project.Word', $data['project']->proID) }}" method="GET">
-            <button type="submit" class="btn btn-primary">Export Word</button>
-        </form>
-    </div>
+        <div>
+            <form action="{{ route('project.Word', $data['project']->proID) }}" method="GET">
+                <button type="submit" class="btn btn-primary">Export Word</button>
+            </form>
+        </div>
+    @endif
+
 
     <div class="col-md-1 col-sm-1"></div>
     <div class="col-md-10 col-sm-10">
@@ -106,6 +109,7 @@
                             @endif
                             @if (count($data['stra2LVMap']) > 0)
                                 @foreach ($data['stra2LVMap'] as $item)
+                                    <br>
                                     <b>{{ $item->stra2LV->name }}</b> <br>
                                     <b>ประเด็นยุทธศาสตร์</b> {{ $item->SFA2LV->name }} <br>
                                     <b>กลยุทธ์</b> {{ $item->tac2LV->name }} <br> <br>
@@ -249,7 +253,7 @@
                     <div class="row field item form-group ">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ประเภทค่าใช้จ่าย :</b></label>
                         <div class="col-md-7 col-sm-7">
-                            <table  class="table table-bordered">
+                            <table class="table table-bordered">
                                 <tr>
                                     <th>งบรายจ่าย / หมวดรายจ่าย</th>
                                     <th>ไตรมาส1</th>
@@ -260,13 +264,13 @@
                                 @foreach ($data['costQuarter'] as $item)
                                     <tr>
                                         <td>
-                                            {{$item->exp->name}} <br>
-                                            {{$item->cost->name}}
+                                            {{ $item->exp->name }} <br>
+                                            {{ $item->cost->name }}
                                         </td>
-                                        <td><br>{{$item->costQu1}}</td>
-                                        <td><br>{{$item->costQu2}}</td>
-                                        <td><br>{{$item->costQu3}}</td>
-                                        <td><br>{{$item->costQu4}}</td>
+                                        <td><br>{{ $item->costQu1 }}</td>
+                                        <td><br>{{ $item->costQu2 }}</td>
+                                        <td><br>{{ $item->costQu3 }}</td>
+                                        <td><br>{{ $item->costQu4 }}</td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -293,59 +297,37 @@
                             @endforeach
                         </div>
                     </div>
+
                     @if (count($data['file']) > 0)
-                    <div class="row field item form-group ">
-                        <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
-                                :</b></label>
-                        <div class="col-md-7 col-sm-7">
-                            @foreach ($data['file'] as $item)
-                               <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name }}</a> <br>
-                            @endforeach
+                        <div class="row field item form-group ">
+                            <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
+                                    :</b></label>
+                            <div class="col-md-7 col-sm-7">
+                                @foreach ($data['file'] as $item)
+                                    <a href="{{ asset('files/' . $item->name) }}"
+                                        target="_blank">{{ $item->name }}</a> <br>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     @endif
-                    
+
                 </form>
-                @if (count($data['comment']) > 0)
-                <div class="row field item form-group " >
-                    <label  for="comment" class="col-form-lable col-md-3 col-sm-3 label-align"><b>ข้อเสนอแนะ
-                            :</b></label>
-                    <div class="col-md-6 col-sm-6" style="background-color: #FFF9B1;">
-                        @foreach ($data['comment'] as $item)
-                           <b>{{$item->user->displayname}} {{$item->user->lastname_en}}</b> : {{$item->detail}} <br>
-                           <b>เมื่อ</b> {{$item->created_at}} <br>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-                <form action="" method="POST" id="actionForm">
-                    @csrf
-                    <div class="row field item form-group ">
-                        <label for="comment" class="col-form-lable col-md-3 col-sm-3 label-align"> @if (count($data['comment']) == 0)
-                            <b>ข้อเสนอแนะ
-                                :</b>
-                        @endif
-                             </label>
-                        <div class="col-md-6 col-sm-6">
-                            <textarea name="comment" id="comment" class="form-control"></textarea>
-                        </div>
-                    </div>
 
-                    <div class="form-group mt-2">
-                        <div class="col-md-6 offset-md-3 d-flex justify-content-center">
 
-                            <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
-                            <button type="submit" class="btn btn-danger"
-                                onclick="submitButton('edit')">กลับไปแก้ไข</button>
-
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
-
-
         {{-- <table class="table table-bordered">
+            @if (count($comment) > 0)
+                <tr style="background-color: #FFF9B1; ">
+                    <th>ข้อเสนอเเนะ</th>
+                    <td colspan="5">
+                        @foreach ($comment as $item)
+                            <b>{{ $item->user->firstname_en }} {{ $item->user->lastname_en }}</b> : {{ $item->detail }} <br>
+                            <b>เมื่อ</b> {{ $item->created_at }} <br>
+                        @endforeach
+                    </td>
+                </tr>
+            @endif
             <tr>
                 <th style="width: 15%">สถานะ</th>
                 <td colspan="5">{{ $status->name }}</td>
@@ -387,7 +369,8 @@
                 <th>format</th>
                 <td colspan="5">{{ $project->format }}</td>
             </tr>
-            @if (!empty($strategic3LVMap))
+
+            @if (count($strategic3LVMap) > 0)
                 @foreach ($strategic3LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -467,7 +450,7 @@
                     </td>
                 </tr>
             @endif
-            @if (!empty($strategic1LVMap))
+            @if (count($strategic1LVMap) > 0)
                 @foreach ($strategic1LVMap as $item)
                     <tr>
                         <th>แผนยุทธศาสตร์</th>
@@ -479,6 +462,8 @@
                     </tr>
                 @endforeach
             @endif
+
+
             <tr>
                 <th>ประเภทโครงการ</th>
                 @foreach ($projectType as $item)
@@ -486,6 +471,8 @@
                         <td colspan="5">{{ $item->name }}</td>
                     @endif
                 @endforeach
+
+
             </tr>
             <tr>
                 <th>ลักษณะโครงการ</th>
@@ -518,13 +505,17 @@
             <tr>
                 <th>วัตถุประสงค์</th>
                 <td colspan="5">
+                    @php
+                        $index = 1;
+                    @endphp
                     @foreach ($projectOBJ as $item)
                         @if ($project->proID === $item->proID)
-                            {{ $item->detail }} <br>
+                           {{$index++}}. {{ $item->detail }} <br>
                         @endif
                     @endforeach
                 </td>
             </tr>
+
             <tr style="text-align: center">
                 <th colspan="4">ตัวชี้วัดความสำเร็จ</th>
                 <th>หน่วยนับ</th>
@@ -566,8 +557,11 @@
             </tr>
             <tr>
                 <td colspan="4">
+                    @php
+                        $index =1;
+                    @endphp
                     @foreach ($projectStep as $item)
-                    {{ $loop->iteration }}. {{ $item->name }} <br>
+                        {{$index++}}. {{ $item->name }} <br>
                     @endforeach
                 </td>
                 <td>
@@ -639,10 +633,7 @@
                         {{ $item->costQu4 }} บาท<br>
                     @endforeach
                 </td>
-
-
             </tr>
-
             <tr>
                 <th>ประมาณการงบประมาณที่ใช้</th>
                 <td colspan="5">{{ $project->badgetTotal }} บาท</td>
@@ -650,8 +641,11 @@
             <tr>
                 <th>ประโยชน์ที่คาดว่าจะได้รับ</th>
                 <td colspan="5">
+                    @php
+                        $index=1;
+                    @endphp
                     @foreach ($projectBenefit as $item)
-                    {{ $loop->iteration }}. {{ $item->detail }} <br>
+                        {{$index++}}. {{ $item->detail }} <br>
                     @endforeach
                 </td>
             </tr>
@@ -659,71 +653,17 @@
                 <th>ไฟล์เอกสารประกอบโครงการ</th>
                 <td colspan="5">
                     @foreach ($file as $item)
-                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name }}</a> <br>
+                        <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name ?? '-' }}</a> <br>
                     @endforeach
 
                 </td>
             </tr>
         </table> --}}
-        {{-- <div class="ln_solid"> --}}
-        {{-- <form id="actionForm" method="POST">
-            @csrf
-            @if (count($comment) > 0)
-                <div class="row m-2">
-                    <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ : </label>
-                    <div class="col-md-6 col-sm-6">
-                        @foreach ($comment as $item)
-                            <table>
-                                <tr>
-                                    <td>
-                                        {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
-                                        {{ $item->detail }} <br> เมื่อ {{ $item->created_at }} <br>
-                                    </td>
-                                </tr>
-                            </table>
-                            <textarea name="comment" id="comment" class="form-control"></textarea>
-                    </div>
-            @endforeach
-    </div>
-@else
-    <div class="row m-2">
-        <label for="comment" class="col-md-2 form-label label-align">ข้อเสนอแนะ</label>
-        <div class="col-md-6 col-sm-6">
-            <textarea name="comment" id="comment" class="form-control"></textarea>
-        </div>
-    </div>
-    @endif
 
-    <div class="form-group mt-2">
-        <div class="col-md-6 offset-md-3">
-
-            <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
-            <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
-
-        </div>
-    </div>
-    </form> --}}
-
-
+        {{-- </div> --}}
     </div>
     <div class="col-md-1 col-sm-1"></div>
 
-    <script>
-        function submitButton(action) {
-            var form = document.getElementById('actionForm');
-            if (action === 'pass') {
-                form.action = "{{ route('departmentPass', $data['project']->proID) }}";
-                form.submit();
-            } else if (action === 'edit') {
-                document.getElementById('comment').required = true;
-                var comment = document.getElementById('comment').value.trim();
-                if (comment !== "") {
-                    form.action = "{{ route('departmentEdit', $data['project']->proID) }}";
-                    form.submit();
-                }
 
-            }
-        }
-    </script>
 
 @endsection

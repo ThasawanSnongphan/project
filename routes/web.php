@@ -53,6 +53,7 @@ use App\Http\Controllers\ExcelClosedController;
 use App\Http\Controllers\ExcelEffectiveController;
 use App\Http\Controllers\ExcelPlanController;
 use App\Http\Controllers\WordClosedController;
+use App\Http\Controllers\PerformanceController;
 
 //PDF
 Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
@@ -84,34 +85,62 @@ Route::post('/logout', function () {
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
 
+Route::get('/projectAll', [HomeController::class, 'projectAll']);
+Route::get('/news', [HomeController::class, 'news']);
+Route::get('/Performance', [PerformanceController::class,'index']);
+
 Route::get('/countKPI', [CountKPIProject::class,'index']);
 Route::post('/countKPIInsert',[CountKPIProject::class,'insert']);
 Route::get('countKPIdelete/{id}',[CountKPIProject::class,'delete'])->name('countKPI.delete');
 Route::get('countKPIedit/{id}',[CountKPIProject::class,'edit'])->name('countKPI.edit');
 Route::post('countKPIupdate/{id}',[CountKPIProject::class,'update'])->name('countKPI.update');
 
-Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']);
+//เจ้าหน้าที่พัสดุ
+Route::get('/SupplyAnalystProject', [SupplyAnalystController::class,'index']); //โครงการใรแผน
+Route::get('/SupplyAnalystProjectOutPlan', [SupplyAnalystController::class,'projectOutPlan']); //โครงการนอกแผน
 
+//ผู้บริหาร
 Route::get('/ExecutiveProjectlist', [Executive::class,'index']);
+Route::get('/ExecutiveProjectOutPlan', [Executive::class,'projectOutPlan']);
 Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
-Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'report'])->name('Executive.detail');
+//เสนอโครงการ
+Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'detail'])->name('Executive.detail');
 Route::post('ExecutivePass/{id}', [Executive::class,'ExecutivePass'])->name('ExecutivePass');
 Route::post('/ExecutiveEdit/{id}', [Executive::class,'ExecutiveEdit'])->name('ExecutiveEdit');
 Route::post('/ExecutiveDenied/{id}', [Executive::class,'ExecutiveDenied'])->name('ExecutiveDenied');
+//ประเมินโครงการ
+Route::get('ExecutiveProjectDetailEvaluation/{id}',[Executive::class,'detailEvaluation'])->name('Executive.detailEvaluation');
+Route::post('ExecutiveEvaluationPass/{id}', [Executive::class,'EvaluationPass'])->name('Executive.PassEvaluation');
+Route::post('/ExecutiveEvaluationEdit/{id}', [Executive::class,'EvaluationEdit'])->name('Executive.EditEvaluation');
+Route::post('/ExecutiveEvaluationDenied/{id}', [Executive::class,'EvaluationDenied'])->name('Executive.DeniedEvaluation');
 
+//เจ้าหน้าที่แผน
+Route::get('/PlanningAnalystProjectAll', [PlanningAnalyst::class,'projectAll']);
 Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
 Route::get('/PlanningAnalystProjectOutPlan', [PlanningAnalyst::class,'projectOutPlan']);
 Route::get('/PlanningAnalystProjectCancel', [PlanningAnalyst::class,'projectCancel']);
-Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'report'])->name('PlanningAnalyst.detail');
+//เสนอโครงการ
+Route::get('PlanningAnalystProjectDetail/{id}',[PlanningAnalyst::class,'detail'])->name('PlanningAnalyst.detail');
 Route::post('planningPass/{id}', [PlanningAnalyst::class,'planningPass'])->name('planningPass');
-Route::post('/planningEdit/{id}', [PlanningAnalyst::class,'planningEdit'])->name('planningEdit');
+//ประเมินโครงการ
+Route::get('PlanningAnalystProjectDetailEvaluation/{id}',[PlanningAnalyst::class,'detailEvaluation'])->name('PlanningAnalyst.detailEvaluation');
+Route::post('EvaluationPass/{id}', [PlanningAnalyst::class,'EvaluationPass'])->name('PlanningAnalyst.EvaluationPass');
 
-Route::get('/DepartmentHeadProject', [Department_Head::class,'index']);
-Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'report'])->name('Department.detail');
+//หัวหน้าฝ่าย
+Route::get('/DepartmentHeadProject', [Department_Head::class,'index']); //รายชื่อโครงการในแผน
+Route::get('/DepartmentHeadProjectOutPlan', [Department_Head::class,'projectOutPlan']); //รายชื่อโครงการนอกแผน
+//เสนอโครงการ
+Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'detail'])->name('Department.detail');
 Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->name('departmentPass');
 Route::post('/departmentEdit/{id}', [Department_Head::class,'departmentEdit'])->name('departmentEdit');
+//ประเมินโครงการ
+Route::get('DepartmentHeadProjectDetailEvaluation/{id}',[Department_Head::class,'detailEvaluation'])->name('Department.detailEvaluation');
+Route::post('departmentEvaluationPass/{id}', [Department_Head::class,'EvaluationPass'])->name('EvaluationPass');
+Route::post('/departmentEvaluationEdit/{id}', [Department_Head::class,'EvaluationEdit'])->name('EvaluationEdit');
+
 
 Route::get('/project', [ProjectController::class,'index']);
+Route::get('/projectOutPlan', [ProjectController::class,'projectOutPlan']);
 Route::any('/projectcreate1', [ProjectController::class,'create1']);
 
 Route::post('/projectgoal3LV', [ProjectController::class,'goal3LV']);
@@ -123,7 +152,9 @@ Route::post('/projecttactics2LV', [ProjectController::class,'tactics2LV']);
 Route::post('/projectKPIMain2LV', [ProjectController::class,'KPIMain2LV']);
 Route::post('/projectcount_target2LV', [ProjectController::class,'count_target_KPIMain2LV']);
 
-Route::post('/projectcostType', [ProjectController::class,'costType']);
+Route::post('/fund', [ProjectController::class,'fund']); //กรองกองทุน
+Route::post('/exp', [ProjectController::class,'exp']); //กรองงบรายจ่าย
+Route::post('/projectcostType', [ProjectController::class,'costType']); //กรองหมวดรายจ่าย
 
 Route::any('/projectcreate2', [ProjectController::class,'create2']);
 // Route::any('/projectcreate2/{id}', [ProjectController::class,'create2']);
@@ -141,11 +172,14 @@ Route::post('projectSendUpdate2/{id}',[ProjectController::class,'sendUpdate2']);
 Route::any('projectedit2/{id}',[ProjectController::class,'edit2']);
 
 Route::post('projectupdate2/{id}',[ProjectController::class,'update'])->name('project.update');
-Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.report');
+Route::get('projectreport/{id}',[ProjectController::class,'report'])->name('project.detail');
 
+//เอกสารประเมินฌครงการ
 Route::any('projectEvaluation/{id}',[ProjectEvalutionController::class,'evaluation'])->name('project.evaluation');
+Route::get('projectDetailEvaluation/{id}',[ProjectEvalutionController::class,'Detail'])->name('detail.evaluation');
 Route::post('projectSaveEvaluation/{id}',[ProjectEvalutionController::class,'save']);
 Route::post('fileEvaluation/{id}',[ProjectEvalutionController::class,'savefile']);
+//แก้ไขเอกสารประเมินโครงการ
 Route::any('EditEvaluation/{id}',[ProjectEvalutionController::class,'edit'])->name('edit.evaluation');
 Route::any('UpdateEvaluation/{id}',[ProjectEvalutionController::class,'update']);
 Route::any('SendEvaluation/{id}',[ProjectEvalutionController::class,'send']);
@@ -321,5 +355,6 @@ Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.upda
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('admin');
 Route::get('/dashboard', [AuthController::class, 'someFunction']);
-Route::get('/projectAll', [HomeController::class, 'projectAll']);
+
+
 

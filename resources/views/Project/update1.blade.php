@@ -32,15 +32,15 @@
                         @csrf
                        
                         @if (count($comment) > 0)
-                            <div class="row field item form-group align-items-center">
+                            <div class="row field item form-group align-items-center" style="background-color: #FFF9B1; ">
                                 <label for="title"
-                                    class="col-form-label col-md-3 col-sm-3 label-align">ข้อเสนอแนะ</label>
+                                    class="col-form-label col-md-3 col-sm-3 label-align"><b>ข้อเสนอแนะ</b></label>
                                 <div class="col-md-6 col-sm-6">
                                     <table >
                                         <td style="padding: 2px">
                                             @foreach ($comment as $item)
-                                                 {{ $item->user->firstname_en }} {{ $item->user->lastname_en }} :
-                                                 {{ $item->detail }} <br> เมื่อ {{$item->created_at}}<br>
+                                                 <b>{{ $item->user->displayname }} {{ $item->user->lastname_en }}</b> :
+                                                 {{ $item->detail }} <br> <b>เมื่อ</b> {{$item->created_at}}<br>
                                             @endforeach
                                         </td>
                                     </table>

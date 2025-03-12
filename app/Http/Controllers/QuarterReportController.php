@@ -9,6 +9,8 @@ use App\Models\ReportQuarters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class QuarterReportController extends Controller
 {
@@ -44,11 +46,14 @@ class QuarterReportController extends Controller
         $data['costQuarter']= DB::table('cost_quarters')->where('proID',$id)->get();
     //     // dd($data['costQuarter']);
 
-        $data['quarterReport']=DB::table('report_quarters')->where('proID',$id)->first();
+        $data['quarterReport']=DB::table('report_quarters')->where([['proID',$id],['quarID',$quarter]])->first();
         if(!empty($data['quarterReport'])){
             $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
 
         }
+        
+        $data['evaluation'] = DB::table('project_evaluations')->where([['proID',$id]])->first();
+        // dd($data['evaluation']);
     //     // dd($data['detail']);
         return view('Project.reportQuarter',compact('data'));
     }
@@ -89,12 +94,15 @@ class QuarterReportController extends Controller
         }
         $KPIMain2LVID = $request->KPIMain2LVID;
         $result2LV = $request->result2LV;
-        foreach($KPIMain2LVID as $index => $KPI){
+        if($result2LV != null){
+             foreach($KPIMain2LVID as $index => $KPI){
             DB::table('k_p_i_main2_level_map_projects')
             ->where('proID',$id)
             ->where('KPIMain2LVID',$KPI)
             ->update([$column=>$result2LV[$index]]);
         }
+        }
+       
         $KPIProID = $request->KPIProID;
         $result = $request->result;
         foreach($KPIProID as $index => $KPI){
@@ -103,6 +111,14 @@ class QuarterReportController extends Controller
             ->where('KPIProID',$KPI)
             ->update([$column=>$result[$index]]);
         }
+
+        $user = DB::table('users')->where('Planning_Analyst',1)->first();
+
+        Mail::to($user->email)->send(new SendMail([
+            'name' => $project->name ,
+            'text' => 'ผู้รับผิดชอบโครงการส่งรายงานไตรมาส'.$quarter
+        ] 
+        ));
 
 
         return redirect('/project');

@@ -41,6 +41,10 @@ use App\Models\Files;
 use App\Models\Comment;
 use App\Models\CountKPIProjects;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 class ProjectController extends Controller
@@ -51,7 +55,7 @@ class ProjectController extends Controller
         $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
         $proIDs = $user->pluck('proID');
         // dd($proIDs);
-        $project=DB::table('projects')->whereIn('proID',$proIDs)->get();
+        $project=DB::table('projects')->where('proTypeID',3)->whereIn('proID',$proIDs)->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
@@ -62,6 +66,24 @@ class ProjectController extends Controller
         // dd($evaluation);
         // dd($proID);
         return view('Project.index',compact('users','project','status','year','projectYear','report','proID','evaluation'));
+    }
+    function projectOutPlan(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+        $proIDs = $user->pluck('proID');
+        // dd($proIDs);
+        $project=DB::table('projects')->where('proTypeID',4)->whereIn('proID',$proIDs)->get();
+        // dd($project);
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
+        $proID = $report->pluck('proID');
+
+        $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+        // dd($evaluation);
+        // dd($proID);
+        return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','evaluation'));
     }
     
     function create1(Request $request){
@@ -149,6 +171,14 @@ class ProjectController extends Controller
         $data['count_target2LV']=KPIMain2Level::where('KPIMain2LVID',$request->KPIMain2LVID)->get(['count','target']);
         return response()->json($data);
     } 
+
+    function fund(Request $requuest){
+        $data['fund'] = Funds::where('planID',$request->planID)->get('fundID');
+        dd($data['fund']);
+        return response()->json($data);
+    }
+
+    
     
     function costType(Request $request){
         $costType['costType']=CostTypes::where('expID',$request->expID)->get(['name','costID']);
@@ -488,7 +518,7 @@ class ProjectController extends Controller
         $project = new Projects();
         $project->yearID = $year->yearID;
         $project->name = $request->input('name');
-        $project->statusID =  16;
+        $project->statusID =  14;
         $project->save(); 
 
         $project = $project->fresh();
@@ -569,26 +599,26 @@ class ProjectController extends Controller
     }
 
     function save2(Request $request){
-        $request->validate(
+        // $request->validate(
            
-                [
-                    'principle' => 'required',
-                    'obj.*' => 'required',
-                    'stepName.*' => 'required',
-                    'stepStart.*' => 'required',
-                    'stepEnd.*' => 'required',
-                    'costQu1.*' => 'required',
-                    'costQu2.*' => 'required',
-                    'costQu3.*' => 'required',
-                    'costQu4.*' => 'required',
-                    'benefit.*' => 'required',
+        //         [
+        //             'principle' => 'required',
+        //             'obj.*' => 'required',
+        //             'stepName.*' => 'required',
+        //             'stepStart.*' => 'required',
+        //             'stepEnd.*' => 'required',
+        //             'costQu1.*' => 'required',
+        //             'costQu2.*' => 'required',
+        //             'costQu3.*' => 'required',
+        //             'costQu4.*' => 'required',
+        //             'benefit.*' => 'required',
                     
-                ],
-                [
-                    'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
-            ]
+        //         ],
+        //         [
+        //             'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
+        //     ]
 
-        );
+        // );
         $projects=[
             'yearID'=>$request->yearID,
             'name'=>$request->project_name,
@@ -602,7 +632,7 @@ class ProjectController extends Controller
             'badID'=>$request->badID,
             'badgetTotal'=>$request->badgetTotal,
             'planID'=>$request->planID,
-            'statusID'=>16,
+            'statusID'=>14,
             'created_at' => now(),
             'updated_at' => now()
         ];
@@ -785,6 +815,7 @@ class ProjectController extends Controller
                 $files = new Files();
                 $files->name = $file->getClientOriginalName();
                 $files->proID = $project;
+                $files->type = 'เอกสารเสนอโครงการ';
                 $files->save();
                 // dd($file);
             }
@@ -2033,8 +2064,12 @@ class ProjectController extends Controller
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
+       
         
-        $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
+        $userMaps = UsersMapProject::with('users')->where('proID',$id)->get();
+
+
+
         //ดึงuserIDทัั้งหมดในuserMap
         $userMapIDs = $userMaps->pluck('userID')->toArray();
         // dd($userMapIDs);
@@ -2696,6 +2731,7 @@ class ProjectController extends Controller
                     [
                         'proID' => $id,
                         'name' => $file->getClientOriginalName(),
+                        'type' => 'เอกสารเสนอโครงการ',
                         'updated_at' => now(), 
                         'created_at' => now()
                     ]
@@ -2733,38 +2769,60 @@ class ProjectController extends Controller
         );
 
 
+        $Responsible = UsersMapProject::with('users')->where('proID',$id)->get();
+        foreach ($Responsible as $index => $item) {
+            $Department = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+
+        }
+        
+        // dd($Department,$userMaps);
+        $mail = Projects::with('status')->where('proID',$id)->first();
+       
+        // dd($status);
+        foreach ($Department as $index => $item) {
+             Mail::to($item->email)->send(new SendMail(
+            [
+                'name' => $mail->name,
+                'text' => $mail->status->name
+            ]
+            ));
+        }
+
+        foreach ($Responsible as $index => $item) {
+            Mail::to($item->users->email)->send(new SendMail(
+                [
+                    'name' => $mail->name,
+                    'text' => $mail->status->name
+                ]
+                ));
+        }
+
         return redirect('/project');
     }
 
 
     function report($id){
-        $project=DB::table('projects')->where('proID',$id)->first();
-        $user=Users::all();
-        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
-        $status = DB::table('statuses')->where('statusID',$project->statusID)->first();
-        $strategic3LVMap=StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
-        $KPI3LVMap = KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
-        $strategic2LVMap=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
-        $KPI2LVMap = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
-        $strategic1LVMap = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
-        $KPIProject = KPIProjects::with('count')->where('proId',$id)->get();
-        $projectYear=Year::all();
-        $projectType=ProjectType::all();
-        $projectCharector=ProjectCharec::all();
-        $projectIntegrat=ProjectIntegrat::all();
-        $projectOBJ=Objectives::all();
-        $projectTarget=Targets::all();
-        $projectStep=DB::table('steps')->where('proID',$id)->get();
-        $projectBadgetType=BadgetType::all();
-        $projectUniPlan=UniPlan::all();
-        $projectCostQuarter=CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
-        $peojectEXP=ExpenseBadgets::all();
-        $projectCostType=CostTypes::all();
-        $projectBenefit=DB::table('benefits')->where('proID',$id)->get();
-        $file = DB::table('files')->where('proID',$id)->get();
-        $comment = Comment::with('user')->where('proID',$id)->get();
+        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan'])->where('proID',$id)->first();
+        $data['user'] = UsersMapProject::with('users')->where('proID',$id)->get();
+
+        $data['obj'] = Db::table('objectives')->where('proID',$id)->get();
+        $data['benefit'] = DB::table('benefits')->where('proID',$id)->get();
+        $data['file'] = DB::table('files')->where([['proID',$id],['type','เอกสารเสนอโครงการ']])->get();
+        $data['stra3LVMap'] = StrategicMap::with(['Stra3LV','SFA3LV','goal3LV','tac3LV'])->where('proID',$id)->get();
+        $data['KPI3LVMap'] = KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
+        // dd($data['KPI3LVMap']);
+        $data['stra2LVMap']=Strategic2LevelMapProject::with(['stra2LV','SFA2LV','tac2LV'])->where('proID',$id)->get();
+        $data['KPI2LVMap'] = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
+
+        $data['stra1LVMap'] = Strategic1LevelMapProject::with(['stra1LV','tar1LV'])->where('proID',$id)->get();
+
+        $data['KPIProject'] = KPIProjects::with('count')->where('proID',$id)->get();
+        $data['step'] = DB::table('steps')->where('proID',$id)->get();
+        $data['costQuarter'] = CostQuarters::with(['exp','cost'])->where('proID',$id)->get();
+
+        $data['comment'] = Comment::with('user')->where([['proID',$id],['type','เอกสารเสนอโครงการ']])->get();
         // dd($comment);
-        return view('Project.report',compact('status','user','userMap','project','strategic3LVMap','KPI3LVMap','strategic2LVMap','KPI2LVMap','strategic1LVMap','KPIProject','projectYear','projectType','projectCharector','projectIntegrat','projectOBJ','projectTarget','projectStep','projectBadgetType','projectUniPlan','projectCostQuarter','peojectEXP','projectCostType','projectBenefit','file','comment'));
+        return view('Project.detail',compact('data'));
     }
 
    
