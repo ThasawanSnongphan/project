@@ -15,11 +15,11 @@ class AuthController extends Controller
    
     function loginPost(Request $request){
         $request->validate([
-            "email" => "required",
+            "username" => "required",
             "password" => "required"
         ]);
         $login = [
-            'email' => $request->input('email'),
+            'username' => $request->input('username'),
             'password' => $request->input('password'),
         ];
 
@@ -28,7 +28,7 @@ class AuthController extends Controller
         } else {
             // ล็อกอินล้มเหลว
             return redirect()->back()->withErrors([
-                'email' => 'Invalid credentials',
+                'username' => 'Invalid credentials',
                 'password' => 'Invalid credentials'
             ]);
         }

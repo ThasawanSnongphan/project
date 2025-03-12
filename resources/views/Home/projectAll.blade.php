@@ -29,14 +29,14 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                    <th>สถานะ</th>
-                    {{-- <th>ไตรมาส 1</th>
+                {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
+                <th>สถานะ</th>
+                {{-- <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
                     <th>ไตรมาส 4</th> --}}
-                   
-                @endif
+
+                {{-- @endif --}}
 
             </tr>
         </thead>
@@ -49,18 +49,23 @@
                 <tr>
                     <td>{{ $i }}</td>
                     <td data-project="{{ $item->proID }}">
-                        @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
-                            {{ $item->name }}
-                        @elseif($item->statusID == 1 || $item->statusID == 2 || $item->statusID == 3 || $item->statusID == 4)
+                        @if ($item->status->statusID == 4)
                             <a href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
                         @else
-                            <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
+                        <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
                         @endif
+
                     </td>
                     {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
-                        <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                        {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
-                        {{-- <td>
+
+                    @if ($item->status->statusID == 4)
+                        <td>กำลังดำเนินการ</td>
+                    @else
+                        <td>{{ $item->status->name }}</td>
+                    @endif
+
+                    {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
+                    {{-- <td>
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                                 <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                                 <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
@@ -106,7 +111,7 @@
             @endforeach
         </tbody>
     </table>
-   
+
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown
         document.getElementById('yearID').addEventListener('change', function() {

@@ -85,6 +85,8 @@ Route::post('/logout', function () {
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
 
+Route::get('/projectAll', [HomeController::class, 'projectAll']);
+Route::get('/news', [HomeController::class, 'news']);
 Route::get('/Performance', [PerformanceController::class,'index']);
 
 Route::get('/countKPI', [CountKPIProject::class,'index']);
@@ -113,6 +115,7 @@ Route::post('/ExecutiveEvaluationEdit/{id}', [Executive::class,'EvaluationEdit']
 Route::post('/ExecutiveEvaluationDenied/{id}', [Executive::class,'EvaluationDenied'])->name('Executive.DeniedEvaluation');
 
 //เจ้าหน้าที่แผน
+Route::get('/PlanningAnalystProjectAll', [PlanningAnalyst::class,'projectAll']);
 Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
 Route::get('/PlanningAnalystProjectOutPlan', [PlanningAnalyst::class,'projectOutPlan']);
 Route::get('/PlanningAnalystProjectCancel', [PlanningAnalyst::class,'projectCancel']);
@@ -353,6 +356,5 @@ Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.upda
 Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('admin');
 Route::get('/dashboard', [AuthController::class, 'someFunction']);
 
-Route::get('/projectAll', [HomeController::class, 'projectAll']);
-Route::get('/news', [HomeController::class, 'news']);
+
 

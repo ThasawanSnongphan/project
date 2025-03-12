@@ -38,6 +38,20 @@ use Carbon\Carbon;
 
 class PlanningAnalyst extends Controller
 {
+    function projectAll(){
+        $year = Year::all();
+        $projectYear = Projects::with('year')->get();
+        $project=Projects::with('projectType','status')->get();
+        // dd($project);
+        $proID = $project->pluck('proID');
+        // dd($proID);
+        $status=Status::all();
+        $users = $users=DB::table('users')->get();
+        $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+        // dd($report_quarter);
+        return view('Planning_Analyst.projectAll',compact('users','project','status','year','projectYear','report_quarter'));
+    }
+    
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();

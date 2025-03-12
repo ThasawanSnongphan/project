@@ -1,17 +1,20 @@
 @extends('layout')
 @section('title', 'Project')
 @section('content')
-    <div>
-        <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
-            <button type="submit" class="btn btn-danger">Export PDF</button>
-        </form>
-    </div>
+    @if (Auth::check())
+        <div>
+            <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
+                <button type="submit" class="btn btn-danger">Export PDF</button>
+            </form>
+        </div>
 
-    <div>
-        <form action="{{ route('project.Word', $data['project']->proID) }}" method="GET">
-            <button type="submit" class="btn btn-primary">Export Word</button>
-        </form>
-    </div>
+        <div>
+            <form action="{{ route('project.Word', $data['project']->proID) }}" method="GET">
+                <button type="submit" class="btn btn-primary">Export Word</button>
+            </form>
+        </div>
+    @endif
+
 
     <div class="col-md-1 col-sm-1"></div>
     <div class="col-md-10 col-sm-10">
@@ -64,8 +67,8 @@
                                 $index = 1;
                             @endphp
                             @foreach ($data['user'] as $item)
-                                {{ $index++ }}. {{ $item->users->firstname_en }} {{ $item->users->lastname_en }} สังกัด
-                                {{ $item->users->faculty_name }}<br>
+                                {{ $index++ }}. {{ $item->users->displayname }}  สังกัด
+                                {{ $item->users->department_name }}<br>
                             @endforeach
                         </div>
                     </div>
@@ -250,7 +253,7 @@
                     <div class="row field item form-group ">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ประเภทค่าใช้จ่าย :</b></label>
                         <div class="col-md-7 col-sm-7">
-                            <table  class="table table-bordered">
+                            <table class="table table-bordered">
                                 <tr>
                                     <th>งบรายจ่าย / หมวดรายจ่าย</th>
                                     <th>ไตรมาส1</th>
@@ -261,13 +264,13 @@
                                 @foreach ($data['costQuarter'] as $item)
                                     <tr>
                                         <td>
-                                            {{$item->exp->name}} <br>
-                                            {{$item->cost->name}}
+                                            {{ $item->exp->name }} <br>
+                                            {{ $item->cost->name }}
                                         </td>
-                                        <td><br>{{$item->costQu1}}</td>
-                                        <td><br>{{$item->costQu2}}</td>
-                                        <td><br>{{$item->costQu3}}</td>
-                                        <td><br>{{$item->costQu4}}</td>
+                                        <td><br>{{ $item->costQu1 }}</td>
+                                        <td><br>{{ $item->costQu2 }}</td>
+                                        <td><br>{{ $item->costQu3 }}</td>
+                                        <td><br>{{ $item->costQu4 }}</td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -296,20 +299,21 @@
                     </div>
 
                     @if (count($data['file']) > 0)
-                    <div class="row field item form-group ">
-                        <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
-                                :</b></label>
-                        <div class="col-md-7 col-sm-7">
-                            @foreach ($data['file'] as $item)
-                               <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name }}</a> <br>
-                            @endforeach
+                        <div class="row field item form-group ">
+                            <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
+                                    :</b></label>
+                            <div class="col-md-7 col-sm-7">
+                                @foreach ($data['file'] as $item)
+                                    <a href="{{ asset('files/' . $item->name) }}"
+                                        target="_blank">{{ $item->name }}</a> <br>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     @endif
-                    
+
                 </form>
-                
-                
+
+
             </div>
         </div>
         {{-- <table class="table table-bordered">

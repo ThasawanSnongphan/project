@@ -17,10 +17,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -41,7 +41,7 @@ class HomeController extends Controller
     {
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
+        $project=Projects::with('status')->whereIn('statusID',[4,8,9,10,11])->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();

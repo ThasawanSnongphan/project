@@ -14,19 +14,23 @@
                         <h4>โครงการทั้งหมด</h4>
                     </div>
                     <div class="card-body text-secondary">
-                        <h5 class="card-title">{{ $data['projectAll'] }}</h5>
+                        <h5 class="card-title">{{ $data['projectcount'] }}</h5>
                         <hr>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา</p>
-                            <p class="card-text" style="text-align: right"></p>
+                            <p class="card-text" style="text-align: right">{{$data['projectEvaComplete']}}</p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
-                            <p class="card-text" style="text-align: right"></p>
+                            <p class="card-text" style="text-align: right"> {{$data['projectEvaDeadline']}} </p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text" style="text-align: left">ปิดโครงการ/ขอเลื่อน</p>
+                            <p class="card-text" style="text-align: right"> {{$data['projectEvaPostponed']}} </p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
-                            <p class="card-text" style="text-align: right"></p>
+                            <p class="card-text" style="text-align: right"> {{$data['projectEvaCancle']}} </p>
                         </div>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
@@ -47,7 +51,7 @@
                         <hr>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา</p>
-                            <p class="card-text" style="text-align: right">{{$data['projectEvaluation'] }}</p>
+                            {{-- <p class="card-text" style="text-align: right">{{$data['projectEvaluation'] }}</p> --}}
                         </div>
                         <div class="d-flex justify-content-between">
                             <p class="card-text" style="text-align: left">ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
@@ -87,11 +91,13 @@
                             <p class="card-text" style="text-align: right"></p>
                         </div>
                         <div class="d-flex justify-content-between">
+                            {{-- นับจากที่กรอกรายงานไตรมาส --}}
                             <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
                             <p class="card-text" style="text-align: right"></p>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
+                            {{-- นับจากรายงานรายไตรมาส --}}
+                            <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p> 
                             <p class="card-text" style="text-align: right"></p>
                         </div>
                     </div>

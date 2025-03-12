@@ -175,14 +175,25 @@
                                         <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
+                                                <li><a href="/PlanningAnalystProjectAll">รายชื่อโครงการทั้งหมด</a></li>
 
-                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการ</a></li>
-                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผน</a>
+                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการในแผนรอพิจารณา</a></li>
+                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผนรอพิจารณา</a>
                                                 </li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a
                                                         href="/PlanningAnalystProjectCancel">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a>
                                                 </li>
+
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="nav side-menu">
+                                        <li><a><i class="fa fa-home"></i> รายงาน <span
+                                                    class="fa fa-chevron-down"></span></a>
+                                            <ul class="nav child_menu">
+                                               
 
 
                                             </ul>
@@ -219,6 +230,7 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                    
                                 @endif
                             @endif
                         </div>
@@ -300,7 +312,7 @@
                                     </li>
                                 @endguest
 
-                                <li role="presentation" class="nav-item dropdown open">
+                                {{-- <li role="presentation" class="nav-item dropdown open">
                                     <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1"
                                         data-toggle="dropdown" aria-expanded="false">
                                         <i class="fa fa-envelope-o"></i>
@@ -377,7 +389,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </nav>

@@ -38,7 +38,7 @@
                         @csrf
                         <h1>Login Form</h1>
                         <div>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="Email"
+                            <input type="text" id="username" name="username" class="form-control" placeholder="username"
                                 required />
                             {{-- @error('email')
                                 <div>
