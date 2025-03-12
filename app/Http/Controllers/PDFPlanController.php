@@ -68,7 +68,7 @@ class PDFPlanController extends Controller
 
         $stylesheet = "
         <style>
-            table { 
+            table {
                 border-collapse: collapse;
                 width: 100%;
                 margin-bottom: 5px;
@@ -148,19 +148,19 @@ class PDFPlanController extends Controller
         $KPI_main2_levels = KPIMain2Level::all();
 
 
-        $plans = UniPlan::all();
-        $funds = Funds::all();
-        $badget_types = BadgetType::all();
-        $expense_badgets = ExpenseBadgets::all();
-        $cost_quarters = CostQuarters::all();
-        $cost_types = CostTypes::all();
+        // $plans = UniPlan::all();
+        // $funds = Funds::all();
+        // $badget_types = BadgetType::all();
+        // $expense_badgets = ExpenseBadgets::all();
+        // $cost_quarters = CostQuarters::all();
+        // $cost_types = CostTypes::all();
 
-        $badget_types = BadgetType::all();
+        // $badget_types = BadgetType::all();
 
         $countKPI_pros = CountKPIProjects::all();
-        $project_integrats = ProjectIntegrat::all();
-        $project_charecs = ProjectCharec::all();
-        $objects = Objectives::all();
+        // $project_integrats = ProjectIntegrat::all();
+        // $project_charecs = ProjectCharec::all();
+        // $objects = Objectives::all();
 
         $currentYear = date('Y');
 
@@ -211,7 +211,7 @@ class PDFPlanController extends Controller
                     <th>ส.ค.</th>
                     <th>ก.ย.</th>
                 </tr>
-            
+
         ';
 
         // แปลงข้อมูลเป็นอาร์เรย์
@@ -282,17 +282,17 @@ class PDFPlanController extends Controller
                                     if ($project['yearID'] == $yearID) {
                                         foreach ($data_strategic_maps as $map) {
                                             if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
-                                                // ✅ ดึง badgetTotal
+                                                //  ดึง badgetTotal
                                                 $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
 
-                                                // ✅ ลูปดึงข้อมูลจาก k_p_i_projects
+                                                //  ลูปดึงข้อมูลจาก k_p_i_projects
                                                 $kpiNames = [];
                                                 $kpiTargets = [];
                                                 foreach ($data_kpi_projects as $kpi) {
                                                     if ($kpi['proID'] == $project['proID']) {
                                                         $kpiNames[] = '- ' . ($kpi['name'] ?? '-');
 
-                                                        // ✅ หาค่า name จาก count_k_p_i_projects
+                                                        //  หาค่า name จาก count_k_p_i_projects
                                                         $targetLabel = "";
                                                         foreach ($data_count_kpi_projects as $countKpi) {
                                                             if ($countKpi['countKPIProID'] == $kpi['countKPIProID']) {
@@ -301,7 +301,7 @@ class PDFPlanController extends Controller
                                                             }
                                                         }
 
-                                                        // ✅ คำนวณค่าเป้าหมายโครงการ
+                                                        //  คำนวณค่าเป้าหมายโครงการ
                                                         $targetValue = "";
                                                         if (!empty($targetLabel) && isset($kpi['target'])) {
                                                             $targetValue = "$targetLabel " . number_format($kpi['target'], 2);
@@ -310,12 +310,12 @@ class PDFPlanController extends Controller
                                                     }
                                                 }
 
-                                                // ✅ ดึงข้อมูลจาก steps
+                                                //  ดึงข้อมูลจาก steps
                                                 $startMonth = null;
                                                 $endMonth = null;
                                                 foreach ($data_steps as $step) {
                                                     if ($step['proID'] == $project['proID']) {
-                                                        // ✅ ใช้ปี ค.ศ. โดยตรง
+                                                        //  ใช้ปี ค.ศ. โดยตรง
                                                         $startDate = new DateTime($step['start']);
                                                         $endDate = new DateTime($step['end']);
 
@@ -327,12 +327,12 @@ class PDFPlanController extends Controller
                                                     }
                                                 }
 
-                                                // ✅ รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
+                                                //  รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
                                                 $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
                                                 $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
 
 
-                                                // ✅ สร้างแถวของโปรเจค
+                                                //  สร้างแถวของโปรเจค
                                                 $projectRows[] = [
                                                     'details' => $projectDetails,
                                                     'target' => $projectTargetDetails,
@@ -356,12 +356,12 @@ class PDFPlanController extends Controller
                                     }
                                 }
 
-                                // ✅ ใช้ rowspan ให้กลยุทธ์แค่แถวแรก
+                                //  ใช้ rowspan ให้กลยุทธ์แค่แถวแรก
                                 $firstRow = true;
                                 foreach ($projectRows as $projectData) {
                                     $htmlContent .= "<tr>";
 
-                                    // ✅ แสดงกลยุทธ์แค่แถวแรกเท่านั้น
+                                    //  แสดงกลยุทธ์แค่แถวแรกเท่านั้น
                                     if ($firstRow) {
                                         $htmlContent .= "<td></td><td style='text-align: left; vertical-align: top;'>" . ($tactic['name'] ?? '-') . "</td>";
                                         $firstRow = false;
@@ -369,22 +369,22 @@ class PDFPlanController extends Controller
                                         $htmlContent .= "<td></td><td></td>"; // ช่องว่างเมื่อเป็นแถวที่ 2 ขึ้นไป
                                     }
 
-                                    // ✅ แสดงข้อมูลโครงการและตัวชี้วัด
+                                    //  แสดงข้อมูลโครงการและตัวชี้วัด
                                     $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['details']}</td>";
 
-                                    // ✅ แสดงค่าเป้าหมายโครงการ
+                                    //  แสดงค่าเป้าหมายโครงการ
                                     $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['target']}</td>";
 
-                                    // ✅ ช่องที่ 5 (เว้นว่าง)
+                                    //  ช่องที่ 5 (เว้นว่าง)
                                     $htmlContent .= "<td>-</td>";
 
-                                    // ✅ ช่องที่ 6 badgetTotal
+                                    //  ช่องที่ 6 badgetTotal
                                     $htmlContent .= "<td style='text-align: center; vertical-align: top;'>{$projectData['badgetTotal']}</td>";
 
-                                    // ✅ ช่องที่ 7 (เว้นว่าง)
+                                    //  ช่องที่ 7 (เว้นว่าง)
                                     $htmlContent .= "<td>-</td>";
 
-                                    // ✅ ช่องเดือน ต.ค. - ก.ย.
+                                    //  ช่องเดือน ต.ค. - ก.ย.
                                     for ($i = 0; $i < count($months); $i++) {
                                         $currentMonth = ($i + 10) % 12; // แปลง index เป็นเดือน (ต.ค. = 10)
                                         if ($currentMonth == 0) {
@@ -392,7 +392,7 @@ class PDFPlanController extends Controller
                                         }
                                         $currentYear = $i >= 3 ? $year2 : $year1; // ปี 2024 = index 0-2, ปี 2025 = index 3-11
 
-                                        // ✅ เช็คว่าข้อมูลของ step ครอบคลุมเดือนนี้หรือไม่
+                                        //  เช็คว่าข้อมูลของ step ครอบคลุมเดือนนี้หรือไม่
                                         $highlight = "";
                                         if ($projectData['startYear'] && $projectData['endYear']) {
                                             $stepStart = ($projectData['startYear'] * 12) + $projectData['startMonth']; // แปลงเป็นตัวเลขเดือนทั้งหมด
@@ -411,7 +411,7 @@ class PDFPlanController extends Controller
                                     $htmlContent .= "</tr>";
                                 }
 
-                                // ✅ ถ้าไม่มีโครงการเลย ให้แสดง "-"
+                                //  ถ้าไม่มีโครงการเลย ให้แสดง "-"
                                 if (empty($projectRows)) {
                                     $htmlContent .= "
                                         <tr>
@@ -424,7 +424,7 @@ class PDFPlanController extends Controller
                                             <td>-</td>
                                     ";
 
-                                    // ✅ ช่องเดือน (ต.ค. - ก.ย.)
+                                    //  ช่องเดือน (ต.ค. - ก.ย.)
                                     for ($i = 0; $i < count($months); $i++) {
                                         $htmlContent .= "<td></td>";
                                     }
