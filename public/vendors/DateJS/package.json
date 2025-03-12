@@ -14,7 +14,9 @@
     "grunt-template-jasmine-istanbul": "^0.3.0",
     "jasmine-node": "~2.0.0-beta4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "datejs": "file:"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/abritinthebay/datejs.git"

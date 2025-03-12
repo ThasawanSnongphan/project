@@ -30,6 +30,7 @@
     "development"
   ],
   "dependencies": {
+    "cropper": "file:",
     "jquery": ">= 1.9.1"
   },
   "devDependencies": {

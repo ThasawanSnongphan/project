@@ -297,6 +297,15 @@ class ExcelEffectiveController extends Controller
                     $sheet->setCellValue('D' . $row, $KPI_pro->target);
                     $sheet->setCellValue('E' . $row, $KPI_pro->result_eva);
                     $sheet->setCellValue('F' . $row, ''); // เว้นว่าง
+
+                    // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
+                    $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
+                    $sheet->getStyle('B' . $row)->applyFromArray($leftAlignment);  // ใช้การจัดชิดซ้ายสำหรับรายละเอียด
+                    $sheet->getStyle('C' . $row)->applyFromArray($centerAlignment);
+                    $sheet->getStyle('D' . $row)->applyFromArray($rightAlignment);
+                    $sheet->getStyle('E' . $row)->applyFromArray($rightAlignment);
+                    $sheet->getStyle('F' . $row)->applyFromArray($centerAlignment);
+
                     $counter++;
                     $row++;
                 }
