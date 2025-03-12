@@ -189,8 +189,8 @@ class PDFProjectController extends Controller
                             $departments[] = $user->department_name;
                         }
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
-                        $responsibleNames[] = $user->firstname_th . ' ' .  $user->lastname_th;
-                        $names[] = $user->firstname_th . ' ' .  $user->lastname_th;
+                        $responsibleNames[] = $user->displayname;
+                        $names[] = $user->displayname;
                         // dd($names);
                     }
                 }
@@ -321,7 +321,7 @@ class PDFProjectController extends Controller
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <b>5. การบูรณาการโครงการ </b> <br> 
+                <b>5. การบูรณาการโครงการ </b> <br>
         ';
 
         foreach ($project_integrats as $project_integrat) {
@@ -338,9 +338,9 @@ class PDFProjectController extends Controller
 
         $htmlContent .= '</div>';
 
-        $htmlContent .= ' 
+        $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <b>6. หลักการและเหตุผลของโครงการ</b> <br> 
+                <b>6. หลักการและเหตุผลของโครงการ</b> <br>
                 <div style="text-align: justify; text-indent: 2em;">
                     ' . nl2br($projects->princiDetail) . ' <br>
                 </div>
@@ -350,7 +350,7 @@ class PDFProjectController extends Controller
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <b>7. วัตถุประสงค์ </b> <br> 
+                <b>7. วัตถุประสงค์ </b> <br>
         ';
 
 
@@ -377,7 +377,7 @@ class PDFProjectController extends Controller
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
-            // ดึงข้อมูลจากตารางหน่วยนับ 
+            // ดึงข้อมูลจากตารางหน่วยนับ
             $countKPI_pros = DB::table('count_k_p_i_projects')->get();
 
             // เริ่มสร้าง HTML ตาราง
@@ -441,7 +441,7 @@ class PDFProjectController extends Controller
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
-                <b>10. ขั้นตอนการดำเนินงาน : </b> <br> 
+                <b>10. ขั้นตอนการดำเนินงาน : </b> <br>
         ';
 
         $pro_steps = DB::table('steps')->where('proID', $id)->get();
@@ -797,13 +797,13 @@ class PDFProjectController extends Controller
             <div style="page-break-inside: avoid;">
                 <b>14. ประมาณการงบประมาณที่ใช้ : </b> ' . number_format($sumTotal, 2) . ' บาท    (' . $sumTotalInWords . ')<br>
             </div>
-        
+
         ';
 
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>15. ประโยชน์ที่คาดว่าจะได้รับ </b><br>
-            
+
         ';
 
 
@@ -838,7 +838,7 @@ class PDFProjectController extends Controller
                     ลงชื่อ ................................................. <br>
                     ( ' . htmlspecialchars($signatureName) . ' ) <br>
                     ผู้รับผิดชอบโครงการ <br>
-                    วันที่ ........../......................./.......... 
+                    วันที่ ........../......................./..........
                 </div>
             </div>
         ';
@@ -847,7 +847,7 @@ class PDFProjectController extends Controller
 
 
 
-        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
+        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS
         $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
 
         return $mpdf->Output('' . $projects->name . '.pdf', 'I');       // ส่งไฟล์ PDF กลับไปให้ผู้ใช้
