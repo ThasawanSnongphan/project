@@ -88,6 +88,7 @@ Route::post('/logout', function () {
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
 Route::get('/news', [HomeController::class, 'news']);
 Route::get('/Performance', [PerformanceController::class,'index']);
+Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');
 
 Route::get('/countKPI', [CountKPIProject::class,'index']);
 Route::post('/countKPIInsert',[CountKPIProject::class,'insert']);
