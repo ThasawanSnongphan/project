@@ -63,6 +63,7 @@ class ProjectController extends Controller
         $proID = $report->pluck('proID');
 
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+       
         // dd($evaluation);
         // dd($proID);
         return view('Project.index',compact('users','project','status','year','projectYear','report','proID','evaluation'));

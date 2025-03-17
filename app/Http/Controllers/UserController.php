@@ -52,7 +52,8 @@ class UserController extends Controller
         $users->username = $request->input('username');
         $users->email = $request->input('email');
         $users->password = Hash::make($request->input('password'));
-
+        $users->displayname = $request->input('displayname');
+        $users->person_key = $request->input('person_key');
         // $users->account_type = $request->input('account_type');
         // $users->full_prefix_name_th = $request->input('full_prefix_name_th');
         // $users->firstname_th = $request->input('firstname_th');
@@ -103,7 +104,9 @@ class UserController extends Controller
         $users=[
             'username'=>$request->username,
                 'email'=>$request->email,
-                'password'=>Hash::make($request->input('password')),
+                'displayname' =>$request->displayname,
+                'person_key' => $request->person_key,
+                // 'password'=>Hash::make($request->input('password')),
                 // 'account_type'=>$request->account_type,
                 // 'full_prefix_name_th'=>$request->full_prefix_name_th,
                 // 'firstname_th'=>$request->firstname_th,
@@ -113,20 +116,20 @@ class UserController extends Controller
                 // 'personnel_type_id'=>$request->personnel_type_id,
                 // 'personnel_type_name'=>$request->personnel_type_name,
                 // 'position_id'=>$request->position_id,
-                // 'position_name'=>$request->position_name,
+                'position_name'=>$request->position_name,
                 // 'position_type_id'=>$request->position_type_id,
                 // 'position_type_th'=>$request->position_type_th,
                 // 'faculty_code'=>$request->faculty_code,
-                // 'faculty_name'=>$request->faculty_name,
+                'faculty_name'=>$request->faculty_name,
                 // 'department_code'=>$request->department_code,
-                // 'department_name'=>$request->department_name,
-                // 'Executive'=>$request->has('Executive') ? true : false,
-                // 'Planning_Analyst'=>$request->has('Planning_Analyst') ? true : false,
-                // 'Department_head'=>$request->has('Department_head') ? true : false,
-                // 'Supply_Analyst'=>$request->has('Supply_Analyst') ? true : false,
-                // 'Responsible'=>$request->has('Responsible') ? true : false,
-                // 'Admin'=>$request->has('Admin') ? true : false,
-                // 'flag'=>$request->has('flag') ? true : false
+                'department_name'=>$request->department_name,
+                'Executive'=>$request->has('Executive') ? true : false,
+                'Planning_Analyst'=>$request->has('Planning_Analyst') ? true : false,
+                'Department_head'=>$request->has('Department_head') ? true : false,
+                'Supply_Analyst'=>$request->has('Supply_Analyst') ? true : false,
+                'Responsible'=>$request->has('Responsible') ? true : false,
+                'Admin'=>$request->has('Admin') ? true : false,
+                'flag'=>$request->has('flag') ? true : false
         ];
         DB::table('users')->where('userID',$id)->update($users);
         return redirect('/users'); 

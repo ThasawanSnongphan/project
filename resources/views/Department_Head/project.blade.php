@@ -59,10 +59,9 @@
                     <td>
                         @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            <a href=""><i class="fa fa-pencil btn btn-primary secondary"> ดูรายงาน</i> </a>
                         @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
+                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled"> ดูรายงาน</i> </a>
                         @endif
                     </td>
                     <td>
@@ -75,7 +74,7 @@
                                    </a>
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        ดูรายงาน</i>{{ $item->proID }} </a>
+                                        ดูรายงาน</i></a>
                             @endif
                         @else
                             <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
@@ -85,19 +84,17 @@
                     <td>
                         @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            <a href=""><i class="fa fa-pencil btn btn-secondary"> ดูรายงาน</i> </a>
                         @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
+                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled"> ดูรายงาน</i> </a>
                         @endif
                     </td>
                     <td>
                         @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                            <a href=""><i class="fa fa-pencil btn btn-secondary"> ดูรายงาน</i> </a>
                         @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    เขียน</i></a>
+                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled"> ดูรายงาน</i> </a>
                         @endif
                     </td>
                 @endif

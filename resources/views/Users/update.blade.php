@@ -58,22 +58,34 @@
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" name="email" id="email" class='email' required="required" type="email" value="{{$users->email}}" /></div>
                                     </div>
+
                                     <div class="field item form-group">
+                                        <label for="displayname" class="col-form-label col-md-3 col-sm-3  label-align">email<span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" name="displayname" id="displayname"  required="required" type="text" value="{{$users->displayname}}" /></div>
+                                    </div>
+                                    <div class="field item form-group">
+                                        <label for="person_key" class="col-form-label col-md-3 col-sm-3  label-align">email<span class="required">*</span></label>
+                                        <div class="col-md-6 col-sm-6">
+                                            <input class="form-control" name="person_key" id="person_key"  required="required" type="text" value="{{$users->person_key}}" /></div>
+                                    </div>
+                                    {{-- <div class="field item form-group">
                                         <label for="password1" class="col-form-label col-md-3 col-sm-3  label-align">Password<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="password" id="password1" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}"  title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character" required value="{{$users->password}}" />
                                             
                                             <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()" >
                                                 <i id="slash" class="fa fa-eye-slash"></i> 
-                                                {{-- <i id="eye" class="fa fa-eye"></i> --}}
+                                                <i id="eye" class="fa fa-eye"></i>
                                            </span>
                                         </div>
-                                    </div>
-                                    <div class="field item form-group">
+                                    </div> --}}
+                                    {{-- <div class="field item form-group">
                                         <label for="password2" class="col-form-label col-md-3 col-sm-3  label-align">Repeat password<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
                                             <input class="form-control" type="password" name="password2" id="password2" data-validate-linked='password' required='required' value="{{$users->password}}" /></div>
-                                    </div>
+                                    </div> --}}
+                                    
                                     {{-- <div class="field item form-group">
                                         <label for="account_type" class="col-form-label col-md-3 col-sm-3  label-align">account_type<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
