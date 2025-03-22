@@ -37,6 +37,7 @@ use App\Models\UsersMapProject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use Mpdf\Finance\Finance;
 use Mpdf\Mpdf;
 use DateTime;
 use Carbon\Carbon;
@@ -253,7 +254,7 @@ class PDFProjectController extends Controller
                 $planDetails = [];
                 foreach ($strategic2_levels as $strategic2_level) {
                     if ($strategic2_level->stra2LVID == $strategic2_level_map->stra2LVID) {
-                        $planDetails[] = '<b>'. $strategic2_level->name . '</b>';
+                        $planDetails[] = '<b>' . $strategic2_level->name . '</b>';
                         break;
                     }
                 }
@@ -298,7 +299,7 @@ class PDFProjectController extends Controller
             $htmlContent .= '<br>';
             $index = 1;
             foreach ($plans as $plan) {
-                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' '.'</b>' . $plan . '<br>';
+                $htmlContent .= '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.' . $index . ' ' . '</b>' . $plan . '<br>';
                 $index++;
             }
         }
@@ -373,7 +374,7 @@ class PDFProjectController extends Controller
             <div style="page-break-inside: avoid;">
             <b>8. ตัวชี้วัดความสำเร็จระดับโครงการ (Output/Outcome) และ ค่าเป้าหมาย (ระบุหน่วยนับ)</b> <br>';
 
-            if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
+        if (DB::table('k_p_i_projects')->where('proID', $id)->exists()) {
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
@@ -717,63 +718,115 @@ class PDFProjectController extends Controller
             }
         }
 
-        function numberToThai($number)
-        {
+
+        // dd($totalCost);
+        // function numberToThai($number)
+        // {
+        //     $thaiNumbers = [
+        //         0 => 'ศูนย์',
+        //         1 => 'หนึ่ง',
+        //         2 => 'สอง',
+        //         3 => 'สาม',
+        //         4 => 'สี่',
+        //         5 => 'ห้า',
+        //         6 => 'หก',
+        //         7 => 'เจ็ด',
+        //         8 => 'แปด',
+        //         9 => 'เก้า',
+        //         10 => 'สิบ',
+        //         20 => 'ยี่สิบ',
+        //         30 => 'สามสิบ',
+        //         40 => 'สี่สิบ',
+        //         50 => 'ห้าสิบ',
+        //         60 => 'หกสิบ',
+        //         70 => 'เจ็ดสิบ',
+        //         80 => 'แปดสิบ',
+        //         90 => 'เก้าสิบ',
+        //         100 => 'ร้อย',
+        //         1000 => 'พัน',
+        //         10000 => 'หมื่น',
+        //         100000 => 'แสน',
+        //         1000000 => 'ล้าน'
+        //     ];
+
+        //     if ($number == 0) {
+        //         return $thaiNumbers[0];
+        //     }
+
+        //     $str = '';
+        //     $number = (int)$number;
+        //     $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
+
+        //     foreach ($units as $unit) {
+        //         $num = (int)($number / $unit);
+        //         $number %= $unit;
+
+        //         if ($num > 0) {
+        //             if ($unit >= 100 && $num == 1) {
+        //                 $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
+        //             } elseif ($unit >= 10 && $num == 2) {
+        //                 $str .= 'ยี่' . $thaiNumbers[$unit];
+        //             } else {
+        //                 $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
+        //             }
+        //         }
+        //     }
+
+        //     return $str . 'บาทถ้วน';
+        // }
+
+        function bahtText($number) {
             $thaiNumbers = [
-                0 => 'ศูนย์',
-                1 => 'หนึ่ง',
-                2 => 'สอง',
-                3 => 'สาม',
-                4 => 'สี่',
-                5 => 'ห้า',
-                6 => 'หก',
-                7 => 'เจ็ด',
-                8 => 'แปด',
-                9 => 'เก้า',
-                10 => 'สิบ',
-                20 => 'ยี่สิบ',
-                30 => 'สามสิบ',
-                40 => 'สี่สิบ',
-                50 => 'ห้าสิบ',
-                60 => 'หกสิบ',
-                70 => 'เจ็ดสิบ',
-                80 => 'แปดสิบ',
-                90 => 'เก้าสิบ',
-                100 => 'ร้อย',
-                1000 => 'พัน',
-                10000 => 'หมื่น',
-                100000 => 'แสน',
-                1000000 => 'ล้าน'
+                0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่',
+                5 => 'ห้า', 6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า'
             ];
 
-            if ($number == 0) {
-                return $thaiNumbers[0];
-            }
+            $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน', 'สิบล้าน', 'ร้อยล้าน', 'พันล้าน'];
+            $numberStr = strval((int)$number);
+            $length = strlen($numberStr);
+            $result = '';
+            $isMillion = false;
 
-            $str = '';
-            $number = (int)$number;
-            $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
+            for ($i = 0; $i < $length; $i++) {
+                $digit = (int)$numberStr[$i];
+                $position = $length - $i - 1;
 
-            foreach ($units as $unit) {
-                $num = (int)($number / $unit);
-                $number %= $unit;
+                if ($digit == 0) continue;
 
-                if ($num > 0) {
-                    if ($unit >= 100 && $num == 1) {
-                        $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
-                    } elseif ($unit >= 10 && $num == 2) {
-                        $str .= 'ยี่' . $thaiNumbers[$unit];
+                // ตรวจสอบหลักล้าน (ไม่ให้ใส่ 'ล้าน' ซ้ำ)
+                if ($position == 6) {
+                    if ($digit == 1 && $result == '') {
+                        $result .= 'หนึ่งล้าน';
                     } else {
-                        $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
+                        $result .= $thaiNumbers[$digit] . 'ล้าน';
                     }
+                    $isMillion = true;
+                    continue;
+                }
+
+                if ($position == 1 && $digit == 1) {
+                    $result .= 'สิบ';
+                } elseif ($position == 1 && $digit == 2) {
+                    $result .= 'ยี่สิบ';
+                } elseif ($position == 0 && $digit == 1 && $length > 1) {
+                    $result .= 'เอ็ด';
+                } else {
+                    $result .= $thaiNumbers[$digit] . $unitNames[$position];
                 }
             }
 
-            return $str . 'บาทถ้วน';
+            return $result . 'บาทถ้วน';
         }
 
 
-        $sumTotalInWords = numberToThai($sumTotal);
+
+
+        // $sumTotalInWords = numberToThai($sumTotal);
+        $sumTotalInWords = bahtText($sumTotal);
+
+
+        // เรียกใช้ Finance::bahtText() เพื่อแปลงเป็นตัวอักษรภาษาไทย
+        // $thaiText = Finance::bahtText($number);
 
         // รวมเงินงบประมาณทั้งหมด
         $htmlContent .= '
