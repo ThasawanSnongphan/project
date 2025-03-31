@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProjectEvaluation;
 use App\Models\Projects;
+use App\Models\Year;
 use Illuminate\Support\Facades\DB;
 
 class PerformanceController extends Controller
 {
-    function index(){
+    function index(Request $request){
+
+        $data['yearAll'] = Year::all();
+        $data['selectYearID'] = $request->input('yearID'); //yearID
+        $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         //โครงการทั้งหมด
-        $data['projectAll'] = Projects::with('projectType')->whereBetween('statusID',[4,11])->get(); 
+        $data['projectAll'] = Projects::with('projectType')->where('yearID',$data['selectYearID'])->whereBetween('statusID',[4,11])->get(); 
         $data['projectCountAll']  = $data['projectAll']->count(); //นับโครงการทั้งหมด
         $data['projectEvaCompleteAll'] = $data['projectAll']->where('statusID',8)->count(); //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
         $data['projectEvaDeadlineAll'] = $data['projectAll']->where('statusID',9)->count(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา

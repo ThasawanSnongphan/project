@@ -17,11 +17,6 @@
                 @endforeach
             </select>
         </div>
-        {{-- <div class="ml-auto">
-
-            <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
-        </div> --}}
-
     </div>
 
     <table id="example" class="display">
