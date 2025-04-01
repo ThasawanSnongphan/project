@@ -118,7 +118,7 @@ class ExcelEffectiveController extends Controller
 
         // สร้าง Spreadsheet
         $spreadsheet = new Spreadsheet();
-        $spreadsheet->getDefaultStyle()->getFont()->setName('TH Sarabun New')->setSize(16);
+        $spreadsheet->getDefaultStyle()->getFont()->setName('TH Sarabun New')->setSize(14);
         $sheet = $spreadsheet->getActiveSheet();
 
         if ($projects && $projects->yearID) {
@@ -170,8 +170,8 @@ class ExcelEffectiveController extends Controller
         // ใส่หัวตาราง
         $sheet->setCellValue('A2', 'ลำดับ');
         $sheet->setCellValue('B2', 'วัตถุประสงค์');
-        $sheet->setCellValue('E2', 'สถานะ');
-        $sheet->setCellValue('F2', 'ข้อ');
+        $sheet->setCellValue('E2', 'บรรลุ / ไม่บรรลุ');
+        $sheet->setCellValue('F2', 'หน่วย');
         $sheet->mergeCells(range: 'B2:D2');
 
         // กำหนดสไตล์ให้หัวตาราง
@@ -213,7 +213,7 @@ class ExcelEffectiveController extends Controller
 
             // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
             $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
-            $sheet->getStyle('B' . $row)->applyFromArray($leftAlignment);  // ใช้การจัดชิดซ้ายสำหรับรายละเอียด
+            $sheet->getStyle('B' . $row)->applyFromArray($leftAlignment);
             $sheet->getStyle('E' . $row)->applyFromArray($centerAlignment);
             $sheet->getStyle('F' . $row)->applyFromArray($centerAlignment);
 
@@ -221,11 +221,14 @@ class ExcelEffectiveController extends Controller
             $row++;
         }
 
+        $totalObj = count($dataObjectives['วัตถุประสงค์']);
+        $achievedObj = array_count_values($dataObjectives['สถานะ'])['บรรลุ'];
+        // dd($achievedObj);
         // แสดงผลรวมข้อมูล
         $sheet->setCellValue('A' . $row, 'รวมวัตถุประสงค์ทั้งหมด');
         $sheet->mergeCells('A' . $row . ':D' . $row); // รวมเซลล์ A และ B
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
-        $sheet->setCellValue('E' . $row, count($dataObjectives['วัตถุประสงค์']));
+        $sheet->setCellValue('E' . $row, $totalObj);
         $sheet->setCellValue('F' . $row, 'ข้อ');
         $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray($styleArray); // ปรับให้แถวผลรวมอยู่ตรงกลาง
         $row++;
@@ -233,15 +236,19 @@ class ExcelEffectiveController extends Controller
         $sheet->setCellValue('A' . $row, 'รวมวัตถุประสงค์ที่บรรลุ');
         $sheet->mergeCells('A' . $row . ':D' . $row); // รวมเซลล์ A และ B
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
-        $sheet->setCellValue('E' . $row, array_count_values($dataObjectives['สถานะ'])['บรรลุ']);
+        $sheet->setCellValue('E' . $row, $achievedObj);
         $sheet->setCellValue('F' . $row, 'ข้อ');
         $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray($styleArray); // ปรับให้แถวผลรวมอยู่ตรงกลาง
         $row++;
 
+        $statuses = array_count_values($dataObjectives['สถานะ']);
+        $notAchievedCount = isset($statuses['ไม่บรรลุ']) ? $statuses['ไม่บรรลุ'] : 0; // กำหนดค่าเป็น 0 หากคีย์ไม่พบ
+
         $sheet->setCellValue('A' . $row, 'รวมวัตถุประสงค์ที่ไม่บรรลุ');
         $sheet->mergeCells('A' . $row . ':D' . $row); // รวมเซลล์ A และ B
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
-        $sheet->setCellValue('E' . $row, array_count_values($dataObjectives['สถานะ'])['ไม่บรรลุ']);
+        $sheet->setCellValue('E' . $row, $notAchievedCount);
+        // $sheet->setCellValue('E' . $row, array_count_values($dataObjectives['สถานะ'])['ไม่บรรลุ']);
         $sheet->setCellValue('F' . $row, 'ข้อ');
         $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray($styleArray); // ปรับให้แถวผลรวมอยู่ตรงกลาง
         $row++;
@@ -257,8 +264,8 @@ class ExcelEffectiveController extends Controller
         $sheet->setCellValue('A' . $row, 'ลำดับ');
         $sheet->setCellValue('B' . $row, 'ตัวชี้วัดโครงการ');
         $sheet->setCellValue('C' . $row, 'หน่วยนับ');
-        $sheet->setCellValue('D' . $row, 'ค่าเป้าหมาย');
-        $sheet->setCellValue('E' . $row, 'ผลค่าเป้าหมายที่ได้');
+        $sheet->setCellValue('D' . $row, 'ค่าที่ได้');
+        $sheet->setCellValue('E' . $row, 'ผลค่าเป้าหมาย');
         $sheet->setCellValue('F' . $row, 'รวม');
 
         // ใช้สไตล์ที่กำหนดให้กับหัวตาราง (A, B, C, D, E, F)
@@ -282,13 +289,20 @@ class ExcelEffectiveController extends Controller
                 if ($KPI_pro->countKPIProID == $countKPI_pro->countKPIProID) {
                     // นับจำนวน KPI ทั้งหมด
                     $totalKPI++;
+                    // $total = $KPI_pro->target / $KPI_pro->result_eva;
+                    // $scoreObj = $totalObj / $achievedObj;
+                    // $scoreKPI = $totalKPI / $achievedKPI;
 
-                    // เช็คว่า ค่าเป้าหมาย (D) มากกว่าผลลัพธ์ (E) หรือไม่
-                    if ($KPI_pro->target <= $KPI_pro->result_eva) {
+                    $total = ($KPI_pro->result_eva != 0) ? ($KPI_pro->target / $KPI_pro->result_eva) : 0;
+
+
+                    if ($total >= 1) {
                         $achievedKPI++; // ถ้าบรรลุเป้าหมาย
                     } else {
                         $notAchievedKPI++; // ถ้าไม่บรรลุเป้าหมาย
                     }
+
+
 
                     // เพิ่มข้อมูลลงแถว
                     $sheet->setCellValue('A' . $row, $counter);
@@ -296,11 +310,11 @@ class ExcelEffectiveController extends Controller
                     $sheet->setCellValue('C' . $row, $countKPI_pro->name);
                     $sheet->setCellValue('D' . $row, $KPI_pro->target);
                     $sheet->setCellValue('E' . $row, $KPI_pro->result_eva);
-                    $sheet->setCellValue('F' . $row, ''); // เว้นว่าง
+                    $sheet->setCellValue('F' . $row, $total);
 
                     // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
                     $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
-                    $sheet->getStyle('B' . $row)->applyFromArray($leftAlignment);  // ใช้การจัดชิดซ้ายสำหรับรายละเอียด
+                    $sheet->getStyle('B' . $row)->applyFromArray($leftAlignment);
                     $sheet->getStyle('C' . $row)->applyFromArray($centerAlignment);
                     $sheet->getStyle('D' . $row)->applyFromArray($rightAlignment);
                     $sheet->getStyle('E' . $row)->applyFromArray($rightAlignment);
@@ -333,9 +347,14 @@ class ExcelEffectiveController extends Controller
         $sheet->setCellValue("F$row", "ตัวชี้วัด");
         $sheet->getStyle('A' . $row . ':F' . $row)->applyFromArray($styleArray);
 
+
+        $scoreObj = ($achievedObj != 0) ? ($totalObj / $achievedObj) : 0;
+        $scoreKPI = ($achievedKPI != 0) ? ($totalKPI / $achievedKPI) : 0;
+        $pro_effect = (($scoreObj+$scoreKPI)/2) * 100;
+
+
         // ปรับสไตล์ให้กับ 3 แถวสุดท้าย
         $summaryStyle = [
-            'font' => ['bold' => true],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
@@ -363,45 +382,102 @@ class ExcelEffectiveController extends Controller
         }
 
         // เว้น 2 บรรทัดก่อนเริ่มตารางใหม่
-        $row += 2;
+        $row += 1;
 
         // กำหนดข้อมูลใหม่
-        $summaryData = [
-            ['1', 'คะแนนวัตถุประสงค์'],
-            ['2', 'คะแนนตัวชี้วัด'],
-            ['3', 'ประสิทธิผลของโครงการ'],
-        ];
+        // $summaryData = [
+        //     ['1', 'คะแนนวัตถุประสงค์'],
+        //     ['2', 'คะแนนตัวชี้วัด'],
+        //     ['3', 'ประสิทธิผลของโครงการ'],
+        // ];
+
+        // // ใส่หัวข้อของตารางใหม่
+        // $sheet->setCellValue("A{$row}", 'ลำดับ');
+
+        // $sheet->setCellValue("B{$row}", 'รายการ');
+        // $sheet->mergeCells("B{$row}:D{$row}");
+
+        // $sheet->setCellValue("E{$row}", 'ค่าที่ได้');
+
+        // $sheet->setCellValue("F{$row}", 'หน่วย');
+
+        // // ใช้สไตล์หัวข้อ (ใส่สีพื้นหลัง)
+        // $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($styleArray);
+
+        // // ใส่ข้อมูลลงตารางใหม่
+        // $startRow = $row;  // บันทึกแถวแรก
+        // $row++; // ขยับไปแถวถัดไป
+        // foreach ($summaryData as $data) {
+        //     $sheet->setCellValue("A{$row}", $data[0]);
+        //     $sheet->setCellValue("B{$row}", $data[1]);
+        //     $sheet->mergeCells("B{$row}:D{$row}");
+        //     $sheet->setCellValue("E{$row}", $scoreObj);
+        //     $sheet->setCellValue("F{$row}", 'คะแนน');
+
+        //     $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($centerAlignment);
+
+        //     $row++; // ขยับไปแถวต่อไป
+        // }
+
+        // // ใส่สีเฉพาะบรรทัดสุดท้าย
+        // $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($styleArray);
+
+        // // ใส่กรอบรอบทุกเซลล์ของตารางใหม่
+        // $borderStyle = [
+        //     'borders' => [
+        //         'allBorders' => [
+        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        //             'color' => ['argb' => '000000'],
+        //         ],
+        //     ],
+        // ];
+
+        // $sheet->getStyle("A{$startRow}:F" . ($row - 1))->applyFromArray($borderStyle);
+
+        $row += 2;
 
         // ใส่หัวข้อของตารางใหม่
         $sheet->setCellValue("A{$row}", 'ลำดับ');
-
         $sheet->setCellValue("B{$row}", 'รายการ');
         $sheet->mergeCells("B{$row}:D{$row}");
-
         $sheet->setCellValue("E{$row}", 'ค่าที่ได้');
-        $sheet->mergeCells("E{$row}:F{$row}");
+        $sheet->setCellValue("F{$row}", 'หน่วย');
 
         // ใช้สไตล์หัวข้อ (ใส่สีพื้นหลัง)
         $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($styleArray);
 
-        // ใส่ข้อมูลลงตารางใหม่
-        $startRow = $row;  // บันทึกแถวแรก
+        // เริ่มกำหนดข้อมูลแต่ละแถว
         $row++; // ขยับไปแถวถัดไป
-        foreach ($summaryData as $data) {
-            $sheet->setCellValue("A{$row}", $data[0]);
+        $startRow = $row; // บันทึกแถวแรก
 
-            $sheet->setCellValue("B{$row}", $data[1]);
-            $sheet->mergeCells("B{$row}:D{$row}");
+        // แถวที่ 1
+        $sheet->setCellValue("A{$row}", '1');
+        $sheet->setCellValue("B{$row}", 'คะแนนวัตถุประสงค์');
+        $sheet->mergeCells("B{$row}:D{$row}");
+        $sheet->setCellValue("E{$row}", $scoreObj);
+        $sheet->setCellValue("F{$row}", 'คะแนน');
+        $row++; // ขยับไปแถวถัดไป
 
-            $sheet->mergeCells("E{$row}:F{$row}");
-            $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($centerAlignment);
+        // แถวที่ 2
+        $sheet->setCellValue("A{$row}", '2');
+        $sheet->setCellValue("B{$row}", 'คะแนนตัวชี้วัด');
+        $sheet->mergeCells("B{$row}:D{$row}");
+        $sheet->setCellValue("E{$row}", $scoreKPI);
+        $sheet->setCellValue("F{$row}", 'คะแนน');
+        $row++; // ขยับไปแถวถัดไป
 
+        // แถวที่ 3
+        $sheet->setCellValue("A{$row}", '3');
+        $sheet->setCellValue("B{$row}", 'ประสิทธิผลของโครงการ');
+        $sheet->mergeCells("B{$row}:D{$row}");
+        $sheet->setCellValue("E{$row}", $pro_effect);
+        $sheet->setCellValue("F{$row}", 'ร้อยละ');
 
-            $row++; // ขยับไปแถวต่อไป
-        }
+        // ใช้สไตล์ตรงกลาง
+        $sheet->getStyle("A{$startRow}:F{$row}")->applyFromArray($centerAlignment);
 
         // ใส่สีเฉพาะบรรทัดสุดท้าย
-        $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($styleArray);
+        $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($styleArray);
 
         // ใส่กรอบรอบทุกเซลล์ของตารางใหม่
         $borderStyle = [
@@ -413,13 +489,7 @@ class ExcelEffectiveController extends Controller
             ],
         ];
 
-        $sheet->getStyle("A{$startRow}:F" . ($row - 1))->applyFromArray($borderStyle);
-
-
-
-
-
-
+        $sheet->getStyle("A{$startRow}:F{$row}")->applyFromArray($borderStyle);
 
 
 
@@ -433,7 +503,7 @@ class ExcelEffectiveController extends Controller
         $highestColumn = $sheet->getHighestColumn(); // หาคอลัมน์สุดท้ายที่มีข้อมูล
         $range = 'A2:' . $highestColumn . $highestRow; // ครอบคลุมข้อมูลทั้งหมด
 
-        // $sheet->getStyle($range)->applyFromArray($borderStyle); // ใส่เส้นขอบให้กับข้อมูลทั้งหมด
+        $sheet->getStyle($range)->applyFromArray($borderStyle); // ใส่เส้นขอบให้กับข้อมูลทั้งหมด
 
         // ปรับความสูงของแถวทั้งหมด
         foreach (range(1, $sheet->getHighestRow()) as $row) {
