@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProjectEvaluation;
 use App\Models\Projects;
 use App\Models\Year;
+use App\Models\ReportQuarters;
 use Illuminate\Support\Facades\DB;
 
 class PerformanceController extends Controller
@@ -14,6 +15,7 @@ class PerformanceController extends Controller
 
         $data['yearAll'] = Year::all();
         $data['selectYearID'] = $request->input('yearID'); //yearID
+        // dd($data['selectYearID']);
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         //โครงการทั้งหมด
         $data['projectAll'] = Projects::with('projectType')->where('yearID',$data['selectYearID'])->whereBetween('statusID',[4,11])->get(); 
@@ -38,9 +40,15 @@ class PerformanceController extends Controller
         $data['report_quarteInPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDInPlan'])->get();
         $data['report_quarterCountInPlan'] = $data['report_quarteInPlan']->count();
         $data['no_ReportInPlan'] = $data['projectCountInPlan'] -  $data['report_quarterCountInPlan'] ;
-        // $data['proIDInPlan'] = $data['projectInPlanAll']->pluck('proID');
-        // $data['projectEvaluation'] = DB::table('projects')->whereIn('proID',$data['proIDInPlan'])->where('statusID',8)->count();
-        // dd($data['proIDInPlan']);
+        //ดึงข้อมูล
+        $data['ID_report_quarteInPlan'] =json_decode( $request->input('detail_report_quar'),true);
+        $data['detail_report_quarteInPlan'] = ReportQuarters::with(['project','user'])->whereIn('reportID', $data['ID_report_quarteInPlan'])->get();
+        // dd($data['detail_report_quarteInPlan']);
+        
+        
+        // dd($data['test'],$data['t']);
+    
+        
 
         $data['projectOutPlanAll'] = $data['projectAll']->whereBetween('statusID',[4,11])->where('proTypeID',4);//นับโปรเจคนอกแผน
         $data['projectCountOutPlan'] = $data['projectOutPlanAll']->count();
@@ -56,8 +64,11 @@ class PerformanceController extends Controller
         
     }
 
-    function detail(Projects $id){
-        
-        return redirect('/Performance',compact($id));
+    function detail($id){
+        $ids = json_decode($id,true);
+        // dd($ids);
+        $data['reportQuarter'] = DB::table('report_quarters')->whereIn('reportID',$ids)->get();
+        // dd($data['reportQuarter']);
+        return redirect('/Performance')->with('data',$data);
     }
 }
