@@ -67,7 +67,7 @@ Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 Route::get('/wordClosed/{id}', [WordClosedController::class, 'word_gen']);
 
 //Excel
-Route::get('/excelAllResults', [ExcelAllResultsController::class, 'excel_gen']);
+// Route::get('/excelAllResults', [ExcelAllResultsController::class, 'excel_gen']);
 Route::get('/excelPlan', [ExcelPlanController::class, 'excel_gen']);
 Route::get('/excelEffective/{id}', [ExcelEffectiveController::class, 'excel_gen']);
 
