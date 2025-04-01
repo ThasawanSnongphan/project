@@ -96,25 +96,7 @@ class ExcelEffectiveController extends Controller
             ],
         ];
 
-        // กำหนดเส้นขอบในตัวแปร
-        $borderStyle = [
-            'borders' => [
-                'allBorders' => [ // ใส่เส้นขอบรอบด้าน
-                    'borderStyle' => Border::BORDER_THIN, // ใช้เส้นบาง
-                    'color' => ['rgb' => '000000'], // สีดำ
-                ],
-            ],
-        ];
 
-        // กำหนดเส้นขอบเฉพาะด้านล่างของ A1:D1
-        $bottomBorderStyle = [
-            'borders' => [
-                'bottom' => [ // เส้นขอบเฉพาะด้านล่าง
-                    'borderStyle' => Border::BORDER_THIN, // ใช้เส้นบาง
-                    'color' => ['rgb' => '000000'], // สีดำ
-                ],
-            ],
-        ];
 
         // สร้าง Spreadsheet
         $spreadsheet = new Spreadsheet();
@@ -350,25 +332,7 @@ class ExcelEffectiveController extends Controller
 
         $scoreObj = ($achievedObj != 0) ? ($totalObj / $achievedObj) : 0;
         $scoreKPI = ($achievedKPI != 0) ? ($totalKPI / $achievedKPI) : 0;
-        $pro_effect = (($scoreObj+$scoreKPI)/2) * 100;
-
-
-        // ปรับสไตล์ให้กับ 3 แถวสุดท้าย
-        $summaryStyle = [
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
-
-        // ใช้สไตล์กับ 3 แถวสุดท้าย
-        $sheet->getStyle("A" . ($row - 2) . ":F$row")->applyFromArray($summaryStyle);
+        $pro_effect = (($scoreObj + $scoreKPI) / 2) * 100;
 
         // กำหนดช่วงที่ต้องใส่เส้นขอบ
         $borderRows = [
@@ -376,63 +340,11 @@ class ExcelEffectiveController extends Controller
             ['start' => 10, 'end' => 15]
         ];
 
-        // วนลูปใส่เส้นขอบเฉพาะช่วงที่กำหนด
-        foreach ($borderRows as $range) {
-            $sheet->getStyle("A{$range['start']}:F{$range['end']}")->applyFromArray($borderStyle);
-        }
 
         // เว้น 2 บรรทัดก่อนเริ่มตารางใหม่
         $row += 1;
 
-        // กำหนดข้อมูลใหม่
-        // $summaryData = [
-        //     ['1', 'คะแนนวัตถุประสงค์'],
-        //     ['2', 'คะแนนตัวชี้วัด'],
-        //     ['3', 'ประสิทธิผลของโครงการ'],
-        // ];
 
-        // // ใส่หัวข้อของตารางใหม่
-        // $sheet->setCellValue("A{$row}", 'ลำดับ');
-
-        // $sheet->setCellValue("B{$row}", 'รายการ');
-        // $sheet->mergeCells("B{$row}:D{$row}");
-
-        // $sheet->setCellValue("E{$row}", 'ค่าที่ได้');
-
-        // $sheet->setCellValue("F{$row}", 'หน่วย');
-
-        // // ใช้สไตล์หัวข้อ (ใส่สีพื้นหลัง)
-        // $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($styleArray);
-
-        // // ใส่ข้อมูลลงตารางใหม่
-        // $startRow = $row;  // บันทึกแถวแรก
-        // $row++; // ขยับไปแถวถัดไป
-        // foreach ($summaryData as $data) {
-        //     $sheet->setCellValue("A{$row}", $data[0]);
-        //     $sheet->setCellValue("B{$row}", $data[1]);
-        //     $sheet->mergeCells("B{$row}:D{$row}");
-        //     $sheet->setCellValue("E{$row}", $scoreObj);
-        //     $sheet->setCellValue("F{$row}", 'คะแนน');
-
-        //     $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($centerAlignment);
-
-        //     $row++; // ขยับไปแถวต่อไป
-        // }
-
-        // // ใส่สีเฉพาะบรรทัดสุดท้าย
-        // $sheet->getStyle("A" . ($row - 1) . ":F" . ($row - 1))->applyFromArray($styleArray);
-
-        // // ใส่กรอบรอบทุกเซลล์ของตารางใหม่
-        // $borderStyle = [
-        //     'borders' => [
-        //         'allBorders' => [
-        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //             'color' => ['argb' => '000000'],
-        //         ],
-        //     ],
-        // ];
-
-        // $sheet->getStyle("A{$startRow}:F" . ($row - 1))->applyFromArray($borderStyle);
 
         $row += 2;
 
@@ -456,6 +368,12 @@ class ExcelEffectiveController extends Controller
         $sheet->mergeCells("B{$row}:D{$row}");
         $sheet->setCellValue("E{$row}", $scoreObj);
         $sheet->setCellValue("F{$row}", 'คะแนน');
+
+
+        // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
+        $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('E' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('F' . $row)->applyFromArray($centerAlignment);
         $row++; // ขยับไปแถวถัดไป
 
         // แถวที่ 2
@@ -464,6 +382,12 @@ class ExcelEffectiveController extends Controller
         $sheet->mergeCells("B{$row}:D{$row}");
         $sheet->setCellValue("E{$row}", $scoreKPI);
         $sheet->setCellValue("F{$row}", 'คะแนน');
+
+
+        // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
+        $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('E' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('F' . $row)->applyFromArray($centerAlignment);
         $row++; // ขยับไปแถวถัดไป
 
         // แถวที่ 3
@@ -473,43 +397,75 @@ class ExcelEffectiveController extends Controller
         $sheet->setCellValue("E{$row}", $pro_effect);
         $sheet->setCellValue("F{$row}", 'ร้อยละ');
 
-        // ใช้สไตล์ตรงกลาง
-        $sheet->getStyle("A{$startRow}:F{$row}")->applyFromArray($centerAlignment);
-
-        // ใส่สีเฉพาะบรรทัดสุดท้าย
+        // ใช้ตัวแปรจัดตำแหน่งในการปรับเซลล์
+        $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('E' . $row)->applyFromArray($centerAlignment);
+        $sheet->getStyle('F' . $row)->applyFromArray($centerAlignment);
         $sheet->getStyle("A{$row}:F{$row}")->applyFromArray($styleArray);
 
-        // ใส่กรอบรอบทุกเซลล์ของตารางใหม่
-        $borderStyle = [
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    'color' => ['argb' => '000000'],
-                ],
-            ],
-        ];
-
-        $sheet->getStyle("A{$startRow}:F{$row}")->applyFromArray($borderStyle);
-
-
-
-
-
-
-
-
-        // คำนวณขนาดข้อมูลอัตโนมัติ
-        $highestRow = $sheet->getHighestRow(); // หาจำนวนแถวสูงสุดที่มีข้อมูล
-        $highestColumn = $sheet->getHighestColumn(); // หาคอลัมน์สุดท้ายที่มีข้อมูล
-        $range = 'A2:' . $highestColumn . $highestRow; // ครอบคลุมข้อมูลทั้งหมด
-
-        $sheet->getStyle($range)->applyFromArray($borderStyle); // ใส่เส้นขอบให้กับข้อมูลทั้งหมด
 
         // ปรับความสูงของแถวทั้งหมด
         foreach (range(1, $sheet->getHighestRow()) as $row) {
             $sheet->getRowDimension($row)->setRowHeight(25);
         }
 
+        // เพิ่มส่วนนี้ก่อนการสร้างไฟล์ Excel (ก่อน $writer = new Xlsx($spreadsheet);)
+
+        // กำหนดสไตล์ Border
+        $borderStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ];
+
+
+        // กำหนดช่วงแถวที่ต้องการใส่ Border (แถวที่ 2 ถึงแถวสุดท้ายที่มีข้อมูล)
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+
+        // วนลูปทุกแถวตั้งแต่แถวที่ 2 ถึงแถวสุดท้าย
+        for ($row = 2; $row <= $highestRow; $row++) {
+            // วนลูปทุกคอลัมน์ (A ถึง F)
+            for ($col = 'A'; $col <= 'F'; $col++) {
+                $cellCoordinate = $col . $row;
+                // ตรวจสอบว่ามีข้อมูลในเซลล์หรือไม่
+                if ($sheet->getCell($cellCoordinate)->getValue() !== null) {
+                    // ใส่ Border เฉพาะเซลล์ที่มีข้อมูล
+                    $sheet->getStyle($cellCoordinate)->applyFromArray($borderStyle);
+                }
+            }
+        }
+
+        // สำหรับเซลล์ที่รวมกัน (merged cells) ต้องจัดการเป็นกรณีพิเศษ
+        $mergedCells = $sheet->getMergeCells();
+        foreach ($mergedCells as $mergedRange) {
+            // ตรวจสอบว่า merged range อยู่ในแถวที่ 2 ขึ้นไปหรือไม่
+            $rangeStartRow = (int) filter_var($mergedRange, FILTER_SANITIZE_NUMBER_INT);
+            if ($rangeStartRow >= 2) {
+                // ตรวจสอบว่า merged range มีข้อมูลหรือไม่
+                $mergedCellValue = $sheet->getCell(explode(':', $mergedRange)[0])->getValue();
+                if ($mergedCellValue !== null) {
+                    // ใส่ Border ให้กับ merged range
+                    $sheet->getStyle($mergedRange)->applyFromArray($borderStyle);
+                }
+            }
+        }
+
+
+        // กำหนดสไตล์ลบ Border (ใช้สำหรับแถวแรก)
+        $noBorderStyle = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_NONE,
+                ],
+            ],
+        ];
+
+        // ลบ Border ทั้งหมดในแถวแรก (A1-F1)
+        $sheet->getStyle('A1:F1')->applyFromArray($noBorderStyle);
 
         // สร้างไฟล์ Excel
         $writer = new Xlsx($spreadsheet);
