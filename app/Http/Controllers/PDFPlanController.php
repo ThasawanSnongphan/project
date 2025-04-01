@@ -173,6 +173,9 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($headerContent, 2);
 
+        // <th rowspan="2">เงินเหลือจาก มจพ.</th>
+        // <th rowspan="2">เงินรายได้ประจำปี</th>
+        // <th rowspan="2">เงินเหลือจ่ายสนง.</th>
 
         $year1 = 2024;
         $year2 = 2025;
@@ -184,15 +187,13 @@ class PDFPlanController extends Controller
                     <th rowspan="3">กลยุทธ์<br>(หน่วยงาน)</th>
                     <th rowspan="3">โครงการ / ตัวชี้วัดโครงการ</th>
                     <th rowspan="3">ค่าเป้าหมายโครงการ</th>
-                    <th colspan="3">งบประมาณ (บาท)</th>
+                    <th rowspan="3">เงินที่จัดสรร (บาท)</th>
                     <th colspan="12">ระยะเวลาดำเนินงาน</th>
                     <th rowspan="3">ผู้รับผิดชอบ</th>
                 </tr>
 
                 <tr>
-                    <th rowspan="2">เงินเหลือจาก มจพ.</th>
-                    <th rowspan="2">เงินรายได้ประจำปี</th>
-                    <th rowspan="2">เงินเหลือจ่ายสนง.</th>
+
                     <th colspan="3">พ.ศ. ' . $year1 + 543 . '</th>
                     <th colspan="9">พ.ศ. ' . $year2 + 543 . '</th>
                 </tr>
@@ -348,7 +349,7 @@ class PDFPlanController extends Controller
                                             if ($project['proID'] == $user_map['proID']) {
                                                 foreach ($data_users as $user) {
                                                     if ($user_map['userID'] == $user['userID']) {
-                                                        $name = $user['firstname_th'] . ' ' .  $user['lastname_th'];
+                                                        $name = $user['displayname'];
                                                     }
                                                 }
                                             }
@@ -376,13 +377,13 @@ class PDFPlanController extends Controller
                                     $htmlContent .= "<td style='text-align: left; vertical-align: top;'>{$projectData['target']}</td>";
 
                                     //  ช่องที่ 5 (เว้นว่าง)
-                                    $htmlContent .= "<td>-</td>";
+                                    // $htmlContent .= "<td>-</td>";
 
                                     //  ช่องที่ 6 badgetTotal
                                     $htmlContent .= "<td style='text-align: center; vertical-align: top;'>{$projectData['badgetTotal']}</td>";
 
                                     //  ช่องที่ 7 (เว้นว่าง)
-                                    $htmlContent .= "<td>-</td>";
+                                    // $htmlContent .= "<td>-</td>";
 
                                     //  ช่องเดือน ต.ค. - ก.ย.
                                     for ($i = 0; $i < count($months); $i++) {
@@ -419,9 +420,7 @@ class PDFPlanController extends Controller
                                             <td style='text-align: left;'>" . ($tactic['name'] ?? '-') . "</td>
                                             <td></td>
                                             <td></td>
-                                            <td>-</td>
                                             <td></td>
-                                            <td>-</td>
                                     ";
 
                                     //  ช่องเดือน (ต.ค. - ก.ย.)

@@ -67,7 +67,7 @@ class PDFClosedController extends Controller
         $badget_types = BadgetType::all();
 
 
-        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config 
+        $config = include(config_path('configPDF_V.php'));       // ดึงการตั้งค่าฟอนต์จาก config
         $mpdf = new Mpdf($config);
         $mpdf->SetY(60);
 
@@ -143,7 +143,7 @@ class PDFClosedController extends Controller
                 $problem = $project_evaluation->problem;
                 $benefit = $project_evaluation->benefit;
                 $corrective_actions = $project_evaluation->corrective_actions;
-                // dd($implementation);
+                // dd($benefit);
             }
         }
 
@@ -261,8 +261,8 @@ class PDFClosedController extends Controller
                             $departments[] = $user->department_name;
                         }
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
-                        $responsibleNames[] = $user->firstname_th . ' ' .  $user->lastname_th;
-                        $names[] = $user->firstname_th . ' ' .  $user->lastname_th;
+                        $responsibleNames[] = $user->displayname;
+                        $names[] = $user->displayname;
                         // dd($names);
                     }
                 }
@@ -282,8 +282,8 @@ class PDFClosedController extends Controller
         }
 
         $htmlContent .= '
-            <div style="page-break-inside: avoid;">   
-                <b>4. วิธีการดำเนินโครงการ : </b> ' . $implementation . '<br>
+            <div style="page-break-inside: avoid;">
+                <b>4. วิธีการดำเนินโครงการ : </b> ' . (!empty($implementation) ? $implementation : 'ไม่มี') . '<br>
             </div>
         ';
 
@@ -340,7 +340,7 @@ class PDFClosedController extends Controller
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>6. วัตถุประสงค์</b><br>
-            
+
         ';
 
         if (DB::table('objectives')->where('proID', $id)->exists()) {
@@ -384,13 +384,14 @@ class PDFClosedController extends Controller
             foreach ($project_evaluations as $project_evaluation) {
                 if ($project_evaluation->operID == $operating_result->operID) {
                     $checked = '✓';
-                    break; // หยุด loop ทันทีเมื่อเจอค่า match
+                } else{
+                    $checked = '&nbsp;&nbsp;';
                 }
             }
             $htmlContent .= '
                 &nbsp;&nbsp;&nbsp;&nbsp;(
                 <span style="font-family: DejaVu Sans, Arial, sans-serif;">
-                    ' . ($checked ?: '&nbsp;&nbsp;') . '
+                    ' . $checked . '
                 </span> ) ' . $operating_result->name . ' <br>
             ';
         }
@@ -406,7 +407,7 @@ class PDFClosedController extends Controller
             // ดึงข้อมูลจาก k_p_i_projects
             $KPI_pros = DB::table('k_p_i_projects')->where('proID', $id)->get();
 
-            // ดึงข้อมูลจากตารางหน่วยนับ 
+            // ดึงข้อมูลจากตารางหน่วยนับ
             $countKPI_pros = DB::table('count_k_p_i_projects')->get();
 
             $counter = 1;
@@ -472,7 +473,7 @@ class PDFClosedController extends Controller
 
         $htmlContent .= '</div>';
 
-
+        $benefit = $benefit ?? '';
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>10. ประโยนช์ที่ได้รับจากการดำเนินโครงการ (หลังการจัดการโครงการ)</b><br>
@@ -482,6 +483,7 @@ class PDFClosedController extends Controller
             </div>
         ';
 
+        $problem = $problem ?? '';
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>11. ปัญหาและอุปสรรคในการดำเนินงานโครงการ</b><br>
@@ -491,6 +493,7 @@ class PDFClosedController extends Controller
             </div>
         ';
 
+        $corrective_actions = $corrective_actions ?? '';
         $htmlContent .= '
             <div style="page-break-inside: avoid;">
                 <b>12. แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b><br>
@@ -500,6 +503,7 @@ class PDFClosedController extends Controller
             </div>
         ';
 
+        // dd($names[0]);
         $htmlContent .= '
             <div style="page-break-before: avoid;">
                 <br><br><br><br>
@@ -579,7 +583,7 @@ class PDFClosedController extends Controller
                 <th style="background-color:rgb(234, 246, 144);">' . $achievedCount . '</th>
                 <td style="width: 5px; background-color:rgb(234, 246, 144);">ข้อ</td>
             </tr>
-            
+
             <tr>
                 <th colspan="2" style="background-color:rgb(234, 246, 144);">รวมที่ไม่บรรลุวัตถุประสงค์</th>
                 <th style="background-color:rgb(234, 246, 144);">' . $notAchievedCount . '</th>
@@ -609,12 +613,15 @@ class PDFClosedController extends Controller
         // dd($data_kpiResult);
 
         foreach ($data_kpiName as $index => $kpiName) {
+            $total = $data_kpiResult[$index] / $data_kpiTarget[$index];
+
             // ตรวจสอบว่า KPI บรรลุหรือไม่
-            if ($data_kpiResult[$index] >= $data_kpiTarget[$index]) {
+            if ($total >= 1) {
                 $countAchieved++; // นับเป็นบรรลุ
             } else {
                 $countNotAchieved++; // นับเป็นไม่บรรลุ
             }
+
 
             $htmlContent .= '
                 <tr>
@@ -623,7 +630,7 @@ class PDFClosedController extends Controller
                     <td style="text-align: center;">' . $data_countKPI[$index] . '</td>
                     <td style="text-align: right;">' . $data_kpiResult[$index] . '</td>
                     <td style="text-align: right;">' . $data_kpiTarget[$index] . '</td>
-                    <td></td>
+                    <td style="text-align: center;">' . $total . '</td>
                 </tr>
             ';
         }
@@ -650,37 +657,47 @@ class PDFClosedController extends Controller
 
         $htmlContent .= '</table>';
 
+        $scoreObj = $achievedCount/$totalObjectives;
+        $scoreKPI = $countAchieved/$totalKPI;
+        $pro_effect = (($scoreObj+$scoreKPI)/2) * 100;
+
         $htmlContent .= '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 40px;">
                 <tr>
                     <th style="background-color:rgb(234, 246, 144);">ลำดับ</th>
                     <th style="background-color:rgb(234, 246, 144);">รายการ</th>
                     <th style="background-color:rgb(234, 246, 144);">ค่าที่ได้</th>
+                    <th style="background-color:rgb(234, 246, 144);">หน่วย</th>
+
                 </tr>
 
                 <tr>
                     <td>1</td>
                     <td>คะแนนวัตถุประสงค์</td>
-                    <td></td>
+                    <td>' . $scoreObj . '</td>
+                    <td>คะแนน</td>
                 </tr>
 
                 <tr>
                     <td>2</td>
                     <td>คะแนนตัวชี้วัด</td>
-                    <td></td>
+                    <td>' . $scoreKPI . '</td>
+                    <td>คะแนน</td>
                 </tr>
 
                 <tr>
                     <td style="background-color:rgb(234, 246, 144);">3</td>
                     <th style="background-color:rgb(234, 246, 144);">ประสิทธิผลของโครงการ</th>
-                    <th style="background-color:rgb(234, 246, 144);"></th>
+                    <th style="background-color:rgb(234, 246, 144);">' . $pro_effect . '</th>
+                    <th style="background-color:rgb(234, 246, 144);">ร้อยละ</th>
+
                 </tr>
         ';
 
         $htmlContent .= '</table>';
 
 
-        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS  
+        $mpdf->WriteHTML($stylesheet, 1);              // โหลด CSS
         $mpdf->WriteHTML($htmlContent, 2);             // เขียนเนื้อหา HTML ลงใน PDF
 
         $mpdf->SetTitle('แบบประเมินโครงการที่ตอบสนองยุทธศาสตร์การพัฒนาสำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศประจำปีงบประมาณ');

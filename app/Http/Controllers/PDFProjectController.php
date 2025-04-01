@@ -137,8 +137,6 @@ class PDFProjectController extends Controller
 
         </style>";
 
-
-
         // logo kmutnb
         $htmlContent = '
             <div style="text-align: center; margin-bottom: 20px;">
@@ -192,11 +190,12 @@ class PDFProjectController extends Controller
                         // เพิ่มชื่อในอาร์เรย์ผู้รับผิดชอบ
                         $responsibleNames[] = $user->displayname;
                         $names[] = $user->displayname;
-                        // dd($names);
                     }
                 }
             }
         }
+        // dd($departments);
+
 
 
         // ตรวจสอบว่ามีข้อมูลหรือไม่
@@ -718,74 +717,17 @@ class PDFProjectController extends Controller
             }
         }
 
-
-        // dd($totalCost);
-        // function numberToThai($number)
-        // {
-        //     $thaiNumbers = [
-        //         0 => 'ศูนย์',
-        //         1 => 'หนึ่ง',
-        //         2 => 'สอง',
-        //         3 => 'สาม',
-        //         4 => 'สี่',
-        //         5 => 'ห้า',
-        //         6 => 'หก',
-        //         7 => 'เจ็ด',
-        //         8 => 'แปด',
-        //         9 => 'เก้า',
-        //         10 => 'สิบ',
-        //         20 => 'ยี่สิบ',
-        //         30 => 'สามสิบ',
-        //         40 => 'สี่สิบ',
-        //         50 => 'ห้าสิบ',
-        //         60 => 'หกสิบ',
-        //         70 => 'เจ็ดสิบ',
-        //         80 => 'แปดสิบ',
-        //         90 => 'เก้าสิบ',
-        //         100 => 'ร้อย',
-        //         1000 => 'พัน',
-        //         10000 => 'หมื่น',
-        //         100000 => 'แสน',
-        //         1000000 => 'ล้าน'
-        //     ];
-
-        //     if ($number == 0) {
-        //         return $thaiNumbers[0];
-        //     }
-
-        //     $str = '';
-        //     $number = (int)$number;
-        //     $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
-
-        //     foreach ($units as $unit) {
-        //         $num = (int)($number / $unit);
-        //         $number %= $unit;
-
-        //         if ($num > 0) {
-        //             if ($unit >= 100 && $num == 1) {
-        //                 $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
-        //             } elseif ($unit >= 10 && $num == 2) {
-        //                 $str .= 'ยี่' . $thaiNumbers[$unit];
-        //             } else {
-        //                 $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
-        //             }
-        //         }
-        //     }
-
-        //     return $str . 'บาทถ้วน';
-        // }
-
         function bahtText($number) {
             $thaiNumbers = [
                 0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่',
                 5 => 'ห้า', 6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า'
             ];
 
-            $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน', 'สิบล้าน', 'ร้อยล้าน', 'พันล้าน'];
+            $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
+
             $numberStr = strval((int)$number);
             $length = strlen($numberStr);
             $result = '';
-            $isMillion = false;
 
             for ($i = 0; $i < $length; $i++) {
                 $digit = (int)$numberStr[$i];
@@ -793,14 +735,16 @@ class PDFProjectController extends Controller
 
                 if ($digit == 0) continue;
 
-                // ตรวจสอบหลักล้าน (ไม่ให้ใส่ 'ล้าน' ซ้ำ)
                 if ($position == 6) {
-                    if ($digit == 1 && $result == '') {
-                        $result .= 'หนึ่งล้าน';
-                    } else {
-                        $result .= $thaiNumbers[$digit] . 'ล้าน';
+                    if ($digit != 1) {
+                        $result .= $thaiNumbers[$digit];
                     }
-                    $isMillion = true;
+                    $result .= 'ล้าน';
+                    continue;
+                }
+
+                if ($position == 7 && $digit == 1) {
+                    $result .= 'สิบ';
                     continue;
                 }
 
@@ -811,17 +755,13 @@ class PDFProjectController extends Controller
                 } elseif ($position == 0 && $digit == 1 && $length > 1) {
                     $result .= 'เอ็ด';
                 } else {
-                    $result .= $thaiNumbers[$digit] . $unitNames[$position];
+                    $result .= $thaiNumbers[$digit] . ($position > 0 ? $unitNames[$position % 6] : '');
                 }
             }
 
             return $result . 'บาทถ้วน';
         }
 
-
-
-
-        // $sumTotalInWords = numberToThai($sumTotal);
         $sumTotalInWords = bahtText($sumTotal);
 
 
