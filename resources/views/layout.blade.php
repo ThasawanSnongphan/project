@@ -87,7 +87,8 @@
                             </ul>
                             <ul class="nav side-menu">
                                 {{-- สิทธิ์ผู้เขียนโครงการ --}}
-                                <li><a><i class="fa fa-file"></i> ผลการดำเนินงาน <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-file"></i> ผลการดำเนินงาน <span
+                                            class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/Performance">ผลการดำเนินงาน</a></li>
                                     </ul>
@@ -177,8 +178,10 @@
                                             <ul class="nav child_menu">
                                                 <li><a href="/PlanningAnalystProjectAll">รายชื่อโครงการทั้งหมด</a></li>
 
-                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการในแผนรอพิจารณา</a></li>
-                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผนรอพิจารณา</a>
+                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการในแผนรอพิจารณา</a>
+                                                </li>
+                                                <li><a
+                                                        href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผนรอพิจารณา</a>
                                                 </li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a
@@ -230,7 +233,6 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    
                                 @endif
                             @endif
                         </div>
@@ -281,7 +283,7 @@
                     <nav class="nav navbar-nav ">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="navbar-left m-2">
-                               
+
                             </div>
                             <ul class=" navbar-right">
                                 @auth
