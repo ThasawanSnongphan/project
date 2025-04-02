@@ -138,7 +138,6 @@ class PDFPlanController extends Controller
 
         $steps = Steps::all();
 
-
         $goals = Goals::all();
         $target1_levels = Target1Level::all();
 
@@ -146,24 +145,11 @@ class PDFPlanController extends Controller
         $tactic2_levels = Tactic2Level::all();
         $tactic2_level_maps = Tactic2LevelMapKPIMain2Level::all();
 
-
         $KPI_pros = KPIProjects::all();
         $KPI_main2_levels = KPIMain2Level::all();
 
-
-        // $plans = UniPlan::all();
-        // $funds = Funds::all();
-        // $badget_types = BadgetType::all();
-        // $expense_badgets = ExpenseBadgets::all();
-        // $cost_quarters = CostQuarters::all();
-        // $cost_types = CostTypes::all();
-
-        // $badget_types = BadgetType::all();
-
         $countKPI_pros = CountKPIProjects::all();
-        // $project_integrats = ProjectIntegrat::all();
-        // $project_charecs = ProjectCharec::all();
-        // $objects = Objectives::all();
+
 
         $currentYear = date('Y');
 
