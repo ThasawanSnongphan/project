@@ -480,13 +480,9 @@ class PDFPlanController extends Controller
                         // <tr>
                         //     <th colspan='20' style='text-align: left;'>เป้าประสงค์ที่: " . ($goal['name'] ?? '-') . "</th>
                         // </tr>";
-                        $shownTactics = [];
+
                         //  ลูปข้อมูลกลยุทธ์ที่สัมพันธ์กับเป้าประสงค์นี้
                         foreach ($data_tactic2_levels as $tactic) {
-                            if (in_array($tactic['tac2LVID'], $shownTactics)) {
-                                continue; // ถ้าเคยแสดงไปแล้ว ข้าม
-                            }
-                            $shownTactics[] = $tactic['tac2LVID'];
                             // foreach ($data_tactic2_level_maps as $tac_map) {
                             // if ($tactic['tac2LVID'] == $tac_map['tac2LVID']) { // เชื่อมโยง FK
                             $projectRows = [];
