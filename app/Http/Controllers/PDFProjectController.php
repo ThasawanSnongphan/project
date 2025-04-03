@@ -661,66 +661,137 @@ class PDFProjectController extends Controller
                     <tbody>';
 
 
-        $totalCost = 0;
-        $sumTotal = 0;
-        $sumQu1 = 0;
-        $sumQu2 = 0;
-        $sumQu3 = 0;
-        $sumQu4 = 0;
+                    $totalCost = 0;
+$sumTotal = 0;
+$sumQu1 = 0;
+$sumQu2 = 0;
+$sumQu3 = 0;
+$sumQu4 = 0;
 
-        $counter = 1;
-        foreach ($cost_quarters as $cost_quarter) {
-            if ($projects->proID == $cost_quarter->proID) {
+$counter = 1;
+$subCounter = 1;
+$prevExpenseName = '';
+foreach ($cost_quarters as $cost_quarter) {
+    if ($projects->proID == $cost_quarter->proID) {
 
-                $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+        $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
 
-                // สะสมค่าในตัวแปรผลรวม
-                $sumTotal += $totalCost;
-                $sumQu1 += $cost_quarter->costQu1;
-                $sumQu2 += $cost_quarter->costQu2;
-                $sumQu3 += $cost_quarter->costQu3;
-                $sumQu4 += $cost_quarter->costQu4;
+        // สะสมค่าในตัวแปรผลรวม
+        $sumTotal += $totalCost;
+        $sumQu1 += $cost_quarter->costQu1;
+        $sumQu2 += $cost_quarter->costQu2;
+        $sumQu3 += $cost_quarter->costQu3;
+        $sumQu4 += $cost_quarter->costQu4;
 
-                $subCounter = 1;
-                foreach ($expense_badgets as $expense_badget) {
-                    if ($cost_quarter->expID == $expense_badget->expID) {
-                        $htmlContent .= '
-                            <tr>
-                                <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ';
-                    }
+        foreach ($expense_badgets as $expense_badget) {
+            if ($cost_quarter->expID == $expense_badget->expID) {
+                // ตรวจสอบชื่อของงบประมาณ
+                if ($prevExpenseName != $expense_badget->name) {
+                    $htmlContent .= '
+                        <tr>
+                            <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    ';
+                    $subCounter = 1;
+                    $counter++;
                 }
-
-
-                foreach ($cost_types as $cost_type) {
-                    if ($cost_quarter->costID == $cost_type->costID) {
-                        $htmlContent .= '
-                            <tr>
-                                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . $counter . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
-                                <td>' . number_format($totalCost, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu3, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu4, 2) . '</td>
-                            </tr>
-                        ';
-                        $subCounter++;
-                        $counter++;
-                    }
-                }
+                $prevExpenseName = $expense_badget->name;
             }
         }
 
-        function bahtText($number) {
+        foreach ($cost_types as $cost_type) {
+            if ($cost_quarter->costID == $cost_type->costID) {
+                $htmlContent .= '
+                    <tr>
+                        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . ($counter - 1) . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
+                        <td>' . ($totalCost == 0 ? '-' : number_format($totalCost, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu1 == 0 ? '-' : number_format($cost_quarter->costQu1, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu2 == 0 ? '-' : number_format($cost_quarter->costQu2, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu3 == 0 ? '-' : number_format($cost_quarter->costQu3, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu4 == 0 ? '-' : number_format($cost_quarter->costQu4, 2)) . '</td>
+                    </tr>
+                ';
+                $subCounter++;
+            }
+        }
+    }
+}
+
+        // $totalCost = 0;
+        // $sumTotal = 0;
+        // $sumQu1 = 0;
+        // $sumQu2 = 0;
+        // $sumQu3 = 0;
+        // $sumQu4 = 0;
+
+        // $counter = 1;
+        // foreach ($cost_quarters as $cost_quarter) {
+        //     if ($projects->proID == $cost_quarter->proID) {
+
+        //         $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+
+        //         // สะสมค่าในตัวแปรผลรวม
+        //         $sumTotal += $totalCost;
+        //         $sumQu1 += $cost_quarter->costQu1;
+        //         $sumQu2 += $cost_quarter->costQu2;
+        //         $sumQu3 += $cost_quarter->costQu3;
+        //         $sumQu4 += $cost_quarter->costQu4;
+
+        //         $subCounter = 1;
+        //         foreach ($expense_badgets as $expense_badget) {
+        //             if ($cost_quarter->expID == $expense_badget->expID) {
+        //                 // dd($expense_badget->name);
+        //                 $htmlContent .= '
+        //                     <tr>
+        //                         <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
+        //                         <td></td>
+        //                         <td></td>
+        //                         <td></td>
+        //                         <td></td>
+        //                         <td></td>
+        //                     </tr>
+        //                 ';
+        //             }
+        //         }
+
+
+        //         foreach ($cost_types as $cost_type) {
+        //             if ($cost_quarter->costID == $cost_type->costID) {
+        //                 $htmlContent .= '
+        //                     <tr>
+        //                         <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . $counter . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
+        //                         <td>' . ($totalCost == 0 ? '-' : number_format($totalCost, 2)) . '</td>
+        //                         <td>' . ($cost_quarter->costQu1 == 0 ? '-' : number_format($cost_quarter->costQu1, 2)) . '</td>
+        //                         <td>' . ($cost_quarter->costQu2 == 0 ? '-' : number_format($cost_quarter->costQu2, 2)) . '</td>
+        //                         <td>' . ($cost_quarter->costQu3 == 0 ? '-' : number_format($cost_quarter->costQu3, 2)) . '</td>
+        //                         <td>' . ($cost_quarter->costQu4 == 0 ? '-' : number_format($cost_quarter->costQu4, 2)) . '</td>
+        //                     </tr>
+        //                 ';
+        //                 $subCounter++;
+        //                 $counter++;
+        //             }
+        //         }
+        //     }
+        // }
+
+        function bahtText($number)
+        {
             $thaiNumbers = [
-                0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่',
-                5 => 'ห้า', 6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า'
+                0 => 'ศูนย์',
+                1 => 'หนึ่ง',
+                2 => 'สอง',
+                3 => 'สาม',
+                4 => 'สี่',
+                5 => 'ห้า',
+                6 => 'หก',
+                7 => 'เจ็ด',
+                8 => 'แปด',
+                9 => 'เก้า'
             ];
 
             $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
@@ -763,10 +834,6 @@ class PDFProjectController extends Controller
         }
 
         $sumTotalInWords = bahtText($sumTotal);
-
-
-        // เรียกใช้ Finance::bahtText() เพื่อแปลงเป็นตัวอักษรภาษาไทย
-        // $thaiText = Finance::bahtText($number);
 
         // รวมเงินงบประมาณทั้งหมด
         $htmlContent .= '
