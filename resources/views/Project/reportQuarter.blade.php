@@ -7,10 +7,12 @@
             <div class="x_panel">
                 <div class="x_title">
                     @if (!empty($data['quarterReport']))
-                        <h2>รายงานความก้าวหน้า ไตรมาส{{$data['quarter']}}</h2>
+                        <h2>รายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
                     @else
                         <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
-
+                    @endif
+                    @if (!empty($data['evaluation']))
+                        <a href="{{ route('detail.evaluation', $data['project']->proID) }}" class="btn btn-primary">รายงานผลประเมิน</a>
                     @endif
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -85,7 +87,15 @@
                                             <td style="text-align: center">{{ $item->KPI->target }}</td>
                                             <td style="text-align: center">
                                                 @if (!empty($data['quarterReport']))
-                                                    {{ $item->result2 }}
+                                                    @if ($data['quarter'] == '1')
+                                                        {{ $item->result1 }}
+                                                    @elseif($data['quarter'] == '2')
+                                                        {{ $item->result2 }}
+                                                    @elseif($data['quarter'] == '3')
+                                                        {{ $item->result3 }}
+                                                    @else
+                                                        {{ $item->result4 }}
+                                                    @endif
                                                 @else
                                                     <input type="text" name="result3LV[]" required>
                                                 @endif
@@ -105,7 +115,15 @@
                                             <td style="text-align: center">{{ $item->KPI->target ?? '-' }}</td>
                                             <td style="text-align: center">
                                                 @if (!empty($data['quarterReport']))
-                                                    {{ $item->result2 }}
+                                                    @if ($data['quarter'] == '1')
+                                                        {{ $item->result1 }}
+                                                    @elseif($data['quarter'] == '2')
+                                                        {{ $item->result2 }}
+                                                    @elseif($data['quarter'] == '3')
+                                                        {{ $item->result3 }}
+                                                    @else
+                                                        {{ $item->result4 }}
+                                                    @endif
                                                 @else
                                                     <input type="text" name="result2LV[]" required>
                                                 @endif
@@ -124,7 +142,15 @@
                                             <td style="text-align: center">{{ $item->target }}</td>
                                             <td style="text-align: center">
                                                 @if (!empty($data['quarterReport']))
-                                                    {{ $item->result2 }}
+                                                    @if ($data['quarter'] == '1')
+                                                        {{ $item->result1 }}
+                                                    @elseif($data['quarter'] == '2')
+                                                        {{ $item->result2 }}
+                                                    @elseif($data['quarter'] == '3')
+                                                        {{ $item->result3 }}
+                                                    @else
+                                                        {{ $item->result4 }}
+                                                    @endif
                                                 @else
                                                     <input type="text" name="result[]" required>
                                                 @endif
@@ -201,8 +227,8 @@
                         <div class="col-md-6 offset-md-3 ">
                             @if (!empty($data['quarterReport']))
                                 @if (empty($data['evaluation']))
-                                    <button type="button" class="btn btn-primary"
-                                        onclick="submitButton('evaluation',{{ $data['project']->proID }})">กรอกข้อมูลประเมินโครงการ</button>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="submitButton('evaluation',{{ $data['project']->proID }})">กรอกข้อมูลขอปิดโครงการ</button>
                                 @endif
                             @else
                                 <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>

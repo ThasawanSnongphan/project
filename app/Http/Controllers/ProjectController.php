@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Year;
+use App\Models\DateInPlan;
 use App\Models\Users;
 use App\Models\UsersMapProject;
 use App\Models\Status;
@@ -63,6 +64,7 @@ class ProjectController extends Controller
         $proID = $report->pluck('proID');
 
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+        // dd( $evaluation );
        
         // dd($evaluation);
         // dd($proID);
@@ -73,14 +75,17 @@ class ProjectController extends Controller
         $projectYear = Projects::with('year')->get();
         $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
         $proIDs = $user->pluck('proID');
+
         // dd($proIDs);
         $project=DB::table('projects')->where('proTypeID',4)->whereIn('proID',$proIDs)->get();
+
+
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
+        $report = DB::table('report_quarters')->whereIn('proID',$project->pluck('proID'))->get();
         $proID = $report->pluck('proID');
-
+        // dd($proID );
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
         // dd($evaluation);
         // dd($proID);
@@ -230,8 +235,11 @@ class ProjectController extends Controller
         $sessiontac3LVID = array_values(array_filter(session('tac3LVID')));
         $sessionKPIMain3LVID = array_values(array_filter(session('KPIMain3LVID')));
         
+        $dateInPlan = DateInPlan::with('year')->where('yearID',session('yearID'))->first();
+        // dd($dateInPlan);
         $user = Users::all();
         $years = Year::all(); // ดึงข้อมูลปี
+       
 
         $strategicMap = StrategicMap::all();
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
@@ -267,7 +275,7 @@ class ProjectController extends Controller
         $CountKPIProjects = CountKPIProjects::all();
         $proID=Projects::all();
         return view('Project.create2',compact('strategic2LV','selectProjectType','selectProjectCharec','selectProjectIntegrat','target1LV','strategic2LVMap','KPIMain2LV','KPIMainMapProject','SFA2Lv','tactics2LV','KPIMain2LVMap','strategic1LV','strategic1LVMap','CountKPIProjects','years','user','strategicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes',
-                    'sessionSFA3LVID','sessiongoal3LVID','sessiontac3LVID','sessionKPIMain3LVID'));
+                    'sessionSFA3LVID','sessiongoal3LVID','sessiontac3LVID','sessionKPIMain3LVID','dateInPlan'));
     }
     
     function send2(Request $request){
@@ -442,10 +450,10 @@ class ProjectController extends Controller
         if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
             foreach($costQu1 as $index => $cost1){
                 $costQu = new CostQuarters();
-                $costQu->costQu1 = $cost1;
-                $costQu->costQu2 = $costQu2[$index];
-                $costQu->costQu3 = $costQu3[$index];
-                $costQu->costQu4 = $costQu4[$index];
+                $costQu->costQu1 = $cost1 ?? 0;
+                $costQu->costQu2 = $costQu2[$index] ?? 0;
+                $costQu->costQu3 = $costQu3[$index] ?? 0;
+                $costQu->costQu4 = $costQu4[$index] ?? 0;
                 $costQu->proID = $project;
                 $costQu->expID = $expID[$index];
                 $costQu->costID = $costID[$index];
@@ -784,10 +792,10 @@ class ProjectController extends Controller
         if(is_array($costQu1) && is_array($costQu2) && is_array($costQu3) && is_array($costQu4)){
             foreach($costQu1 as $index => $cost1){
                 $costQu = new CostQuarters();
-                $costQu->costQu1 = $cost1;
-                $costQu->costQu2 = $costQu2[$index] ?? null;
-                $costQu->costQu3 = $costQu3[$index] ?? null;
-                $costQu->costQu4 = $costQu4[$index] ?? null;
+                $costQu->costQu1 = $cost1 ?? 0;
+                $costQu->costQu2 = $costQu2[$index] ?? 0;
+                $costQu->costQu3 = $costQu3[$index] ?? 0;
+                $costQu->costQu4 = $costQu4[$index] ?? 0;
                 $costQu->proID = $project;
                 $costQu->expID = $expID[$index];
                 $costQu->costID = $costID[$index];

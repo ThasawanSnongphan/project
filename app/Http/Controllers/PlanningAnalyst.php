@@ -68,7 +68,7 @@ class PlanningAnalyst extends Controller
     function projectOutPlan(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where('proTypeID','4')->get();
+        $project=DB::table('projects')->where('proTypeID','4')->whereIn('statusID',[2,6])->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();

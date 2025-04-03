@@ -39,7 +39,11 @@ class QuarterReportController extends Controller
         $data['quarter']=$quarter;
         $data['project'] = DB::table('projects')->where('proID',$id)->first();
         $data['steps'] = DB::table('steps')->where('proID',$id)->get();
+        
+       
+        // dd($data['KPIMain3LV']);
         $data['KPIMain3LV']=KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
+        
         $data['KPIMain2LV'] = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
     //     // dd($data['KPIMain2LV']);
         $data['KPI'] = DB::table('k_p_i_projects')->where('proID',$id)->get();
@@ -47,6 +51,8 @@ class QuarterReportController extends Controller
     //     // dd($data['costQuarter']);
 
         $data['quarterReport']=DB::table('report_quarters')->where([['proID',$id],['quarID',$quarter]])->first();
+
+        // dd($data['quarterReport']);
         if(!empty($data['quarterReport'])){
             $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
 
@@ -113,13 +119,12 @@ class QuarterReportController extends Controller
         }
 
         $user = DB::table('users')->where('Planning_Analyst',1)->first();
-
+        
         Mail::to($user->email)->send(new SendMail([
             'name' => $project->name ,
             'text' => 'ผู้รับผิดชอบโครงการส่งรายงานไตรมาส'.$quarter
         ] 
         ));
-
 
         return redirect('/project');
 

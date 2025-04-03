@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quarters extends Model
 {
-    //
+    protected $primaryKey = 'quarID';
 }

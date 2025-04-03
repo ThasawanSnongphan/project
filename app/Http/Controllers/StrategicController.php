@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class StrategicController extends Controller
 {
+    
     function index(){
         $year=Year::all();
         $strategic=Strategic3Level::all();
@@ -44,10 +45,9 @@ class StrategicController extends Controller
         return view('Strategic3Level.Strategics.update',compact('strategic','year'));
     }
     function update(Request $request,$id){
-        $year = Year::where('yearID',$request->input('yearID'))->first();
+        
         
         $strategic=[
-            'yearID'=>$request->yearID,
             'name'=>$request->name
         ];
         DB::table('strategic3_levels')->where('stra3LVID',$id)->update($strategic);

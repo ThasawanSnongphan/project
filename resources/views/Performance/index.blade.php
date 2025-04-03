@@ -21,7 +21,9 @@
                     <label for="title" class="col-form-label col-md-1 col-sm-1 label-align">ปีงบประมาณ<span
                             class="required">*</span></label>
                     <div class="col-md-3 col-sm-3">
-                        <select id="yearID" name="yearID" class="form-control" required onchange="submitForm()">
+                        <select id="yearID" name="yearID" class="form-control" required 
+                        {{-- onchange="submitForm()" --}}
+                        >
                             <option value="">--เลือกปีงบประมาณ--</option>
                             @foreach ($data['yearAll'] as $item)
                                 <option value="{{ $item->yearID }}"
@@ -30,11 +32,33 @@
                             @endforeach
                         </select>
                     </div>
-
                 </div>
+                <div class="row field item form-group ">
+                    <label for="title" class="col-form-label col-md-1 col-sm-1 label-align">ไตรมาส<span
+                            class="required">*</span></label>
+                    <div class="col-md-3 col-sm-3">
+                        <select id="quarID" name="quarID" class="form-control" required 
+                        {{-- onchange="submitForm()" --}}
+                        >
+                            <option value="">--เลือกไตรมาส--</option>
+                            @foreach ($data['quarterAll'] as $item)
+                                <option value="{{ $item->quarID }}"
+                                    {{ request('quarID') == $item->quarID ? 'selected' : '' }}>{{ $item->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row field item form-group ">
+                    <label for="title" class="col-form-label col-md-1 col-sm-1 label-align"></label>
+                    <div class="col-md-3 col-sm-3">
+                        <button class="btn btn-primary" type="submit">serch</button>
+                    </div>
+                </div>
+                
             </form>
 
-            @if (!empty($data['selectYearID']))
+            @if (!empty($data['selectYearID']) && !empty($data['selectQuarID']))
 
 
                 <h4 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการ และโครงการนอกแผนปฏิบัติการ

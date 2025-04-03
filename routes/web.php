@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CopyPlanControllers;
+
 use App\Http\Controllers\PDFAllResultsController;
 use App\Http\Controllers\PDFClosedController;
 use App\Http\Controllers\PDFPlanController;
@@ -54,6 +56,7 @@ use App\Http\Controllers\ExcelEffectiveController;
 use App\Http\Controllers\ExcelPlanController;
 use App\Http\Controllers\WordClosedController;
 use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\DateInPlanControllers;
 
 //PDF
 Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
@@ -84,6 +87,10 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken(); // ป้องกัน CSRF attacks
     return redirect('/'); // เปลี่ยนเส้นทางกลับไปหน้าแรก
 });
+
+//copyplan
+Route::get('/copyPlan{id}',[CopyPlanControllers::class,'index'])->name('copyPlan');
+Route::post('/copy',[CopyPlanControllers::class,'insert']);
 
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
 Route::get('/news', [HomeController::class, 'news']);
@@ -193,6 +200,7 @@ Route::post('saveReportQuarter/{id}{quarter}', [QuarterReportController::class,'
 //Report
 Route::get('projectPDF/{id}',[PDFProjectController::class,'db_gen'])->name('project.PDF');
 Route::get('projectWord/{id}',[WordProjectController::class,'word_gen'])->name('project.Word');
+
 
 
 Route::get('create',[NewsController::class,'create']);
@@ -349,6 +357,9 @@ Route::get('fundDelete/{id}',[FundController::class,'delete'])->name('fund.delet
 Route::get('fundEdit/{id}',[FundController::class,'edit'])->name('fund.edit');
 Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.update');
 
+
+Route::get('dateInPlan',[DateInPlanControllers::class,'index']);
+Route::post('dataInPlanInsert',[DateInPlanControllers::class,'insert']);
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Auth::routes();
