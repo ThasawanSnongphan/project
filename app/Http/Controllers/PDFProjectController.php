@@ -226,24 +226,43 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($goals as $goal) {
                     if ($goal->goalID == $strategic_map->goalID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }
@@ -257,18 +276,31 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($strategic_issue2_levels as $strategic_issue2_level) {
                     if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue2_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($tactic2_levels as $tactic2_level) {
                     if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }
@@ -282,12 +314,19 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($target1_levels as $target1_level) {
                     if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }
@@ -669,6 +708,8 @@ class PDFProjectController extends Controller
         $sumQu4 = 0;
 
         $counter = 1;
+        $subCounter = 1;
+        $prevExpenseName = '';
         foreach ($cost_quarters as $cost_quarter) {
             if ($projects->proID == $cost_quarter->proID) {
 
@@ -681,46 +722,59 @@ class PDFProjectController extends Controller
                 $sumQu3 += $cost_quarter->costQu3;
                 $sumQu4 += $cost_quarter->costQu4;
 
-                $subCounter = 1;
                 foreach ($expense_badgets as $expense_badget) {
                     if ($cost_quarter->expID == $expense_badget->expID) {
-                        $htmlContent .= '
-                            <tr>
-                                <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ';
+                        // ตรวจสอบชื่อของงบประมาณ
+                        if ($prevExpenseName != $expense_badget->name) {
+                            $htmlContent .= '
+                        <tr>
+                            <td style="text-align: left;">' . $counter . '. ' . $expense_badget->name . '</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    ';
+                            $subCounter = 1;
+                            $counter++;
+                        }
+                        $prevExpenseName = $expense_badget->name;
                     }
                 }
-
 
                 foreach ($cost_types as $cost_type) {
                     if ($cost_quarter->costID == $cost_type->costID) {
                         $htmlContent .= '
-                            <tr>
-                                <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . $counter . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
-                                <td>' . number_format($totalCost, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu1, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu2, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu3, 2) . '</td>
-                                <td>' . number_format($cost_quarter->costQu4, 2) . '</td>
-                            </tr>
-                        ';
+                    <tr>
+                        <td style="text-align: left;">&nbsp;&nbsp;&nbsp;' . ($counter - 1) . '.' . $subCounter . ' ' .  $cost_type->name . '</td>
+                        <td>' . ($totalCost == 0 ? '-' : number_format($totalCost, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu1 == 0 ? '-' : number_format($cost_quarter->costQu1, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu2 == 0 ? '-' : number_format($cost_quarter->costQu2, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu3 == 0 ? '-' : number_format($cost_quarter->costQu3, 2)) . '</td>
+                        <td>' . ($cost_quarter->costQu4 == 0 ? '-' : number_format($cost_quarter->costQu4, 2)) . '</td>
+                    </tr>
+                ';
                         $subCounter++;
-                        $counter++;
                     }
                 }
             }
         }
 
-        function bahtText($number) {
+
+        function bahtText($number)
+        {
             $thaiNumbers = [
-                0 => 'ศูนย์', 1 => 'หนึ่ง', 2 => 'สอง', 3 => 'สาม', 4 => 'สี่',
-                5 => 'ห้า', 6 => 'หก', 7 => 'เจ็ด', 8 => 'แปด', 9 => 'เก้า'
+                0 => 'ศูนย์',
+                1 => 'หนึ่ง',
+                2 => 'สอง',
+                3 => 'สาม',
+                4 => 'สี่',
+                5 => 'ห้า',
+                6 => 'หก',
+                7 => 'เจ็ด',
+                8 => 'แปด',
+                9 => 'เก้า'
             ];
 
             $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
@@ -763,10 +817,6 @@ class PDFProjectController extends Controller
         }
 
         $sumTotalInWords = bahtText($sumTotal);
-
-
-        // เรียกใช้ Finance::bahtText() เพื่อแปลงเป็นตัวอักษรภาษาไทย
-        // $thaiText = Finance::bahtText($number);
 
         // รวมเงินงบประมาณทั้งหมด
         $htmlContent .= '

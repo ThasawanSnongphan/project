@@ -160,7 +160,7 @@ class WordProjectController extends Controller
         foreach ($years as $year) {
             if ($projects->yearID == $year->yearID) {
                 $section->addText(
-                    'แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ. ' . $year->name,
+                    'แบบเสนอโครงการ ประจำปีงบประมาณ พ.ศ. ' . $year->year,
                     $boldTextStyle,
                     $center
                 );
@@ -204,8 +204,8 @@ class WordProjectController extends Controller
                         if (!in_array($user->department_name, $departments)) {
                             $departments[] = $user->department_name;
                         }
-                        $responsibleNames[] = $user->username;
-                        $names[] = $user->username;
+                        $responsibleNames[] = $user->displayname;
+                        $names[] = $user->displayname;
                     }
                 }
             }
@@ -276,28 +276,28 @@ class WordProjectController extends Controller
                 $index++;
             }
 
-            if (!empty($plan['strategic_issue'])) {
+            if (array_key_exists('strategic_issue', $plan)) {
                 $textRun = $section->addTextRun($indentationMax);
                 $textRun->addText("ประเด็นยุทธศาสตร์ที่ ", $boldTextStyle);
-                $textRun->addText($plan['strategic_issue']);
+                $textRun->addText(!empty($plan['strategic_issue']) ? $plan['strategic_issue'] : "-");
             }
 
-            if (!empty($plan['goal'])) {
+            if (array_key_exists('goal', $plan)) {
                 $textRun = $section->addTextRun($indentationMax);
                 $textRun->addText("เป้าประสงค์ที่ ", $boldTextStyle);
-                $textRun->addText($plan['goal']);
+                $textRun->addText(!empty($plan['goal']) ? $plan['goal'] : "-");
             }
 
-            if (!empty($plan['tactic'])) {
+            if (array_key_exists('tactic', $plan)) {
                 $textRun = $section->addTextRun($indentationMax);
                 $textRun->addText("กลยุทธ์ที่ ", $boldTextStyle);
-                $textRun->addText($plan['tactic']);
+                $textRun->addText(!empty($plan['tactic']) ? $plan['tactic'] : "-");
             }
 
-            if (!empty($plan['target'])) {
+            if (array_key_exists('target', $plan)) {
                 $textRun = $section->addTextRun($indentationMax);
                 $textRun->addText("เป้าหมายที่ ", $boldTextStyle);
-                $textRun->addText($plan['target']);
+                $textRun->addText(!empty($plan['target']) ? $plan['target'] : "-");
             }
         }
 
@@ -587,17 +587,25 @@ class WordProjectController extends Controller
         $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
         $table->addCell(2500)->addText('แผนการใช้จ่าย', [], $center);
 
+
+
         $totalCost = 0;
         $sumTotal = 0;
         $sumQu1 = 0;
         $sumQu2 = 0;
         $sumQu3 = 0;
         $sumQu4 = 0;
+
         $counter = 1;
+        $subCounter = 1;
+        $prevExpenseName = '';
 
         foreach ($cost_quarters as $cost_quarter) {
             if ($projects->proID == $cost_quarter->proID) {
+
                 $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+
+                // สะสมค่าในตัวแปรผลรวม
                 $sumTotal += $totalCost;
                 $sumQu1 += $cost_quarter->costQu1;
                 $sumQu2 += $cost_quarter->costQu2;
@@ -606,40 +614,95 @@ class WordProjectController extends Controller
 
                 foreach ($expense_badgets as $expense_badget) {
                     if ($cost_quarter->expID == $expense_badget->expID) {
-                        $table->addRow();
-                        $table->addCell(4000)->addText($counter . '. ' . $expense_badget->name);
-                        for ($i = 0; $i < 5; $i++) $table->addCell(1200)->addText('');
+                        if ($prevExpenseName != $expense_badget->name) {
+                            $table->addRow();
+                            $table->addCell(5000)->addText($counter . '. ' . $expense_badget->name);
+                            for ($i = 0; $i < 5; $i++) $table->addCell(1200)->addText('');
+                            $subCounter = 1;
+                            $counter++;
+                        }
+                        $prevExpenseName = $expense_badget->name;
                     }
                 }
 
-                $subCounter = 1;
                 foreach ($cost_types as $cost_type) {
                     if ($cost_quarter->costID == $cost_type->costID) {
                         $table->addRow();
-                        $table->addCell(4000)->addText($counter . '.' . $subCounter . ' ' . $cost_type->name, [], $center);
+                        $table->addCell(4000)->addText($counter - 1 . '.' . $subCounter . ' ' . $cost_type->name, [], $center);
                         $table->addCell(2500)->addText($totalCost > 0 ? number_format($totalCost, 2) : '-', [], $center);
                         $table->addCell(2500)->addText($cost_quarter->costQu1 > 0 ? number_format($cost_quarter->costQu1, 2) : '-', [], $center);
                         $table->addCell(2500)->addText($cost_quarter->costQu2 > 0 ? number_format($cost_quarter->costQu2, 2) : '-', [], $center);
                         $table->addCell(2500)->addText($cost_quarter->costQu3 > 0 ? number_format($cost_quarter->costQu3, 2) : '-', [], $center);
                         $table->addCell(2500)->addText($cost_quarter->costQu4 > 0 ? number_format($cost_quarter->costQu4, 2) : '-', [], $center);
                         $subCounter++;
-                        $counter++;
                     }
                 }
             }
         }
 
-        // แสดงผลรวมท้ายตาราง
+
+
+        // แถวรวมเงินงบประมาณ
         $table->addRow();
-        $table->addCell(4000)->addText('รวมเงินงบประมาณ', [], $center);
-        $table->addCell(2500)->addText($sumTotal > 0 ? number_format($sumTotal, 2) : '-', [], $center);
-        $table->addCell(2500)->addText($sumQu1 > 0 ? number_format($sumQu1, 2) : '-', [], $center);
-        $table->addCell(2500)->addText($sumQu2 > 0 ? number_format($sumQu2, 2) : '-', [], $center);
-        $table->addCell(2500)->addText($sumQu3 > 0 ? number_format($sumQu3, 2) : '-', [], $center);
-        $table->addCell(2500)->addText($sumQu4 > 0 ? number_format($sumQu4, 2) : '-', [], $center);
+        $table->addCell(5000)->addText('รวมเงินงบประมาณ', [], $center);
+        $table->addCell(2500)->addText(number_format($sumTotal, 2), [], $center);
+        $table->addCell(2500)->addText(number_format($sumQu1, 2), [], $center);
+        $table->addCell(2500)->addText(number_format($sumQu2, 2), [], $center);
+        $table->addCell(2500)->addText(number_format($sumQu3, 2), [], $center);
+        $table->addCell(2500)->addText(number_format($sumQu4, 2), [], $center);
 
+        // $totalCost = 0;
+        // $sumTotal = 0;
+        // $sumQu1 = 0;
+        // $sumQu2 = 0;
+        // $sumQu3 = 0;
+        // $sumQu4 = 0;
+        // $counter = 1;
 
-        function numberToThai($number)
+        // foreach ($cost_quarters as $cost_quarter) {
+        //     if ($projects->proID == $cost_quarter->proID) {
+        //         $totalCost = $cost_quarter->costQu1 + $cost_quarter->costQu2 + $cost_quarter->costQu3 + $cost_quarter->costQu4;
+        //         $sumTotal += $totalCost;
+        //         $sumQu1 += $cost_quarter->costQu1;
+        //         $sumQu2 += $cost_quarter->costQu2;
+        //         $sumQu3 += $cost_quarter->costQu3;
+        //         $sumQu4 += $cost_quarter->costQu4;
+
+        //         foreach ($expense_badgets as $expense_badget) {
+        //             if ($cost_quarter->expID == $expense_badget->expID) {
+        //                 $table->addRow();
+        //                 $table->addCell(4000)->addText($counter . '. ' . $expense_badget->name);
+        //                 for ($i = 0; $i < 5; $i++) $table->addCell(1200)->addText('');
+        //             }
+        //         }
+
+        //         $subCounter = 1;
+        //         foreach ($cost_types as $cost_type) {
+        //             if ($cost_quarter->costID == $cost_type->costID) {
+        //                 $table->addRow();
+        //                 $table->addCell(4000)->addText($counter . '.' . $subCounter . ' ' . $cost_type->name, [], $center);
+        //                 $table->addCell(2500)->addText($totalCost > 0 ? number_format($totalCost, 2) : '-', [], $center);
+        //                 $table->addCell(2500)->addText($cost_quarter->costQu1 > 0 ? number_format($cost_quarter->costQu1, 2) : '-', [], $center);
+        //                 $table->addCell(2500)->addText($cost_quarter->costQu2 > 0 ? number_format($cost_quarter->costQu2, 2) : '-', [], $center);
+        //                 $table->addCell(2500)->addText($cost_quarter->costQu3 > 0 ? number_format($cost_quarter->costQu3, 2) : '-', [], $center);
+        //                 $table->addCell(2500)->addText($cost_quarter->costQu4 > 0 ? number_format($cost_quarter->costQu4, 2) : '-', [], $center);
+        //                 $subCounter++;
+        //                 $counter++;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // แสดงผลรวมท้ายตาราง
+        // $table->addRow();
+        // $table->addCell(4000)->addText('รวมเงินงบประมาณ', [], $center);
+        // $table->addCell(2500)->addText($sumTotal > 0 ? number_format($sumTotal, 2) : '-', [], $center);
+        // $table->addCell(2500)->addText($sumQu1 > 0 ? number_format($sumQu1, 2) : '-', [], $center);
+        // $table->addCell(2500)->addText($sumQu2 > 0 ? number_format($sumQu2, 2) : '-', [], $center);
+        // $table->addCell(2500)->addText($sumQu3 > 0 ? number_format($sumQu3, 2) : '-', [], $center);
+        // $table->addCell(2500)->addText($sumQu4 > 0 ? number_format($sumQu4, 2) : '-', [], $center);
+
+        function bahtText($number)
         {
             $thaiNumbers = [
                 0 => 'ศูนย์',
@@ -651,51 +714,50 @@ class WordProjectController extends Controller
                 6 => 'หก',
                 7 => 'เจ็ด',
                 8 => 'แปด',
-                9 => 'เก้า',
-                10 => 'สิบ',
-                20 => 'ยี่สิบ',
-                30 => 'สามสิบ',
-                40 => 'สี่สิบ',
-                50 => 'ห้าสิบ',
-                60 => 'หกสิบ',
-                70 => 'เจ็ดสิบ',
-                80 => 'แปดสิบ',
-                90 => 'เก้าสิบ',
-                100 => 'ร้อย',
-                1000 => 'พัน',
-                10000 => 'หมื่น',
-                100000 => 'แสน',
-                1000000 => 'ล้าน'
+                9 => 'เก้า'
             ];
 
-            if ($number == 0) {
-                return $thaiNumbers[0];
-            }
+            $unitNames = ['', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน'];
 
-            $str = '';
-            $number = (int)$number;
-            $units = [1000000, 100000, 10000, 1000, 100, 10, 1]; // หน่วย (ล้าน, แสน, หมื่น, พัน, ร้อย, สิบ, หน่วย)
+            $numberStr = strval((int)$number);
+            $length = strlen($numberStr);
+            $result = '';
 
-            foreach ($units as $unit) {
-                $num = (int)($number / $unit);
-                $number %= $unit;
+            for ($i = 0; $i < $length; $i++) {
+                $digit = (int)$numberStr[$i];
+                $position = $length - $i - 1;
 
-                if ($num > 0) {
-                    if ($unit >= 100 && $num == 1) {
-                        $str .= ($unit == 100) ? 'ร้อย' : ($unit == 1000 ? 'พัน' : '');
-                    } elseif ($unit >= 10 && $num == 2) {
-                        $str .= 'ยี่' . $thaiNumbers[$unit];
-                    } else {
-                        $str .= $thaiNumbers[$num] . $thaiNumbers[$unit];
+                if ($digit == 0) continue;
+
+                if ($position == 6) {
+                    if ($digit != 1) {
+                        $result .= $thaiNumbers[$digit];
                     }
+                    $result .= 'ล้าน';
+                    continue;
+                }
+
+                if ($position == 7 && $digit == 1) {
+                    $result .= 'สิบ';
+                    continue;
+                }
+
+                if ($position == 1 && $digit == 1) {
+                    $result .= 'สิบ';
+                } elseif ($position == 1 && $digit == 2) {
+                    $result .= 'ยี่สิบ';
+                } elseif ($position == 0 && $digit == 1 && $length > 1) {
+                    $result .= 'เอ็ด';
+                } else {
+                    $result .= $thaiNumbers[$digit] . ($position > 0 ? $unitNames[$position % 6] : '');
                 }
             }
 
-            return $str . 'บาทถ้วน';
+            return $result . 'บาทถ้วน';
         }
 
         $spaceBeforeStyle = ['spaceBefore' => 200];
-        $sumTotalInWords = numberToThai($sumTotal);
+        $sumTotalInWords = bahtText($sumTotal);
 
         $textRun = $section->addTextRun(['spaceAfter' => 240, 'spaceBefore' => 200]); // ใช้ $spaceBeforeStyle ที่นี่
 
@@ -732,7 +794,7 @@ class WordProjectController extends Controller
         $textRun = $section->addTextRun(['alignment' => 'center', 'indentation' => ['left' => 5000]]);
         $textRun->addText("ลงชื่อ ", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
         $textRun->addText(".................................................", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
-        $section->addText('(' . htmlspecialchars($signatureName) . ')', [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
+        $section->addText('( ' . htmlspecialchars($signatureName) . ' )', [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
         $section->addText("ผู้รับผิดชอบโครงการ", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
         $section->addText("วันที่ ........../......................./..........", [], ['alignment' => 'center', 'indentation' => ['left' => 5000]]);
 
