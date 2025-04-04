@@ -207,33 +207,174 @@ class ExcelPlanController extends Controller
         $row++;
 
         foreach ($data_strategic_issues as $issue) {
-            $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $issue['name']);
-            $row++;
+            // $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $issue['name']);
+            // $row++;
 
-            // $yearID = null;
-            // foreach ($data_strategic3_levels as $level) {
-            //     if ($level['stra3LVID'] == $issue['stra3LVID']) {
-            //         $yearID = $level['yearID'];
-            //         break;
-            //     }
-            // }
-            // $year = null;
-            // foreach ($data_years as $yearRow) {
-            //     if ($yearRow['yearID'] == $yearID) {
-            //         $year = $yearRow['year'] - 543;
-            //         break; //  จบลูปทันทีเมื่อเจอค่า
-            //     }
-            // }
+            $yearID = null;
+            foreach ($data_strategic3_levels as $level) {
+                if ($level['stra3LVID'] == $issue['stra3LVID']) {
+                    $yearID = $level['yearID'];
+                    break;
+                }
+            }
+            $year = null;
+            foreach ($data_years as $yearRow) {
+                if ($yearRow['yearID'] == $yearID) {
+                    $year = $yearRow['year'];
+                    // dd($year);
+                    break; //  จบลูปทันทีเมื่อเจอค่า
+                }
+            }
 
-            // if ($year == $currentYear) {
-            //     $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $issue['name']);
-            //     $row++;
+            if ($year == $currentYear) {
+                $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $issue['name']);
+                $sheet->mergeCells('A' . $row . ':' . 'R' . $row);
+                // ตั้งค่าสีพื้นหลัง
+                $sheet->getStyle('A' . $row . ':' . 'R' . $row)
+                    ->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('FFFF00'); // สีเหลือง (รูปแบบ ARGB)
 
-            //     // foreach ($data_goals as $goal) {
-            //     //     $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $goal['name']);
-            //     //     $row++;
-            //     // }
-            // }
+                $row++;
+
+                foreach ($data_goals as $goal) {
+                    if ($goal['SFA3LVID'] == $issue['SFA3LVID']) {
+                        $sheet->setCellValue('A' . $row, 'เป้าประสงค์ที่: ' . $goal['name']);
+                        $sheet->mergeCells('A' . $row . ':' . 'R' . $row);
+
+                        $row++;
+                    }
+
+                    foreach ($data_tactics as $tactic) {
+                        if ($tactic['goal3LVID'] == $goal['goal3LVID']) {
+                            $projectRows = [];
+
+                            $year1 = 2024;
+                            $year2 = 2025;
+
+                            $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
+
+                            foreach ($data_projects as $project) {
+                                if ($project['yearID'] == $yearID) {
+                                    foreach ($data_strategic_maps as $map) {
+                                        if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
+                                            $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
+
+                                            $kpiNames = [];
+                                            $kpiTargets = [];
+
+                                            foreach ($data_kpi_projects as $kpi) {
+                                                if ($kpi['proID'] == $project['proID']) {
+                                                    $kpiNames[] = '- ' . ($kpi['name'] ?? '-');
+
+                                                    $targetLabel = "";
+                                                    foreach ($data_count_kpi_projects as $countKpi) {
+                                                        if ($countKpi['countKPIProID'] == $kpi['countKPIProID']) {
+                                                            $targetLabel = '- ' . $countKpi['name'];
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    $targetValue = "";
+                                                    $targetValue = "";
+                                                    if (!empty($targetLabel) && isset($kpi['target'])) {
+                                                        $targetValue = "$targetLabel " . number_format($kpi['target'], 2);
+                                                    }
+                                                    $kpiTargets[] = $targetValue;
+                                                }
+                                            }
+                                            $startMonth = null;
+                                            $endMonth = null;
+                                            foreach ($data_steps as $step) {
+                                                if ($step['proID'] == $project['proID']) {
+                                                    //  ใช้ปี ค.ศ. โดยตรง
+                                                    $startDate = new DateTime($step['start']);
+                                                    $endDate = new DateTime($step['end']);
+
+                                                    $startYear = (int)$startDate->format('Y'); // ใช้ ค.ศ.
+                                                    $endYear = (int)$endDate->format('Y');
+
+                                                    $startMonth = (int)$startDate->format('m');
+                                                    $endMonth = (int)$endDate->format('m');
+                                                }
+                                            }
+                                            // สร้าง array เพื่อเก็บข้อมูลโครงการ
+                                            $projectData = [];
+
+                                            foreach ($data_projects as $project) {
+                                                // เก็บข้อมูลพื้นฐานโครงการ
+                                                $projectItem = [
+                                                    'name' => $project['name'] ?? '-',
+                                                    'budget' => $project['badgetTotal'] ?? 0,
+                                                    'kpis' => [],
+                                                    'targets' => []
+                                                ];
+
+                                                // เก็บข้อมูล KPI
+                                                foreach ($data_kpi_projects as $kpi) {
+                                                    if ($kpi['proID'] == $project['proID']) {
+                                                        $countKpi = collect($data_count_kpi_projects)
+                                                            ->where('countKPIProID', $kpi['countKPIProID'])
+                                                            ->first();
+
+                                                        $projectItem['kpis'][] = $kpi['name'] ?? '-';
+                                                        $projectItem['targets'][] = ($countKpi['name'] ?? '') . ' ' . number_format($kpi['target'], 2);
+                                                    }
+                                                }
+
+                                                // เก็บข้อมูลผู้รับผิดชอบ
+                                                $userMap = collect($data_users_map)
+                                                    ->where('proID', $project['proID'])
+                                                    ->first();
+
+                                                $user = $userMap ? collect($data_users)
+                                                    ->where('userID', $userMap['userID'])
+                                                    ->first() : null;
+
+                                                $projectItem['responsible'] = $user['displayname'] ?? '-';
+
+                                                // เก็บข้อมูลระยะเวลา
+                                                $step = collect($data_steps)
+                                                    ->where('proID', $project['proID'])
+                                                    ->first();
+
+                                                if ($step) {
+                                                    $projectItem['start'] = $step['start'];
+                                                    $projectItem['end'] = $step['end'];
+                                                }
+
+                                                // เพิ่มโครงการลงใน array หลัก
+                                                $projectData[] = $projectItem;
+                                            }
+
+                                            // ตัวอย่างการนำไปใช้แสดงผลทีหลัง
+                                            foreach ($projectData as $project) {
+                                                // แสดงชื่อโครงการ (ตัวหนา)
+                                                $sheet->setCellValue('C' . $row, $project['name']);
+                                                $sheet->getStyle('C' . $row)->getFont()->setBold(true);
+
+                                                // แสดง KPI และค่าเป้าหมาย
+                                                foreach ($project['kpis'] as $index => $kpi) {
+                                                    $row++;
+                                                    $sheet->setCellValue('C' . $row, '- ' . $kpi);
+                                                    $sheet->setCellValue('D' . $row, $project['targets'][$index] ?? '');
+                                                }
+
+                                                // แสดงข้อมูลอื่นๆ
+                                                $sheet->setCellValue('E' . $row, number_format($project['budget'], 2));
+                                                $sheet->setCellValue('R' . $row, $project['responsible']);
+
+                                                $row++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -356,7 +497,7 @@ class ExcelPlanController extends Controller
         //                                             }
         //                                         }
 
-        //                                         //  รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
+        //  รวมโครงการและตัวชี้วัดให้อยู่ในคอลัมน์เดียวกัน
         //                                         $projectDetails = "<b>" . ($project['name'] ?? '-') . "</b><br>" . implode("<br>", $kpiNames);
         //                                         $projectTargetDetails = "<br>" . implode("<br>", $kpiTargets); // เพิ่มช่องว่างบรรทัดแรก
 
