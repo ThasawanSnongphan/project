@@ -139,6 +139,7 @@ class ProjectEvalutionController extends Controller
     }
 
     public function detail($id){
+        
         // $data['evaluation'] = DB::table('project_evaluations')->where('proID',$id)->first();
        $data['evaluation']=ProjectEvaluation::with('operating')->where('proID',$id)->first();
 

@@ -81,68 +81,11 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="field item form-group">
-                        <label for="account_type"
-                            class="col-form-label col-md-3 col-sm-3  label-align">account_type<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" name="account_type" id="account_type"
-                                data-validate-length-range="5,15" type="text" />
-                                @error('account_type')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="field item form-group">
-                        <label for="full_prefix_name_th"
-                            class="col-form-label col-md-3 col-sm-3  label-align">full_prefix_name_th<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="full_prefix_name_th"
-                                id="full_prefix_name_th" data-validate-linked='email' required='required' />
-                                @error('full_prefix_name_th')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="field item form-group">
-                        <label for="firstname_th"
-                            class="col-form-label col-md-3 col-sm-3  label-align">firstname_th<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="firstname_th" id="firstname_th"
-                                data-validate-minmax="10,100" required='required'>
-                                @error('firstname_th')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="field item form-group">
-                        <label for="lastname_th"
-                            class="col-form-label col-md-3 col-sm-3  label-align">lastname_th<span
-                                class="required">*</span></label>
-                        <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text"name="lastname_th" id="lastname_th"
-                                data-validate-minmax="10,100" required='required'>
-                                @error('lastname_th')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
+                  
 
 
 
-                    <div class="field item form-group">
+                    {{-- <div class="field item form-group">
                         <label for="firstname_en"
                             class="col-form-label col-md-3 col-sm-3  label-align">firstname_en<span
                                 class="required">*</span></label>
@@ -211,6 +154,34 @@
                                 </div>
                             @enderror
                         </div>
+                    </div> --}}
+                    <div class="field item form-group">
+                        <label for="displayname"
+                            class="col-form-label col-md-3 col-sm-3  label-align">displayname<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" name="displayname" id="displayname"
+                                required='required' data-validate-length-range="8,20" />
+                                @error('displayname')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label for="person_key"
+                            class="col-form-label col-md-3 col-sm-3  label-align">person_key<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <input class="form-control" type="text" name="person_key" id="person_key"
+                                required='required' data-validate-length-range="8,20" />
+                                @error('person_key')
+                                <div class="m-2">
+                                    <span class="text text-danger">{{ $message }}</span>
+                                </div>
+                            @enderror
+                        </div>
                     </div>
                     <div class="field item form-group">
                         <label for="position_name"
@@ -226,7 +197,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="field item form-group">
+                    {{-- <div class="field item form-group">
                         <label for="position_type_id"
                             class="col-form-label col-md-3 col-sm-3  label-align">position_type_id<span
                                 class="required">*</span></label>
@@ -239,8 +210,8 @@
                                 </div>
                             @enderror
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="position_type_th"
                             class="col-form-label col-md-3 col-sm-3  label-align">position_type_th<span
                                 class="required">*</span></label>
@@ -253,8 +224,8 @@
                                 </div>
                             @enderror
                         </div>
-                    </div>
-                    <div class="field item form-group">
+                    </div> --}}
+                    {{-- <div class="field item form-group">
                         <label for="faculty_code"
                             class="col-form-label col-md-3 col-sm-3  label-align">faculty_code<span
                                 class="required">*</span></label>
@@ -267,7 +238,7 @@
                                 </div>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="field item form-group">
                         <label for="faculty_name"
                             class="col-form-label col-md-3 col-sm-3  label-align">faculty_name<span
@@ -282,7 +253,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="field item form-group">
+                    {{-- <div class="field item form-group">
                         <label for="department_code"
                             class="col-form-label col-md-3 col-sm-3  label-align">department_code<span
                                 class="required">*</span></label>
@@ -295,7 +266,7 @@
                                 </div>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="field item form-group">
                         <label for="department_name"
                             class="col-form-label col-md-3 col-sm-3  label-align">department_name<span

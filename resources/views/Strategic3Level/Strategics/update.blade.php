@@ -54,7 +54,7 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="yearID" name="yearID" class="form-control" required>
+                                                <select id="yearID" name="yearID" class="form-control" disabled>
                                                     @foreach ($year as $year)
                                                         <option value="{{ $year->yearID }}"  @if ($year->yearID == $strategic->yearID) selected @endif > {{ $year->year }}</option>
                                                     @endforeach

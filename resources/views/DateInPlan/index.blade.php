@@ -1,26 +1,36 @@
 @extends('layout')
-@section('title', 'ProjectCharector')
+@section('title','DateInPlan')
 @section('content')
 <div class="container body">
     <div class="main_container">
-        <!-- page content -->
         <div role="main">
             <div class="">
                 <div class="page-title">
                     <div class="title_left">
-                        <h3>ลักษณะโครงการ</h3>
+                        <h3>กำหนดการเสนอโครงการในแผน</h3>
                     </div>
 
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5   form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">Go!</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                @include('ProjectCharac.create')
+                @include('DateInPlan.create')
 
                 <div class="row" style="display: block;">
-                    <div class="col-md-3 col-sm-3  "></div>
-                    <div class="col-md-6 col-sm-6  ">
+                    <div class="col-md-3 col-sm-1  "></div>
+                    <div class="col-md-6 col-sm-10  ">
+
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>ลักษณะโครงการ</h2>
+                                <h2>กำหนดการเสนอโครงการในแผน</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -43,25 +53,29 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>ปีงบประมาณ</th>
+                                            <th>วันที่เปิด</th>
+                                            <th>วันที่ปิด</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
-                                            $i=1;
+                                            $i = 1;
                                         @endphp
-                                        @foreach ($pro_char as $pro )
+                                        @foreach ($data['date'] as $item)
                                             <tr>
-                                                <th scope="row">{{$i}}</th>
-                                                <td>{{ $pro->name }}</td>
+                                                <th scope="row">{{ $i }}</th>
+                                                <td>{{$item->year->year}}</td>
+                                                <td>{{ $item->startDate }}</td>
+                                                <td>{{ $item->endDate }}</td>
                                                 <td>
-                                                    <a
-                                                            href="{{ route('pro.edit', $pro->proChaID) }}"><i
-                                                                class="fa fa-pencil btn btn-warning"></i></a>
-                                                        <a href="{{ route('pro.delete', $pro->proChaID) }}"
-                                                            onclick="return confirm('ต้องการลบลักษณะโครงการ {{ $pro->name }} หรือไม่')"><i
-                                                                class="fa fa-times btn btn-danger"></i></a>
+                                                    {{-- <a href="{{ route('dateInPlan.edit', $item->id) }}">
+                                                        <i class="fa fa-pencil btn btn-warning
+                                                        "></i></a>
+                                                    <a href="{{ route('dateInPlan.delete', $item->id) }}"
+                                                        onclick="return confirm('ต้องการลบ{{ $item->startDate }} หรือไม่')">
+                                                        <i class="fa fa-times btn btn-danger"></i></a> --}}
                                                 </td>
                                             </tr>
                                             @php
@@ -74,11 +88,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-3  "></div>
+                    <div class="col-md-3 col-sm-1  "></div>
                 </div>
             </div>
         </div>
-        <!-- /page content -->
     </div>
 </div>
 @endsection

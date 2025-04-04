@@ -207,202 +207,204 @@
                                             <div class=" col-md-3 col-sm-3 m-1">
                                                 <input class="form-control" type="text" name="countMain3LV[]"
                                                     id="count3LV_{{ $index }}"
-                                                    @if (session()->has('KPIMain3LVID')) @foreach ($KPIMain3LV as $KPI)
+                                                    @if (session()->has('KPIMain3LVID')) 
+                                                        @foreach ($KPIMain3LV as $KPI)
                                                             @if ($KPI->goal3LVID == session('goal3LVID')[$index])
                                                                 @if ($KPI->KPIMain3LVID == session('KPIMain3LVID')[$index]) value="{{ $KPI->count }}" @endif
                                                             @endif
+                                                    
+                                                        @endforeach
+                                                    @endif readonly>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="targetMain3LV[]"
+                                                id="target3LV_{{ $index }}"
+                                                 @if (session()->has('KPIMain3LVID')) 
+                                                    @foreach ($KPIMain3LV as $KPI)
+                                                        @if ($KPI->goal3LVID == session('goal3LVID')[$index])
+                                                            @if ($KPI->KPIMain3LVID == session('KPIMain3LVID')[$index]) value="{{ $KPI->target }}" @endif
+                                                        @endif
+                                                    @endforeach
+                                                @endif readonly>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type='button' class="btn btn-primary insert-kpi3LV-button"
+                                                        data-index="{{ $index }}">เพิ่ม
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                        <div id="insertKPIMain1_{{ $index }}"></div>
+                                    </div>
+                                </div>
+                                @php
+                                    $index += 1;
+                                @endphp
+                            @endforeach
+
+                            @php
+                                $index = 0;
+                            @endphp
+                            @foreach ($strategic2Level as $item)
+                                {{-- @if ($item->proID == $project->proID) --}}
+                                <div class="row field item form-group align-items-center">
+                                    <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                            class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6 d-flex">
+                                        @if (session()->has('stra2LVID'))
+                                            <input type="checkbox" name="stra2LVID[]" value="{{ $item->stra2LVID }}" checked>
+                                        @else
+                                            <input type="checkbox" name="stra2LVID[]" value="{{ $item->stra2LVID }}">
+
+                                        @endif
+
+                                        <input class="ml-2 form-control" type="text" name="name" id="name"
+                                            data-validate-length-range="8,20" value="{{ $item->name }}" readonly />
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-9 border mb-2 p-2">
+                                    <div class="row field item form-group align-items-center">
+                                        <label label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <select id="SFA2LVID_{{ $index }}" name="SFA2LVID[]" class="form-control">
+                                                <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
+                                                @foreach ($SFA2LV as $SFA)
+                                                    @if ($SFA->stra2LVID == $item->stra2LVID)
+                                                        <option value="{{ $SFA->SFA2LVID }}">
+                                                            {{ $SFA->name }}</option>
+                                                    @endif
                                                 @endforeach
 
-                        @endif readonly>
-                </div>
-                <div class=" col-md-3 col-sm-3 m-1">
-                    <input class="form-control" type="text" name="targetMain3LV[]"
-                        id="target3LV_{{ $index }}"
-                        @if (session()->has('KPIMain3LVID')) @foreach ($KPIMain3LV as $KPI)
-                                    @if ($KPI->goal3LVID == session('goal3LVID')[$index])
-                                        @if ($KPI->KPIMain3LVID == session('KPIMain3LVID')[$index]) value="{{ $KPI->target }}" @endif
-                        @endif
-                    @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <select id="tac2LVID_{{ $index }}" name="tac2LVID[]" class="form-control">
+                                                <option value="">--เลือกกลยุทธ์--</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row field item form-group align-items-center">
+                                    <label for="title"
+                                        class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
+                                    <div class="row col-md-9 col-sm-9 border m-1">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
+                                                <label for="title" class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
+                                            </div>
+                                            <div class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                                <label class="col-form-label label-align ">หน่วยนับ</label>
+
+                                            </div>
+                                            <div class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
+                                                <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="col-md-4 col-sm-4 m-1">
+                                                <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]" class="form-control">
+                                                    <option value="">--เลือกตัวชี้วัด--</option>
+
+
+                                                </select>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+
+                                                <input class="form-control" type="text" name="countMain2LV[]"
+                                                    id="count2LV_{{ $index }}" readonly>
+
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="targetMain2LV[]"
+                                                    id="target2LV_{{ $index }}" readonly>
+                                            </div>
+                                            <div class="col-md-1 col-sm-1 m-1">
+                                                <button type='button' class="btn btn-primary insert-kpi2LV-button"
+                                                    data-index="{{ $index }}">เพิ่ม
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                        <div id="insertKPIMain2_{{ $index }}"></div>
+                                    </div>
+                                </div>
+                                @php
+                                    $index += 1;
+                                @endphp
+                                {{-- @endif --}}
+                            @endforeach
+
+                            @php
+                                $index = 0;
+                            @endphp
+                            @foreach ($strategic1Level as $item)
+                                {{-- @if ($item->proID == $project->proID) --}}
+                                <div class="row field item form-group align-items-center">
+                                    <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
+                                            class="required">*</span></label>
+                                    <div class="col-md-6 col-sm-6 d-flex">
+                                        @if (session()->has('stra1LVID'))
+                                            <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra1LVID }}" checked>
+                                        @else
+                                            <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra1LVID }}">
+
+                                        @endif
+                                        <input class="ml-2 form-control" type="text" name="name" id="name"
+                                            data-validate-length-range="8,20" value="{{ $item->name }}" readonly />
+                                    </div>
+
+                                </div>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-9 border mb-2 p-2">
+                                    <div class="row field item form-group align-items-center">
+                                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
+                                                class="required">*</span></label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <select id="tar1LVID_{{ $index }}" name="tar1LVID[]" class="form-control">
+                                                <option value="">--เลือกเป้าหมาย--</option>
+                                                @foreach ($target1LV as $target)
+                                                    @if ($target->stra1LVID == $item->stra1LVID)
+                                                        <option value="{{ $target->tar1LVID }}">
+                                                            {{ $target->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- @endif --}}
+                                @php
+                                    $index += 1;
+                                @endphp
+                            @endforeach
+
+                            @if (count($strategic3Level) > 0 || count($strategic2Level) > 0 || count($strategic1Level) > 0)
+                                <div class="ln_solid">
+                                <div class="form-group ">
+                                    <div class="col-md-6 offset-md-3 ">
+                                        <button type='submit' class="btn btn-primary" onclick="submitButton('saveStrategic')">บันทึก</button>
+                                        <button type="submit" class="btn btn-primary" onclick="submitButton('next')">ถัดไป</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                               <p style="text-align: center">ไม่มีแผนยุทธศาสตร์ในปีนี้</p>
+                            @endif
+                            
+   
+                        </form>
                     @endif
-                    readonly>
-                </div>
-                <div class="col-md-1 col-sm-1 m-1">
-                    <button type='button' class="btn btn-primary insert-kpi3LV-button"
-                        data-index="{{ $index }}">เพิ่ม
-                    </button>
-
-                </div>
-            </div>
-            <div id="insertKPIMain1_{{ $index }}"></div>
-        </div>
-    </div>
-    @php
-        $index += 1;
-    @endphp
-    @endforeach
-
-    @php
-        $index = 0;
-    @endphp
-    @foreach ($strategic2Level as $item)
-        {{-- @if ($item->proID == $project->proID) --}}
-        <div class="row field item form-group align-items-center">
-            <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
-                    class="required">*</span></label>
-            <div class="col-md-6 col-sm-6 d-flex">
-                @if (session()->has('stra2LVID'))
-                    <input type="checkbox" name="stra2LVID[]" value="{{ $item->stra2LVID }}" checked>
-                @else
-                    <input type="checkbox" name="stra2LVID[]" value="{{ $item->stra2LVID }}">
-
-                @endif
-
-                <input class="ml-2 form-control" type="text" name="name" id="name"
-                    data-validate-length-range="8,20" value="{{ $item->name }}" readonly />
-            </div>
-
-        </div>
-        <div class="col-md-3"></div>
-        <div class="col-md-9 border mb-2 p-2">
-            <div class="row field item form-group align-items-center">
-                <label label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ประเด็นยุทธศาสตร์<span
-                        class="required">*</span></label>
-                <div class="col-md-8 col-sm-8">
-                    <select id="SFA2LVID_{{ $index }}" name="SFA2LVID[]" class="form-control">
-                        <option value="">--เลือกประเด็นยุทธศาสตร์--</option>
-                        @foreach ($SFA2LV as $SFA)
-                            @if ($SFA->stra2LVID == $item->stra2LVID)
-                                <option value="{{ $SFA->SFA2LVID }}">
-                                    {{ $SFA->name }}</option>
-                            @endif
-                        @endforeach
-
-                    </select>
-                </div>
-            </div>
-            <div class="row field item form-group align-items-center">
-                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
-                        class="required">*</span></label>
-                <div class="col-md-8 col-sm-8">
-                    <select id="tac2LVID_{{ $index }}" name="tac2LVID[]" class="form-control">
-                        <option value="">--เลือกกลยุทธ์--</option>
-
-                    </select>
                 </div>
             </div>
         </div>
-        <div class="row field item form-group align-items-center">
-            <label for="title"
-                class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
-            <div class="row col-md-9 col-sm-9 border m-1">
-                <div class="col-md-12 col-sm-12">
-                    <div class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
-                        <label for="title" class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
-                    </div>
-                    <div class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                        <label class="col-form-label label-align ">หน่วยนับ</label>
-
-                    </div>
-                    <div class="row col-md-3 col-sm-3 m-1 d-flex justify-content-center align-items-center">
-                        <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
-                    </div>
-                </div>
-                <div class="col-md-12 col-sm-12">
-                    <div class="col-md-4 col-sm-4 m-1">
-                        <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]" class="form-control">
-                            <option value="">--เลือกตัวชี้วัด--</option>
-
-
-                        </select>
-                    </div>
-                    <div class=" col-md-3 col-sm-3 m-1">
-
-                        <input class="form-control" type="text" name="countMain2LV[]"
-                            id="count2LV_{{ $index }}" readonly>
-
-                    </div>
-                    <div class=" col-md-3 col-sm-3 m-1">
-                        <input class="form-control" type="text" name="targetMain2LV[]"
-                            id="target2LV_{{ $index }}" readonly>
-                    </div>
-                    <div class="col-md-1 col-sm-1 m-1">
-                        <button type='button' class="btn btn-primary insert-kpi2LV-button"
-                            data-index="{{ $index }}">เพิ่ม
-                        </button>
-
-                    </div>
-                </div>
-                <div id="insertKPIMain2_{{ $index }}"></div>
-            </div>
-        </div>
-        @php
-            $index += 1;
-        @endphp
-        {{-- @endif --}}
-    @endforeach
-
-    @php
-        $index = 0;
-    @endphp
-    @foreach ($strategic1Level as $item)
-        {{-- @if ($item->proID == $project->proID) --}}
-        <div class="row field item form-group align-items-center">
-            <label for="plan" class="col-form-label col-md-3 col-sm-3 label-align">แผนยุทธศาสตร์<span
-                    class="required">*</span></label>
-            <div class="col-md-6 col-sm-6 d-flex">
-                @if (session()->has('stra1LVID'))
-                    <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra1LVID }}" checked>
-                @else
-                    <input type="checkbox" name="stra1LVID[]" value="{{ $item->stra1LVID }}">
-
-                @endif
-                <input class="ml-2 form-control" type="text" name="name" id="name"
-                    data-validate-length-range="8,20" value="{{ $item->name }}" readonly />
-            </div>
-
-        </div>
-        <div class="col-md-3"></div>
-        <div class="col-md-9 border mb-2 p-2">
-            <div class="row field item form-group align-items-center">
-                <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เป้าหมาย<span
-                        class="required">*</span></label>
-                <div class="col-md-8 col-sm-8">
-                    <select id="tar1LVID_{{ $index }}" name="tar1LVID[]" class="form-control">
-                        <option value="">--เลือกเป้าหมาย--</option>
-                        @foreach ($target1LV as $target)
-                            @if ($target->stra1LVID == $item->stra1LVID)
-                                <option value="{{ $target->tar1LVID }}">
-                                    {{ $target->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-        {{-- @endif --}}
-        @php
-            $index += 1;
-        @endphp
-    @endforeach
-
-    {{-- <div class="ln_solid"> --}}
-    <div class="ln_solid">
-        <div class="form-group ">
-            <div class="col-md-6 offset-md-3 ">
-                <button type='submit' class="btn btn-primary" onclick="submitButton('saveStrategic')">บันทึก</button>
-                <button type="submit" class="btn btn-primary" onclick="submitButton('next')">ถัดไป</button>
-
-                {{-- <button type="submit" class="btn btn-primary" name="action" value="save">บันทึก</button>
-                <button type="submit" class="btn btn-primary" name="action" value="next">ถัดไป</button> --}}
-            </div>
-        </div>
-    </div>
-    {{-- </div> --}}
-    </form>
-    @endif
-    </div>
-    </div>
-    </div>
     <div class="col-md-1 col-sm-1"></div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -473,7 +475,7 @@
                 var idIndex = dropdownID.split("_")[1];
                 $('[id^="KPIMain3LVID_"]');
                 // $('[id^="KPIMain3LVID_' + idIndex + '"]').prop('disabled', false); // เปิดใช้งาน dropdown
-                
+
                 $.ajax({
                     url: "/projectKPIMain3LV",
                     type: 'POST',

@@ -17,12 +17,8 @@
                 @endforeach
             </select>
         </div>
-        {{-- <div class="ml-auto">
-
-            <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
-        </div> --}}
-
     </div>
+
 
     <table id="example" class="display">
         <thead>
@@ -51,15 +47,14 @@
                     <td data-project="{{ $item->proID }}">
                         @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
                             {{ $item->name }}
-                        @elseif ($item->statusID == 1 || $item->statusID == 2 || $item->statusID == 3 || $item->statusID == 4 || $item->statusID == 15)
-                            <a href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
                         @else
-                            <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
+                            <a href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
+                        
                         @endif
                     </td>
 
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
-                    
+
                     @if (Auth::check() && auth()->user())
                         <td>
 
@@ -81,46 +76,74 @@
                                 @elseif($item->statusID == 8 || $item->statusID == 9 || $item->statusID == 10 || $item->statusID == 11)
                                     <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
                                             class="fa fa-eye btn btn-primary"> ดูรายงาน</i></a>
-                                
                                 @endif
                             @else
-                                    <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                            เขียน</i></a>    
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
                             @endif
 
                         </td>
                         <td>
 
-                            @if ($currentMonth >= 1 && $currentMonth <= 3)
+                            @if ($currentMonth >= 1 && $currentMonth <= 4)
                                 <!-- เช็คว่าเป็นเดือนมกราคมถึงมีนาคม -->
+
                                 @if ($item->statusID == 4)
                                     {{-- <input type="text" value="{{$item->proID}}"> --}}
-                                    @if (!empty($evaluation) && ($evaluation[$index]->proID ?? '') === $item->proID)
-                                        <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                class="fa fa-pencil btn btn-warning"> แก้ไขเอกสารเสนอปิดโครงการ</i></a>
-                                    @elseif ($proID[$index] ?? '' === $item->proID)
+                                    {{-- @if (empty($evaluation) && ($evaluation[$index]->proID ?? '') === $item->proID) --}}
+
+                                    @if ($proID[$index] ?? '' === $item->proID)
                                         <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
                                                 class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
                                     @else
-                                            {{-- <input type="text" value="{{$proID ?? ''}}"> --}}
+                                        {{-- <input type="text" value="{{$proID ?? ''}}"> --}}
                                         <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
-                                                class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                                class="fa fa-pencil btn btn-primary">
+                                                เขียน</i></a>
                                         {{-- <input type="text" value="{{$item->proID}}"> --}}
                                     @endif
-                                @elseif ($item->statusID == 8 || $item->statusID == 9 || $item->statusID == 10 || $item->statusID == 11)
+                                @elseif($item->statusID == 13)
+                                    <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                            class="fa fa-pencil btn btn-warning"> แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                                @elseif ($item->statusID >= 5 && $item->statusID <= 11)
                                     <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
                                             class="fa fa-eye btn btn-primary"> ดูรายงาน</i></a>
                                 @else
                                     <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                             เขียน</i></a>
                                 @endif
+                            @else
+                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                        เขียน</i></a>
                             @endif
                         </td>
                         <td>
-                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID == 4)
+                            @if ($currentMonth >= 4 && $currentMonth <= 6)
                                 <!-- เช็คว่าเป็นเดือนเมษายนถึงมิถุนายน -->
-                                <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
-                                        class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                @if ($item->statusID == 4)
+                                    {{-- <input type="text" value="{{$item->proID}}"> --}}
+                                    {{-- @if (empty($evaluation) && ($evaluation[$index]->proID ?? '') === $item->proID) --}}
+
+                                    @if ($proID[$index] ?? '' === $item->proID)
+                                        <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                                class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                                    @else
+                                        {{-- <input type="text" value="{{$proID ?? ''}}"> --}}
+                                        <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                                class="fa fa-pencil btn btn-primary">
+                                                เขียน</i></a>
+                                        {{-- <input type="text" value="{{$item->proID}}"> --}}
+                                    @endif
+                                @elseif($item->statusID == 13)
+                                    <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                            class="fa fa-pencil btn btn-warning"> แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                                @elseif ($item->statusID >= 5 && $item->statusID <= 11)
+                                    <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
+                                            class="fa fa-eye btn btn-primary"> ดูรายงาน</i></a>
+                                @else
+                                    <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                            เขียน</i></a>
+                                @endif
                             @else
                                 <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                         เขียน</i></a>

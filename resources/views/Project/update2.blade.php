@@ -1194,7 +1194,7 @@
                             <button type='submit' class="btn btn-primary"
                                 onclick="submitButton('save2',{{ $project->proID }})">บันทึก</button>
                             <button type='button' class="btn btn-primary"
-                                onclick="submitButton('send2',{{ $project->proID }})">ส่ง</button>
+                                onclick="submitButton('send2',{{ $project->proID }})">เสนอโครงการ</button>
                         </div>
                     </div>
                 </div>

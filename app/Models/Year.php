@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Year extends Model
 {
+    protected $primaryKey = 'yearID';
     use HasFactory;
     public function projects()
     {

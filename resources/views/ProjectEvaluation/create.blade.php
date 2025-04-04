@@ -130,7 +130,7 @@
                                 <div class="col-md-7 col-sm-7">
                                    @foreach ($data['KPIProject'] as $item)
                                        -{{$item->name}} <br>
-                                       <input name="result_eva[]" class="form-control"  value="{{$item->result2}}">
+                                       <input type="text" name="result_eva[]" class="form-control" >
                                    @endforeach
                                 </div>
                             </div>
@@ -178,14 +178,14 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ปัญหาและอุปสรรคในการดำเนินโครงการ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="problem" id="problem" class="form-control" style="min-height: 100px" required></textarea>
+                                   <textarea name="problem" id="problem" class="form-control" style="min-height: 100px" ></textarea>
                                 </div>
                             </div>
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>แนวทางการดำเนินการแก้ไข / ข้อเสนอแนะ</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                   <textarea name="corrective" id="corrective" class="form-control" style="min-height: 100px" required></textarea>
+                                   <textarea name="corrective" id="corrective" class="form-control" style="min-height: 100px" ></textarea>
                                 </div>
                             </div>
 

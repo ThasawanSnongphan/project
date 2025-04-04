@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Strategic3Level extends Model
 {
+    protected $primaryKey = 'stra3LVID'; 
     use HasFactory;
     public function year()
     {

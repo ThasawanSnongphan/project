@@ -87,7 +87,8 @@
                             </ul>
                             <ul class="nav side-menu">
                                 {{-- สิทธิ์ผู้เขียนโครงการ --}}
-                                <li><a><i class="fa fa-home"></i> ผลการดำเนินงาน <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-file"></i> ผลการดำเนินงาน <span
+                                            class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="/Performance">ผลการดำเนินงาน</a></li>
                                     </ul>
@@ -97,7 +98,7 @@
                                 @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                     {{-- <h3>General</h3> --}}
                                     <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> Admin <span
+                                        <li><a><i class="fa fa-user"></i> Admin <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                                 <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
@@ -133,6 +134,7 @@
                                                 <li><a href="/projectType">ประเภทโครงการ</a></li>
                                                 <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                                 <li><a href="/countKPI">หน่วยนับKPI</a></li>
+                                                <li><a href="/dateInPlan">กำหนดการเสนอโครงการในแผน</a></li>
                                                 <li><a href="/project">โครงการ</a></li>
                                             </ul>
                                         </li>
@@ -141,7 +143,7 @@
                                 @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
                                     <ul class="nav side-menu">
                                         {{-- สิทธิ์ผู้เขียนโครงการ --}}
-                                        <li><a><i class="fa fa-home"></i> ผู้รับผิดชอบโครงการ <span
+                                        <li><a><i class="fa fa-user"></i> ผู้รับผิดชอบโครงการ <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
@@ -157,7 +159,7 @@
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
                                     <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> หัวหน้าฝ่าย <span
+                                        <li><a><i class="fa fa-user"></i> หัวหน้าฝ่าย <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
@@ -172,13 +174,15 @@
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
                                     <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> เจ้าหน้าที่แผน <span
+                                        <li><a><i class="fa fa-user"></i> เจ้าหน้าที่แผน <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
                                                 <li><a href="/PlanningAnalystProjectAll">รายชื่อโครงการทั้งหมด</a></li>
 
-                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการในแผนรอพิจารณา</a></li>
-                                                <li><a href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผนรอพิจารณา</a>
+                                                <li><a href="/PlanningAnalystProject">รายชื่อโครงการในแผนรอพิจารณา</a>
+                                                </li>
+                                                <li><a
+                                                        href="/PlanningAnalystProjectOutPlan">รายชื่อโครงการนอกแผนรอพิจารณา</a>
                                                 </li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
                                                 <li><a
@@ -189,21 +193,12 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> รายงาน <span
-                                                    class="fa fa-chevron-down"></span></a>
-                                            <ul class="nav child_menu">
-                                               
-
-
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    
                                 @endif
 
                                 @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
                                     <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> ผู้บริหาร <span
+                                        <li><a><i class="fa fa-user"></i> ผู้บริหาร <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
@@ -217,10 +212,11 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                    
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
                                     <ul class="nav side-menu">
-                                        <li><a><i class="fa fa-home"></i> เจ้าหน้าที่พัสดุ <span
+                                        <li><a><i class="fa fa-user"></i> เจ้าหน้าที่พัสดุ <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
 
@@ -230,8 +226,31 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    
                                 @endif
+                                <ul class="nav side-menu">
+                                    <li><a><i class="fa fa-home"></i> รายงาน <span
+                                                class="fa fa-chevron-down"></span></a>
+                                        <ul class="nav child_menu">
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                                                <li><a href=""></a>รายงานแผนปฏิบัติการ</li>
+                                                
+                                            @endif
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
+                                                
+                                            @endif
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
+                                                
+                                            @endif
+                                            @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
+                                                
+                                            @endif
+                                            @if  (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
+                                                
+                                            @endif
+
+                                        </ul>
+                                    </li>
+                                </ul>
                             @endif
                         </div>
                     </div>
@@ -281,7 +300,7 @@
                     <nav class="nav navbar-nav ">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="navbar-left m-2">
-                               
+
                             </div>
                             <ul class=" navbar-right">
                                 @auth

@@ -10,16 +10,7 @@
                         <h3>แผนยุทธศาสตร์</h3>
                     </div>
 
-                    <div class="title_right">
-                        <div class="col-md-5 col-sm-5   form-group pull-right top_search">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search for...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button">Go!</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 @include('Strategic3Level.Strategics.create')
@@ -92,6 +83,7 @@
                                                     onclick="return confirm('ต้องการลบข่าว {{ $stra->name }} หรือไม่')">
                                                     <i class="fa fa-times btn btn-danger"></i>
                                                 </a>
+                                                <a href="{{route('copyPlan',$stra->stra3LVID)}}">copy</a>
                                             </td>
                                         </tr>
                                         @php

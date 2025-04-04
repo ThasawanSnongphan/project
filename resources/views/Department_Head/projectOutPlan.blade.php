@@ -58,7 +58,7 @@
                     <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
-                        @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
+                        @if ($currentMonth >= 10 && $currentMonth <= 12 && $currentMonth = 1  && $item->statusID === 7)
                             <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
                             <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                         @else
@@ -77,13 +77,37 @@
                         @endif
                     </td>
                     <td>
-                        @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                        @if ($currentMonth >= 4 && $currentMonth <= 6)
+                        <!-- เช็คว่าเป็นเดือนเมษายนถึงมิถุนายน -->
+                        
+                        @if ($item->statusID == 4)
+                            {{-- <input type="text" value="{{$item->proID}}"> --}}
+                            {{-- @if (empty($evaluation) && ($evaluation[$index]->proID ?? '') === $item->proID) --}}
+
+                            @if ($proID[$index] ?? '' === $item->proID)
+                                <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                        class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                            @else
+                                {{-- <input type="text" value="{{$proID ?? ''}}"> --}}
+                                <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                        class="fa fa-pencil btn btn-primary">
+                                        เขียน</i></a>
+                                {{-- <input type="text" value="{{$item->proID}}"> --}}
+                            @endif
+                        @elseif($item->statusID == 13)
+                            <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                    class="fa fa-pencil btn btn-warning"> แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                        @elseif ($item->statusID >= 5 && $item->statusID <= 11)
+                            <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                    class="fa fa-eye btn btn-primary"> ดูรายงาน</i></a>
                         @else
                             <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                     เขียน</i></a>
                         @endif
+                    @else
+                        <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
+                                เขียน</i></a>
+                    @endif
                     </td>
                     <td>
                         @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
