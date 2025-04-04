@@ -193,7 +193,7 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    
+
                                 @endif
 
                                 @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
@@ -212,7 +212,7 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                    
+
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
                                     <ul class="nav side-menu">
@@ -232,20 +232,20 @@
                                                 class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
                                             @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                                                <li><a href=""></a>รายงานแผนปฏิบัติการ</li>
-                                                
+                                                <li><a href="{{ route('plan.PDF') }}" target="_blank"></a>รายงานแผนปฏิบัติการ</li>
+
                                             @endif
                                             @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
-                                                
+
                                             @endif
                                             @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
-                                                
+
                                             @endif
                                             @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
-                                                
+
                                             @endif
                                             @if  (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
-                                                
+
                                             @endif
 
                                         </ul>
