@@ -226,24 +226,43 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($goals as $goal) {
                     if ($goal->goalID == $strategic_map->goalID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>' . $goal->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าประสงค์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($tactics as $tactic) {
                     if ($tactic->tacID == $strategic_map->tacID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }
@@ -257,18 +276,31 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($strategic_issue2_levels as $strategic_issue2_level) {
                     if ($strategic_issue2_level->SFA2LVID == $strategic2_level_map->SFA2LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>' . $strategic_issue2_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็นยุทธศาสตร์ที่ </b>-';
+                }
+
+                $found = false;
                 foreach ($tactic2_levels as $tactic2_level) {
                     if ($tactic2_level->tac2LVID == $strategic2_level_map->tac2LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>' . $tactic2_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;กลยุทธ์ที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }
@@ -282,12 +314,19 @@ class PDFProjectController extends Controller
                         break;
                     }
                 }
+
+                $found = false;
                 foreach ($target1_levels as $target1_level) {
                     if ($target1_level->tac1LVID == $strategic1_level_map->tac1LVID) {
                         $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>' . $target1_level->name;
+                        $found = true;
                         break;
                     }
                 }
+                if (!$found) {
+                    $planDetails[] = '<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป้าหมายที่ </b>-';
+                }
+
                 $plans[] = implode('<br>', $planDetails);
             }
         }

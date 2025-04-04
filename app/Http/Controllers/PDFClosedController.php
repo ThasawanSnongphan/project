@@ -168,6 +168,7 @@ class PDFClosedController extends Controller
                         break;
                     }
                 }
+
                 foreach ($strategic_issues as $strategic_issue) {
                     if ($strategic_issue->SFAID == $strategic_map->SFAID) {
                         $planDetails[] = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ประเด็น' . $strategic_issue->name;
