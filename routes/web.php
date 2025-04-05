@@ -59,7 +59,7 @@ use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\DateInPlanControllers;
 
 //PDF
-Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
+Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen'])->name('closed.PDF');
 Route::get('/pdfPlan/{id}', [PDFPlanController::class, 'pdf_gen'])->name('plan.PDF');
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 

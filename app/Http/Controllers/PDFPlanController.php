@@ -161,7 +161,7 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($headerContent, 2);
 
-        $year1 = ($years->year - 1) - 543;
+        $year1 = ($years->year - 543) - 1;
         $year2 = $years->year - 543;
 
         // dd($year2);
@@ -376,7 +376,6 @@ class PDFPlanController extends Controller
                                             $currentMonth = 12; // แก้ปัญหา ธ.ค.
                                         }
                                         $currentYear = $i >= 3 ? $year2 : $year1; // ปี 2024 = index 0-2, ปี 2025 = index 3-11
-                                        // dd($currentMonth);
 
                                         //  เช็คว่าข้อมูลของ step ครอบคลุมเดือนนี้หรือไม่
                                         $highlight = "";
@@ -384,19 +383,12 @@ class PDFPlanController extends Controller
                                             $stepStart = ($projectData['startYear'] * 12) + $projectData['startMonth']; // แปลงเป็นตัวเลขเดือนทั้งหมด
                                             $stepEnd = ($projectData['endYear'] * 12) + $projectData['endMonth'];
                                             $current = ($currentYear * 12) + $currentMonth;
-                                            // dd($stepStart);
-                                            // dd($projectData['startYear'], $projectData['startMonth'], $projectData['endYear'], $projectData['endMonth'], $currentYear, $currentMonth);
-                                            // dd($stepStart, $stepEnd, $current); // ตรวจสอบว่า stepStart, stepEnd, และ current เป็นค่าที่คาดหวังหรือไม่
 
 
                                             if ($current >= $stepStart && $current <= $stepEnd) {
                                                 $highlight = "style='background-color: yellow;'"; //  ไฮไลต์ช่องสีเหลือง
                                             }
-                                            // else if($stepStart == $stepEnd) {
-                                            //     $highlight = "style='background-color: yellow;'"; //  ไฮไลต์ช่องสีเหลือง
-                                            // }
                                         }
-                                        // $htmlContent .= "<td style='background-color: yellow;'></td>";
 
                                         $htmlContent .= "<td $highlight></td>";
                                     }

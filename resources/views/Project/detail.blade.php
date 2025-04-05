@@ -15,7 +15,7 @@
         </div>
 
         <div>
-            <form action="" method="GET" target="_blank">
+            <form action="{{ route('closed.PDF', $data['project']->proID) }}" method="GET" target="_blank">
                 <button type="submit" class="btn btn-danger">แบบเสนอปิดโครงการ PDF</button>
             </form>
         </div>
