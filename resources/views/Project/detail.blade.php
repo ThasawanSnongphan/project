@@ -4,13 +4,19 @@
     @if (Auth::check())
         <div>
             <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
-                <button type="submit" class="btn btn-danger">Export PDF</button>
+                <button type="submit" class="btn btn-danger">แบบเสนอโครงการ PDF</button>
             </form>
         </div>
 
         <div>
             <form action="{{ route('project.Word', $data['project']->proID) }}" method="GET">
-                <button type="submit" class="btn btn-primary">Export Word</button>
+                <button type="submit" class="btn btn-primary">แบบเสนอโครงการ word</button>
+            </form>
+        </div>
+
+        <div>
+            <form action="" method="GET" target="_blank">
+                <button type="submit" class="btn btn-danger">แบบเสนอปิดโครงการ PDF</button>
             </form>
         </div>
     @endif

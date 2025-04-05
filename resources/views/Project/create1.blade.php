@@ -59,6 +59,21 @@
                             </div>
                         </div>
 
+                        <div class="row field item form-group align-items-center">
+                            <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ผู้กำกับดูแลโครงการ<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <select id="Approver" name="ApproverID" class="form-control" required>
+                                    <option value="">--กรุณาเลือก--</option>
+                                    @foreach ($user as $item)
+                                        <option value="{{ $item->userID }}"
+                                            {{ request('yearID') == $item->userID ? 'selected' : '' }}>{{ $item->displayname }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         @php
                             $index = 0;
                         @endphp

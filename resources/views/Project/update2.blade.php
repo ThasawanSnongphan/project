@@ -56,6 +56,24 @@
 
                             </div>
                         </div>
+
+                        <div class="row field item form-group align-items-center">
+                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับดูแลโครงการ<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="text" name="approverID" value="{{session('approverID')}}">
+                                <input class="form-control" type="text" name="approver"
+                                    data-validate-length-range="8,20" 
+                                    @foreach ($user as $item)
+                                    @if (session('approverID') == $item->userID)
+                                        value=" {{$item->displayname}} "
+                                    @endif
+                                        
+                                    @endforeach  readonly />
+
+                            </div>
+                        </div>
+
                         {{-- ถ้ามีหลายคนก็เเก้ไขได้ --}}
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">เจ้าของโครงการ<span

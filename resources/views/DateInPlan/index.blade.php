@@ -70,12 +70,12 @@
                                                 <td>{{ $item->startDate }}</td>
                                                 <td>{{ $item->endDate }}</td>
                                                 <td>
-                                                    {{-- <a href="{{ route('dateInPlan.edit', $item->id) }}">
+                                                    <a href="{{ route('dateInPlan.edit', $item->id) }}">
                                                         <i class="fa fa-pencil btn btn-warning
                                                         "></i></a>
                                                     <a href="{{ route('dateInPlan.delete', $item->id) }}"
-                                                        onclick="return confirm('ต้องการลบ{{ $item->startDate }} หรือไม่')">
-                                                        <i class="fa fa-times btn btn-danger"></i></a> --}}
+                                                        onclick="return confirm('ต้องการลบกำหนดการปี{{ $item->year->year }} หรือไม่')">
+                                                        <i class="fa fa-times btn btn-danger"></i></a>
                                                 </td>
                                             </tr>
                                             @php

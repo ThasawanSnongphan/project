@@ -76,4 +76,8 @@ class Projects extends Model
         return $this->belongsTo(UniPlan::class,'planID','planID');
 
     }
+
+    public function Approver(){
+        return $this->belongsTo(User::class,'approverID','userID');
+    }
 }
