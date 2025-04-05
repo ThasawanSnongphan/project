@@ -95,6 +95,7 @@
                                 </li>
                             </ul>
                             @if (Auth::check())
+                               
                                 @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                     {{-- <h3>General</h3> --}}
                                     <ul class="nav side-menu">
@@ -193,7 +194,6 @@
                                             </ul>
                                         </li>
                                     </ul>
-
                                 @endif
 
                                 @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
@@ -212,7 +212,6 @@
                                             </ul>
                                         </li>
                                     </ul>
-
                                 @endif
                                 @if (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
                                     <ul class="nav side-menu">
@@ -227,26 +226,13 @@
                                         </li>
                                     </ul>
                                 @endif
+                               
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> รายงาน <span
                                                 class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                                                <li><a href="{{ route('plan.PDF') }}" target="_blank"></a>รายงานแผนปฏิบัติการ</li>
-
-                                            @endif
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Department_head == 1)
-
-                                            @endif
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Planning_Analyst == 1)
-
-                                            @endif
-                                            @if (Auth::check() && auth()->user() && auth()->user()->Executive == 1)
-
-                                            @endif
-                                            @if  (Auth::check() && auth()->user() && auth()->user()->Supply_Analyst == 1)
-
-                                            @endif
+                                            <li><a href="{{ route('plan.PDF') }}"
+                                                    target="_blank">รายงานแผนปฏิบัติการ</a></li>
 
                                         </ul>
                                     </li>

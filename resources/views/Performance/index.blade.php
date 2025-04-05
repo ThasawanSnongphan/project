@@ -17,50 +17,45 @@
                 </div>
             </div> --}}
             <form action="/Performance" id="actionForm">
-                <div class="row field item form-group ">
-                    <label for="title" class="col-form-label col-md-1 col-sm-1 label-align">ปีงบประมาณ<span
-                            class="required">*</span></label>
-                    <div class="col-md-3 col-sm-3">
-                        <select id="yearID" name="yearID" class="form-control" required 
-                        {{-- onchange="submitForm()" --}}
-                        >
-                            <option value="">--เลือกปีงบประมาณ--</option>
-                            @foreach ($data['yearAll'] as $item)
-                                <option value="{{ $item->yearID }}"
-                                    {{ request('yearID') == $item->yearID ? 'selected' : '' }}>{{ $item->year }}
-                                </option>
-                            @endforeach
-                        </select>
+                <div class="d-flex justify-content-around">
+                    <div class="row field item form-group ">
+                        <label for="title" >ปีงบประมาณ <span
+                                class="required">*</span></label>
+                        <div >
+                            <select id="yearID" name="yearID" class="form-control" required {{-- onchange="submitForm()" --}}>
+                                <option value="">--เลือกปีงบประมาณ--</option>
+                                @foreach ($data['yearAll'] as $item)
+                                    <option value="{{ $item->yearID }}"
+                                        {{ request('yearID') == $item->yearID ? 'selected' : '' }}>{{ $item->year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row field item form-group  ">
+                        <label for="title" >ไตรมาส </label>
+                        <div >
+                            <select id="quarID" name="quarID" class="form-control" {{-- onchange="submitForm()" --}}>
+                                <option value="ทั้งหมด">--ทั้งหมด--</option>
+                                @foreach ($data['quarterAll'] as $item)
+                                    <option value="{{ $item->quarID }}"
+                                        {{ request('quarID') == $item->quarID ? 'selected' : '' }}>{{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row field item form-group ">
+                        <label for="title" class="col-form-label col-md-1 col-sm-1 label-align"></label>
+                        <div class="col-md-3 col-sm-3">
+                            <button class="btn btn-primary" type="submit">search</button>
+                        </div>
                     </div>
                 </div>
-                <div class="row field item form-group ">
-                    <label for="title" class="col-form-label col-md-1 col-sm-1 label-align">ไตรมาส<span
-                            class="required">*</span></label>
-                    <div class="col-md-3 col-sm-3">
-                        <select id="quarID" name="quarID" class="form-control" required 
-                        {{-- onchange="submitForm()" --}}
-                        >
-                            <option value="">--เลือกไตรมาส--</option>
-                            @foreach ($data['quarterAll'] as $item)
-                                <option value="{{ $item->quarID }}"
-                                    {{ request('quarID') == $item->quarID ? 'selected' : '' }}>{{ $item->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="row field item form-group ">
-                    <label for="title" class="col-form-label col-md-1 col-sm-1 label-align"></label>
-                    <div class="col-md-3 col-sm-3">
-                        <button class="btn btn-primary" type="submit">serch</button>
-                    </div>
-                </div>
-                
+
             </form>
 
             @if (!empty($data['selectYearID']) && !empty($data['selectQuarID']))
-
-
                 <h4 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการ และโครงการนอกแผนปฏิบัติการ
                     ประจำปีงบประมาณ พ.ศ. {{ $data['year']->year }} </h4>
                 <h6 style="text-align: center">ข้อมูลจากระบบ ... ณ {{ now() }}</h6> <br>
@@ -71,7 +66,7 @@
                             <h4>โครงการทั้งหมด</h4>
                         </div>
                         <div class="card-body text-secondary">
-                            <h5 class="card-title">{{ $data['projectCountAll'] }}</h5>
+                            <h5 class="card-title">{{ $data['projectAll']->count() }}</h5>
                             <hr>
                             <div class="d-flex justify-content-between">
                                 <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา</p>
@@ -109,7 +104,7 @@
                             <h4>โครงการตามแผนปฏิบัติการ</h4>
                         </div>
                         <div class="card-body text-secondary">
-                            <h5 class="card-title"><a href="">{{ $data['projectCountInPlan'] }}</a> </h5>
+                            <h5 class="card-title"><a href="#">{{ $data['projectInPlanAll']->count() }}</a> </h5>
                             <hr>
 
                             <form action="/Performance" id="projectEvaCompleteInPlan">
@@ -240,9 +235,9 @@
                                             <td><u>ตัวชี้วัด</u> <br> {{ $KPI3LV->KPI->name }}</td>
                                             <td><u>หน่วยนับ</u> <br>{{ $KPI3LV->KPI->count }} </td>
                                             <td><u>เป้าหมาย</u><br>{{ $KPI3LV->KPI->target }} </td>
-                                            <td><u>ผล</u> <br> {{$KPI3LV->result2}}<br></td>
+                                            <td><u>ผล</u> <br> {{ $KPI3LV->result2 }}<br></td>
                                             <td><u>สถานะตัวชี้วัด</u> <br>
-                                                @if ($KPI3LV->KPI->target == $KPI3LV->result2 )
+                                                @if ($KPI3LV->KPI->target == $KPI3LV->result2)
                                                     บรรลุ
                                                 @else
                                                     ไม่บรรลุ
@@ -258,9 +253,9 @@
                                             <td>{{ $KPI2LV->KPI->name }}</td>
                                             <td>{{ $KPI2LV->KPI->count }} </td>
                                             <td>{{ $KPI2LV->KPI->target }} </td>
-                                            <td><u>ผล</u> <br> {{$KPI2LV->result2}}<br></td>
+                                            <td><u>ผล</u> <br> {{ $KPI2LV->result2 }}<br></td>
                                             <td><u>สถานะตัวชี้วัด</u> <br>
-                                                @if ($KPI2LV->KPI->target == $KPI2LV->result2 )
+                                                @if ($KPI2LV->KPI->target == $KPI2LV->result2)
                                                     บรรลุ
                                                 @else
                                                     ไม่บรรลุ
@@ -276,9 +271,9 @@
                                             <td>{{ $KPIProject->name }}</td>
                                             <td>{{ $KPIProject->count->name }} </td>
                                             <td>{{ $KPIProject->target }} </td>
-                                            <td>{{$KPIProject->result2}}<br></td>
+                                            <td>{{ $KPIProject->result2 }}<br></td>
                                             <td>
-                                                @if ($KPIProject->target == $KPIProject->result2 )
+                                                @if ($KPIProject->target == $KPIProject->result2)
                                                     บรรลุ
                                                 @else
                                                     ไม่บรรลุ
