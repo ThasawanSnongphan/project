@@ -47,7 +47,7 @@ Carbon::setLocale('th');
 
 class PDFPlanController extends Controller
 {
-    public function pdf_gen()
+    public function pdf_gen($id)
     {
         $config = include(config_path('configPDF_H.php'));       // ดึงการตั้งค่าฟอนต์จาก config
 
@@ -118,9 +118,8 @@ class PDFPlanController extends Controller
 
 
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
-        // $projects = Projects::where('proID', $id)->first();
         $all_projects = Projects::all();
-        $years = Year::all();
+        $years = Year::where('yearID', $id)->first();
         $users_map = UsersMapProject::all();
         $users = Users::all();
 
@@ -152,7 +151,7 @@ class PDFPlanController extends Controller
 
 
         // $currentYear = date('Y');
-        $currentYear = 2024;
+        $currentYear = $years->year;
 
 
         $headerContent = '
@@ -164,8 +163,8 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($headerContent, 2);
 
-        $year1 = 2024;
-        $year2 = 2025;
+        $year1 = $years->year - 1;
+        $year2 = $years->year;
 
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
@@ -181,8 +180,8 @@ class PDFPlanController extends Controller
 
                 <tr>
 
-                    <th colspan="3">พ.ศ. ' . $year1 + 543 . '</th>
-                    <th colspan="9">พ.ศ. ' . $year2 + 543 . '</th>
+                    <th colspan="3">พ.ศ. ' . $year1 . '</th>
+                    <th colspan="9">พ.ศ. ' . $year2 . '</th>
                 </tr>
 
                 <tr>
