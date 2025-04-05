@@ -240,7 +240,7 @@
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {   
                                             ?>
-                                            <li><a href="{{ route('plan.PDF') }}"
+                                            <li><a href="{{ route('plan.PDF',$row['yearID']) }}"
                                                     target="_blank">รายงานแผนปฏิบัติการ<?php  echo $row['year'];?>  </a></li>                                            
                                            <?php
                                         }
