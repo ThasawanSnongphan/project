@@ -49,7 +49,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
 class ExcelPlanController extends Controller
 {
-    public function excel_gen()
+    public function excel_gen($id)
     {
 
         // สร้าง Spreadsheet
@@ -57,18 +57,15 @@ class ExcelPlanController extends Controller
         $spreadsheet->getDefaultStyle()->getFont()->setName('TH Sarabun New')->setSize(14);
         $sheet = $spreadsheet->getActiveSheet();
 
-        $currentYear = date('Y') + 543;
-        $year1 = 2024 + 543;
-        $year2 = 2025 + 543;
-
         // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
         $all_projects = Projects::all();
-        $years = Year::all();
+        $years = Year::where('yearID', $id)->first();
         $users_map = UsersMapProject::all();
         $users = Users::all();
 
-        // $strategic_maps = StrategicMap::all();
-        $strategic_maps = StrategicMap::with(['SFA3LV', 'goal3LV', 'tac3LV'])->get();
+
+        $strategic_maps = StrategicMap::all();
+        // $strategic_maps = StrategicMap::with(['SFA3LV', 'goal3LV', 'tac3LV', 'proID', 'stra3LV'])->get();
         $strategic1_level_maps = Strategic1LevelMapProject::all();
         $strategic2_level_maps = Strategic2LevelMapProject::all();
 
@@ -140,19 +137,24 @@ class ExcelPlanController extends Controller
             ],
         ];
 
+        $currentYear = $years->year - 543;
+        $year1 = ($years->year - 543) - 1;
+        $year2 = $years->year - 543;
+
+        $row = 1;
 
         // ตั้งค่าหัวข้อเอกสาร
-        $sheet->setCellValue('A1', "แผนปฏิบัติการประจำปีงบประมาณ พ.ศ. $currentYear");
-        $sheet->setCellValue('A2', "สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ");
+        $sheet->setCellValue('A' . $row, "แผนปฏิบัติการประจำปีงบประมาณ พ.ศ." . $currentYear + 543);
+        $sheet->mergeCells('A' . $row . ':R' . $row);
+        $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
-        $sheet->mergeCells('A1:R1');
-        $sheet->mergeCells('A2:R2');
 
-        $sheet->getStyle('A1')->applyFromArray($centerAlignment);
-        $sheet->getStyle('A2')->applyFromArray($centerAlignment);
+        $row++;
+        $sheet->setCellValue('A' . $row, "สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ");
+        $sheet->mergeCells('A' . $row . ':R' . $row);
+        $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
-        $row = 4;
-
+        $row += 2;
         $sheet->setCellValue('A' . $row, 'ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์');
         $sheet->setCellValue('B' . $row, 'กลยุทธ์ (หน่วยงาน)');
         $sheet->setCellValue('C' . $row, 'โครงการ / ตัวชี้วัดโครงการ');
@@ -174,12 +176,6 @@ class ExcelPlanController extends Controller
         $sheet->getStyle('A' . $row . ':' . 'G' . $row)->getAlignment()->setWrapText(true);
         $sheet->getStyle('A' . $row . ':' . 'R' . $row)->applyFromArray($centerAlignment);
 
-        // $sheet->mergeCells('A4:A6');
-        // $sheet->mergeCells('B4:B6');
-        // $sheet->mergeCells('C4:C6');
-        // $sheet->mergeCells('D4:D6');
-        // $sheet->mergeCells('E4:E6');
-        // $sheet->mergeCells('R4:R6');
         $row++;
 
         $sheet->setCellValue('F' . $row, 'พ.ศ.' . $year1);
@@ -214,17 +210,22 @@ class ExcelPlanController extends Controller
             foreach ($data_strategic3_levels as $level) {
                 if ($level['stra3LVID'] == $issue['stra3LVID']) {
                     $yearID = $level['yearID'];
+                    // dd($yearID);
                     break;
                 }
             }
-            $year = null;
-            foreach ($data_years as $yearRow) {
-                if ($yearRow['yearID'] == $yearID) {
-                    $year = $yearRow['year'];
-                    // dd($year);
-                    break; //  จบลูปทันทีเมื่อเจอค่า
-                }
-            }
+
+            // $year = null;
+            // foreach ($data_years as $yearRow) {
+            //     if ($yearRow['yearID'] == $yearID) {
+            //         $year = $yearRow['year'];
+            //         break; //  จบลูปทันทีเมื่อเจอค่า
+            //     }   
+            // }
+
+            $year = ($data_years['yearID'] == $yearID) ? $data_years['year'] - 543 : null;
+
+            // dd($currentYear);
 
             if ($year == $currentYear) {
                 $sheet->setCellValue('A' . $row, 'ประเด็น: ' . $issue['name']);
@@ -250,15 +251,14 @@ class ExcelPlanController extends Controller
                         if ($tactic['goal3LVID'] == $goal['goal3LVID']) {
                             $projectRows = [];
 
-                            $year1 = 2024;
-                            $year2 = 2025;
-
                             $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
 
                             foreach ($data_projects as $project) {
                                 if ($project['yearID'] == $yearID) {
                                     foreach ($data_strategic_maps as $map) {
                                         if ($map['tac3LVID'] == $tactic['tac3LVID'] && $map['proID'] == $project['proID']) {
+                                            dd($map['proID']);
+
                                             $badgetTotal = isset($project['badgetTotal']) ? number_format($project['badgetTotal'], 2) : "-";
 
                                             $kpiNames = [];

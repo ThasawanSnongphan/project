@@ -263,9 +263,6 @@ class PDFPlanController extends Controller
                             if ($tactic['goal3LVID'] == $goal['goal3LVID']) { // เชื่อมโยง FK
                                 $projectRows = [];
 
-                                // $year1 = ($years->year - 1) - 543;
-                                // $year2 = $years->year - 543;
-
                                 // รายชื่อเดือนที่ใช้ในตาราง (ต.ค. - ก.ย.)
                                 $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
 
