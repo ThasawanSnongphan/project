@@ -95,7 +95,7 @@
                                 </li>
                             </ul>
                             @if (Auth::check())
-                               
+
                                 @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                                     {{-- <h3>General</h3> --}}
                                     <ul class="nav side-menu">
@@ -226,14 +226,25 @@
                                         </li>
                                     </ul>
                                 @endif
-                               
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> รายงาน <span
                                                 class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
+                                            <?php
+                                    $conn = mysqli_connect('localhost', 'root', '', 'plan');
+                                    if ($conn->connect_error) {
+                                        die('Connection failed: ' . $conn->connect_error);
+                                    }
+                                    $sql = "SELECT yearID,year FROM years ";
+                                    $result = $conn->query($sql);
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {   
+                                            ?>
                                             <li><a href="{{ route('plan.PDF') }}"
-                                                    target="_blank">รายงานแผนปฏิบัติการ</a></li>
-
+                                                    target="_blank">รายงานแผนปฏิบัติการ<?php  echo $row['year'];?>  </a></li>                                            
+                                           <?php
+                                        }
+                                    } ?>
                                         </ul>
                                     </li>
                                 </ul>

@@ -158,8 +158,6 @@
                                                 @else
                                                     <option value="">--เลือกกลยุทธ์--</option>
                                                 @endif
-
-
                                             </select>
                                         </div>
                                     </div>
@@ -167,8 +165,9 @@
                                 {{-- @endif --}}
                                 <div class="row field item form-group align-items-center">
                                     <label for="title"
-                                        class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
-                                    <div class="row col-md-9 col-sm-9 border m-1">
+                                        class="col-form-label col-md-3 label-align">ตัวชี้วัด<span
+                                        class="required">*</span></label>
+                                    <div class="row col-md-9 border mb-2 p-2">
                                         <div class="col-md-12 col-sm-12">
                                             <div
                                                 class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
@@ -294,8 +293,9 @@
                                 </div>
                                 <div class="row field item form-group align-items-center">
                                     <label for="title"
-                                        class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
-                                    <div class="row col-md-9 col-sm-9 border m-1">
+                                        class="col-form-label col-md-3 col-sm-3 label-align">ตัวชี้วัด<span
+                                        class="required">*</span></label>
+                                    <div class="row col-md-9 col-sm-9 border ml-1 p-1">
                                         <div class="col-md-12 col-sm-12">
                                             <div class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
                                                 <label for="title" class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>

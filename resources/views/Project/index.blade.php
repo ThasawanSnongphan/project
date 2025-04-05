@@ -85,7 +85,7 @@
                         </td>
                         <td>
 
-                            @if ($currentMonth >= 1 && $currentMonth <= 4)
+                            @if ($currentMonth >= 1 && $currentMonth <= 3)
                                 <!-- เช็คว่าเป็นเดือนมกราคมถึงมีนาคม -->
 
                                 @if ($item->statusID == 4)
