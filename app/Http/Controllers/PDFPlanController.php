@@ -151,7 +151,9 @@ class PDFPlanController extends Controller
         $countKPI_pros = CountKPIProjects::all();
 
 
-        $currentYear = date('Y');
+        // $currentYear = date('Y');
+        $currentYear = 2024;
+
 
         $headerContent = '
             <div style="text-align: center; margin-bottom: 8px;">
