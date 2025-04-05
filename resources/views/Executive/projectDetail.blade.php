@@ -334,18 +334,31 @@
                         </div>
                     </div>
 
-                    <div class="form-group mt-2">
-                        <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                    @if ($data['project']->statusID == 1)
+                        <div class="form-group mt-2">
+                            <div class="col-md-6 offset-md-3 d-flex justify-content-center">
 
-                            <button type="submit" class="btn btn-success"
-                                onclick="submitButton('pass')">อนุมัติ</button>
-                            <button type="submit" class="btn btn-danger"
-                                onclick="submitButton('Denied')">ไม่อนุมัติ</button>
-                            <button type="submit" class="btn btn-warning"
-                                onclick="submitButton('edit')">กลับไปแก้ไข</button>
+                                <button type="submit" class="btn btn-success"
+                                    onclick="submitButton('pass')">ผ่าน</button>
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="submitButton('edit')">กลับไปแก้ไข</button>
 
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="form-group mt-2">
+                            <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+
+                                <button type="submit" class="btn btn-success"
+                                    onclick="submitButton('pass')">อนุมัติ</button>
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+                                <button type="submit" class="btn btn-warning"
+                                    onclick="submitButton('edit')">กลับไปแก้ไข</button>
+
+                            </div>
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>

@@ -358,6 +358,9 @@ Route::post('fundUpdate/{id}',[FundController::class,'update'])->name('fund.upda
 
 Route::get('dateInPlan',[DateInPlanControllers::class,'index']);
 Route::post('dataInPlanInsert',[DateInPlanControllers::class,'insert']);
+Route::get('dateInPlanDelete/{id}',[DateInPlanControllers::class,'delete'])->name('dateInPlan.delete');
+Route::get('dateInPlanEdit/{id}',[DateInPlanControllers::class,'edit'])->name('dateInPlan.edit');
+Route::post('dateInPlanUpdate/{id}',[DateInPlanControllers::class,'update'])->name('dateInPlan.update');
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Auth::routes();

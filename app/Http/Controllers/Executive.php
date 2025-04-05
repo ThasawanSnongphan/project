@@ -41,7 +41,7 @@ class Executive extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where('proTypeID',3)->whereIn('statusID',[3,7])->get();
+        $project=DB::table('projects')->where([['proTypeID',3],['approverID',auth()->id()]])->whereIn('statusID',[1,3,7])->get();
         $proID = $project->pluck('proID');
         // dd($proID);
         $status=Status::all();

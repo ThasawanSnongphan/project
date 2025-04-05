@@ -51,6 +51,7 @@ use Illuminate\Support\Facades\Session;
 class ProjectController extends Controller
 {
     function index(){
+
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
         $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
@@ -96,6 +97,8 @@ class ProjectController extends Controller
        
         // session()->flush(); 
         $year = Year::all();
+        $user = DB::table('users')->where('Department_head',1)->where('department_name',auth()->user()->department_name)->orWhere('Executive',1)->get();
+        // dd($user);
 
         $selectYear = $request->input('yearID');
         // $selectYear = session('yearID');
@@ -145,7 +148,7 @@ class ProjectController extends Controller
 
         
             
-        return view('Project.create1',compact('year','selectYear','strategic3Level','selectStra3LV','selectStra2LV','selectSFA2Level','selectTactics2LV','selectKPIMain2LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain','selectKPIMain1LV','selectTarget1LV','selectStra1LV'));
+        return view('Project.create1',compact('year','user','selectYear','strategic3Level','selectStra3LV','selectStra2LV','selectSFA2Level','selectTactics2LV','selectKPIMain2LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain','selectKPIMain1LV','selectTarget1LV','selectStra1LV'));
     }
 
     function goal3LV(Request $request){
@@ -199,6 +202,7 @@ class ProjectController extends Controller
             [
                 'yearID' => $request->yearID,
                 'name' => $request->project_name,
+                'approverID' => $request->ApproverID,
                 'stra3LVID' => $request->stra3LVID,
                 'SFA3LVID' => $request->SFA3LVID ,
                 'goal3LVID' =>$request->goal3LVID,
@@ -279,21 +283,21 @@ class ProjectController extends Controller
     }
     
     function send2(Request $request){
-        $request->validate(
-            [
-                'principle'=>'required',
-                'obj.*'=>'required',
-                'stepName.*'=>'required',
-                'stepStart.*'=>'required',
-                'stepEnd.*'=>'required',
-                'costQu1.*'=>'required',
-                'costQu2.*'=>'required',
-                'costQu3.*'=>'required',
-                'costQu4.*'=>'required',
-                'benefit.*'=>'required',
-                'file'=>'required',
-            ]
-        );
+        // $request->validate(
+        //     [
+        //         'principle'=>'required',
+        //         'obj.*'=>'required',
+        //         'stepName.*'=>'required',
+        //         'stepStart.*'=>'required',
+        //         'stepEnd.*'=>'required',
+        //         'costQu1.*'=>'required',
+        //         'costQu2.*'=>'required',
+        //         'costQu3.*'=>'required',
+        //         'costQu4.*'=>'required',
+        //         'benefit.*'=>'required',
+        //         'file'=>'required',
+        //     ]
+        // );
 
         $projects=[
             'yearID'=>$request->yearID,
@@ -312,6 +316,7 @@ class ProjectController extends Controller
             'created_at' => now(),
             'updated_at' => now()
         ];
+        dd($project['proTypeID']);
         $project = DB::table('projects')->insertGetId($projects);
 
 
@@ -501,8 +506,14 @@ class ProjectController extends Controller
                 'tar1LVID' 
             ]
         );
+         
+        if($project['proTypeID'] == '3'){
+            return redirect('/project');
+        }else {
+            return redirect('/projectOutPlan');
+        }
 
-        return redirect('/project');
+        
     }
 
     
@@ -642,13 +653,12 @@ class ProjectController extends Controller
             'badgetTotal'=>$request->badgetTotal,
             'planID'=>$request->planID,
             'statusID'=>14,
+            'approverID' => $request->approverID,
             'created_at' => now(),
             'updated_at' => now()
         ];
         $project = DB::table('projects')->insertGetId($projects);
        
-        
-      
 
         $users = $request->input('userID');
         if(!empty($users) && is_array($users)){
@@ -848,13 +858,24 @@ class ProjectController extends Controller
                 'tar1LVID' 
             ]
         );
+        if($projects['proTypeID'] == 3){
+            return redirect('/project');
+        }else{
+            return redirect('/projectOutPlan');
+        }
         
-        return redirect('/project');
     }
 
     function delete($id){
-        DB::table('projects')->where('proID',$id)->delete();
-        return redirect('/project');
+        $project = Projects::find($id);
+        if($project->proTypeID == 3){
+            $project->delete();
+            return redirect('/project');
+        }else{
+            $project->delete();
+            return redirect('/projectOutPlan');
+        }
+        
     }
 
     function edit1(Request $request,$id){
@@ -864,6 +885,8 @@ class ProjectController extends Controller
 
         $selectYear = $project->yearID;
         $year = Year::all(); // ดึงข้อมูลปี
+        $user = DB::table('users')->where('Department_head',1)->where('department_name',auth()->user()->department_name)->orWhere('Executive',1)->get();
+
         
         
         $strategic3LVMap= DB::table('strategic_maps')->where('proID',$id)->get();
@@ -928,7 +951,7 @@ class ProjectController extends Controller
         compact('comment','selectYear','year','project','strategic3LVMap','stra3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMapFirst','KPIMain3LVMaps','KPIMain3LVMap',
                 'SFA3LVs','strategic3Level','selectStra3LV','goal3Level','tactics3LV','KPIMain3LV',
                 'strategic2LVMap','SFA2LVMap','tac2LVMap','strategic2Level','SFA2LV','tactics2LV','KPIMain2LV','KPIMain2LVMaps','KPIMain2LVMap','KPIMain2LVMapFirst',
-                'strategic1Level','strategic1LVMap','target1LVMap','target1LV'));
+                'strategic1Level','strategic1LVMap','target1LVMap','target1LV','user'));
     }
     function sendUpdate1(Request $request,$id){
        
@@ -937,6 +960,7 @@ class ProjectController extends Controller
             [
                 'yearID' => $request->yearID,
                 'name' => $request->project_name,
+                'approverID' => $request->ApproverID,
                 'stra3LVID' => $request->stra3LVID,
                 'SFA3LVID' => $request->SFA3LVID,
                 'goal3LVID' =>$request->goal3LVID,
@@ -1335,7 +1359,8 @@ class ProjectController extends Controller
             'badID'=>$request->badID,
             'badgetTotal'=>$request->badgetTotal,
             'planID'=>$request->planID,
-            'statusID'=>16,
+            'statusID'=>14,
+            'approverID' =>$request->approverID,
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
@@ -2056,6 +2081,7 @@ class ProjectController extends Controller
     }
 
     function sendUpdate2(Request $request,$id){
+        
         $project=[
             'yearID'=>$request->yearID,
             'name'=>$request->name,
@@ -2070,6 +2096,7 @@ class ProjectController extends Controller
             'badgetTotal'=>$request->badgetTotal,
             'planID'=>$request->planID,
             'statusID'=>1,
+            'approverID' =>$request->approverID,
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
@@ -2779,23 +2806,25 @@ class ProjectController extends Controller
 
 
         $Responsible = UsersMapProject::with('users')->where('proID',$id)->get();
-        foreach ($Responsible as $index => $item) {
-            $Department = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+        // dd($Responsible);
 
-        }
+        // foreach ($Responsible as $index => $item) {
+        //     $Department = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
+
+        // }
         
         // dd($Department,$userMaps);
-        $mail = Projects::with('status')->where('proID',$id)->first();
+        $mail = Projects::with('status','Approver')->where('proID',$id)->first();
        
         // dd($status);
-        foreach ($Department as $index => $item) {
-             Mail::to($item->email)->send(new SendMail(
+        // foreach ($Department as $index => $item) {
+             Mail::to($mail->Approver->email)->send(new SendMail(
             [
                 'name' => $mail->name,
                 'text' => $mail->status->name
             ]
             ));
-        }
+        // }
 
         foreach ($Responsible as $index => $item) {
             Mail::to($item->users->email)->send(new SendMail(

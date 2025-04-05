@@ -44,7 +44,7 @@ class Department_Head extends Controller
 
        
 
-        $project= DB::table('projects')->where([['proTypeID',3]])->whereIn('statusID',[1,5])->get();
+        $project= DB::table('projects')->where([['proTypeID',3],['approverID',auth()->id()]])->whereIn('statusID',[1,5])->get();
         // dd($project);
         $status=Status::all();
         // $users = $users=DB::table('users')->get();

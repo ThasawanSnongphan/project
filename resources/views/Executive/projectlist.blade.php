@@ -44,7 +44,7 @@
                     <td data-project="{{ $item->proID }}">
                         @if ($item->statusID == 7)
                             <a href="{{ route('Executive.detailEvaluation', $item->proID) }}">{{ $item->name }}</a>
-                        @elseif($item->statusID == 3)
+                        @elseif($item->statusID == 3 || $item->statusID == 1 )
                             <a href="{{ route('Executive.detail', $item->proID) }}">{{ $item->name }}</a>
                         @endif
                     </td>

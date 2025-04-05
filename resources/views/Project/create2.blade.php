@@ -24,9 +24,10 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="/projectSave2" enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="/projectSave2" 
+                    enctype="multipart/form-data"
+                    >
                         @csrf
-                        {{-- <input type="hidden" id="proID" name="proID" value="{{$project->proID}}"> --}}
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
@@ -48,6 +49,22 @@
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="project_name" id="project_name"
                                     data-validate-length-range="8,20" value="{{ session('name') }}" readonly />
+
+                            </div>
+                        </div>
+                        <div class="row field item form-group align-items-center">
+                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับดูแลโครงการ<span
+                                    class="required">*</span></label>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="hidden" name="approverID" value="{{session('approverID')}}">
+                                <input class="form-control" type="text" name="approver"
+                                    data-validate-length-range="8,20" 
+                                    @foreach ($user as $item)
+                                    @if (session('approverID') == $item->userID)
+                                        value=" {{$item->displayname}} "
+                                    @endif
+                                        
+                                    @endforeach  readonly />
 
                             </div>
                         </div>
@@ -366,7 +383,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                <input type="text" value="{{ $currentDate }}">
+                                
                                 <select id="type" name="proTypeID" class="form-control">
                                     @foreach ($projectType as $item)
                                         @if ($item->proTypeID == 3)
@@ -424,11 +441,6 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 d-flex">
                                 <textarea class="form-control" name="principle" id="principle" required></textarea>
-                                {{-- @error('principle')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror --}}
                             </div>
                         </div>
 
@@ -437,12 +449,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">วัตถุประสงค์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="obj[]" id="obj" required />
-                                {{-- @error('obj.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror --}}
+                                <input class="form-control" type="text" name="obj[]" id="obj" required/>
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
@@ -765,12 +772,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="file" name="file[]" id="file">
-                                {{-- @error('file')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror --}}
-
+                                
                             </div>
                             {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
                             <div class="col-md-1 col-sm-1 ">
@@ -779,11 +781,11 @@
                         </div>
                         <div id="insertFile"></div>
 
+
                         <div class="ln_solid">
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3">
-                                    <button type='button' class="btn btn-primary"
-                                        onclick="submitButton()">บันทึก</button>
+                                    <button type='submit' class="btn btn-primary">บันทึก</button>
                                 </div>
                             </div>
                         </div>
@@ -1324,63 +1326,63 @@
 
 
 
-        // function updateExpenseDropdown(selectedPlanID) {
-        //     console.log(selectedPlanID);
+        function updateExpenseDropdown(selectedPlanID) {
+            console.log(selectedPlanID);
 
 
-        //     const expenseSelect = document.getElementById('expID');
-        //     expenseSelect.innerHTML = '';
+            const expenseSelect = document.getElementById('expID');
+            expenseSelect.innerHTML = '';
 
-        //     // กรองกองทุนที่เชื่อมกับแผน
-        //     const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
+            // กรองกองทุนที่เชื่อมกับแผน
+            const relatedFunds = funds.filter(fund => fund.planID == selectedPlanID);
 
-        //     // กรองงบรายจ่ายตามกองทุนที่เชื่อมกับแผน
-        //     const filteredExpenses = expenses.filter(expense =>
-        //         relatedFunds.some(fund => fund.fundID == expense.fundID)
-        //     );
+            // กรองงบรายจ่ายตามกองทุนที่เชื่อมกับแผน
+            const filteredExpenses = expenses.filter(expense =>
+                relatedFunds.some(fund => fund.fundID == expense.fundID)
+            );
 
-        //     if (filteredExpenses.length === 0) {
-        //         const noExpenseOption = document.createElement('option');
-        //         noExpenseOption.value = '';
-        //         noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
-        //         expenseSelect.appendChild(noExpenseOption);
-        //         updateCostTypeDropdown(null);
-        //         expenseSelect.disabled = true; // Disable expense dropdown
-        //     } else {
-        //         expenseSelect.disabled = false; // Enable expense dropdown
-        //         filteredExpenses.forEach(expense => {
-        //             const option = document.createElement('option');
-        //             option.value = expense.expID;
-        //             option.textContent = expense.name;
-        //             expenseSelect.appendChild(option);
-        //         });
-        //         updateCostTypeDropdown(filteredExpenses[0].expID);
-        //     }
-        // }
+            if (filteredExpenses.length === 0) {
+                const noExpenseOption = document.createElement('option');
+                noExpenseOption.value = '';
+                noExpenseOption.textContent = 'ไม่มีงบรายจ่าย';
+                expenseSelect.appendChild(noExpenseOption);
+                updateCostTypeDropdown(null);
+                expenseSelect.disabled = true; // Disable expense dropdown
+            } else {
+                expenseSelect.disabled = false; // Enable expense dropdown
+                filteredExpenses.forEach(expense => {
+                    const option = document.createElement('option');
+                    option.value = expense.expID;
+                    option.textContent = expense.name;
+                    expenseSelect.appendChild(option);
+                });
+                updateCostTypeDropdown(filteredExpenses[0].expID);
+            }
+        }
 
-        // function updateCostTypeDropdown(selectedEXPID) {
-        //     const costTypeSelect = document.getElementById('costType');
-        //     costTypeSelect.innerHTML = '';
+        function updateCostTypeDropdown(selectedEXPID) {
+            const costTypeSelect = document.getElementById('costType');
+            costTypeSelect.innerHTML = '';
 
-        //     // กรองกองทุนที่เชื่อมกับแผน
-        //     const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
+            // กรองกองทุนที่เชื่อมกับแผน
+            const filteredCostType = costTypes.filter(costType => costType.expID == selectedEXPID);
 
-        //     if (filteredCostType.length === 0) {
-        //         const noCostTypeOption = document.createElement('option');
-        //         noCostTypeOption.value = '';
-        //         noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
-        //         costTypeSelect.appendChild(noCostTypeOption);
-        //         costTypeSelect.disabled = true; // Disable expense dropdown
-        //     } else {
-        //         costTypeSelect.disabled = false; // Enable expense dropdown
-        //         filteredCostType.forEach(costType => {
-        //             const option = document.createElement('option');
-        //             option.value = costType.costID;
-        //             option.textContent = costType.name;
-        //             costTypeSelect.appendChild(option);
-        //         });
-        //     }
-        // }
+            if (filteredCostType.length === 0) {
+                const noCostTypeOption = document.createElement('option');
+                noCostTypeOption.value = '';
+                noCostTypeOption.textContent = 'ไม่มีหมวดรายจ่าย';
+                costTypeSelect.appendChild(noCostTypeOption);
+                costTypeSelect.disabled = true; // Disable expense dropdown
+            } else {
+                costTypeSelect.disabled = false; // Enable expense dropdown
+                filteredCostType.forEach(costType => {
+                    const option = document.createElement('option');
+                    option.value = costType.costID;
+                    option.textContent = costType.name;
+                    costTypeSelect.appendChild(option);
+                });
+            }
+        }
 
         function submitButton() {
             var form = document.getElementById('actionForm');
@@ -1389,7 +1391,7 @@
             console.log(costID);
 
 
-            form.action = "/projectSave2";
+            form.action = "";
 
             form.submit();
         }
