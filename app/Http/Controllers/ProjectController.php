@@ -41,6 +41,7 @@ use App\Models\Benefits;
 use App\Models\Files;
 use App\Models\Comment;
 use App\Models\CountKPIProjects;
+use App\Models\DateReportQuarter;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Mail;
@@ -48,6 +49,7 @@ use App\Mail\SendMail;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+
 class ProjectController extends Controller
 {
     function index(){
@@ -57,19 +59,38 @@ class ProjectController extends Controller
         $user = DB::table('users_map_projects')->where('userID',auth()->id())->get();
         $proIDs = $user->pluck('proID');
         // dd($proIDs);
-        $project=DB::table('projects')->where('proTypeID',3)->whereIn('proID',$proIDs)->get();
+        $project=DB::table('projects')->where('proTypeID',3)->whereIn('proID',$user->pluck('proID'))->get();
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        $report = DB::table('report_quarters')->where('quarID',2)->whereIn('proID',$proIDs)->get();
-        $proID = $report->pluck('proID');
+        
+       
 
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+
+        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->get();
+        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->get();
+        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->get();
+        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
+
+        $data['reportQuarter'] = DB::table('report_quarters')->whereIn('proID',$user->pluck('proID'))->get();
+
+        $data['report'] = DB::table('projects')
+        ->join('report_quarters','report_quarters.proID','=','projects.proID');
+        // dd($data['report']->get());
+        // dd($data['reportQuarter1']);
+
+        // $proID = $report->pluck('proID');
+       
+       
+        
+
+        // dd($dateReportQuarter);
         // dd( $evaluation );
        
         // dd($evaluation);
         // dd($proID);
-        return view('Project.index',compact('users','project','status','year','projectYear','report','proID','evaluation'));
+        return view('Project.index',compact('users','project','status','year','projectYear','evaluation','data'));
     }
     function projectOutPlan(){
         $year = Year::all();

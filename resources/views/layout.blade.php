@@ -136,6 +136,7 @@
                                                 <li><a href="/target">กลุ่มเป้าหมาย</a></li>
                                                 <li><a href="/countKPI">หน่วยนับKPI</a></li>
                                                 <li><a href="/dateInPlan">กำหนดการเสนอโครงการในแผน</a></li>
+                                                <li><a href="/dateReportQuarter">กำหนดการกรอกรายงานรายไตรมาส</a></li>
                                                 <li><a href="/project">โครงการ</a></li>
                                             </ul>
                                         </li>
@@ -151,7 +152,7 @@
                                                 <li><a href="/project">รายชื่อโครงการ</a></li>
                                                 <li><a href="/projectOutPlan">รายชื่อโครงการนอกแผน</a></li>
                                                 {{-- โครงการที่ไม่อนุมัติ --}}
-                                                <li><a href="/project">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="#">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                                 <li><a href="/projectcreate1">สร้างโครงการใหม่</a></li>
 
                                             </ul>

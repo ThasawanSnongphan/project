@@ -57,6 +57,7 @@ use App\Http\Controllers\ExcelPlanController;
 use App\Http\Controllers\WordClosedController;
 use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\DateInPlanControllers;
+use App\Http\Controllers\DateReportQuarterController;
 
 //PDF
 Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
@@ -120,7 +121,8 @@ Route::post('ExecutiveEvaluationPass/{id}', [Executive::class,'EvaluationPass'])
 Route::post('/ExecutiveEvaluationEdit/{id}', [Executive::class,'EvaluationEdit'])->name('Executive.EditEvaluation');
 Route::post('/ExecutiveEvaluationDenied/{id}', [Executive::class,'EvaluationDenied'])->name('Executive.DeniedEvaluation');
 
-//เจ้าหน้าที่แผน
+
+/***** เจ้าหน้าที่แผน  *****/
 Route::get('/PlanningAnalystProjectAll', [PlanningAnalyst::class,'projectAll']);
 Route::get('/PlanningAnalystProject', [PlanningAnalyst::class,'index']);
 Route::get('/PlanningAnalystProjectOutPlan', [PlanningAnalyst::class,'projectOutPlan']);
@@ -131,6 +133,7 @@ Route::post('planningPass/{id}', [PlanningAnalyst::class,'planningPass'])->name(
 //ประเมินโครงการ
 Route::get('PlanningAnalystProjectDetailEvaluation/{id}',[PlanningAnalyst::class,'detailEvaluation'])->name('PlanningAnalyst.detailEvaluation');
 Route::post('EvaluationPass/{id}', [PlanningAnalyst::class,'EvaluationPass'])->name('PlanningAnalyst.EvaluationPass');
+
 
 //หัวหน้าฝ่าย
 Route::get('/DepartmentHeadProject', [Department_Head::class,'index']); //รายชื่อโครงการในแผน
@@ -200,7 +203,7 @@ Route::get('projectPDF/{id}',[PDFProjectController::class,'db_gen'])->name('proj
 Route::get('projectWord/{id}',[WordProjectController::class,'word_gen'])->name('project.Word');
 
 
-
+/******* Admin *******/
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);
 Route::get('ndelete/{id}',[NewsController::class,'delete'])->name('news.delete');
@@ -361,6 +364,12 @@ Route::post('dataInPlanInsert',[DateInPlanControllers::class,'insert']);
 Route::get('dateInPlanDelete/{id}',[DateInPlanControllers::class,'delete'])->name('dateInPlan.delete');
 Route::get('dateInPlanEdit/{id}',[DateInPlanControllers::class,'edit'])->name('dateInPlan.edit');
 Route::post('dateInPlanUpdate/{id}',[DateInPlanControllers::class,'update'])->name('dateInPlan.update');
+
+Route::get('dateReportQuarter',[DateReportQuarterController::class,'index']);
+Route::post('/dataReportQuarterInsert',[DateReportQuarterController::class,'insert']);
+Route::get('dateReportQuarterDelete/{id}',[DateReportQuarterController::class,'delete'])->name('dateReportQuarter.delete');
+Route::get('dateReportQuarterEdit/{id}',[DateReportQuarterController::class,'edit'])->name('dateReportQuarter.edit');
+Route::post('dateReportQuarterUpdate/{id}',[DateReportQuarterController::class,'update'])->name('dateReportQuarter.update');
 //Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Auth::routes();

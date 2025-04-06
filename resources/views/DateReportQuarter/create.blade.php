@@ -3,7 +3,7 @@
     <div class="col-md-6 col-sm-10">
         <div class="x_panel">
             <div class="x_title">
-                <h2>กำหนดการเสนอโครงการในแผน </h2>
+                <h2>กำหนดการกรอกรายงานรายไตรมาส </h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -21,7 +21,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/dataInPlanInsert"  enctype="multipart/form-data">
+                <form method="POST" action="/dataReportQuarterInsert"  enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
                         <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
@@ -31,6 +31,19 @@
                                 @foreach ($data['year'] as $item)
                                     <option value="{{ $item->yearID }}"
                                         >{{ $item->year }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field item form-group">
+                        <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ไตรมาส<span
+                                class="required">*</span></label>
+                        <div class="col-md-6 col-sm-6">
+                            <select id="quarter" name="quarID" class="form-control" required>
+                                @foreach ($data['quarter'] as $item)
+                                    <option value="{{ $item->quarID }}"
+                                        >{{ $item->name }}
                                     </option>
                                 @endforeach
                             </select>
