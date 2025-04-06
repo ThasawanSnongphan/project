@@ -60,7 +60,7 @@ use App\Http\Controllers\DateInPlanControllers;
 use App\Http\Controllers\DateReportQuarterController;
 
 //PDF
-Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen']);
+Route::get('/pdfClosed/{id}', [PDFClosedController::class, 'pdf_gen'])->name('closed.PDF');
 Route::get('/pdfPlan/{id}', [PDFPlanController::class, 'pdf_gen'])->name('plan.PDF');
 Route::get('/pdfAllResults', [PDFAllResultsController::class, 'pdf_gen']);
 
@@ -70,7 +70,7 @@ Route::get('/wordClosed/{id}', [WordClosedController::class, 'word_gen']);
 
 //Excel
 // Route::get('/excelAllResults', [ExcelAllResultsController::class, 'excel_gen']);
-Route::get('/excelPlan', [ExcelPlanController::class, 'excel_gen']);
+Route::get('/excelPlan/{id}', [ExcelPlanController::class, 'excel_gen'])->name('plan.Excel');
 Route::get('/excelEffective/{id}', [ExcelEffectiveController::class, 'excel_gen']);
 
 

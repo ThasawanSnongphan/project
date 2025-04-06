@@ -149,9 +149,7 @@ class PDFPlanController extends Controller
 
         $countKPI_pros = CountKPIProjects::all();
 
-
-        // $currentYear = date('Y');
-        $currentYear = $years->year;
+        $currentYear = $years->year - 543;
 
 
         $headerContent = '
@@ -163,9 +161,10 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($headerContent, 2);
 
-        $year1 = $years->year - 1;
-        $year2 = $years->year;
+        $year1 = ($years->year - 543) - 1;
+        $year2 = $years->year - 543;
 
+        // dd($year2);
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
                 <tr>
@@ -180,8 +179,8 @@ class PDFPlanController extends Controller
 
                 <tr>
 
-                    <th colspan="3">พ.ศ. ' . $year1 . '</th>
-                    <th colspan="9">พ.ศ. ' . $year2 . '</th>
+                    <th colspan="3">พ.ศ. ' . $year1 + 543 . '</th>
+                    <th colspan="9">พ.ศ. ' . $year2 + 543 . '</th>
                 </tr>
 
                 <tr>
@@ -200,6 +199,8 @@ class PDFPlanController extends Controller
                 </tr>
 
         ';
+
+        // dd($year2);
 
         // แปลงข้อมูลเป็นอาร์เรย์
         $data_strategic_maps = $strategic_maps->toArray();
@@ -226,25 +227,20 @@ class PDFPlanController extends Controller
 
 
 
-
         foreach ($data_strategic_issues as $issue) {
             // ดึง YearID ของ strategic_issues ผ่าน strategic3_levels
             $yearID = null;
             foreach ($data_strategic3_levels as $level) {
                 if ($level['stra3LVID'] == $issue['stra3LVID']) {
                     $yearID = $level['yearID'];
+                    // dd($yearID);
+
                     break;
                 }
             }
 
-            // หา YearID ในตาราง years แล้วลบ 543
-            $year = null;
-            foreach ($data_years as $yearRow) {
-                if ($yearRow['yearID'] == $yearID) {
-                    $year = $yearRow['year'] - 543;
-                    break; //  จบลูปทันทีเมื่อเจอค่า
-                }
-            }
+
+            $year = ($data_years['yearID'] == $yearID) ? $data_years['year'] - 543 : null;
 
             //  เช็คว่า Year ตรงกับปีปัจจุบันหรือไม่
             if ($year == $currentYear) {
@@ -266,10 +262,6 @@ class PDFPlanController extends Controller
                         foreach ($data_tactics as $tactic) {
                             if ($tactic['goal3LVID'] == $goal['goal3LVID']) { // เชื่อมโยง FK
                                 $projectRows = [];
-
-                                // ตัวแปรปี
-                                $year1 = 2024;
-                                $year2 = 2025;
 
                                 // รายชื่อเดือนที่ใช้ในตาราง (ต.ค. - ก.ย.)
                                 $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
@@ -389,8 +381,9 @@ class PDFPlanController extends Controller
                                             $stepEnd = ($projectData['endYear'] * 12) + $projectData['endMonth'];
                                             $current = ($currentYear * 12) + $currentMonth;
 
+
                                             if ($current >= $stepStart && $current <= $stepEnd) {
-                                                $highlight = "style='background-color: yellow;'"; // ✅ ไฮไลต์ช่องสีเหลือง
+                                                $highlight = "style='background-color: yellow;'"; //  ไฮไลต์ช่องสีเหลือง
                                             }
                                         }
 
@@ -400,6 +393,7 @@ class PDFPlanController extends Controller
 
                                     $htmlContent .= "</tr>";
                                 }
+
 
                                 //  ถ้าไม่มีโครงการเลย ให้แสดง "-"
                                 if (empty($projectRows)) {
@@ -440,9 +434,7 @@ class PDFPlanController extends Controller
         ';
 
         $mpdf->WriteHTML($htmlContent, 2);
-
-        $year1 = 2024;
-        $year2 = 2025;
+        // dd($year1);
 
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
@@ -490,14 +482,7 @@ class PDFPlanController extends Controller
                 }
             }
 
-            // หา YearID ในตาราง years แล้วลบ 543
-            $year = null;
-            foreach ($data_years as $yearRow) {
-                if ($yearRow['yearID'] == $yearID) {
-                    $year = $yearRow['year'] - 543;
-                    break; //  จบลูปทันทีเมื่อเจอค่า
-                }
-            }
+            $year = ($data_years['yearID'] == $yearID) ? $data_years['year'] - 543 : null;
 
             //  เช็คว่า Year ตรงกับปีปัจจุบันหรือไม่
             if ($year == $currentYear) {
@@ -514,9 +499,6 @@ class PDFPlanController extends Controller
                     if ($tactic['SFA2LVID'] == $issue['SFA2LVID']) { // เชื่อมโยง FK
                         $projectRows = [];
 
-                        // ตัวแปรปี
-                        $year1 = 2024;
-                        $year2 = 2025;
 
                         // รายชื่อเดือนที่ใช้ในตาราง (ต.ค. - ก.ย.)
                         $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
@@ -686,8 +668,8 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($htmlContent, 2);
 
-        $year1 = 2024;
-        $year2 = 2025;
+        // $year1 = 2024;
+        // $year2 = 2025;
 
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
@@ -730,21 +712,8 @@ class PDFPlanController extends Controller
             $yearID = null;
             $yearID = $level['yearID'];
 
+            $year = ($data_years['yearID'] == $yearID) ? $data_years['year'] - 543 : null;
 
-            // foreach ($data_strategic1_levels as $level) {
-            //     // if ($level['stra2LVID'] == $issue['stra2LVID']) {
-            //         // break;
-            //     // }
-            // }
-
-            // หา YearID ในตาราง years แล้วลบ 543
-            $year = null;
-            foreach ($data_years as $yearRow) {
-                if ($yearRow['yearID'] == $yearID) {
-                    $year = $yearRow['year'] - 543;
-                    break; //  จบลูปทันทีเมื่อเจอค่า
-                }
-            }
 
             //  เช็คว่า Year ตรงกับปีปัจจุบันหรือไม่
             if ($year == $currentYear) {
@@ -754,13 +723,6 @@ class PDFPlanController extends Controller
                             <th colspan='20' style='text-align: left; background-color: #ddd;'>แผนยุทธ์ศาสตร์: " . ($level['name'] ?? '-') . "</th>
                         </tr>";
 
-                //  ลูปข้อมูลเป้าประสงค์ที่สัมพันธ์กับประเด็นยุทธศาสตร์นี้
-                // foreach ($data_goals as $goal) {
-                // if ($goal['SFA3LVID'] == $issue['SFA3LVID']) { // เชื่อมโยง FK
-                // $htmlContent .= "
-                // <tr>
-                //     <th colspan='20' style='text-align: left;'>เป้าประสงค์ที่: " . ($goal['name'] ?? '-') . "</th>
-                // </tr>";
 
                 //  ลูปข้อมูลกลยุทธ์ที่สัมพันธ์กับเป้าประสงค์นี้
                 foreach ($data_target1_levels as $target) {
@@ -768,8 +730,8 @@ class PDFPlanController extends Controller
                         $projectRows = [];
 
                         // ตัวแปรปี
-                        $year1 = 2024;
-                        $year2 = 2025;
+                        // $year1 = 2024;
+                        // $year2 = 2025;
 
                         // รายชื่อเดือนที่ใช้ในตาราง (ต.ค. - ก.ย.)
                         $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
@@ -937,7 +899,7 @@ class PDFPlanController extends Controller
 
 
         $mpdf->WriteHTML($htmlContent, 2);
-        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $year + 543);
-        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . ($year + 543) . '.pdf', 'I');
+        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear);
+        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear . '.pdf', 'I');
     }
 }
