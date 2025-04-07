@@ -567,21 +567,23 @@ class ExcelPlanController extends Controller
                 }
             }
         }
-        dd($row);
+        // dd($row);
 
 
-        // กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
-        // $startRow = 4;
-        // $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
+        //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
+        $startRow = $row;
+        $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
 
-        // $sheet->getStyle('A' . $startRow . ':R' . $endRow)->applyFromArray([
-        //     'borders' => [
-        //         'allBorders' => [
-        //             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //             'color' => ['argb' => '000000'],
-        //         ],
-        //     ],
-        // ]);
+        // dd($startRow);
+
+        $sheet->getStyle('A' . $startRow . ':R' . $endRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
 
 
 
@@ -600,6 +602,11 @@ class ExcelPlanController extends Controller
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
         $row += 2;
+        
+        //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
+        $startRow = $row;
+        $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
+
         $sheet->setCellValue('A' . $row, 'ประเด็นยุทธ์ศาสตร์');
         $sheet->setCellValue('B' . $row, 'กลยุทธ์ (หน่วยงาน)');
         $sheet->setCellValue('C' . $row, 'โครงการ / ตัวชี้วัดโครงการ');
@@ -783,6 +790,21 @@ class ExcelPlanController extends Controller
                 }
             }
         }
+
+
+
+        $sheet->getStyle('A' . $startRow . ':R' . $endRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => '000000'],
+                ],
+            ],
+        ]);
+
+
+
+
 
 
 
