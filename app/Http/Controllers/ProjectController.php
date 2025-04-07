@@ -74,6 +74,7 @@ class ProjectController extends Controller
         $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
 
         $data['reportQuarter'] = DB::table('report_quarters')->whereIn('proID',$user->pluck('proID'))->get();
+        // dd($data['reportQuarter']);
 
         $data['report'] = DB::table('projects')
         ->join('report_quarters','report_quarters.proID','=','projects.proID');
@@ -2855,13 +2856,17 @@ class ProjectController extends Controller
                 ]
                 ));
         }
-
-        return redirect('/project');
+        
+        if($project['proTypeID'] == '3'){
+            return redirect('/project');
+        }else {
+            return redirect('/projectOutPlan');
+        }
     }
 
 
     function report($id){
-        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan'])->where('proID',$id)->first();
+        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan','Approver'])->where('proID',$id)->first();
         $data['user'] = UsersMapProject::with('users')->where('proID',$id)->get();
 
         $data['obj'] = Db::table('objectives')->where('proID',$id)->get();

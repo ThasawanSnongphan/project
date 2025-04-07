@@ -56,10 +56,13 @@
                         @if (count($data['dateQuarter1']))
                             @foreach ($data['dateQuarter1'] as $date)
                                 {{-- ไตรมาส 1 (ต.ค-ธ.ค) --}}
-                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                    
-                                      
-                                    
+                                @if (
+                                    $date->yearID == $item->yearID &&
+                                        $currentDate >= $date->startDate &&
+                                        $currentDate <= $date->endDate &&
+                                        $item->statusID == 4)
+                                    )
+
                                     <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
                                             class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                                 @else
@@ -76,10 +79,18 @@
                     <td>
                         @if (count($data['dateQuarter2']) > 0)
                             @foreach ($data['dateQuarter2'] as $date)
-                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                    
-                                    <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                            class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                @if (
+                                    $date->yearID == $item->yearID &&
+                                        $currentDate >= $date->startDate &&
+                                        $currentDate <= $date->endDate &&
+                                        $item->statusID == 4)
+                                    @foreach ($data['reportQuarter'] as $report)
+                                        @if ($report->quarID == 3 && $report->proID == $item->proID)
+                                        @else
+                                            <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                    class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                        @endif
+                                    @endforeach
                                 @else
                                     <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                             เขียน</i></a>
@@ -94,9 +105,21 @@
                     <td>
                         @if (count($data['dateQuarter3']) > 0)
                             @foreach ($data['dateQuarter3'] as $date)
-                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                    <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                            class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                @if (
+                                    $date->yearID == $item->yearID &&
+                                        $currentDate >= $date->startDate &&
+                                        $currentDate <= $date->endDate &&
+                                        $item->statusID == 4)
+                                    @foreach ($data['reportQuarter'] as $report)
+                                        @if ($report->quarID == 3 && $report->proID == $item->proID)
+                                        <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                            class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                                        @else
+                                            <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                    class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                        @endif
+                                    @endforeach
+                                    
                                 @else
                                     <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                             เขียน</i></a>
@@ -111,7 +134,11 @@
                     <td>
                         @if (count($data['dateQuarter4']) > 0)
                             @foreach ($data['dateQuarter4'] as $date)
-                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                @if (
+                                    $date->yearID == $item->yearID &&
+                                        $currentDate >= $date->startDate &&
+                                        $currentDate <= $date->endDate &&
+                                        $item->statusID == 4)
                                     <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
                                             class="fa fa-pencil btn btn-primary"> เขียน</i></a>
                                 @else

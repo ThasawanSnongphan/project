@@ -70,6 +70,12 @@
                         </div>
                     </div>
                     <div class="row field item form-group">
+                        <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผู้กำกับดูแลโครงการ :</b></label>
+                        <div class="col-md-7 col-sm-7">
+                            {{ $data['project']->Approver->displayname }}
+                        </div>
+                    </div>
+                    <div class="row field item form-group">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>format :</b></label>
                         <div class="col-md-8 col-sm-8">
                             {{ $data['project']->format }}

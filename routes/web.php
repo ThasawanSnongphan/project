@@ -113,6 +113,7 @@ Route::get('/ExecutiveProjectDenied', [Executive::class,'projectDenied']);
 //เสนอโครงการ
 Route::get('ExecutiveProjectDetail/{id}',[Executive::class,'detail'])->name('Executive.detail');
 Route::post('ExecutivePass/{id}', [Executive::class,'ExecutivePass'])->name('ExecutivePass');
+Route::post('ExecutiveApprove/{id}', [Executive::class,'ExecutiveApprove'])->name('ExecutiveApprove');
 Route::post('/ExecutiveEdit/{id}', [Executive::class,'ExecutiveEdit'])->name('ExecutiveEdit');
 Route::post('/ExecutiveDenied/{id}', [Executive::class,'ExecutiveDenied'])->name('ExecutiveDenied');
 //ประเมินโครงการ

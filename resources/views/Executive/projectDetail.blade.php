@@ -45,6 +45,8 @@
                         </div>
                     </div>
 
+
+
                     <div class="row field item form-group">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ปีงบประมาณ :</b></label>
                         <div class="col-md-7 col-sm-7">
@@ -69,6 +71,14 @@
                             @endforeach
                         </div>
                     </div>
+
+                    <div class="row field item form-group">
+                        <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผู้กำกับดูแลโครงการ :</b></label>
+                        <div class="col-md-7 col-sm-7">
+                            {{ $data['project']->Approver->displayname }}
+                        </div>
+                    </div>
+
                     <div class="row field item form-group">
                         <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>format :</b></label>
                         <div class="col-md-8 col-sm-8">
@@ -131,7 +141,7 @@
                             @if (count($data['stra1LVMap']) > 0)
                                 @foreach ($data['stra1LVMap'] as $item)
                                     <b>{{ $item->stra1LV->name }}</b> <br>
-                                    <b>เป้าหมาย</b> {{ $item->tar1LV->name }}
+                                    <b>เป้าหมาย</b> {{ $item->tar1LV->name }} <br>
                                 @endforeach
                             @endif
                         </div>
@@ -350,7 +360,7 @@
                             <div class="col-md-6 offset-md-3 d-flex justify-content-center">
 
                                 <button type="submit" class="btn btn-success"
-                                    onclick="submitButton('pass')">อนุมัติ</button>
+                                    onclick="submitButton('approve')">อนุมัติ</button>
                                 <button type="submit" class="btn btn-danger"
                                     onclick="submitButton('Denied')">ไม่อนุมัติ</button>
                                 <button type="submit" class="btn btn-warning"
@@ -710,7 +720,11 @@
             if (action === 'pass') {
                 form.action = "{{ route('ExecutivePass', $data['project']->proID) }}";
                 form.submit();
-            } else if (action === 'edit') {
+            }else if (action === 'approve'){
+                form.action = "{{ route('ExecutiveApprove', $data['project']->proID) }}";
+                form.submit();
+            }
+             else if (action === 'edit') {
                 document.getElementById('comment').required = true;
                 var comment = document.getElementById('comment').value.trim();
                 if (comment !== "") {

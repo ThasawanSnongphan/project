@@ -41,23 +41,33 @@ class Executive extends Controller
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where([['proTypeID',3],['approverID',auth()->id()]])->whereIn('statusID',[1,3,7])->get();
+        // $status=Status::all();
+        
+        if(auth()->user()->username == 'prasertsakt'){
+            $project=Projects::with('status')->where([['proTypeID',3]])->whereIn('statusID',[3,7])->orWhere('statusID',1)->where('approverID',auth()->id())->get();
+        }else{
+            $project=Projects::with('status')->where([['proTypeID',3],['statusID',1],['approverID',auth()->id()]])->get();
+            // dd($project);
+        }
         $proID = $project->pluck('proID');
         // dd($proID);
-        $status=Status::all();
         $users = $users=DB::table('users')->get();
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
         // dd($report_quarter);
-        return view('Executive.projectlist',compact('users','project','status','year','projectYear','report_quarter'));
+        return view('Executive.projectlist',compact('users','project','year','projectYear','report_quarter'));
     }
 
     function projectOutPlan(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where('proTypeID',4)->whereIn('statusID',[3,7])->get();
-        $status=Status::all();
+        if(auth()->user()->username == 'prasertsakt'){
+            $project=Projects::with('status')->where([['proTypeID',4]])->whereIn('statusID',[3,7])->orWhere('statusID',1)->where('approverID',auth()->id())->get();
+        }else{
+            $project=Projects::with('status')->where([['proTypeID',4],['statusID',1],['approverID',auth()->id()]])->get();
+            // dd($project);
+        }
         $users = $users=DB::table('users')->get();
-        return view('Executive.projectOutPlan',compact('users','project','status','year','projectYear'));
+        return view('Executive.projectOutPlan',compact('users','project','year','projectYear'));
     }
 
     function projectDenied(){
@@ -72,7 +82,7 @@ class Executive extends Controller
     //เอกสารเสนอโครงการ
     function detail($id){
        
-        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan'])->where('proID',$id)->first();
+        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan','Approver'])->where('proID',$id)->first();
         $data['user'] = UsersMapProject::with('users')->where('proID',$id)->get();
 
         $data['obj'] = Db::table('objectives')->where('proID',$id)->get();
@@ -95,6 +105,45 @@ class Executive extends Controller
         return view('Executive.projectDetail',compact('data'));
     }
     function ExecutivePass(Request $request, $id){
+        DB::table('projects')->where('proID',$id)->update(['statusID' => 2]);
+        $project = Projects::with('status')->where('proID',$id)->first();
+        // dd($project);
+        $detail = $request->input('comment');
+        if(!empty($detail)){
+            $userID = Auth::id();
+            $commentID = DB::table('comments')->insertGetId(
+                [
+                    'proID' => $id,
+                    'detail' => $detail,
+                    'type' => 'เอกสารเสนอโครงการ',
+                    'userID' => $userID,
+                    'updated_at' => now(), 
+                    'created_at' => now() 
+                ]);
+        }
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        }
+
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        
+        
+        foreach ($userMap as $index => $item) {
+            $mailData = [
+                'name' => $project->name,
+                'text' => $project->status->name
+            ];
+            if(!empty($comment)){
+                $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
+        }
+
+        return redirect('/ExecutiveProjectlist');
+    }
+    function ExecutiveApprove(Request $request, $id){
         DB::table('projects')->where('proID',$id)->update(['statusID' => 4]);
         $project = Projects::with('status')->where('proID',$id)->first();
         // dd($project);

@@ -25,14 +25,14 @@
             <tr>
                 <th>#</th>
                 <th>ชื่อโครงการ</th>
-                @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
+                
                     <th>สถานะ</th>
                     <th>ไตรมาส 1</th>
                     <th>ไตรมาส 2</th>
                     <th>ไตรมาส 3</th>
                     <th>ไตรมาส 4</th>
                    
-                @endif
+               
 
             </tr>
         </thead>
@@ -48,12 +48,12 @@
                     <td data-project="{{ $item->proID }}">
                         @if ($item->statusID == 7)
                             <a href="{{ route('Executive.detailEvaluation', $item->proID) }}">{{ $item->name }}</a>
-                        @elseif($item->statusID == 3)
+                        @elseif($item->statusID == 3 || $item->statusID == 1)
                             <a href="{{ route('Executive.detail', $item->proID) }}">{{ $item->name }}</a>
                         @endif
                     </td>
-                    @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1)
-                        <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
+                    
+                        <td>{{ $item->status->name ?? 'ไม่พบ' }}</td>
                         {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                         <td>
                             @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 4)
@@ -93,7 +93,7 @@
                             @endif
                         </td>
                         
-                    @endif
+                    
                 </tr>
                 @php
                     $i++;

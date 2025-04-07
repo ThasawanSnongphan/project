@@ -49,7 +49,7 @@
                         @endif
                     </td>
 
-                    <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}</td>
+                    <td>{{ $item->status->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
                         @if ($currentMonth >= 10 && $currentMonth <= 12)

@@ -86,7 +86,7 @@ class PlanningAnalyst extends Controller
 
     //เอกสารเสนอโครงการ
     function detail($id){
-        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan'])->where('proID',$id)->first();
+        $data['project'] = Projects::with(['year','status','projectType','badgetType','projectCharecter','projectIntegrat','target','UniPlan','Approver'])->where('proID',$id)->first();
         $data['user'] = UsersMapProject::with('users')->where('proID',$id)->get();
 
         $data['obj'] = Db::table('objectives')->where('proID',$id)->get();
