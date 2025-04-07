@@ -105,21 +105,11 @@
                     <td>
                         @if (count($data['dateQuarter3']) > 0)
                             @foreach ($data['dateQuarter3'] as $date)
-                                @if (
-                                    $date->yearID == $item->yearID &&
-                                        $currentDate >= $date->startDate &&
-                                        $currentDate <= $date->endDate &&
-                                        $item->statusID == 4)
-                                    @foreach ($data['reportQuarter'] as $report)
-                                        @if ($report->quarID == 3 && $report->proID == $item->proID)
-                                        <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
-                                            class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
-                                        @else
-                                            <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                                    class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                                        @endif
-                                    @endforeach
-                                    
+                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                    @if ($item->statusID == 4)
+                                        <a href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                class="fa fa-pencil btn btn-primary"> เขียน</i></a>
+                                    @endif
                                 @else
                                     <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                             เขียน</i></a>
@@ -129,6 +119,12 @@
                             <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
                                     เขียน</i></a>
                         @endif
+                        {{-- @foreach ($data['reportQuarter'] as $report)
+                            @if ($report->proID == $item->proID)
+                                <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                        class="fa fa-pencil btn btn-danger"> เสนอปิดโครงการ</i></a>
+                            @endif
+                        @endforeach --}}
 
                     </td>
                     <td>
