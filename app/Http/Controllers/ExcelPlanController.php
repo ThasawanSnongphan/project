@@ -147,6 +147,9 @@ class ExcelPlanController extends Controller
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
         $row += 2;
+
+        $startRow = $row;
+
         $sheet->setCellValue('A' . $row, 'ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์');
         $sheet->setCellValue('B' . $row, 'กลยุทธ์ (หน่วยงาน)');
         $sheet->setCellValue('C' . $row, 'โครงการ / ตัวชี้วัดโครงการ');
@@ -350,7 +353,7 @@ class ExcelPlanController extends Controller
         }
 
         // กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
-        $startRow = 4;
+        // $startRow = 4;
         $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
 
         $sheet->getStyle('A' . $startRow . ':R' . $endRow)->applyFromArray([
@@ -378,6 +381,11 @@ class ExcelPlanController extends Controller
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
         $row += 2;
+
+        //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
+        $startRow = $row;
+        // dd($endRow);
+
         $sheet->setCellValue('A' . $row, 'ประเด็นยุทธ์ศาสตร์');
         $sheet->setCellValue('B' . $row, 'กลยุทธ์ (หน่วยงาน)');
         $sheet->setCellValue('C' . $row, 'โครงการ / ตัวชี้วัดโครงการ');
@@ -571,7 +579,7 @@ class ExcelPlanController extends Controller
 
 
         //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
-        $startRow = $row;
+        // $startRow = $row;
         $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
 
         // dd($startRow);
@@ -605,7 +613,6 @@ class ExcelPlanController extends Controller
         
         //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
         $startRow = $row;
-        $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
 
         $sheet->setCellValue('A' . $row, 'ประเด็นยุทธ์ศาสตร์');
         $sheet->setCellValue('B' . $row, 'กลยุทธ์ (หน่วยงาน)');
@@ -792,6 +799,7 @@ class ExcelPlanController extends Controller
         }
 
 
+        $endRow = $row - 1; // $row คือตำแหน่งแถวสุดท้ายที่ใช้
 
         $sheet->getStyle('A' . $startRow . ':R' . $endRow)->applyFromArray([
             'borders' => [
