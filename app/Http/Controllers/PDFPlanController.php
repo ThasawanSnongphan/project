@@ -439,7 +439,7 @@ class PDFPlanController extends Controller
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
                 <tr>
-                    <th rowspan="3">ประเด็นยุทธ์ศาสตร์ / เป้าประสงค์</th>
+                    <th rowspan="3">ประเด็นยุทธ์ศาสตร์</th>
                     <th rowspan="3">กลยุทธ์<br>(หน่วยงาน)</th>
                     <th rowspan="3">โครงการ / ตัวชี้วัดโครงการ</th>
                     <th rowspan="3">ค่าเป้าหมายโครงการ</th>
@@ -668,8 +668,6 @@ class PDFPlanController extends Controller
 
         $mpdf->WriteHTML($htmlContent, 2);
 
-        // $year1 = 2024;
-        // $year2 = 2025;
 
         $htmlContent = '
             <table border="1" style="border-collapse: collapse; width: 100%; margin-bottom: 7px; font-weight: 12pt;">
@@ -728,10 +726,6 @@ class PDFPlanController extends Controller
                 foreach ($data_target1_levels as $target) {
                     if ($target['stra1LVID'] == $level['stra1LVID']) { // เชื่อมโยง FK
                         $projectRows = [];
-
-                        // ตัวแปรปี
-                        // $year1 = 2024;
-                        // $year2 = 2025;
 
                         // รายชื่อเดือนที่ใช้ในตาราง (ต.ค. - ก.ย.)
                         $months = ["ต.ค.", "พ.ย.", "ธ.ค.", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย."];
@@ -899,7 +893,7 @@ class PDFPlanController extends Controller
 
 
         $mpdf->WriteHTML($htmlContent, 2);
-        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear);
-        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear . '.pdf', 'I');
+        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear + 543);
+        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear + 543 . '.pdf', 'I');
     }
 }
