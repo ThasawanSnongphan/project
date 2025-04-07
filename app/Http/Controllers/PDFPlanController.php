@@ -899,7 +899,7 @@ class PDFPlanController extends Controller
 
 
         $mpdf->WriteHTML($htmlContent, 2);
-        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear);
-        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear . '.pdf', 'I');
+        $mpdf->SetTitle('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear + 543);
+        return $mpdf->Output('แผนปฏิบัติการประจำปีงบประมาณ พ.ศ.' . $currentYear + 543 . '.pdf', 'I');
     }
 }
