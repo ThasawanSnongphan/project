@@ -24,9 +24,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="/projectSave2" 
-                    enctype="multipart/form-data"
-                    >
+                    <form id="actionForm" method="POST" action="/projectSave2" enctype="multipart/form-data">
                         @csrf
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
@@ -53,18 +51,17 @@
                             </div>
                         </div>
                         <div class="row field item form-group align-items-center">
-                            <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับดูแลโครงการ<span
+                            <label for="title"
+                                class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับดูแลโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="hidden" name="approverID" value="{{session('approverID')}}">
-                                <input class="form-control" type="text" name="approver"
-                                    data-validate-length-range="8,20" 
+                                <input type="hidden" name="approverID" value="{{ session('approverID') }}">
+                                <input class="form-control" type="text" name="approver" data-validate-length-range="8,20"
                                     @foreach ($user as $item)
                                     @if (session('approverID') == $item->userID)
-                                        value=" {{$item->displayname}} "
-                                    @endif
-                                        
-                                    @endforeach  readonly />
+                                        value=" {{ $item->displayname }} "
+                                    @endif @endforeach
+                                    readonly />
 
                             </div>
                         </div>
@@ -383,7 +380,7 @@
                             <label for="title" class="col-form-label col-md-2 col-sm-2 label-align">ประเภทโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-4 col-sm-4">
-                                
+
                                 <select id="type" name="proTypeID" class="form-control">
                                     @foreach ($projectType as $item)
                                         @if ($item->proTypeID == 3)
@@ -449,7 +446,7 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">วัตถุประสงค์<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <input class="form-control" type="text" name="obj[]" id="obj" required/>
+                                <input class="form-control" type="text" name="obj[]" id="obj" required />
                             </div>
                             <div class="col-md-3 col-sm-3">
                                 <button type='button' class="btn btn-primary" onclick="insertObj()">เพิ่ม</button>
@@ -496,8 +493,11 @@
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="number" name="targetProject[]" id="targetKPI"
-                                            required>
+                                        <input class="form-control" type="text" name="targetProject[]"
+                                            inputmode="decimal" pattern="[0-9]*" id="targetKPI" required>
+                                        <div class="invalid-feedback">
+                                            กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
+                                        </div>
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -772,7 +772,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ไฟล์เอกสารประกอบโครงการ</label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="file" name="file[]" id="file">
-                                
+
                             </div>
                             {{-- เช็คจากค่าใช้สอย กับค่า ครุภัณฑ์  --}}
                             <div class="col-md-1 col-sm-1 ">
@@ -807,6 +807,42 @@
 
         const users = @json($user);
         const currentUserId = {{ Auth::user()->userID }};
+
+        const input = document.getElementById('targetKPI');
+        const feedback = document.getElementById('targetKPI-feedback');
+
+        input.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+
+            // ถ้าไม่ใช่ตัวเลขหรือจุด
+            if (!/[0-9.]/.test(char)) {
+                e.preventDefault();
+                input.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+
+            // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+            if (char === '.' && input.value.includes('.')) {
+                e.preventDefault();
+                input.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        input.addEventListener('input', function() {
+            const value = input.value;
+
+            // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+            const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+            if (valid) {
+                input.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+            } else {
+                input.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
 
         function calculateTotal() {
             // ดึงค่าจากช่อง input ที่มี class "cost-input"
@@ -994,6 +1030,50 @@
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
             targetInput.name = 'targetProject[]';
+
+            // เพิ่มข้อความแจ้งเตือน (feedback)
+            const feedback = document.createElement('div');
+            feedback.classList.add('invalid-feedback');
+            feedback.style.display = 'none';
+            feedback.textContent = 'กรุณากรอกเฉพาะตัวเลขและทศนิยม';
+
+            // วาง targetInput และ feedback ใน colTarget
+            colTarget.appendChild(feedback); // ขยับ feedback ไปอยู่ด้านล่างของ targetInput
+            colTarget.appendChild(targetInput);
+            
+            // เพิ่ม event listener ให้ targetInput
+            targetInput.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+
+                // ถ้าไม่ใช่ตัวเลขหรือจุด
+                if (!/[0-9.]/.test(char)) {
+                    e.preventDefault();
+                    targetInput.classList.add('is-invalid');
+                    feedback.style.display = 'block';
+                }
+
+                // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+                if (char === '.' && targetInput.value.includes('.')) {
+                    e.preventDefault();
+                    targetInput.classList.add('is-invalid');
+                    feedback.style.display = 'block';
+                }
+            });
+
+            targetInput.addEventListener('input', function() {
+                const value = targetInput.value;
+
+                // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+                const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+                if (valid) {
+                    targetInput.classList.remove('is-invalid');
+                    feedback.style.display = 'none';
+                } else {
+                    targetInput.classList.add('is-invalid');
+                    feedback.style.display = 'block';
+                }
+            });
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
