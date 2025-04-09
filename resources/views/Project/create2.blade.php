@@ -555,22 +555,14 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepStart[]" id=""
+                                        <input class="form-control step-start" type="date" name="stepStart[]" id=""
                                             required>
-                                        @error('stepStart.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepEnd[]" id=""
+                                        <input class="form-control step-end" type="date" name="stepEnd[]" id=""
                                             required>
-                                        @error('stepEnd.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -683,39 +675,35 @@
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu1[]"
-                                            id="" required>
-                                        {{-- @error('costQu1.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror --}}
+                                            id="costQu1" required>
+                                        <div class="invalid-feedback">
+                                            กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
+                                        </div>
+
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu2[]"
-                                            id="" required>
-                                        {{-- @error('costQu2.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror --}}
+                                            id="costQu2" required>
+                                        <div class="invalid-feedback">
+                                            กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
+                                        </div>
+
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu3[]"
-                                            id="" required>
-                                        {{-- @error('costQu3.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror --}}
+                                            id="costQu3" required>
+                                        <div class="invalid-feedback">
+                                            กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
+                                        </div>
+
                                     </div>
                                     <div class="row col-md-2 col-sm-2 mr-1">
                                         <input class="form-control cost-input" type="text" name="costQu4[]"
-                                            id="" required>
-                                        {{-- @error('costQu4.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror --}}
+                                            id="costQu4" required>
+                                        <div class="invalid-feedback">
+                                            กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
+                                        </div>
+
                                     </div>
                                     <div class="col-md-1 col-sm-1 ">
                                         <button type='button' class="btn btn-primary"
@@ -808,9 +796,28 @@
         const users = @json($user);
         const currentUserId = {{ Auth::user()->userID }};
 
-        const input = document.getElementById('targetKPI');
-        const feedback = document.getElementById('targetKPI-feedback');
+        document.addEventListener('DOMContentLoaded', function() {
+            const startInputs = document.querySelectorAll('.step-start');
+            const endInputs = document.querySelectorAll('.step-end');
 
+            startInputs.forEach((startInput, index) => {
+                startInput.addEventListener('change', function() {
+                    const selectedDate = startInput.value;
+                    const endInput = endInputs[index];
+                    if (endInput) {
+                        endInput.min =
+                        selectedDate; // ตั้งค่าขั้นต่ำให้ endInput เป็นวันเดียวกับ startInput
+                        // ถ้า endInput มีค่าน้อยกว่า startInput → ล้างค่า
+                        if (endInput.value < selectedDate) {
+                            endInput.value = '';
+                        }
+                    }
+                });
+            });
+        });
+
+        const input = document.getElementById('targetKPI');
+        // const feedback = document.getElementById('targetKPI-feedback');
         input.addEventListener('keypress', function(e) {
             const char = String.fromCharCode(e.which);
 
@@ -840,6 +847,146 @@
                 feedback.style.display = 'none';
             } else {
                 input.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        const costQu1 = document.getElementById('costQu1');
+        // const feedback = document.getElementById('targetKPI-feedback');
+        costQu1.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+
+            // ถ้าไม่ใช่ตัวเลขหรือจุด
+            if (!/[0-9.]/.test(char)) {
+                e.preventDefault();
+                costQu1.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+
+            // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+            if (char === '.' && costQu1.value.includes('.')) {
+                e.preventDefault();
+                costQu1.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        costQu1.addEventListener('input', function() {
+            const value = costQu1.value;
+
+            // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+            const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+            if (valid) {
+                costQu1.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+            } else {
+                costQu1.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        const costQu2 = document.getElementById('costQu2');
+        // const feedback = document.getElementById('targetKPI-feedback');
+        costQu2.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+
+            // ถ้าไม่ใช่ตัวเลขหรือจุด
+            if (!/[0-9.]/.test(char)) {
+                e.preventDefault();
+                costQu2.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+
+            // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+            if (char === '.' && costQu2.value.includes('.')) {
+                e.preventDefault();
+                costQu2.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        costQu2.addEventListener('input', function() {
+            const value = costQu2.value;
+
+            // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+            const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+            if (valid) {
+                costQu2.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+            } else {
+                costQu2.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        const costQu3 = document.getElementById('costQu3');
+        // const feedback = document.getElementById('targetKPI-feedback');
+        costQu3.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+
+            // ถ้าไม่ใช่ตัวเลขหรือจุด
+            if (!/[0-9.]/.test(char)) {
+                e.preventDefault();
+                costQu3.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+
+            // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+            if (char === '.' && costQu3.value.includes('.')) {
+                e.preventDefault();
+                costQu3.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        costQu3.addEventListener('input', function() {
+            const value = costQu3.value;
+
+            // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+            const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+            if (valid) {
+                costQu3.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+            } else {
+                costQu3.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        const costQu4 = document.getElementById('costQu4');
+        // const feedback = document.getElementById('targetKPI-feedback');
+        costQu4.addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.which);
+
+            // ถ้าไม่ใช่ตัวเลขหรือจุด
+            if (!/[0-9.]/.test(char)) {
+                e.preventDefault();
+                costQu4.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+
+            // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+            if (char === '.' && costQu4.value.includes('.')) {
+                e.preventDefault();
+                costQu4.classList.add('is-invalid');
+                feedback.style.display = 'block';
+            }
+        });
+
+        costQu4.addEventListener('input', function() {
+            const value = costQu4.value;
+
+            // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+            const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+            if (valid) {
+                costQu4.classList.remove('is-invalid');
+                feedback.style.display = 'none';
+            } else {
+                costQu4.classList.add('is-invalid');
                 feedback.style.display = 'block';
             }
         });
@@ -1031,16 +1178,18 @@
             targetInput.type = 'text';
             targetInput.name = 'targetProject[]';
 
+
             // เพิ่มข้อความแจ้งเตือน (feedback)
             const feedback = document.createElement('div');
             feedback.classList.add('invalid-feedback');
             feedback.style.display = 'none';
-            feedback.textContent = 'กรุณากรอกเฉพาะตัวเลขและทศนิยม';
+            feedback.textContent = 'กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น';
 
             // วาง targetInput และ feedback ใน colTarget
-            colTarget.appendChild(feedback); // ขยับ feedback ไปอยู่ด้านล่างของ targetInput
-            colTarget.appendChild(targetInput);
-            
+
+
+
+
             // เพิ่ม event listener ให้ targetInput
             targetInput.addEventListener('keypress', function(e) {
                 const char = String.fromCharCode(e.which);
@@ -1092,6 +1241,7 @@
             colKPI.appendChild(KPIInput);
             colCount.appendChild(countInput);
             colTarget.appendChild(targetInput);
+            colTarget.appendChild(feedback); // ขยับ feedback ไปอยู่ด้านล่างของ targetInput
             colDelete.appendChild(deleteButton);
             // เพิ่มปุ่มลบลงใน mainContainer
             document.getElementById('insertKPIProject').appendChild(mainContainer);
@@ -1266,6 +1416,49 @@
             CostQu1Input.addEventListener('input', calculateTotal);
 
             colCostQu1.appendChild(CostQu1Input);
+
+            const feedback1 = document.createElement('div');
+            feedback1.classList.add('invalid-feedback');
+            feedback1.style.display = 'none';
+            feedback1.textContent = 'กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น';
+
+            CostQu1Input.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+
+                // ถ้าไม่ใช่ตัวเลขหรือจุด
+                if (!/[0-9.]/.test(char)) {
+                    e.preventDefault();
+                    CostQu1Input.classList.add('is-invalid');
+                    feedback1.style.display = 'block';
+                }
+
+                // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+                if (char === '.' && CostQu1Input.value.includes('.')) {
+                    e.preventDefault();
+                    CostQu1Input.classList.add('is-invalid');
+                    feedback1.style.display = 'block';
+                }
+            });
+
+            CostQu1Input.addEventListener('input', function() {
+                const value = CostQu1Input.value;
+
+                // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+                const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+                if (valid) {
+                    CostQu1Input.classList.remove('is-invalid');
+                    feedback1.style.display = 'none';
+                } else {
+                    CostQu1Input.classList.add('is-invalid');
+                    feedback1.style.display = 'block';
+                }
+            });
+
+            colCostQu1.appendChild(feedback1);
+
+
+
             mainCostTypeContainer.appendChild(colCostQu1);
 
             const colCostQu2 = document.createElement('div');
@@ -1278,6 +1471,47 @@
             CostQu2Input.addEventListener('input', calculateTotal);
 
             colCostQu2.appendChild(CostQu2Input);
+
+            const feedback2 = document.createElement('div');
+            feedback2.classList.add('invalid-feedback');
+            feedback2.style.display = 'none';
+            feedback2.textContent = 'กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น';
+
+            CostQu2Input.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+
+                // ถ้าไม่ใช่ตัวเลขหรือจุด
+                if (!/[0-9.]/.test(char)) {
+                    e.preventDefault();
+                    CostQu2Input.classList.add('is-invalid');
+                    feedback2.style.display = 'block';
+                }
+
+                // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+                if (char === '.' && CostQu2Input.value.includes('.')) {
+                    e.preventDefault();
+                    CostQu2Input.classList.add('is-invalid');
+                    feedback2.style.display = 'block';
+                }
+            });
+
+            CostQu2Input.addEventListener('input', function() {
+                const value = CostQu2Input.value;
+
+                // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+                const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+                if (valid) {
+                    CostQu2Input.classList.remove('is-invalid');
+                    feedback2.style.display = 'none';
+                } else {
+                    CostQu2Input.classList.add('is-invalid');
+                    feedback2.style.display = 'block';
+                }
+            });
+
+            colCostQu2.appendChild(feedback2);
+
             mainCostTypeContainer.appendChild(colCostQu2);
 
             const colCostQu3 = document.createElement('div');
@@ -1290,6 +1524,47 @@
             CostQu3Input.addEventListener('input', calculateTotal);
 
             colCostQu3.appendChild(CostQu3Input);
+
+            const feedback3 = document.createElement('div');
+            feedback3.classList.add('invalid-feedback');
+            feedback3.style.display = 'none';
+            feedback3.textContent = 'กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น';
+
+            CostQu3Input.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+
+                // ถ้าไม่ใช่ตัวเลขหรือจุด
+                if (!/[0-9.]/.test(char)) {
+                    e.preventDefault();
+                    CostQu3Input.classList.add('is-invalid');
+                    feedback3.style.display = 'block';
+                }
+
+                // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+                if (char === '.' && CostQu3Input.value.includes('.')) {
+                    e.preventDefault();
+                    CostQu3Input.classList.add('is-invalid');
+                    feedback3.style.display = 'block';
+                }
+            });
+
+            CostQu3Input.addEventListener('input', function() {
+                const value = CostQu3Input.value;
+
+                // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+                const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+                if (valid) {
+                    CostQu3Input.classList.remove('is-invalid');
+                    feedback3.style.display = 'none';
+                } else {
+                    CostQu3Input.classList.add('is-invalid');
+                    feedback3.style.display = 'block';
+                }
+            });
+
+            colCostQu3.appendChild(feedback3);
+
             mainCostTypeContainer.appendChild(colCostQu3);
 
 
@@ -1303,6 +1578,46 @@
             CostQu4Input.addEventListener('input', calculateTotal);
 
             colCostQu4.appendChild(CostQu4Input);
+
+            const feedback4 = document.createElement('div');
+            feedback4.classList.add('invalid-feedback');
+            feedback4.style.display = 'none';
+            feedback4.textContent = 'กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น';
+
+            CostQu4Input.addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.which);
+
+                // ถ้าไม่ใช่ตัวเลขหรือจุด
+                if (!/[0-9.]/.test(char)) {
+                    e.preventDefault();
+                    CostQu4Input.classList.add('is-invalid');
+                    feedback4.style.display = 'block';
+                }
+
+                // ถ้าเป็นจุด แล้วมีจุดอยู่แล้วใน input
+                if (char === '.' && CostQu4Input.value.includes('.')) {
+                    e.preventDefault();
+                    CostQu4Input.classList.add('is-invalid');
+                    feedback4.style.display = 'block';
+                }
+            });
+
+            CostQu4Input.addEventListener('input', function() {
+                const value = CostQu4Input.value;
+
+                // ตรวจสอบว่ามีแค่จุดเดียว และเป็นรูปแบบตัวเลข/ทศนิยม
+                const valid = /^(\d+(\.\d*)?)?$/.test(value);
+
+                if (valid) {
+                    CostQu4Input.classList.remove('is-invalid');
+                    feedback4.style.display = 'none';
+                } else {
+                    CostQu4Input.classList.add('is-invalid');
+                    feedback4.style.display = 'block';
+                }
+            });
+
+            colCostQu4.appendChild(feedback4);
             mainCostTypeContainer.appendChild(colCostQu4);
 
 
