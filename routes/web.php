@@ -93,6 +93,7 @@ Route::post('/copy',[CopyPlanControllers::class,'insert']);
 
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
 Route::get('/news', [HomeController::class, 'news']);
+Route::get('/newsDetail/{id}', [HomeController::class, 'detail']);
 Route::get('/Performance', [PerformanceController::class,'index']);
 Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');
 

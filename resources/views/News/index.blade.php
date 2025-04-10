@@ -28,17 +28,7 @@
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                 </li>
-                                                <li class="dropdown">
-                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                                        role="button" aria-expanded="false"><i
-                                                            class="fa fa-wrench"></i></a>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a class="dropdown-item" href="#">Settings 1</a>
-                                                        <a class="dropdown-item" href="#">Settings 2</a>
-                                                    </div>
-                                                </li>
-                                                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                </li>
+                                                
                                             </ul>
                                             <div class="clearfix"></div>
                                         </div>
@@ -46,10 +36,10 @@
                                         <div class="x_content">
                                             <div class="row">
                                                 @foreach ($news as $new)
-                                                    <div class="col-md-55">
+
+                                                    {{-- <div class="col-md-55">
                                                         <div class="thumbnail">
                                                             <div class="image view view-first">
-                                                                {{-- {{dd(asset('public/images/News' . $new->img))}} --}}
                                                                 <img style="width: 100%; display: block;"
                                                                     src="{{ asset('images/News/' . $new->img) }}" />
                                                                 <div class="mask">
@@ -68,7 +58,7 @@
                                                                 <p>{{ $new->content }}</p>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 @endforeach
                                             </div>
                                         </div>
