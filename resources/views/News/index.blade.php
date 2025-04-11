@@ -7,15 +7,7 @@
                 <!-- page content -->
                 <div role="main">
                     <div class="">
-                        <div class="page-title">
-                            <div class="title_left">
-                                <h3> ข่าวประชาสัมพันธ์ </h3>
-                            </div>
-
-                           
-                        </div>
-
-                        <div class="clearfix"></div>
+                        
 
                         @if (Auth::check() && auth()->user() && auth()->user()->Admin == 1)
                             @include('News.create')
@@ -37,12 +29,12 @@
                                             <div class="row">
                                                 @foreach ($news as $new)
 
-                                                    {{-- <div class="col-md-55">
+                                                    <div class="col-md-55">
                                                         <div class="thumbnail">
                                                             <div class="image view view-first">
-                                                                <img style="width: 100%; display: block;"
-                                                                    src="{{ asset('images/News/' . $new->img) }}" />
-                                                                <div class="mask">
+                                                                <a href="/newsDetail/{{ $new->id }}"><img style="width: 100%; display: block;"
+                                                                    src="{{ asset('images/News/' . $new->img) }}" /></a>
+                                                                {{-- <div class="mask">
                                                                     <p>Your Text</p>
                                                                     <div class="tools tools-bottom">
                                                                         <a href="#"><i class="fa fa-link"></i></a>
@@ -52,13 +44,13 @@
                                                                             onclick="return confirm('ต้องการลบข่าว {{ $new->title }} หรือไม่')"><i
                                                                                 class="fa fa-times"></i></a>
                                                                     </div>
-                                                                </div>
+                                                                </div> --}}
                                                             </div>
                                                             <div class="caption">
-                                                                <p>{{ $new->content }}</p>
+                                                                <a href="/newsDetail/{{ $new->id }}">{{ $new->content }}</a>
                                                             </div>
                                                         </div>
-                                                    </div> --}}
+                                                    </div>
                                                 @endforeach
                                             </div>
                                         </div>

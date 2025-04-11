@@ -53,8 +53,5 @@ class HomeController extends Controller
         return view('Home.News',compact('data'));
     }
 
-    public function detail($id){
-        $data['newsDetail'] = News::find($id);
-        return view('Home.NewsDetail',compact('data'));
-    }
+    
 }

@@ -14,10 +14,11 @@ class NewsController extends Controller
         $news=DB::table('news')->get();
         return view('News.index',compact('news'));
     }
-
-    function create(){
-        return view('News.create');
+    public function detail($id){
+        $data['newsDetail'] = News::find($id);
+        return view('News.detail',compact('data'));
     }
+
 
     public function insert(Request $request){
         $request->validate(

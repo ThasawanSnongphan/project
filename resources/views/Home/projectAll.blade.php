@@ -3,114 +3,91 @@
 @section('content')
     {{-- @include('Project.create') --}}
 
+    <body class="nav-md">
+        <div class="container body">
+            <div class="main_container">
+                <!-- page content -->
+                <div role="main">
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>โครงการทั้งหมด</h2>
+                                        <ul class="nav navbar-right panel_toolbox">
+                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                                        </ul>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <div class="field item form-group ">
+                                            <label class="col-form-label col-md-1 col-sm-1 "
+                                                for="heard">ปีงบประมาณ*</label>
+                                            <div class="col-md-2 col-sm-2 m-2 ">
+                                                <select name="year" id="yearID" class="form-control">
+                                                    <option data-year="ทั้งหมด">ทั้งหมด</option>
+                                                    @foreach ($year as $year)
+                                                        <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
+                                                            {{ $year->year }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <table id="example" class="display">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>โครงการ</th>
+                                                    <th>สถานะ</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $currentMonth = now()->month;
+                                                    $i = 1;
+                                                @endphp
+                                                @foreach ($project as $item)
+                                                    <tr>
+                                                        <td>{{ $i }}</td>
+                                                        <td data-project="{{ $item->proID }}">
+                                                            @if ($item->status->statusID == 4)
+                                                                <a
+                                                                    href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
+                                                            @else
+                                                                <a
+                                                                    href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
+                                                            @endif
 
+                                                        </td>
 
-    <div class="field item form-group ">
-        <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
-        <div class="col-md-2 col-sm-2 m-2 ">
-            <select name="year" id="yearID" class="form-control">
-                <option data-year="ทั้งหมด">ทั้งหมด</option>
-                @foreach ($year as $year)
-                    <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
-                        {{ $year->year }}</option>
-                @endforeach
-            </select>
+                                                        @if ($item->status->statusID == 4)
+                                                            <td>กำลังดำเนินการ</td>
+                                                        @else
+                                                            <td>{{ $item->status->name }}</td>
+                                                        @endif
+                                                    </tr>
+                                                    @php
+                                                        $i++;
+                                                    @endphp
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {{-- <div class="ml-auto">
+    </body>
 
-            <a type='submit' class="btn btn-secondary m-2" href="/projectcreate">สร้างโครงการ</a>
-        </div> --}}
 
-    </div>
 
-    <table id="example" class="display">
-        <thead>
 
-            <tr>
-                <th>#</th>
-                <th>ชื่อโครงการ</th>
-                {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
-                <th>สถานะ</th>
-                {{-- <th>ไตรมาส 1</th>
-                    <th>ไตรมาส 2</th>
-                    <th>ไตรมาส 3</th>
-                    <th>ไตรมาส 4</th> --}}
 
-                {{-- @endif --}}
 
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $currentMonth = now()->month;
-                $i = 1;
-            @endphp
-            @foreach ($project as $item)
-                <tr>
-                    <td>{{ $i }}</td>
-                    <td data-project="{{ $item->proID }}">
-                        @if ($item->status->statusID == 4)
-                            <a href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
-                        @else
-                        <a href="{{ route('detail.evaluation', $item->proID) }}">{{ $item->name }}</a>
-                        @endif
-
-                    </td>
-                    {{-- @if (Auth::check() && auth()->user() && auth()->user()->Responsible == 1) --}}
-
-                    @if ($item->status->statusID == 4)
-                        <td>กำลังดำเนินการ</td>
-                    @else
-                        <td>{{ $item->status->name }}</td>
-                    @endif
-
-                    {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
-                    {{-- <td>
-                            @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
-                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                            @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        เขียน</i></a>
-                            @endif
-                        </td>
-                        <td>
-
-                            @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
-                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                            @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        เขียน</i></a>
-                            @endif
-                        </td>
-                        <td>
-                            @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
-                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                            @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        เขียน</i></a>
-                            @endif
-                        </td>
-                        <td>
-                            @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
-                                <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                            @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        เขียน</i></a>
-                            @endif
-                        </td>
-                        
-                    @endif --}}
-                </tr>
-                @php
-                    $i++;
-                @endphp
-            @endforeach
-        </tbody>
-    </table>
 
     <script>
         // เมื่อมีการเลือกแผนยุทธศาสตร์จาก dropdown

@@ -42,8 +42,7 @@
 
                                                         </div>
                                                         <div class="caption">
-                                                            <a
-                                                                href="/newsDetail/{{ $new->id }}">{{ $new->content }}</a>
+                                                            <a href="/newsDetail/{{ $new->id }}">{{ $new->content }}</a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -5,11 +5,7 @@
         <div class="main_container">
             <div role="main">
                 <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>User </h3>
-                        </div>
-                    </div>
+                    
                     
                     @include('Users.create');
 

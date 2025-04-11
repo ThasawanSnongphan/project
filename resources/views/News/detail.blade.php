@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="ln_solid">
-                                        <a href="/news" style="float: right"><i class="fa fa-arrow-left"> back</i></a>
+                                        <a href="/" style="float: right"><i class="fa fa-arrow-left"> back</i></a>
                                     </div>
 
                                 </div>

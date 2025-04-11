@@ -6,14 +6,7 @@
         <div class="main_container">
             <div role="main">
                 <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>ปีงบประมาณ</h3>
-                        </div>
-
-                        
-                    </div>
-
+                    
                     @include('Year.create')
 
                     <div class="row" style="display: block;">

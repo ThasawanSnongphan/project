@@ -93,7 +93,7 @@ Route::post('/copy',[CopyPlanControllers::class,'insert']);
 
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
 Route::get('/news', [HomeController::class, 'news']);
-Route::get('/newsDetail/{id}', [HomeController::class, 'detail']);
+
 Route::get('/Performance', [PerformanceController::class,'index']);
 Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');
 
@@ -206,6 +206,7 @@ Route::get('projectWord/{id}',[WordProjectController::class,'word_gen'])->name('
 
 
 /******* Admin *******/
+Route::get('/newsDetail/{id}', [NewsController::class, 'detail']);
 Route::get('create',[NewsController::class,'create']);
 Route::post('insert',[NewsController::class,'insert']);
 Route::get('ndelete/{id}',[NewsController::class,'delete'])->name('news.delete');
