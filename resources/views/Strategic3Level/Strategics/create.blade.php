@@ -7,16 +7,7 @@
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                            aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
-                        </div>
-                    </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
+                    
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -53,10 +44,10 @@
 
 
                     <div class="ln_solid">
-                        <div class="form-group ">
+                        <div class="form-group text-center p-2">
                             <div class="col-md-6 offset-md-3">
-                                <button type='submit' class="btn btn-primary" value="บันทึก">Submit</button>
-                                <button type='reset' class="btn btn-success">Reset</button>
+                                <button type='submit' class="btn btn-success" value="บันทึก">Submit</button>
+                                {{-- <button type='reset' class="btn btn-success">Reset</button> --}}
                             </div>
                         </div>
                     </div>

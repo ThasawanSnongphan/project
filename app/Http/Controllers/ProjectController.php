@@ -76,11 +76,19 @@ class ProjectController extends Controller
         $data['reportQuarter'] = DB::table('report_quarters')->whereIn('proID',$user->pluck('proID'))->get();
         // dd($data['reportQuarter']);
 
+        $data['report']=DB::table('projects')
+        ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
+        ->join('report_quarters','report_quarters.proID','=','projects.proID')
+        ->get();
+
+        // dd($data['report']);
+
         $data['evaluation']=DB::table('projects')
         ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
         ->join('report_quarters','report_quarters.proID','=','projects.proID')
         ->join('project_evaluations','project_evaluations.proID','=','projects.proID')->get();
 
+        // dd($data['evaluation']);
 
         
         // dd($data['report']->get());
