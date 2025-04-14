@@ -92,6 +92,7 @@
                                                         <a href="/newsDetail/{{ $new->id }}">{{ $new->title }}</a>
 
                                                         {{-- </div> --}}
+                                                        
                                                         <div class="d-flex justify-content-end m-2">
                                                             <a href="{{ route('news.edit', $new->id) }}"><i
                                                                     class="fa fa-pencil btn btn-warning"></i></a>
