@@ -102,7 +102,7 @@
                                         <li><a><i class="fa fa-user"></i> Admin <span
                                                     class="fa fa-chevron-down"></span></a>
                                             <ul class="nav child_menu">
-                                                <li><a href="/">ข่าวประชาสัมพันธ์</a></li>
+                                                <li><a href="/news">ข่าวประชาสัมพันธ์</a></li>
                                                 <li><a href="/users">Users</a></li>
                                                 <li><a href="/year">ปีงบประมาณ</a></li>
                                                 <hr>

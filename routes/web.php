@@ -76,9 +76,9 @@ Route::get('/excelEffective/{id}', [ExcelEffectiveController::class, 'excel_gen'
 
 
 
-Route::get('/', [NewsController::class,'index']);
+Route::get('/news', [NewsController::class,'index']);
 Auth::routes();
-Route::get('/login', [AuthController::class,'login']);
+Route::get('/login', [AuthController::class,'login'])->name('login');
 Route::post('loginPost',[AuthController::class,'loginPost']);
 Route::post('/logout', function () {
     Auth::logout();
@@ -92,7 +92,7 @@ Route::get('/copyPlan{id}',[CopyPlanControllers::class,'index'])->name('copyPlan
 Route::post('/copy',[CopyPlanControllers::class,'insert']);
 
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
-Route::get('/news', [HomeController::class, 'news']);
+Route::get('/', [HomeController::class, 'news']);
 
 Route::get('/Performance', [PerformanceController::class,'index']);
 Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');

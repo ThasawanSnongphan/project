@@ -92,14 +92,15 @@
                                                         <a href="/newsDetail/{{ $new->id }}">{{ $new->title }}</a>
 
                                                         {{-- </div> --}}
-                                                        
-                                                        <div class="d-flex justify-content-end m-2">
-                                                            <a href="{{ route('news.edit', $new->id) }}"><i
-                                                                    class="fa fa-pencil btn btn-warning"></i></a>
-                                                            <a href="{{ route('news.delete', $new->id) }}"
-                                                                onclick="return confirm('ต้องการลบข่าว {{ $new->title }} หรือไม่')"><i
-                                                                    class="fa fa-times btn btn-danger"></i></a>
-                                                        </div>
+                                                        @if (Auth::check() && auth()->user()->Admin == 1)
+                                                            <div class="d-flex justify-content-end m-2">
+                                                                <a href="{{ route('news.edit', $new->id) }}"><i
+                                                                        class="fa fa-pencil btn btn-warning"></i></a>
+                                                                <a href="{{ route('news.delete', $new->id) }}"
+                                                                    onclick="return confirm('ต้องการลบข่าว {{ $new->title }} หรือไม่')"><i
+                                                                        class="fa fa-times btn btn-danger"></i></a>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endforeach
