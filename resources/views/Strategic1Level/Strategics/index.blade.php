@@ -1,17 +1,11 @@
 @extends('layout')
-@section('title', 'Strategic')
+@section('title', 'แผนยุทธศาสตร์')
 @section('content')
     <div class="main_container">
         <!-- page content -->
         <div role="main">
             <div class="">
-                <div class="page-title">
-                    <div class="title_left">
-                        <h3>แผนยุทธศาสตร์</h3>
-                    </div>
-
-                    
-                </div>
+                
 
                 @include('Strategic1Level.Strategics.create')
 

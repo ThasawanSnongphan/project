@@ -144,6 +144,16 @@ class ProjectController extends Controller
         // dd($proID);
         return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','evaluation'));
     }
+
+    function projectCancel(){
+        $data['year'] = Year::all();
+        $data['projectYear'] = Projects::with('year')->get();
+
+        $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+
+        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
+        return view('Project.projectCancel',compact('data'));
+    }
     
     function create1(Request $request){
        

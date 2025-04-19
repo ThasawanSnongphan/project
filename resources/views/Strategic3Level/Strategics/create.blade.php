@@ -12,7 +12,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/strategicInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/strategicInsert" enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
@@ -30,13 +30,8 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="name" id="name" required='required'
-                                data-validate-length-range="8,20" />
-                            @error('name')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                            <input class="form-control" type="text" name="name" id="name" required>
+                            
                         </div>
 
                     </div>

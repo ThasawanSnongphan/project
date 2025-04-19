@@ -21,18 +21,18 @@ class NewsController extends Controller
 
 
     public function insert(Request $request){
-        $request->validate(
-            [
-                'title'=>'required',
-                'content'=>'required',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg'
-            ],
-            [
-                'title.required'=>'กรุณากรอกหัวข้อข่าว',
-                'content.required'=>'กรุณากรอกรายละเอียดข่าว',
-                'img.nullable'=>'กรุณาใส่รูปภาพ'
-            ]
-        );
+        // $request->validate(
+        //     [
+        //         'title'=>'required',
+        //         'content'=>'required',
+        //         'image' => 'nullable|image|mimes:jpeg,png,jpg'
+        //     ],
+        //     [
+        //         'title.required'=>'กรุณากรอกหัวข้อข่าว',
+        //         'content.required'=>'กรุณากรอกรายละเอียดข่าว',
+        //         'img.nullable'=>'กรุณาใส่รูปภาพ'
+        //     ]
+        // );
 
         $news = new News();
         $news->title = $request->input('title');
@@ -52,12 +52,12 @@ class NewsController extends Controller
         $imageName = basename($img);
         $news->img = $imageName;
         $news->save();
-        return redirect('/');
+        return redirect('/news');
     }
 
     function delete($id){
         DB::table('news')->where('id',$id)->delete();
-        return redirect('/');
+        return redirect('/news');
     }
     function edit($id){
         $news=DB::table('news')->where('id',$id)->first();
@@ -99,6 +99,6 @@ class NewsController extends Controller
             'img'=>$filename
         ];
         DB::table('news')->where('id',$id)->update($news);
-        return redirect('/'); 
+        return redirect('/news'); 
     }
 }

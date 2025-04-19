@@ -1,17 +1,11 @@
 @extends('layout')
-@section('title','KPIMain')
+@section('title','ตัวชี้วัดของแผน')
 @section('content')
 <div class="main_container">
     <!-- page content -->
     <div role="main">
         <div class="">
-            <div class="page-title">
-                <div class="title_left">
-                    <h3>ตัวชี้วัดของแผน</h3>
-                </div>
-
-                
-            </div>
+           
 
             @include('Strategic3Level.KPIMain.create')
 
@@ -24,7 +18,7 @@
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
-                                <li class="dropdown">
+                                {{-- <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                         aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -33,7 +27,7 @@
                                     </div>
                                 </li>
                                 <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                </li>
+                                </li> --}}
                             </ul>
                             <div class="clearfix"></div>
                         </div>
@@ -86,18 +80,13 @@
                                             <td>{{ $item->count }}</td>
                                             <td>{{ $item->target }}</td>
                                             <td> 
-                                                @if($item->director)
-                                                    {{ $item->director->firstname_en }} {{ $item->director->lastname_en }}
-                                                @else
-                                                    null
-                                                @endif
+                                                {{ $item->director->displayname ?? 'null'}}
+                                                
                                             </td>
                                             <td>
-                                                @if($item->recorder)
-                                                    {{ $item->recorder->firstname_en }} {{ $item->recorder->lastname_en }}
-                                                @else
-                                                    null
-                                                @endif
+                                               
+                                                    {{ $item->recorder->displayname ?? 'null'}} 
+                                                
                                             </td>
                                             <td>
                                                 <a

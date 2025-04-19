@@ -366,8 +366,8 @@
                                 <div class="ln_solid">
                                     <div class="form-group ">
                                         <div class="col-md-6 offset-md-3">
-                                            <button type='submit' class="btn btn-primary"
-                                                onclick="submitButton('saveStrategic')">บันทึก</button>
+                                            {{-- <button type='submit' class="btn btn-primary"
+                                                onclick="submitButton('saveStrategic')">บันทึก</button> --}}
                                             <button type="submit" class="btn btn-primary" onclick="submitButton('next')">ถัดไป</button>
                                         </div>
                                     </div>
