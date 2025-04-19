@@ -265,8 +265,7 @@
                                                 if ($result->num_rows > 0) {
                                                     while ($row = $result->fetch_assoc()) {
                                                     ?>
-                                                        <li><a href="{{ route('plan.Excel', $row['yearID']) }}"
-                                                            target="_blank">รายงานแผนปฏิบัติการ <?php echo $row['year']; ?> </a></li>
+                                                        <li><a href="{{ route('plan.Excel', $row['yearID']) }}">รายงานแผนปฏิบัติการ <?php echo $row['year']; ?> </a></li>
                                                     <?php
                                                     }
                                                 } ?>
