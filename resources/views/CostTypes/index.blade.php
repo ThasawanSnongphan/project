@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'CostType')
+@section('title', 'หมวดรายจ่าย')
 @section('content')
 <div class="container body">
     <div class="main_container">

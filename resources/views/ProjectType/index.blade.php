@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ProjectType')
+@section('title', 'ประเภทโครงการ')
 @section('content')
 <div class="container body">
     <div class="main_container">
@@ -38,7 +38,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>ประเภทโครงการ</th>
                                             <th></th>
                                         </tr>
                                     </thead>

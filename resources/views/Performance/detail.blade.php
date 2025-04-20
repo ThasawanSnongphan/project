@@ -4,7 +4,6 @@
     <div class="main_container">
         <div role="main">
             <div class="row">
-                
                 <div class="col-md-12 col-sm-12">
                     <div class="x_panel">
                         <div class="x_title">
@@ -16,44 +15,7 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-                            <form action="/Performance" id="actionForm">
-                                {{-- <div class="d-flex justify-content-around"> --}}
-                                    <div class=" field item form-group ">
-                                        <label class="col-form-label col-md-1 col-sm-1">ปีงบประมาณ*</label>
-                                        <div class="col-md-2 col-sm-2 m-2 ">
-                                            <select id="yearID" name="yearID" class="form-control" required
-                                                {{-- onchange="submitForm()" --}}>
-                                                <option value="">--เลือกปีงบประมาณ--</option>
-                                                @foreach ($data['yearAll'] as $item)
-                                                    <option value="{{ $item->yearID }}"
-                                                        {{ request('yearID') == $item->yearID ? 'selected' : '' }}>
-                                                        {{ $item->year }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <label class="col-form-label col-md-1 col-sm-1">ไตรมาส*</label>
-                                        <div class="col-md-2 col-sm-2 m-2 ">
-                                            <select id="quarID" name="quarID" class="form-control" required
-                                                {{-- onchange="submitForm()" --}}>
-                                                <option value="">--เลือกไตรมาส--</option>
-                                                @foreach ($data['quarterAll'] as $item)
-                                                    <option value="{{ $item->quarID }}"
-                                                        {{ request('quarID') == $item->quarID ? 'selected' : '' }}>
-                                                        {{ $item->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3 col-sm-3 m-2">
-                                            <button class="btn btn-primary" type="submit">search</button>
-                                        </div>
-                                    </div>
-                                    
-                                   
-                                {{-- </div> --}}
-
-                            </form>
+                            @include('Performance.index')
                             @if (!empty($data['selectYearID']) && !empty($data['selectQuarID']))
                                 <h3 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการ
                                     และโครงการนอกแผนปฏิบัติการ

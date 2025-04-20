@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Fund')
+@section('title', 'กองทุน')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -52,7 +52,7 @@
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"
-                                                    required>
+                                                    required value="{{$fund->name}}">
                                                 
                                             </div>
                                         </div>

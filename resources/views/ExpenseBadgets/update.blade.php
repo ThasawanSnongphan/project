@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ExpenseBadget')
+@section('title', 'งบรายจ่าย')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -12,7 +12,7 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>งบรายจ่าย </h2>
+                                    <h2>แก้ไขงบรายจ่าย </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>

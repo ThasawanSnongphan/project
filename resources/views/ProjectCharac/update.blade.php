@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ExpenseBadget')
+@section('title', 'ลักษณะโครงการ')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -12,7 +12,7 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>ลักษณะโครงการ </h2>
+                                    <h2>แก้ไขลักษณะโครงการ </h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -30,20 +30,16 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('pro.update',$pro_char->proChaID)}}"novalidate enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('pro.update',$pro_char->proChaID)}}" enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
                                             <label for="name"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">ลักษณะโครงการ<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <input class="form-control" type="textt" name="name" id="name"
-                                                    required='required' data-validate-length-range="8,20" value="{{$pro_char->name}}"  />
-                                                @error('name')
-                                                    <div class="m-2">
-                                                        <span class="text text-danger">{{ $message }}</span>
-                                                    </div>
-                                                @enderror
+                                                <input class="form-control" type="text" name="name" id="name"
+                                                    required value="{{$pro_char->name}}"  >
+                                                
                                             </div>
                                         </div>
 

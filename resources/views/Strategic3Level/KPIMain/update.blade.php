@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Tactics')
+@section('title', 'ตัวชี้วัดของแผน')
 @section('content')
     <div class="row">
         <div class="col-md-2 col-sm-2"></div>

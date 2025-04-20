@@ -1,38 +1,22 @@
 @extends('layout')
-@section('title', 'ProjectIntrgrat')
+@section('title', 'การบูรณาการ')
 @section('content')
     <div class="container body">
         <div class="main_container">
             <div role="main">
                 <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>แก้ไขกการบูรณาการ</h3>
-                        </div>
-
-                        <div class="title_right">
-                            <div class="col-md-5 col-sm-5 form-group pull-right top_search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Search for...">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Go!</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
+                    
 
                     <div class="row">
-                        <div class="col-md-3 col-sm-3"></div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-1 col-sm-1"></div>
+                        <div class="col-md-10 col-sm-10">
                             <div class="x_panel">
                                 <div class="x_title">
                                     <h2>การบูรณาการ</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
-                                        <li class="dropdown">
+                                        {{-- <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                                 aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -41,36 +25,32 @@
                                             </div>
                                         </li>
                                         <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{route('projectIntegrat.update',$project_integrat->proInID)}}"novalidate enctype="multipart/form-data">
+                                    <form method="POST" action="{{route('projectIntegrat.update',$project_integrat->proInID)}}" enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
                                             <label for="name"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">การบูรณาการ<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <input class="form-control" type="textt" name="name" id="name"
-                                                    required='required' data-validate-length-range="8,20" value="{{$project_integrat->name}}"  />
-                                                @error('name')
-                                                    <div class="m-2">
-                                                        <span class="text text-danger">{{ $message }}</span>
-                                                    </div>
-                                                @enderror
+                                                <input class="form-control" type="text" name="name" id="name"
+                                                    required value="{{$project_integrat->name}}"  >
+                                                
                                             </div>
                                         </div>
 
 
 
                                         <div class="ln_solid">
-                                            <div class="form-group ">
+                                            <div class="form-group text-center p-2">
                                                 <div class="col-md-6 offset-md-3">
-                                                    <button type='submit' class="btn btn-primary"
-                                                        value="บันทึก">Submit</button>
-                                                    <button type='reset' class="btn btn-success">Reset</button>
+                                                    <button type='submit' class="btn btn-warning"
+                                                        value="บันทึก">Edit</button>
+                                                    <button type='button' class="btn btn-danger"><a href="/projectIntegrat" style="color: white">Back</a></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -78,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-1 col-sm-1"></div>
                     </div>
                 </div>
             </div>

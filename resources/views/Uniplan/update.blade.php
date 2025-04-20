@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'UnivarsityPlan')
+@section('title', 'แผนงานมหาลัย')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -33,7 +33,7 @@
                                         @csrf
                                         <div class="field item form-group">
                                             <label for="name"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาลัย<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"

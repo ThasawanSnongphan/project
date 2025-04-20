@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title','Fund')
+@section('title','กองทุน')
 @section('content')
 <div class="main_container">
     <!-- page content -->

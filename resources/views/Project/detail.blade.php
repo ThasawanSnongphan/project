@@ -1,7 +1,7 @@
 @extends('layout')
 @section('title', 'Project')
 @section('content')
-    @if (Auth::check())
+    {{-- @if (Auth::check())
         <div>
             <form action="{{ route('project.PDF', $data['project']->proID) }}" method="GET" target="_blank">
                 <button type="submit" class="btn btn-danger">แบบเสนอโครงการ PDF</button>
@@ -19,7 +19,7 @@
                 <button type="submit" class="btn btn-danger">แบบเสนอปิดโครงการ PDF</button>
             </form>
         </div>
-    @endif
+    @endif --}}
 
 
     <div class="col-md-1 col-sm-1"></div>
@@ -31,13 +31,13 @@
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                            aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            aria-expanded="false"><i class="fa fa-file-text"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Settings 1</a>
-                            <a class="dropdown-item" href="#">Settings 2</a>
+                            <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
+                            <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
                     </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    <li><a href="/project"><i class="fa fa-arrow-left"></i></a>
                 </ul>
                 <div class="clearfix"></div>
             </div>

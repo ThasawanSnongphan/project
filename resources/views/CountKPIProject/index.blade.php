@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'countKPI')
+@section('title', 'หน่วยนับ KPI')
 @section('content')
     <div class="container body">
         <div class="main_container">

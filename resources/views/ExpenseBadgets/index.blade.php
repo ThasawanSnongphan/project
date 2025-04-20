@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ExpenseBadget')
+@section('title', 'งบรายจ่าย')
 @section('content')
 <div class="container body">
     <div class="main_container">

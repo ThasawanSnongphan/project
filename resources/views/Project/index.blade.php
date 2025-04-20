@@ -2,8 +2,8 @@
 @section('title', 'โครงการประจำปี')
 @section('content')
 
-    <body class="nav-md">
-        <div class="container body">
+    {{-- <body class="nav-md"> --}}
+        {{-- <div class="container body"> --}}
             <div class="main_container">
                 <div role="main">
                     <div class="">
@@ -400,8 +400,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </body>
+        {{-- </div> --}}
+    {{-- </body> --}}
 
 
 

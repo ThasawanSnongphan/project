@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Status')
+@section('title', 'สถานะ')
 @section('content')
 <div class="container body">
     <div class="main_container">
@@ -34,7 +34,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>สถานะ</th>
                                             <th></th>
                                         </tr>
                                     </thead>

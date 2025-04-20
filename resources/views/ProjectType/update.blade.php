@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'ProjectType')
+@section('title', 'ประเภทโครงการ')
 @section('content')
     <div class="container body">
         <div class="main_container">
