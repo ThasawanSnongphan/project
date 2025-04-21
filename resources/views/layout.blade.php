@@ -32,8 +32,24 @@
     <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- ฟอนต์ Sarabun จาก Google Fonts -->
+    {{-- <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet"> --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
+        rel="stylesheet">
 
     <title>@yield('title')</title>
+
+    <!-- เรียกใช้ฟอนต์ TH Sarabun -->
+    <style>
+        * {
+            font-family: 'THSarabunPSK';
+            src: url('/fonts/THSarabunPSK.ttf') format('truetype');
+
+        }
+    </style>
 </head>
 
 
@@ -246,9 +262,9 @@
                                                 if ($result->num_rows > 0) {
                                                     while ($row = $result->fetch_assoc()) {
                                                     ?>
-                                                        <li><a href="{{ route('plan.PDF', $row['yearID']) }}"
-                                                            target="_blank">รายงานแผนปฏิบัติการ <?php echo $row['year']; ?> </a></li>
-                                                    <?php
+                                            <li><a href="{{ route('plan.PDF', $row['yearID']) }}"
+                                                    target="_blank">รายงานแผนปฏิบัติการ <?php echo $row['year']; ?> </a></li>
+                                            <?php
                                                     }
                                                 } ?>
 
@@ -265,8 +281,9 @@
                                                 if ($result->num_rows > 0) {
                                                     while ($row = $result->fetch_assoc()) {
                                                     ?>
-                                                        <li><a href="{{ route('plan.Excel', $row['yearID']) }}">รายงานแผนปฏิบัติการ <?php echo $row['year']; ?> </a></li>
-                                                    <?php
+                                            <li><a href="{{ route('plan.Excel', $row['yearID']) }}">รายงานแผนปฏิบัติการ
+                                                    <?php echo $row['year']; ?> </a></li>
+                                            <?php
                                                     }
                                                 } ?>
                                         </ul>
