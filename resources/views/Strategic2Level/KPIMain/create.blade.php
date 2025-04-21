@@ -7,7 +7,7 @@
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
-                    <li class="dropdown">
+                    {{-- <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-expanded="false"><i class="fa fa-wrench"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -16,12 +16,12 @@
                         </div>
                     </li>
                     <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/KPIMain2LVInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/KPIMain2LVInsert" enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
                         <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
@@ -61,13 +61,8 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">KPI<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="name" id="name" required='required'
-                                data-validate-length-range="8,20" />
-                            @error('KPI')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                            <input class="form-control" type="text" name="name" id="name" required>
+                            
                         </div>
 
                     </div>
@@ -75,8 +70,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">หน่วยนับ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="count" id="count" 
-                                data-validate-length-range="8,20" />
+                            <input class="form-control" type="text" name="count" id="count" required>
                         </div>
 
                     </div>
@@ -84,7 +78,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ค่าเป้าหมาย<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" type="text" name="target" id="target" data-validate-length-range="8,20" />
+                            <input class="form-control" type="text" name="target" id="target" required>
                         </div>
 
                     </div>
@@ -93,11 +87,11 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="directorID" name="directorID" class="form-control" >
+                            <select id="directorID" name="directorID" class="form-control" required>
                                 <option value="">---เลือกผู้กำกับ---</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->userID }}">
-                                        {{ $item->firstname_en }} {{$item->lastname_en }}</option>
+                                        {{ $item->displayname }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -107,11 +101,11 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้บันทึกข้อมูล<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="recorderID" name="recorderID" class="form-control" >
+                            <select id="recorderID" name="recorderID" class="form-control" required >
                                 <option value="">---เลือกผู้บันทึกข้อมูล---</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->userID }}">
-                                        {{ $item->firstname_en }} {{$item->lastname_en }}</option>
+                                        {{ $item->displayname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -120,7 +114,7 @@
 
 
                     <div class="ln_solid">
-                        <div class="form-group ">
+                        <div class="form-group text-center p-2">
                             <div class="col-md-6 offset-md-3">
                                 <button type='submit' class="btn btn-primary" value="บันทึก">Submit</button>
                                 <button type='reset' class="btn btn-success">Reset</button>

@@ -23,6 +23,7 @@ class PerformanceController extends Controller
         $data['selectQuarID'] = $request->input('quarID'); //quarID
 
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
+        $data['quarter'] = Quarters::find($data['selectQuarID']);
 
         if(!empty($data['selectQuarID']) && $data['selectQuarID'] != 'ทั้งหมด'){
             $data['quarter'] = Quarters::find($data['selectQuarID']);

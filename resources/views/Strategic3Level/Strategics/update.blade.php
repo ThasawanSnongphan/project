@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Strategic')
+@section('title', 'แผนยุทธศาสตร์')
 @section('content')
     <div class="container body">
         <div class="main_container">
@@ -28,7 +28,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                    <form method="POST" action="{{ route('strategic.update', $strategic->stra3LVID) }}"novalidate
+                                    <form method="POST" action="{{ route('strategic.update', $strategic->stra3LVID) }}"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="field item form-group">
@@ -49,24 +49,20 @@
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"
-                                                    required='required' data-validate-length-range="8,20"
-                                                    value="{{ $strategic->name }}" />
-                                                @error('name')
-                                                    <div class="m-2">
-                                                        <span class="text text-danger">{{ $message }}</span>
-                                                    </div>
-                                                @enderror
+                                                    required
+                                                    value="{{ $strategic->name }}" >
+                                                
                                             </div>
                                         </div>
 
 
 
                                         <div class="ln_solid">
-                                            <div class="form-group ">
+                                            <div class="form-group text-center p-2">
                                                 <div class="col-md-6 offset-md-3">
-                                                    <button type='submit' class="btn btn-primary"
-                                                        value="บันทึก">Submit</button>
-                                                    <button type='reset' class="btn btn-success">Reset</button>
+                                                    <button type='submit' class="btn btn-warning"
+                                                        value="บันทึก">Edit</button>
+                                                    <button type='reset' class="btn btn-danger"><a href="/strategic" style="color: white">Back</a></button>
                                                 </div>
                                             </div>
                                         </div>

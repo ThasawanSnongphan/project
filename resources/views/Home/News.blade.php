@@ -24,6 +24,17 @@
                                     </div>
 
                                     <div class="x_content">
+
+                                        {{-- <table id="example" class="display">
+                                            <thead>
+                                                <tr>
+                                                    <td>#</td>
+                                                    <td>img</td>
+                                                    <td>title</td>
+                                                    <td>content</td>
+                                                </tr>
+                                            </thead>
+                                        </table> --}}
                                         <div class="row">
                                             @foreach ($data['news'] as $new)
                                                 <div class="col-md-55">
@@ -36,7 +47,7 @@
 
                                                         </div>
                                                         <div class="caption">
-                                                            <a href="/newsDetail/{{ $new->id }}">{{ $new->content }}</a>
+                                                            <a href="/newsDetail/{{ $new->id }}">{{ $new->title }}</a>
                                                         </div>
                                                     </div>
                                                 </div>

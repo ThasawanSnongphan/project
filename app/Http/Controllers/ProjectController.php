@@ -148,6 +148,17 @@ class ProjectController extends Controller
         
     }
 
+
+    function projectCancel(){
+        $data['year'] = Year::all();
+        $data['projectYear'] = Projects::with('year')->get();
+
+        $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+
+        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
+        return view('Project.projectCancel',compact('data'));
+    }
+
     function create1(Request $request){
 
         // session()->flush();

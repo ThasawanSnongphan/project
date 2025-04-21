@@ -21,10 +21,10 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form method="POST" action="/statusInsert"novalidate enctype="multipart/form-data">
+                <form method="POST" action="/statusInsert" enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">name<span
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">สถานะ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="name" id="name" required='required'

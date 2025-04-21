@@ -11,4 +11,14 @@ class KPIMain2Level extends Model
     {
         return $this->belongsTo(StrategicIssues2Level::class, 'SFA2LVID','SFA2LVID');
     }
+
+    public function director()
+    {
+        return $this->belongsTo(Users::class, 'directorID','userID');
+    }
+
+    public function recorder()
+    {
+        return $this->belongsTo(Users::class, 'recorderID','userID');
+    }
 }

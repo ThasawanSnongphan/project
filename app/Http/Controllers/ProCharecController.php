@@ -13,19 +13,10 @@ class ProCharecController extends Controller
         return view('ProjectCharac.index',compact('pro_char'));
     }
 
-    function create(){
-        return view('ProjectCharac.create');
-    }
+    
 
     function insert(Request $request ){
-        $request->validate(
-            [
-                'name'=>'required'
-            ],
-            [
-                'name.required'=>'กรุณากรอกลักษณะโครงการ'
-            ]
-        );
+        
         $pro_char = new ProjectCharec();
         $pro_char->name = $request->input('name');
         $pro_char->save();
@@ -43,19 +34,12 @@ class ProCharecController extends Controller
         return view('ProjectCharac.update',compact('pro_char'));
     }
     function update(Request $request,$id){
-        $request->validate(
-            [
-                'name'=>'required'
-            ],
-            [
-                'name.required'=>'กรุณากรอกลักษณะโครงการ'
-            ]
-        );
+        
         $pro_char=[
             'name'=>$request->name
         ];
         DB::table('project_charecs')->where('proChaID',$id)->update($pro_char);
-        return redirect('/ProjectCharac.index'); 
+        return redirect('/proChar'); 
     }
 
 

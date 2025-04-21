@@ -1,9 +1,9 @@
 @extends('layout')
-@section('title', 'Project')
+@section('title', 'โครงการประจำปี')
 @section('content')
 
-    <body class="nav-md">
-        <div class="container body">
+    {{-- <body class="nav-md"> --}}
+        {{-- <div class="container body"> --}}
             <div class="main_container">
                 <div role="main">
                     <div class="">
@@ -38,6 +38,7 @@
                                                     <th>#</th>
                                                     <th>ชื่อโครงการ</th>
                                                     <th>สถานะ</th>
+
                                                     {{-- @if (Auth::check() && auth()->user()) --}}
                                                     <th>ไตรมาส 1</th>
                                                     <th>ไตรมาส 2</th>
@@ -45,6 +46,10 @@
                                                     <th>ไตรมาส 4</th>
                                                     <th></th>
                                                     {{-- @endif --}}
+
+                                                   
+                                                    
+
 
                                                 </tr>
                                             </thead>
@@ -488,8 +493,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </body>
+        {{-- </div> --}}
+    {{-- </body> --}}
 
 
 

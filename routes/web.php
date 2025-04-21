@@ -152,6 +152,8 @@ Route::post('/departmentEvaluationEdit/{id}', [Department_Head::class,'Evaluatio
 
 Route::get('/project', [ProjectController::class,'index']);
 Route::get('/projectOutPlan', [ProjectController::class,'projectOutPlan']);
+Route::get('/projectCancel', [ProjectController::class,'projectCancel']);
+
 Route::any('/projectcreate1', [ProjectController::class,'create1']);
 
 Route::post('/projectgoal3LV', [ProjectController::class,'goal3LV']);

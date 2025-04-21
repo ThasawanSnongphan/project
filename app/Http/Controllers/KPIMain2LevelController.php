@@ -16,7 +16,7 @@ class KPIMain2LevelController extends Controller
         $year = Year::all();
         $strategic = Strategic2Level::all();
         $SFA = StrategicIssues2Level::all();
-        $KPIMain=KPIMain2Level::with('SFA.strategic.year')->get();
+        $KPIMain=KPIMain2Level::with('SFA.strategic.year','director','recorder')->get();
         $user=Users::all();
         return view('Strategic2Level.KPIMain.index',compact('user','year','strategic','SFA','KPIMain'));
     }

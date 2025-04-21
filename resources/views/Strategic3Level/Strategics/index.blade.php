@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Strategic')
+@section('title', 'แผนยุทธศาสตร์')
 @section('content')
     <div class="main_container">
         <!-- page content -->
