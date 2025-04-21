@@ -47,6 +47,7 @@
         * {
             font-family: 'THSarabunPSK';
             src: url('/fonts/THSarabunPSK.ttf') format('truetype');
+            /* font-size: 14px; */
 
         }
     </style>
