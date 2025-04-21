@@ -218,7 +218,7 @@
                                             @if ($KPIMap->goal3LVID == ($goal3LVMap[$index] ?? ''))
                                                 <div class="row col-md-12 col-sm-12">
                                                     <div class="col-md-4 col-sm-4 m-1">
-                                                        <input type="hidden" name="goal3LVID[]"   value="{{$goal3LVMap[$index]}}">
+                                                        {{-- <input type="hidden" name="goal3LVID[]"   value="{{$goal3LVMap[$index]}}"> --}}
                                                         <select id="KPIMain3LVID_{{ $index }}"
                                                             name="KPIMain3LVID[]" class="form-control" required>
                                                             <option value="">--เลือกตัวชี้วัด--</option>

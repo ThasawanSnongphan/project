@@ -127,13 +127,13 @@
 
                         </div>
                         <div class="row field item form-group align-items-center">
-                            <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
+                            <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">รูปแบบของงาน<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="format" name="format" class="form-control" >
-                                    <option value="team" {{ $project->format == 'team' ? 'selected' : '' }}>team</option>
+                                    <option value="team" {{ $project->format == 'team' ? 'selected' : '' }}>งานกลยุทธ์ TQA</option>
                                     <option value="department" {{ $project->format == 'department' ? 'selected' : '' }}>
-                                        department
+                                        งานประจำของฝ่าย
                                     </option>
                                 </select>
                             </div>
@@ -144,11 +144,11 @@
                                     <label for="plan"
                                         class="col-form-label col-md-3 col-sm-3 label-align">ชื่อแผน</label>
                                     <div class="col-md-6 col-sm-6">
-                                        @foreach ($strategicMap as $map)
+                                        {{-- @foreach ($strategicMap as $map)
                                             @if ($map->stra3LVID == $item)
-                                                <input type="hidden" name="straMapID[]" value="{{ $map->straMapID }}">
+                                                <input type="text" name="straMapID[]" value="{{ $map->straMapID }}">
                                             @endif
-                                        @endforeach
+                                        @endforeach --}}
 
                                         <input type="hidden" name="stra3LVID[]" value="{{ $item }}">
 
@@ -182,7 +182,6 @@
                                                     @endforeach
                                                 @endif
                                             @endforeach
-
                                         </div>
                                     </div>
                                     <div class="row field item form-group align-items-center">
@@ -190,10 +189,11 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                                 class="required">*</span></label>
                                         <div class="row col-md-8 col-sm-8">
-                                            {{-- <input type="text" value="{{session('goal3LVID')[$index]}}"> --}}
+                                            {{-- <input type="text" value="{{session('SFA3LVID')[$index]}}"> --}}
+                                            {{-- <input type="text" name="" id="" value="{{session()->has('goal3LVID')}}"> --}}
+                                           
                                             @foreach ($goals as $goal)
-                                                @if (session()->has('goal3LVID') && is_array(session('goal3LVID')))
-                                                
+                                                @if (session()->has('goal3LVID') && is_array(session('goal3LVID'))) 
                                                     @foreach (session('goal3LVID') as $goal3LVID)
                                                         @if ($goal->goal3LVID == $goal3LVID && $goal->SFA3LVID == session('SFA3LVID')[$index])
                                                             <input type="hidden" name="goal3LVID[]"
@@ -201,6 +201,7 @@
                                                             <input class="form-control" type="text" id="goal3LVID"
                                                                 value="{{ $goal->name }}" 
                                                                 readonly>
+                                                                
                                                         @endif
                                                     @endforeach
                                                 @endif
@@ -212,10 +213,13 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
                                         <div class="row col-md-8 col-sm-8">
+                                            
+                                            
                                             @foreach ($tactics as $tactic)
                                                 @if (session()->has('tac3LVID') && is_array(session('tac3LVID')))
                                                     @foreach (session('tac3LVID') as $tac3LVID)
                                                         @if ($tactic->tac3LVID == $tac3LVID && $tactic->goal3LVID == session('goal3LVID')[$index])
+                                                            
                                                             <input type="hidden" name="tac3LVID[]"
                                                                 value="{{ $tactic->tac3LVID }}">
                                                             <input class="form-control" type="text" id="tac3LVID"
@@ -397,6 +401,8 @@
                                             class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                                 class="required">*</span></label>
                                         <div class="row col-md-8 col-sm-8">
+                                            
+
                                             @foreach ($tactics2LV as $tactic)
                                                 @if (session()->has('tac2LVID') && is_array(session('tac2LVID')))
                                                     @foreach (session('tac2LVID') as $tac2LVID)
@@ -404,8 +410,7 @@
                                                             <input type="hidden" name="tac2LVID[]"
                                                                 value="{{ $tactic->tac2LVID }}">
                                                             <input class="form-control" type="text" id="tac2LVID"
-                                                                data-validate-length-range="8,20"
-                                                                value="{{ $tactic->name }}" readonly />
+                                                                value="{{ $tactic->name }}" readonly >
                                                         @endif
                                                     @endforeach
                                                 @endif

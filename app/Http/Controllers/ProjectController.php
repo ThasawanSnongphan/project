@@ -105,6 +105,8 @@ class ProjectController extends Controller
         ->join('report_quarters','report_quarters.proID','=','projects.proID')
         ->join('project_evaluations','project_evaluations.proID','=','projects.proID')->get();
 
+
+
         // dd($data['evaluation']);
 
 
@@ -585,21 +587,7 @@ class ProjectController extends Controller
 
 
     function save1(Request $request){
-        $request->validate(
-            [
-                'principle'=>'required',
-                'obj.*'=>'required',
-                'stepName.*'=>'required',
-                'stepStart.*'=>'required',
-                'stepEnd.*'=>'required',
-                'costQu1.*'=>'required',
-                'costQu2.*'=>'required',
-                'costQu3.*'=>'required',
-                'costQu4.*'=>'required',
-                'benefit.*'=>'required',
-                'file'=>'required',
-            ]
-        );
+        
         $year = Year::where('yearID',$request->input('yearID'))->first();
         $project = new Projects();
         $project->yearID = $year->yearID;
@@ -1066,6 +1054,7 @@ class ProjectController extends Controller
         $straMap = $strategicMap->where('proID',$project->proID)->first();
         $SFAs = StrategicIssues::all();
         $goals = Goals::all();
+        // dd(session('goal3LVID'));
         $tactics = Tactics::all();
         $KPIMainMapProject = KPIMainMapProjects::all();
         $KPIMains=KPIMains::all();
@@ -1407,6 +1396,28 @@ class ProjectController extends Controller
             ->where('stra1LVID',$stra1LVMapToDelete)
             ->delete();
         }
+
+        session()->forget(
+            [
+                'yearID' ,
+                'name' ,
+                'stra3LVID',
+                'SFA3LVID' ,
+                'goal3LVID',
+                'tac3LVID',
+                'KPIMain3LVID',
+                'count3LVID',
+                'target3LVID',
+                'stra2LVID',
+                'SFA2LVID',
+                'tac2LVID',
+                'KPIMain2LVID',
+                'stra1LVID',
+                'tar1LVID'
+            ]
+        );
+
+
 
         return redirect('/project');
     }

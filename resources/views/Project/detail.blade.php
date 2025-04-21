@@ -33,7 +33,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-expanded="false"><i class="fa fa-file-text"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
+                            <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}" target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
                             <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
                     </li>

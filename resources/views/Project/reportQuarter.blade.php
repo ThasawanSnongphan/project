@@ -11,20 +11,19 @@
                     @else
                         <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
                     @endif
-                    @if (!empty($data['evaluation']))
-                        <a href="{{ route('detail.evaluation', $data['project']->proID) }}" class="btn btn-primary">รายงานผลประเมิน</a>
-                    @endif
+                    
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
+                        @if (!empty($data['evaluation']))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                aria-expanded="false"><i class="fa fa-file-text"></i></a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Settings 1</a>
-                                <a class="dropdown-item" href="#">Settings 2</a>
+                                <a class="dropdown-item" href="{{ route('detail.evaluation', $data['project']->proID) }}">รายงานผลประเมิน</a>
                             </div>
                         </li>
+                        @endif
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
                         </li>
                     </ul>

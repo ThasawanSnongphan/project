@@ -10,7 +10,7 @@
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
-                        
+
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -88,14 +88,14 @@
 
                         </div>
                         <div class="row field item form-group align-items-center">
-                            <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">format<span
+                            <label for="format" class="col-form-label col-md-3 col-sm-3 label-align">รูปแบบของงาน<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="format" name="format" class="form-control">
                                     <option value="team"
-                                        {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>team</option>
+                                        {{ old('format', request('format')) == 'team' ? 'selected' : '' }}>งานกลยุทธ์ TQA</option>
                                     <option value="department"
-                                        {{ old('format', request('format')) == 'department' ? 'selected' : '' }}>department
+                                        {{ old('format', request('format')) == 'department' ? 'selected' : '' }}>งานประจำของฝ่าย
                                     </option>
                                 </select>
                             </div>
@@ -546,13 +546,13 @@
                                         @enderror
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control step-start" type="date" name="stepStart[]" id=""
-                                            required>
+                                        <input class="form-control step-start" type="date" name="stepStart[]"
+                                            id="" required>
 
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control step-end" type="date" name="stepEnd[]" id=""
-                                            required>
+                                        <input class="form-control step-end" type="date" name="stepEnd[]"
+                                            id="" required>
 
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
@@ -658,7 +658,8 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12 mt-2">
                                     <div class="row col-md-3 col-sm-3 mr-1">
-                                        <select id="costType" name="costID[]" class="form-control">
+                                        <select id="costType" name="costID[]" class="form-control"
+                                            onchange="document.getElementById('file').required = (this.value === '3' || this.value === '4' || this.value === '8')">
                                             @foreach ($costTypes as $item)
                                                 <option value="{{ $item->costTypeID }}">{{ $item->name }}</option>
                                             @endforeach
@@ -797,7 +798,7 @@
                     const endInput = endInputs[index];
                     if (endInput) {
                         endInput.min =
-                        selectedDate; // ตั้งค่าขั้นต่ำให้ endInput เป็นวันเดียวกับ startInput
+                            selectedDate; // ตั้งค่าขั้นต่ำให้ endInput เป็นวันเดียวกับ startInput
                         // ถ้า endInput มีค่าน้อยกว่า startInput → ล้างค่า
                         if (endInput.value < selectedDate) {
                             endInput.value = '';
@@ -1366,6 +1367,10 @@
             costTypeDropdown.id = `costType_${Date.now()}`;
             costTypeDropdown.name = 'costID[]';
             costTypeDropdown.innerHTML = '';
+            costTypeDropdown.setAttribute(
+                'onchange',
+                "document.getElementById('file').required = (this.value === '3' || this.value === '4' || this.value === '8');"
+            );
 
             const updateCostTypeDropdown = () => {
                 const selectedEXPID = ExpenseDropdown.value;
@@ -1404,7 +1409,9 @@
             CostQu1Input.classList.add('form-control', 'cost-input');
             CostQu1Input.type = 'text';
             CostQu1Input.name = 'costQu1[]';
+            CostQu1Input.required = true;
             CostQu1Input.addEventListener('input', calculateTotal);
+            
 
             colCostQu1.appendChild(CostQu1Input);
 
@@ -1459,6 +1466,7 @@
             CostQu2Input.classList.add('form-control', 'cost-input');
             CostQu2Input.type = 'text';
             CostQu2Input.name = 'costQu2[]';
+            CostQu2Input.required = true;
             CostQu2Input.addEventListener('input', calculateTotal);
 
             colCostQu2.appendChild(CostQu2Input);
@@ -1512,6 +1520,7 @@
             CostQu3Input.classList.add('form-control', 'cost-input');
             CostQu3Input.type = 'text';
             CostQu3Input.name = 'costQu3[]';
+            CostQu3Input.required = true;
             CostQu3Input.addEventListener('input', calculateTotal);
 
             colCostQu3.appendChild(CostQu3Input);
@@ -1566,6 +1575,7 @@
             CostQu4Input.classList.add('form-control', 'cost-input');
             CostQu4Input.type = 'text';
             CostQu4Input.name = 'costQu4[]';
+            CostQu4Input.required = true;
             CostQu4Input.addEventListener('input', calculateTotal);
 
             colCostQu4.appendChild(CostQu4Input);
@@ -1631,10 +1641,11 @@
         function toggleTextarea() {
             var select = document.getElementById("integrat");
             var otherTextContainer = document.getElementById("otherTextContainer");
+            var text = document.getElementById("proInDetail");
 
             if (select.value === '6') {
                 otherTextContainer.style.display = "flex";
-                otherTextContainer.required = true;
+                text.required = true;
             } else {
                 otherTextContainer.style.display = "none";
             }
@@ -1713,7 +1724,7 @@
 
 
         function updateExpenseDropdown(selectedPlanID) {
-            console.log(selectedPlanID);
+            // console.log(selectedPlanID);
 
 
             const expenseSelect = document.getElementById('expID');
@@ -1770,16 +1781,17 @@
             }
         }
 
-        function submitButton() {
+        function submitForm() {
             var form = document.getElementById('actionForm');
-            var costID = document.getElementById('[id^="costType"]');
+            // var costID = document.querySelectorAll('[id^="costType_"]');
+            // costID.forEach(el => {
+            //     console.log( el.value);
+            // });
 
-            console.log(costID);
 
+            // form.action = "/projectSave2";
 
-            form.action = "";
-
-            form.submit();
+            // form.submit();
         }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ
@@ -1789,7 +1801,7 @@
             const EXPSelect = document.getElementById('expID');
             planSelect.addEventListener('change', function() {
                 const selectedPlanID = this.value;
-                console.log(selectedPlanID);
+                // console.log(selectedPlanID);
                 updateExpenseDropdown(selectedPlanID);
             });
             EXPSelect.addEventListener('change', function() {
