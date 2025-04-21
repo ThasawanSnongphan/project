@@ -35,7 +35,7 @@ use App\Models\Funds;
 use App\Models\CostTypes;
 use App\Models\ExpenseBadgets;
 use App\Models\Objectives;
-use App\Models\Steps;   
+use App\Models\Steps;
 use App\Models\CostQuarters;
 use App\Models\Benefits;
 use App\Models\Files;
@@ -52,7 +52,7 @@ use Illuminate\Support\Facades\Session;
 
 class ProjectController extends Controller
 {
-   
+
     /**
      * Create a new controller instance.
      *
@@ -80,8 +80,8 @@ class ProjectController extends Controller
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        
-       
+
+
 
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
 
@@ -107,18 +107,18 @@ class ProjectController extends Controller
 
         // dd($data['evaluation']);
 
-        
+
         // dd($data['report']->get());
         // dd($data['reportQuarter1']);
 
         // $proID = $report->pluck('proID');
-       
-       
-        
+
+
+
 
         // dd($dateReportQuarter);
         // dd( $evaluation );
-       
+
         // dd($evaluation);
         // dd($proID);
         return view('Project.index',compact('users','project','status','year','projectYear','evaluation','data'));
@@ -143,11 +143,14 @@ class ProjectController extends Controller
         // dd($evaluation);
         // dd($proID);
         return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','evaluation'));
+
+
+        
     }
-    
+
     function create1(Request $request){
-       
-        // session()->flush(); 
+
+        // session()->flush();
         $year = Year::all();
         $user = DB::table('users')->where('Department_head',1)->where('department_name',auth()->user()->department_name)->orWhere('Executive',1)->get();
         // dd($user);
@@ -161,7 +164,7 @@ class ProjectController extends Controller
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() : Strategic2Level::all();
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() : Strategic1Level::all();
         // $name = request()->query('name');
-      
+
         // $validated = $request->validate([
         //     'name' => 'required'
         // ]);
@@ -188,18 +191,18 @@ class ProjectController extends Controller
 
         $SFA3LVs = StrategicIssues::all();
         $goal3Level = Goals::all();
-        $tactics3LV = Tactics::all(); 
+        $tactics3LV = Tactics::all();
         $KPIMain3LV = KPIMains::all();
 
-        $SFA2LV = StrategicIssues2Level::all(); 
+        $SFA2LV = StrategicIssues2Level::all();
         $tactics2LV = Tactic2Level::all();
         // dd($tactics2LV);
         $KPIMain2LV = KPIMain2Level::all();
 
         $target1LV = Target1Level::all();
 
-        
-            
+
+
         return view('Project.create1',compact('year','user','selectYear','strategic3Level','selectStra3LV','selectStra2LV','selectSFA2Level','selectTactics2LV','selectKPIMain2LV','strategic2Level','strategic1Level','selectSFA3Level','SFA3LVs','selectGoal3Level','goal3Level','tactics3LV','selectTactics3LV','KPIMain3LV','SFA2LV','tactics2LV','KPIMain2LV','target1LV','selectKPIMain','selectKPIMain1LV','selectTarget1LV','selectStra1LV'));
     }
 
@@ -231,7 +234,7 @@ class ProjectController extends Controller
     function count_target_KPIMain2LV(Request $request){
         $data['count_target2LV']=KPIMain2Level::where('KPIMain2LVID',$request->KPIMain2LVID)->get(['count','target']);
         return response()->json($data);
-    } 
+    }
 
     function fund(Request $requuest){
         $data['fund'] = Funds::where('planID',$request->planID)->get('fundID');
@@ -239,13 +242,13 @@ class ProjectController extends Controller
         return response()->json($data);
     }
 
-    
-    
+
+
     function costType(Request $request){
         $costType['costType']=CostTypes::where('expID',$request->expID)->get(['name','costID']);
         return response()->json($costType);
     }
-   
+
 
     function send1(Request $request){
 
@@ -270,32 +273,32 @@ class ProjectController extends Controller
                 'tar1LVID'=>$request->tar1LVID
             ]);
 
-       
+
         //  dd(session('goal3LVID'));
             // dd($SFA3LVID);
-       
 
-           
-            
-        
+
+
+
+
         return redirect('/projectcreate2');
     }
-    
-    
+
+
     function create2(Request $request){
-        
+
         // $project=DB::table('projects')->where('proID',$id)->first();
         //  dd($project,$id);
         $sessionSFA3LVID = array_values(array_filter(session('SFA3LVID')));
         $sessiongoal3LVID = array_values(array_filter(session('goal3LVID')));
         $sessiontac3LVID = array_values(array_filter(session('tac3LVID')));
         $sessionKPIMain3LVID = array_values(array_filter(session('KPIMain3LVID')));
-        
+
         $dateInPlan = DateInPlan::with('year')->where('yearID',session('yearID'))->first();
         // dd($dateInPlan);
         $user = Users::all();
         $years = Year::all(); // ดึงข้อมูลปี
-       
+
 
         $strategicMap = StrategicMap::all();
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
@@ -333,7 +336,7 @@ class ProjectController extends Controller
         return view('Project.create2',compact('strategic2LV','selectProjectType','selectProjectCharec','selectProjectIntegrat','target1LV','strategic2LVMap','KPIMain2LV','KPIMainMapProject','SFA2Lv','tactics2LV','KPIMain2LVMap','strategic1LV','strategic1LVMap','CountKPIProjects','years','user','strategicMap','strategic','SFAs','goals','tactics','KPIMainMapProject','KPIMains','projectType','projectCharec','projectIntegrat','target','badgetType','uniplan','fund','expanses','costTypes',
                     'sessionSFA3LVID','sessiongoal3LVID','sessiontac3LVID','sessionKPIMain3LVID','dateInPlan'));
     }
-    
+
     function send2(Request $request){
         // $request->validate(
         //     [
@@ -368,7 +371,7 @@ class ProjectController extends Controller
             'created_at' => now(),
             'updated_at' => now()
         ];
-        dd($project['proTypeID']);
+        // dd($project['proTypeID']);
         $project = DB::table('projects')->insertGetId($projects);
 
 
@@ -409,7 +412,7 @@ class ProjectController extends Controller
                 $map->KPIMain3LVID = $KPIMain ?? null;
                 $map->stra3LVID = $stra3LV[$index];
                 $map->proID = $project;
-                $map->save(); 
+                $map->save();
                 }
             }
         }
@@ -432,7 +435,7 @@ class ProjectController extends Controller
         }
         $KPIMain2LV = $request->input('KPIMain2LVID');
         // dd($KPIMain2LV);
-        
+
         if(!empty($KPIMain2LV) && is_array($KPIMain2LV)){
             foreach($KPIMain2LV as $index => $KPI){
                 if(!empty($KPI) ){
@@ -458,7 +461,7 @@ class ProjectController extends Controller
                     $straMap->save();
                 }
             }
-        } 
+        }
 
         $objDetail = $request->input('obj');
         if(!empty($objDetail) && is_array($objDetail)) {
@@ -555,20 +558,20 @@ class ProjectController extends Controller
                 'tac2LVID',
                 'KPIMain2LVID',
                 'stra1LVID',
-                'tar1LVID' 
+                'tar1LVID'
             ]
         );
-         
+
         if($project['proTypeID'] == '3'){
             return redirect('/project');
         }else {
             return redirect('/projectOutPlan');
         }
 
-        
+
     }
 
-    
+
 
     function save1(Request $request){
         $request->validate(
@@ -591,7 +594,7 @@ class ProjectController extends Controller
         $project->yearID = $year->yearID;
         $project->name = $request->input('name');
         $project->statusID =  14;
-        $project->save(); 
+        $project->save();
 
         $project = $project->fresh();
 
@@ -620,11 +623,11 @@ class ProjectController extends Controller
                 $map->KPIMain3LVID = $KPIMain ?? null;
                 $map->stra3LVID = $stra3LV[$index];
                 $map->proID = $project->proID;
-                $map->save(); 
+                $map->save();
                 }
             }
         }
-        
+
         $stra2LV = $request->input('stra2LVID');
         $SFA2LV = $request->input('SFA2LVID');
         $tactics2LV = $request->input('tac2LVID');
@@ -664,15 +667,15 @@ class ProjectController extends Controller
                     $straMap->save();
                 }
             }
-        } 
-        
+        }
+
         return redirect('/project');
-        
+
     }
 
     function save2(Request $request){
         // $request->validate(
-           
+
         //         [
         //             'principle' => 'required',
         //             'obj.*' => 'required',
@@ -684,7 +687,7 @@ class ProjectController extends Controller
         //             'costQu3.*' => 'required',
         //             'costQu4.*' => 'required',
         //             'benefit.*' => 'required',
-                    
+
         //         ],
         //         [
         //             'principle.required' => 'กรุณากรอกหลักการและเหตุผล',
@@ -710,7 +713,7 @@ class ProjectController extends Controller
             'updated_at' => now()
         ];
         $project = DB::table('projects')->insertGetId($projects);
-       
+
 
         $users = $request->input('userID');
         if(!empty($users) && is_array($users)){
@@ -746,13 +749,13 @@ class ProjectController extends Controller
         // dd($goalMap,$KPIMain3LV);
         if(!empty($KPIMain3LV) && is_array($KPIMain3LV) ){
             foreach ($KPIMain3LV as $index => $KPIMain) {
-                
+
                 $map = new KPIMainMapProjects();
                 $map->KPIMain3LVID = $KPIMain ;
                 $map->goal3LVID = $goalMap[$index] ;
                 $map->proID = $project;
-                $map->save(); 
-                
+                $map->save();
+
             }
         }
 
@@ -775,7 +778,7 @@ class ProjectController extends Controller
         $KPIMain2LV = $request->input('KPIMain2LVID');
         $SFAMap = $request->input('SFAMap');
         // dd($KPIMain2LV);
-        
+
         if(!empty($KPIMain2LV) && is_array($KPIMain2LV)){
             foreach($KPIMain2LV as $index => $KPI){
                 if(!empty($KPI) ){
@@ -801,7 +804,7 @@ class ProjectController extends Controller
                     $straMap->save();
                 }
             }
-        } 
+        }
 
 
         $objDetail = $request->input('obj');
@@ -817,7 +820,7 @@ class ProjectController extends Controller
         $KPIName = $request->input('KPIProject') ;
         $KPICount =  $request->input('countKPIProject') ;
         $KPITarget =  $request->input('targetProject') ;
-        
+
         if(!empty($KPIName) && is_array($KPIName) && is_array($KPICount) && is_array($KPITarget)){
             foreach ($KPIName as $index => $KPI){
                 $KPIProject = new KPIProjects();
@@ -843,7 +846,7 @@ class ProjectController extends Controller
             }
         }
 
-       
+
         $costQu1 = $request->input('costQu1');
         $costQu2= $request->input('costQu2');
         $costQu3= $request->input('costQu3');
@@ -869,7 +872,7 @@ class ProjectController extends Controller
         $benefits = $request->input('benefit');
         // dd($benefits);
         if(!empty($benefits) && is_array($benefits)){
-            
+
             foreach($benefits as $index => $bnf){
                 $benefit = new Benefits();
                 $benefit->detail = $bnf;
@@ -877,7 +880,7 @@ class ProjectController extends Controller
                 $benefit->save();
             }
         }
-        
+
         $filename = $request->file('file');
         if(!empty($filename)){
             foreach($filename as $file){
@@ -907,7 +910,7 @@ class ProjectController extends Controller
                 'tac2LVID',
                 'KPIMain2LVID',
                 'stra1LVID',
-                'tar1LVID' 
+                'tar1LVID'
             ]
         );
         if($projects['proTypeID'] == 3){
@@ -915,7 +918,7 @@ class ProjectController extends Controller
         }else{
             return redirect('/projectOutPlan');
         }
-        
+
     }
 
     function delete($id){
@@ -927,7 +930,7 @@ class ProjectController extends Controller
             $project->delete();
             return redirect('/projectOutPlan');
         }
-        
+
     }
 
     function edit1(Request $request,$id){
@@ -939,24 +942,24 @@ class ProjectController extends Controller
         $year = Year::all(); // ดึงข้อมูลปี
         $user = DB::table('users')->where('Department_head',1)->where('department_name',auth()->user()->department_name)->orWhere('Executive',1)->get();
 
-        
-        
+
+
         $strategic3LVMap= DB::table('strategic_maps')->where('proID',$id)->get();
-       
+
         $stra3LVMap = $strategic3LVMap->pluck('stra3LVID')->toArray();
         // dd($strategic3LVMap);
         $SFA3LVMap=$strategic3LVMap->pluck('SFA3LVID')->toArray();
         $goal3LVMap = $strategic3LVMap->pluck('goal3LVID')->toArray();
         $tac3LVMap =  $strategic3LVMap->pluck('tac3LVID')->toArray();
         // dd($SFA3LVMap);
-        
-        
+
+
         $KPIMain3LVMaps = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
         $KPIMain3LVMap =  $KPIMain3LVMaps->pluck('KPIMain3LVID')->toArray();
         $KPIMain3LVMapFirst = $KPIMain3LVMaps->unique('goal3LVID')->values();
 
         // dd($KPIMain3LVMapFirst);
-        
+
         // dd($selectYear);
         $strategic3Level = $selectYear ? Strategic3Level::where('yearID',$selectYear)->get() :  Strategic3Level::all();
         // dd( $strategic3Level);
@@ -966,11 +969,11 @@ class ProjectController extends Controller
         // dd($SFA3LVs);
         // $sfa3LVIDs = $SFA3LVs->pluck('SFA3LVID');
         $goal3Level = Goals::all();
-        
+
         // $goal3Level = DB::table('goals')->whereIn('SFA3LVID',$sfa3LVIDs)->get();
         // dd($goal3Level);
-        // $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all(); 
-        $tactics3LV =Tactics::all(); 
+        // $tactics3LV = $selectGoal3Level ? Tactics::where('goal3LVID',$selectGoal3Level)->get() : Tactics::all();
+        $tactics3LV =Tactics::all();
         $KPIMain3LV = KPIMains::all();
         // $KPIMain3LVMap = KPIMainMapProjects::all();
 
@@ -985,7 +988,7 @@ class ProjectController extends Controller
         // dd($strategic2LVMap);
 
         $strategic2Level = $selectYear ? Strategic2Level::where('yearID',$selectYear)->get() :  Strategic2Level::all();
-        $SFA2LV = StrategicIssues2Level::all(); 
+        $SFA2LV = StrategicIssues2Level::all();
         $tactics2LV = Tactic2Level::all();
         $KPIMain2LV = KPIMain2Level::all();
         // $KPIMain2LVMap = KPIMain2LevelMapProject::all();
@@ -997,7 +1000,7 @@ class ProjectController extends Controller
         $strategic1Level = $selectYear ? Strategic1Level::where('yearID',$selectYear)->get() :  Strategic1Level::all();
         $target1LV = Target1Level::all();
 
-       
+
 
         return view('Project.update1',
         compact('comment','selectYear','year','project','strategic3LVMap','stra3LVMap','SFA3LVMap','goal3LVMap','tac3LVMap','KPIMain3LVMapFirst','KPIMain3LVMaps','KPIMain3LVMap',
@@ -1006,8 +1009,8 @@ class ProjectController extends Controller
                 'strategic1Level','strategic1LVMap','target1LVMap','target1LV','user'));
     }
     function sendUpdate1(Request $request,$id){
-       
-      
+
+
         session(
             [
                 'yearID' => $request->yearID,
@@ -1093,7 +1096,7 @@ class ProjectController extends Controller
         $benefit = $benefits->where('proID',$project->proID)->first();
         $files = DB::table('files')->where('proID',$id)->get();
         // dd($files);
-       
+
         return view('Project.update2',compact('userMap','user','project','years','strategic','strategicMap','straMap','SFAs','goals','tactics','KPIMainMapProject','KPIMains',
                     'strategic2LV','strategic2LVMap','SFA2Lv','tactics2LV','KPIMain2LV','KPIMain2LVMap',
                     'strategic1LV','strategic1LVMap','target1LV','obj','objProject','KPIProjects','KPIProject','CountKPIProjects',
@@ -1102,19 +1105,19 @@ class ProjectController extends Controller
 
     function saveUpdate1(Request $request,$id){
         $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
-        
+
         $stra3LVIDs = $strategicMap->pluck('stra3LVID')->toArray();
         $SFA3LVIDs = $strategicMap->pluck('SFA3LVID')->toArray();
         $goal3LVIDs = $strategicMap->pluck('goal3LVID')->toArray();
         $tac3LVIDs = $strategicMap->pluck('tac3LVID')->toArray();
         // dd($straMapIDs,$straIDs,$SFAIDs,$goalIDs,$tacIDs);
-       
+
         $stra3LVID = $request->stra3LVID ?? [];
         $SFA3LVID = $request->SFA3LVID;
         $goal3LVID = $request->goal3LVID;
         $tac3LVID = $request->tac3LVID;
         // dd($straMap3LVID,$stra3LVID,$SFA3LVID,$goal3LVID,$tac3LVID);
-        
+
         foreach($stra3LVID as $index => $straMap){
             // dd($straMap);
             if(isset($straMap)){
@@ -1137,34 +1140,34 @@ class ProjectController extends Controller
                 }else{
                     DB::table('strategic_maps')->insert(
                         [
-                            
+
                             'proID' => $id,
                             'stra3LVID' => $straMap,
                             'SFA3LVID' => $SFA3LVID[$index],
                             'goal3LVID' => $goal3LVID[$index],
                             'tac3LVID' => $tac3LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
-                
-                }    
+
+                }
             }else{
                 DB::table('strategic_maps')->insert(
                     [
-                        
+
                         'proID' => $id,
                         'stra3LVID' => $straMap,
                         'SFA3LVID' => $SFA3LVID[$index],
                         'goal3LVID' => $goal3LVID[$index],
                         'tac3LVID' => $tac3LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
         }
-    
+
         $straMapToDelete = array_diff($stra3LVIDs,$stra3LVID);
         if(!empty($straMapToDelete)){
             DB::table('strategic_maps')
@@ -1174,9 +1177,9 @@ class ProjectController extends Controller
         }
         $KPIMain3LVMap = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
         $KPIMain3LVIDs = $KPIMain3LVMap->pluck('KPIMain3LVID')->toArray();
-        
+
         $KPIMain3LVID = $request->KPIMain3LVID ?? [];
-       
+
         foreach ($KPIMain3LVID as $index => $KPIMain3LV){
             if(isset($KPIMain3LV)){
                 $currentKPIMain3LLVID = $KPIMain3LV;
@@ -1198,8 +1201,8 @@ class ProjectController extends Controller
                             'KPIMain3LVID' => $KPIMain3LV,
                             'goal3LVID' => $goal3LVID[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                         );
                 }
@@ -1210,8 +1213,8 @@ class ProjectController extends Controller
                         'KPIMain3LVID' => $KPIMain3LV,
                         'goal3LVID' => $goal3LVID[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                     );
             }
@@ -1259,8 +1262,8 @@ class ProjectController extends Controller
                             'stra2LVID' => $stra2LV,
                             'SFA2LVID' => $SFA2LVID[$index],
                             'tac2LVID' => $tac2LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1272,8 +1275,8 @@ class ProjectController extends Controller
                         'stra2LVID' => $stra2LV,
                         'SFA2LVID' => $SFA2LVID[$index],
                         'tac2LVID' => $tac2LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1313,8 +1316,8 @@ class ProjectController extends Controller
                             'KPIMain2LVID' => $KPIMain2LV,
                             'SFA2LVID' => $SFAMap[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1324,8 +1327,8 @@ class ProjectController extends Controller
                         'KPIMain2LVID' => $KPIMain2LV,
                         'SFA2LVID' => $SFAMap[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1368,8 +1371,8 @@ class ProjectController extends Controller
                             'proID' =>$id,
                             'stra1LVID' => $stra1LV,
                             'tar1LVID'=>$tar1LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1380,8 +1383,8 @@ class ProjectController extends Controller
                         'proID' =>$id,
                         'stra1LVID' => $stra1LV,
                         'tar1LVID'=>$tar1LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1416,7 +1419,7 @@ class ProjectController extends Controller
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
-        
+
         $userMaps = DB::table('users_map_projects')->where('proID',$id)->get();
         //ดึงuserIDทัั้งหมดในuserMap
         $userMapIDs = $userMaps->pluck('userID')->toArray();
@@ -1424,7 +1427,7 @@ class ProjectController extends Controller
         $userMapID = $request->userID;
         //  dd($userMapIDs,$userMapID);
 
-        
+
         foreach ($userMapID as $index => $userMap){
             // dd($userMap);
             if(isset($userMap)){
@@ -1446,8 +1449,8 @@ class ProjectController extends Controller
                         [
                             'userID' => $userMap,
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]);
                 }
             }else{
@@ -1455,8 +1458,8 @@ class ProjectController extends Controller
                     [
                         'userID'=>$userMap,
                         'proID'=>$id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]);
             }
         }
@@ -1468,21 +1471,21 @@ class ProjectController extends Controller
             ->whereIn('userID',$userMapToDelete)
             ->delete();
         }
-        
+
         $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
-        
+
         $stra3LVIDs = $strategicMap->pluck('stra3LVID')->toArray();
         $SFA3LVIDs = $strategicMap->pluck('SFA3LVID')->toArray();
         $goal3LVIDs = $strategicMap->pluck('goal3LVID')->toArray();
         $tac3LVIDs = $strategicMap->pluck('tac3LVID')->toArray();
         // dd($straMapIDs,$straIDs,$SFAIDs,$goalIDs,$tacIDs);
-       
+
         $stra3LVID = $request->stra3LVID ?? [];
         $SFA3LVID = $request->SFA3LVID;
         $goal3LVID = $request->goal3LVID;
         $tac3LVID = $request->tac3LVID;
         // dd($straMap3LVID,$stra3LVID,$SFA3LVID,$goal3LVID,$tac3LVID);
-        
+
         foreach($stra3LVID as $index => $straMap){
             // dd($straMap);
             if(isset($straMap)){
@@ -1505,34 +1508,34 @@ class ProjectController extends Controller
                 }else{
                     DB::table('strategic_maps')->insert(
                         [
-                            
+
                             'proID' => $id,
                             'stra3LVID' => $straMap,
                             'SFA3LVID' => $SFA3LVID[$index],
                             'goal3LVID' => $goal3LVID[$index],
                             'tac3LVID' => $tac3LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
-                
-                }    
+
+                }
             }else{
                 DB::table('strategic_maps')->insert(
                     [
-                        
+
                         'proID' => $id,
                         'stra3LVID' => $straMap,
                         'SFA3LVID' => $SFA3LVID[$index],
                         'goal3LVID' => $goal3LVID[$index],
                         'tac3LVID' => $tac3LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
         }
-    
+
         $straMapToDelete = array_diff($stra3LVIDs,$stra3LVID);
         if(!empty($straMapToDelete)){
             DB::table('strategic_maps')
@@ -1542,9 +1545,9 @@ class ProjectController extends Controller
         }
         $KPIMain3LVMap = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
         $KPIMain3LVIDs = $KPIMain3LVMap->pluck('KPIMain3LVID')->toArray();
-        
+
         $KPIMain3LVID = $request->KPIMain3LVID ?? [];
-       
+
         foreach ($KPIMain3LVID as $index => $KPIMain3LV){
             if(isset($KPIMain3LV)){
                 $currentKPIMain3LLVID = $KPIMain3LV;
@@ -1566,8 +1569,8 @@ class ProjectController extends Controller
                             'KPIMain3LVID' => $KPIMain3LV,
                             'goal3LVID' => $goal3LVID[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                         );
                 }
@@ -1578,13 +1581,13 @@ class ProjectController extends Controller
                         'KPIMain3LVID' => $KPIMain3LV,
                         'goal3LVID' => $goal3LVID[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                     );
             }
         }
-    
+
         $KPIMain3LVMapToDelete = array_diff($KPIMain3LVIDs,$KPIMain3LVID);
         if(!empty($KPIMain3LVMapToDelete)){
             DB::table('k_p_i_main_map_projects')
@@ -1628,8 +1631,8 @@ class ProjectController extends Controller
                             'stra2LVID' => $stra2LV,
                             'SFA2LVID' => $SFA2LVID[$index],
                             'tac2LVID' => $tac2LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1641,8 +1644,8 @@ class ProjectController extends Controller
                         'stra2LVID' => $stra2LV,
                         'SFA2LVID' => $SFA2LVID[$index],
                         'tac2LVID' => $tac2LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1682,8 +1685,8 @@ class ProjectController extends Controller
                             'KPIMain2LVID' => $KPIMain2LV,
                             'SFA2LVID' => $SFAMap[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1693,8 +1696,8 @@ class ProjectController extends Controller
                         'KPIMain2LVID' => $KPIMain2LV,
                         'SFA2LVID' => $SFAMap[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1737,8 +1740,8 @@ class ProjectController extends Controller
                             'proID' =>$id,
                             'stra1LVID' => $stra1LV,
                             'tar1LVID'=>$tar1LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -1749,8 +1752,8 @@ class ProjectController extends Controller
                         'proID' =>$id,
                         'stra1LVID' => $stra1LV,
                         'tar1LVID'=>$tar1LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -1765,7 +1768,7 @@ class ProjectController extends Controller
 
 
 
-       
+
 
         $objs = DB::table('objectives')->where('proID',$id)->get();
         $objIDs = $objs->pluck('objID')->toArray();
@@ -1773,9 +1776,9 @@ class ProjectController extends Controller
         $obj = $request->obj;
         $objID = $request->objID ?? [];
         // dd($objIDs,$objID);
-        
+
         foreach ($obj as $index => $obj) {
-            
+
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
             if (isset($objID[$index])) {
                 $currentObjID = $objID[$index];  // ดึง objID จาก array objID[]
@@ -1784,7 +1787,7 @@ class ProjectController extends Controller
                 if (in_array($currentObjID, $objIDs)) {
                     // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
                     DB::table('objectives')->updateOrInsert(
-                        [   
+                        [
                             'proID' => $id,
                             'objID' => $currentObjID
                         ],  // เช็คด้วย objID
@@ -1813,7 +1816,7 @@ class ProjectController extends Controller
                 ]);
             }
         }
-       
+
         // หาค่า objIDs ที่อยู่ในฐานข้อมูล แต่ไม่มีอยู่ใน $objID
         $objIDsToDelete = array_diff($objIDs, $objID);
         // dd($objIDsToDelete);
@@ -1825,8 +1828,8 @@ class ProjectController extends Controller
             ->delete();
         }
         // dd($countProject,$targetProject);
-        
-        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
+
+        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get();
         $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
         $KPIProject = $request->KPIProject;
         $countProject = $request->countKPIProject;
@@ -1884,7 +1887,7 @@ class ProjectController extends Controller
             ->delete();
         }
 
-        $steps =DB::table('steps')->where('proID',$id)->get(); 
+        $steps =DB::table('steps')->where('proID',$id)->get();
         $stepIDs = $steps->pluck('stepID')->toArray();
         $stepName = $request->stepName;
         $stepStart = $request->stepStart;
@@ -1955,7 +1958,7 @@ class ProjectController extends Controller
         $costID = $request->costID ?? [];
         // dd($costQuID,$costQu1,$costQu2,$costQu3,$costQu4);
         // dd($expID,$costID);
-        
+
         foreach($costQu1 as $index => $cost1){
             if(isset($costQuID[$index])){
                 $currentcostQuID = $costQuID[$index];
@@ -2024,16 +2027,16 @@ class ProjectController extends Controller
         $bnfID = $request->bnfID ?? [];
         // dd($bnf,$bnfID);
         foreach ($bnf as $index => $bnf) {
-            
+
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
             if (isset($bnfID[$index])) {
                 $currentbnfID = $bnfID[$index];  // ดึง objID จาก array objID[]
-                
+
                 // ตรวจสอบว่า objID นี้มีอยู่ในฐานข้อมูลหรือไม่
                 if (in_array($currentbnfID, $bnfIDs)) {
                     // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
                     DB::table('benefits')->updateOrInsert(
-                        [   
+                        [
                             'proID' => $id,
                             'bnfID' => $currentbnfID
                         ],  // เช็คด้วย objID
@@ -2062,7 +2065,7 @@ class ProjectController extends Controller
                 ]);
             }
         }
-        
+
         // หาค่า objIDs ที่อยู่ในฐานข้อมูล แต่ไม่มีอยู่ใน $objID
         $bnfIDsToDelete = array_diff($bnfIDs, $bnfID);
         // dd($objIDsToDelete);
@@ -2083,13 +2086,13 @@ class ProjectController extends Controller
         // dd($oldfileID);
         if(isset($file)){
         foreach($file as $index => $file){
-           
-               
+
+
                 Db::table('files')->insert(
                     [
                         'proID' => $id,
                         'name' => $file->getClientOriginalName(),
-                        'updated_at' => now(), 
+                        'updated_at' => now(),
                         'created_at' => now()
                     ]
                 );
@@ -2103,11 +2106,11 @@ class ProjectController extends Controller
             ->where('proID',$id)
             ->whereIn('fileID',$fileIDToDelete)
             ->delete();
-        } 
         }
-        
+        }
 
-        
+
+
 
         session()->forget(
             [
@@ -2125,7 +2128,7 @@ class ProjectController extends Controller
                 'tac2LVID',
                 'KPIMain2LVID',
                 'stra1LVID',
-                'tar1LVID' 
+                'tar1LVID'
             ]
         );
 
@@ -2133,7 +2136,7 @@ class ProjectController extends Controller
     }
 
     function sendUpdate2(Request $request,$id){
-        
+
         $project=[
             'yearID'=>$request->yearID,
             'name'=>$request->name,
@@ -2152,8 +2155,8 @@ class ProjectController extends Controller
             'updated_at' => now()
         ];
         DB::table('projects')->where('proID',$id)->update($project);
-       
-        
+
+
         $userMaps = UsersMapProject::with('users')->where('proID',$id)->get();
 
 
@@ -2164,7 +2167,7 @@ class ProjectController extends Controller
         $userMapID = $request->userID;
         //  dd($userMapIDs,$userMapID);
 
-        
+
         foreach ($userMapID as $index => $userMap){
             // dd($userMap);
             if(isset($userMap)){
@@ -2186,8 +2189,8 @@ class ProjectController extends Controller
                         [
                             'userID' => $userMap,
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]);
                 }
             }else{
@@ -2195,8 +2198,8 @@ class ProjectController extends Controller
                     [
                         'userID'=>$userMap,
                         'proID'=>$id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]);
             }
         }
@@ -2208,15 +2211,15 @@ class ProjectController extends Controller
             ->whereIn('userID',$userMapToDelete)
             ->delete();
         }
-        
+
         $strategicMap = DB::table('strategic_maps')->where('proID',$id)->get();
-      
+
         $stra3LVIDs = $strategicMap->pluck('stra3LVID')->toArray();
         $SFA3LVIDs = $strategicMap->pluck('SFA3LVID')->toArray();
         $goal3LVIDs = $strategicMap->pluck('goal3LVID')->toArray();
         $tac3LVIDs = $strategicMap->pluck('tac3LVID')->toArray();
         // dd($straMapIDs,$straIDs,$SFAIDs,$goalIDs,$tacIDs);
-        
+
         $stra3LVID = $request->stra3LVID ?? [];
         $SFA3LVID = $request->SFA3LVID;
         $goal3LVID = $request->goal3LVID;
@@ -2250,12 +2253,12 @@ class ProjectController extends Controller
                             'SFA3LVID' => $SFA3LVID[$index],
                             'goal3LVID' => $goal3LVID[$index],
                             'tac3LVID' => $tac3LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
-                
-                }    
+
+                }
             }else{
                 DB::table('strategic_maps')->insert(
                     [
@@ -2264,8 +2267,8 @@ class ProjectController extends Controller
                         'SFA3LVID' => $SFA3LVID[$index],
                         'goal3LVID' => $goal3LVID[$index],
                         'tac3LVID' => $tac3LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -2279,7 +2282,7 @@ class ProjectController extends Controller
         }
         $KPIMain3LVMap = DB::table('k_p_i_main_map_projects')->where('proID',$id)->get();
         $KPIMain3LVIDs = $KPIMain3LVMap->pluck('KPIMain3LVID')->toArray();
-        
+
         $KPIMain3LVID = $request->KPIMain3LVID ?? [];
         $goalMap = $request->goalMap;
 
@@ -2304,8 +2307,8 @@ class ProjectController extends Controller
                             'KPIMain3LVID' => $KPIMain3LV,
                             'goal3LVID' => $goalMap[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                         );
                 }
@@ -2316,13 +2319,13 @@ class ProjectController extends Controller
                         'KPIMain3LVID' => $KPIMain3LV,
                         'goal3LVID' => $goalMap[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                     );
             }
         }
-    
+
         $KPIMain3LVMapToDelete = array_diff($KPIMain3LVIDs,$KPIMain3LVID);
         if(!empty($KPIMain3LVMapToDelete)){
             DB::table('k_p_i_main_map_projects')
@@ -2356,7 +2359,7 @@ class ProjectController extends Controller
                             'SFA2LVID' => $SFA2LVID[$index],
                             'tac2LVID' => $tac2LVID[$index],
                             'updated_at' => now(),
-                            'created_at' => now() 
+                            'created_at' => now()
                         ]
                         );
                 }
@@ -2367,8 +2370,8 @@ class ProjectController extends Controller
                             'stra2LVID' => $stra2LV,
                             'SFA2LVID' => $SFA2LVID[$index],
                             'tac2LVID' => $tac2LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -2380,8 +2383,8 @@ class ProjectController extends Controller
                         'stra2LVID' => $stra2LV,
                         'SFA2LVID' => $SFA2LVID[$index],
                         'tac2LVID' => $tac2LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -2421,8 +2424,8 @@ class ProjectController extends Controller
                             'KPIMain2LVID' => $KPIMain2LV,
                             'SFA2LVID' => $SFAMap[$index],
                             'proID' => $id,
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -2432,8 +2435,8 @@ class ProjectController extends Controller
                         'KPIMain2LVID' => $KPIMain2LV,
                         'SFA2LVID' => $SFAMap[$index],
                         'proID' => $id,
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -2476,8 +2479,8 @@ class ProjectController extends Controller
                             'proID' =>$id,
                             'stra1LVID' => $stra1LV,
                             'tar1LVID'=>$tar1LVID[$index],
-                            'updated_at' => now(), 
-                            'created_at' => now() 
+                            'updated_at' => now(),
+                            'created_at' => now()
                         ]
                     );
                 }
@@ -2488,8 +2491,8 @@ class ProjectController extends Controller
                         'proID' =>$id,
                         'stra1LVID' => $stra1LV,
                         'tar1LVID'=>$tar1LVID[$index],
-                        'updated_at' => now(), 
-                        'created_at' => now() 
+                        'updated_at' => now(),
+                        'created_at' => now()
                     ]
                 );
             }
@@ -2508,9 +2511,9 @@ class ProjectController extends Controller
         $obj = $request->obj;
         $objID = $request->objID ?? [];
         // dd($objIDs,$objID);
-        
+
         foreach ($obj as $index => $obj) {
-            
+
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
             if (isset($objID[$index])) {
                 $currentObjID = $objID[$index];  // ดึง objID จาก array objID[]
@@ -2519,7 +2522,7 @@ class ProjectController extends Controller
                 if (in_array($currentObjID, $objIDs)) {
                     // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
                     DB::table('objectives')->updateOrInsert(
-                        [   
+                        [
                             'proID' => $id,
                             'objID' => $currentObjID
                         ],  // เช็คด้วย objID
@@ -2559,8 +2562,8 @@ class ProjectController extends Controller
             ->delete();
         }
         // dd($countProject,$targetProject);
-        
-        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get(); 
+
+        $KPIProjects =DB::table('k_p_i_projects')->where('proID',$id)->get();
         $KPIProIDs = $KPIProjects->pluck('KPIProID')->toArray();
         $KPIProject = $request->KPIProject;
         $countProject = $request->countKPIProject;
@@ -2618,13 +2621,13 @@ class ProjectController extends Controller
             ->delete();
         }
 
-        $steps =DB::table('steps')->where('proID',$id)->get(); 
+        $steps =DB::table('steps')->where('proID',$id)->get();
         $stepIDs = $steps->pluck('stepID')->toArray();
         $stepName = $request->stepName;
         $stepStart = $request->stepStart;
         $stepEnd = $request->stepEnd;
         $stepID = $request->stepID ?? [];
-        
+
         foreach($stepName as $index => $step){
             // dd($KPI);
             if(isset($stepID[$index])){
@@ -2688,7 +2691,7 @@ class ProjectController extends Controller
         $costID = $request->costID ?? [];
         // dd($costQuID,$costQu1,$costQu2,$costQu3,$costQu4);
         // dd($expID,$costID);
-        
+
         foreach($costQu1 as $index => $cost1){
             if(isset($costQuID[$index])){
                 $currentcostQuID = $costQuID[$index];
@@ -2755,16 +2758,16 @@ class ProjectController extends Controller
         $bnfID = $request->bnfID ?? [];
 
         foreach ($bnf as $index => $bnf) {
-            
+
             // ตรวจสอบว่า $objID[$index] มีค่าอยู่หรือไม่
             if (isset($bnfID[$index])) {
                 $currentbnfID = $bnfID[$index];  // ดึง objID จาก array objID[]
-                
+
                 // ตรวจสอบว่า objID นี้มีอยู่ในฐานข้อมูลหรือไม่
                 if (in_array($currentbnfID, $bnfIDs)) {
                     // หาก objID นี้มีอยู่ในฐานข้อมูลแล้ว, ให้ทำการ update
                     DB::table('benefits')->updateOrInsert(
-                        [   
+                        [
                             'proID' => $id,
                             'bnfID' => $currentbnfID
                         ],  // เช็คด้วย objID
@@ -2813,14 +2816,14 @@ class ProjectController extends Controller
         // dd($oldfileID);
         if(isset($file)){
         foreach($file as $index => $file){
-           
-               
+
+
                 Db::table('files')->insert(
                     [
                         'proID' => $id,
                         'name' => $file->getClientOriginalName(),
                         'type' => 'เอกสารเสนอโครงการ',
-                        'updated_at' => now(), 
+                        'updated_at' => now(),
                         'created_at' => now()
                     ]
                 );
@@ -2852,7 +2855,7 @@ class ProjectController extends Controller
                 'tac2LVID',
                 'KPIMain2LVID',
                 'stra1LVID',
-                'tar1LVID' 
+                'tar1LVID'
             ]
         );
 
@@ -2864,10 +2867,10 @@ class ProjectController extends Controller
         //     $Department = DB::table('users')->where([['Department_head',1],['department_name',$item->users->department_name]])->get();
 
         // }
-        
+
         // dd($Department,$userMaps);
         $mail = Projects::with('status','Approver')->where('proID',$id)->first();
-       
+
         // dd($status);
         // foreach ($Department as $index => $item) {
              Mail::to($mail->Approver->email)->send(new SendMail(
@@ -2886,7 +2889,7 @@ class ProjectController extends Controller
                 ]
                 ));
         }
-        
+
         if($project['proTypeID'] == '3'){
             return redirect('/project');
         }else {
@@ -2919,9 +2922,9 @@ class ProjectController extends Controller
         return view('Project.detail',compact('data'));
     }
 
-   
 
 
 
-   
+
+
 }
