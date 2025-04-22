@@ -539,11 +539,7 @@
                                     <div class="row col-md-4 col-sm-4 m-1">
                                         <input class="form-control" type="text" name="stepName[]" id=""
                                             required>
-                                        @error('stepName.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+                                        
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control step-start" type="date" name="stepStart[]"
@@ -1114,6 +1110,7 @@
             InputObjt.classList.add('form-control');
             InputObjt.type = 'text';
             InputObjt.name = 'obj[]';
+            InputObjt.required = true;
 
             mainContainer.appendChild(colMD3);
             mainContainer.appendChild(colMD6);
@@ -1150,6 +1147,7 @@
             KPIInput.classList.add('form-control');
             KPIInput.type = 'text';
             KPIInput.name = 'KPIProject[]';
+            KPIInput.required = true;
 
             const colCount = document.createElement('div');
             colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
@@ -1158,6 +1156,7 @@
             countInput.classList.add('form-control');
             countInput.id = 'countKPIProject';
             countInput.name = 'countKPIProject[]';
+            countInput.required = true;
 
             const originalOptions = document.querySelector('#countKPIProject').innerHTML;
             countInput.innerHTML = originalOptions;
@@ -1169,6 +1168,7 @@
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
             targetInput.name = 'targetProject[]';
+            targetInput.required = true;
 
 
             // เพิ่มข้อความแจ้งเตือน (feedback)
@@ -1250,22 +1250,35 @@
             NameInput.classList.add('form-control');
             NameInput.type = 'text';
             NameInput.name = 'stepName[]';
+            NameInput.required = true;
 
             const colStart = document.createElement('div');
             colStart.classList.add('col-md-3', 'col-sm-3', 'm-1');
 
             const startInput = document.createElement('input');
-            startInput.classList.add('form-control');
+            startInput.classList.add('form-control','step-start');
             startInput.type = 'date';
             startInput.name = 'stepStart[]';
+            startInput.required = true;
 
             const colEnd = document.createElement('div');
             colEnd.classList.add('col-md-3', 'col-sm-3', 'm-1');
 
             const EndInput = document.createElement('input');
-            EndInput.classList.add('form-control');
+            EndInput.classList.add('form-control','step-end');
             EndInput.type = 'date';
             EndInput.name = 'stepEnd[]';
+            EndInput.required = true;
+
+            startInput.addEventListener('change', function() {
+                const selectedDate = startInput.value;
+                if (EndInput) {
+                    EndInput.min = selectedDate;
+                    if (EndInput.value < selectedDate) {
+                        EndInput.value = '';
+                    }
+                }
+            });
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
@@ -1666,6 +1679,7 @@
             InputBenefit.classList.add('form-control');
             InputBenefit.type = 'text';
             InputBenefit.name = 'benefit[]';
+            InputBenefit.required = true;
 
             mainContainer.appendChild(colMD3);
             mainContainer.appendChild(colMD6);

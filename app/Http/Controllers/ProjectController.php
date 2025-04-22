@@ -1092,6 +1092,7 @@ class ProjectController extends Controller
         $costQuarters = CostQuarters::all();
         // dd($costQuarters);
         $costQuarter = $costQuarters->where('proID',$project->proID)->first();
+        
         $benefits = Benefits::all();
         $benefit = $benefits->where('proID',$project->proID)->first();
         $files = DB::table('files')->where('proID',$id)->get();
@@ -2114,6 +2115,7 @@ class ProjectController extends Controller
                     [
                         'proID' => $id,
                         'name' => $file->getClientOriginalName(),
+                        'type' => 'เอกสารเสนอโครงการ',
                         'updated_at' => now(),
                         'created_at' => now()
                     ]

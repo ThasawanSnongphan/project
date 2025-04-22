@@ -25,15 +25,17 @@ class PerformanceController extends Controller
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         $data['quarter'] = Quarters::find($data['selectQuarID']);
 
-        if(!empty($data['selectQuarID']) && $data['selectQuarID'] != 'ทั้งหมด'){
+        if(!empty($data['selectQuarID']) && !empty($data['selectQuarID'])){
             $data['quarter'] = Quarters::find($data['selectQuarID']);
 
             //โครงการทั้งหมด
             $data['projectAll'] = DB::table('projects')
+            // ->join('report_quarters','projects.proID','=','report_quarters.proID')
             ->whereBetween('projects.statusID',[4,11])
             ->where('projects.yearID',$data['selectYearID'])
             // ->where('report_quarters.quarID',$data['selectQuarID'])
             ->get();
+            // dd($data['projectAll']);
         }else{
             $data['projectAll'] = DB::table('projects')
             ->whereBetween('projects.statusID',[4,11])

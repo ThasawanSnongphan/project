@@ -10,7 +10,7 @@
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
-                        <li class="dropdown">
+                        {{-- <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                 aria-expanded="false"><i class="fa fa-wrench"></i></a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -19,12 +19,12 @@
                             </div>
                         </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action=""novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="" enctype="multipart/form-data">
                         @csrf
                         {{-- <input type="hidden" id="proID" name="proID" value="{{$project->proID}}"> --}}
                         <div class="row field item form-group align-items-center">
@@ -855,30 +855,18 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row col-md-4 col-sm-4 m-1">
                                         <input class="form-control" type="text" name="stepName[]" id=""
-                                            value="{{ $step->name ?? '' }}">
-                                        @error('stepName.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+                                            value="{{ $step->name ?? '' }}" required>
+                                      
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepStart[]" id=""
-                                            value="{{ $step->start ?? '' }}">
-                                        @error('stepStart.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+                                        <input class="form-control step-start" type="date" name="stepStart[]" id=""
+                                            value="{{ $step->start ?? '' }}" required>
+                                       
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
-                                        <input class="form-control" type="date" name="stepEnd[]" id=""
-                                            value="{{ $step->end ?? '' }}">
-                                        @error('stepEnd.*')
-                                            <div class="m-2">
-                                                <span class="text text-danger">{{ $message }}</span>
-                                            </div>
-                                        @enderror
+                                        <input class="form-control step-end" type="date" name="stepEnd[]" id=""
+                                            value="{{ $step->end ?? '' }}" required>
+                                        
                                     </div>
                                     <div class="col-md-1 col-sm-1 m-1">
                                         <button type='button' class="btn btn-primary"
@@ -908,7 +896,7 @@
                                                             onclick="this.closest('.row').remove()">ลบ</button>
                                                     </div>
                                                 </div>
-
+                                
                                 </div>
                                 @endif
                                 @endforeach
@@ -1001,46 +989,29 @@
                         </div>
                         <div class="col-md-12 col-sm-12 mt-2">
                             <div class="row col-md-3 col-sm-3 mr-1">
-                                <select id="costType" name="costID[]" class="form-control" required>
+                                <select id="costType" name="costID[]" class="form-control" required onchange="document.getElementById('file').required = (this.value === '3' || this.value === '4' || this.value === '8')">
 
                                 </select>
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
                                 <input type="hidden" name="costQuID[]" value="{{ $costQuarter->costQuID }}">
                                 <input class="form-control cost-input" type="text" name="costQu1[]" id=""
-                                    value="{{ $costQuarter->costQu1 ?? '' }}">
-                                @error('costQu1.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                    value="{{ $costQuarter->costQu1 ?? '' }}" required>
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
                                 <input class="form-control cost-input" type="text" name="costQu2[]" id=""
-                                    value="{{ $costQuarter->costQu2 ?? '' }}">
-                                @error('costQu2.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                    value="{{ $costQuarter->costQu2 ?? '' }}" required>
+                               
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
                                 <input class="form-control cost-input" type="text" name="costQu3[]" id=""
-                                    value="{{ $costQuarter->costQu3 ?? '' }}">
-                                @error('costQu3.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                    value="{{ $costQuarter->costQu3 ?? '' }}" required>
+                               
                             </div>
                             <div class="row col-md-2 col-sm-2 mr-1">
                                 <input class="form-control cost-input" type="text" name="costQu4[]" id=""
-                                    value="{{ $costQuarter->costQu4 ?? '' }}">
-                                @error('costQu4.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror
+                                    value="{{ $costQuarter->costQu4 ?? '' }}" required>
+                               
                             </div>
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertCostType()">เพิ่ม</button>
@@ -1174,13 +1145,8 @@
                     <div class="col-md-6 col-sm-6">
 
 
-                        <input class="form-control" type="file" name="file[]" id="file" required='required'
-                            data-validate-length-range="8,20" />
-                        @error('file')
-                            <div class="m-2">
-                                <span class="text text-danger">{{ $message }}</span>
-                            </div>
-                        @enderror
+                        <input class="form-control" type="file" name="file[]" id="file" >
+                        
                         @if (!empty($files))
                             @foreach ($files as $item)
                                 <div class="row m-2">
@@ -1212,9 +1178,9 @@
 
 
                 <div class="ln_solid">
-                    <div class="form-group ">
+                    <div class="form-group text-center p-2">
                         <div class="col-md-6 offset-md-3">
-                            <button type='submit' class="btn btn-primary"
+                            <button type='button' class="btn btn-primary"
                                 onclick="submitButton('save2',{{ $project->proID }})">บันทึก</button>
                             <button type='button' class="btn btn-primary"
                                 onclick="submitButton('send2',{{ $project->proID }})">เสนอโครงการ</button>
@@ -1230,32 +1196,32 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('[id^="expID_"]').change(function(event) {
-                var expID = this.value;
-                var dropdownID = $(this).attr('id');
-                var idIndex = dropdownID.split("_")[1];
-                // alert(idIndex);
-                $('[id^="costType_"]')
-                $.ajax({
-                    url: "/projectcostType",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        expID: expID,
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function(response) {
-                        $('#costType_' + idIndex).html('');
-                        $.each(response.costType, function(index, val) {
-                            $('#costType_' + idIndex).append('<option value="' + val
-                                .costID + '">' + val.name + '</option>');
-                        });
-                    }
-                });
-            });
+        // $(document).ready(function() {
+        //     $('[id^="expID_"]').change(function(event) {
+        //         var expID = this.value;
+        //         var dropdownID = $(this).attr('id');
+        //         var idIndex = dropdownID.split("_")[1];
+        //         // alert(idIndex);
+        //         $('[id^="costType_"]')
+        //         $.ajax({
+        //             url: "/projectcostType",
+        //             type: 'POST',
+        //             dataType: 'json',
+        //             data: {
+        //                 expID: expID,
+        //                 _token: "{{ csrf_token() }}"
+        //             },
+        //             success: function(response) {
+        //                 $('#costType_' + idIndex).html('');
+        //                 $.each(response.costType, function(index, val) {
+        //                     $('#costType_' + idIndex).append('<option value="' + val
+        //                         .costID + '">' + val.name + '</option>');
+        //                 });
+        //             }
+        //         });
+        //     });
             
-        });
+        // });
 
 
         const funds = @json($fund);
@@ -1399,6 +1365,7 @@
             InputObjt.classList.add('form-control');
             InputObjt.type = 'text';
             InputObjt.name = 'obj[]';
+            InputObjt.required  =true;
 
             mainContainer.appendChild(colMD3);
             mainContainer.appendChild(colMD6);
@@ -1435,6 +1402,7 @@
             KPIInput.classList.add('form-control');
             KPIInput.type = 'text';
             KPIInput.name = 'KPIProject[]';
+            KPIInput.required = true;
 
             const colCount = document.createElement('div');
             colCount.classList.add('col-md-3', 'col-sm-3', 'm-1');
@@ -1443,6 +1411,7 @@
             countInput.classList.add('form-control');
             countInput.id = 'countKPIProject';
             countInput.name = 'countKPIProject[]';
+            countInput.required = true;
 
             const originalOptions = document.querySelector('#countKPIProject').innerHTML;
             countInput.innerHTML = originalOptions;
@@ -1454,6 +1423,7 @@
             targetInput.classList.add('form-control');
             targetInput.type = 'text';
             targetInput.name = 'targetProject[]';
+            targetInput.required = true;
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
@@ -1488,22 +1458,35 @@
             NameInput.classList.add('form-control');
             NameInput.type = 'text';
             NameInput.name = 'stepName[]';
+            NameInput.required = true;
 
             const colStart = document.createElement('div');
             colStart.classList.add('col-md-3', 'col-sm-3', 'm-1');
 
             const startInput = document.createElement('input');
-            startInput.classList.add('form-control');
+            startInput.classList.add('form-control','step-start');
             startInput.type = 'date';
             startInput.name = 'stepStart[]';
+            startInput.required = true;
 
             const colEnd = document.createElement('div');
             colEnd.classList.add('col-md-3', 'col-sm-3', 'm-1');
 
             const EndInput = document.createElement('input');
-            EndInput.classList.add('form-control');
+            EndInput.classList.add('form-control','step-end');
             EndInput.type = 'date';
             EndInput.name = 'stepEnd[]';
+            EndInput.required = true;
+
+            startInput.addEventListener('change', function() {
+                const selectedDate = startInput.value;
+                if (EndInput) {
+                    EndInput.min = selectedDate;
+                    if (EndInput.value < selectedDate) {
+                        EndInput.value = '';
+                    }
+                }
+            });
 
             const colDelete = document.createElement('div');
             colDelete.classList.add('col-md-1', 'col-sm-1', 'm-1');
@@ -1629,6 +1612,7 @@
             CostQu1Input.classList.add('form-control', 'cost-input');
             CostQu1Input.type = 'text';
             CostQu1Input.name = 'costQu1[]';
+            CostQu1Input.required = true;
             CostQu1Input.addEventListener('input', calculateTotal);
 
             colCostQu1.appendChild(CostQu1Input);
@@ -1641,6 +1625,7 @@
             CostQu2Input.classList.add('form-control', 'cost-input');
             CostQu2Input.type = 'text';
             CostQu2Input.name = 'costQu2[]';
+            CostQu2Input.required = true;
             CostQu2Input.addEventListener('input', calculateTotal);
 
             colCostQu2.appendChild(CostQu2Input);
@@ -1653,6 +1638,7 @@
             CostQu3Input.classList.add('form-control', 'cost-input');
             CostQu3Input.type = 'text';
             CostQu3Input.name = 'costQu3[]';
+            CostQu3Input.required = true;
             CostQu3Input.addEventListener('input', calculateTotal);
 
             colCostQu3.appendChild(CostQu3Input);
@@ -1666,6 +1652,7 @@
             CostQu4Input.classList.add('form-control', 'cost-input');
             CostQu4Input.type = 'text';
             CostQu4Input.name = 'costQu4[]';
+            CostQu4Input.required = true;
             CostQu4Input.addEventListener('input', calculateTotal);
 
             colCostQu4.appendChild(CostQu4Input);
@@ -1691,9 +1678,10 @@
         function toggleTextarea() {
             var select = document.getElementById("integrat");
             var otherTextContainer = document.getElementById("otherTextContainer");
-
+            var text = document.getElementById("proInDetail");
             if (select.value === '6') {
                 otherTextContainer.style.display = "flex";
+                text.required = true;
             } else {
                 otherTextContainer.style.display = "none";
                 var textarea = document.getElementById('proInDetail');
@@ -1716,6 +1704,7 @@
             InputBenefit.classList.add('form-control');
             InputBenefit.type = 'text';
             InputBenefit.name = 'benefit[]';
+            InputBenefit.required = true;
 
             mainContainer.appendChild(colMD3);
             mainContainer.appendChild(colMD6);
@@ -1755,23 +1744,7 @@
             mainContainer.appendChild(colMD6);
             colMD6.appendChild(inputFile);
 
-            // const colMD1 = document.createElement('div');
-            // colMD1.classList.add('col-md-1', 'col-sm-1');
-
-            // const checkboxDiv = document.createElement('div');
-            // checkboxDiv.classList.add('checkbox');
-
-            // const checkboxLabel = document.createElement('label');
-            // const checkboxInput = document.createElement('input');
-            // checkboxInput.type = 'checkbox';
-            // checkboxInput.name = 'TOR[]';
-            // checkboxInput.value = 'TOR';
-
-            // mainContainer.appendChild(colMD1);
-            // colMD1.appendChild(checkboxDiv);
-            // checkboxDiv.appendChild(checkboxLabel);
-            // checkboxLabel.appendChild(checkboxInput);
-            // checkboxLabel.appendChild(document.createTextNode(' TOR'));
+            
 
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';
@@ -1789,8 +1762,6 @@
         }
 
         function updateExpenseDropdown(selectedPlanID) {
-            console.log(selectedPlanID);
-
 
             const expenseSelect = document.getElementById('expID');
             expenseSelect.innerHTML = '';
@@ -1816,9 +1787,17 @@
                     const option = document.createElement('option');
                     option.value = expense.expID;
                     option.textContent = expense.name;
+                    if(expense.expID == '{{$costQuarter->expID}}'){
+                        option.selected = true;
+                        updateCostTypeDropdown(expense.expID);
+                    }
                     expenseSelect.appendChild(option);
+                    
                 });
-                updateCostTypeDropdown(filteredExpenses[0].expID);
+                if(!filteredExpenses.some(expenses => expenses.expID == '{{ $costQuarter->expID}}')){
+                    updateCostTypeDropdown(filteredExpenses[0].expID);
+                }
+                
             }
         }
 
@@ -1841,6 +1820,10 @@
                     const option = document.createElement('option');
                     option.value = costType.costID;
                     option.textContent = costType.name;
+                    if(costType.costID == '{{$costQuarter->costID}}'){
+                        option.selected = true;
+                       
+                    }
                     costTypeSelect.appendChild(option);
                 });
             }
@@ -1853,7 +1836,12 @@
             } else if (action === 'send2') {
                 form.action = "/projectSendUpdate2/" + proID;
             }
-            form.submit();
+            // ตรวจว่าฟอร์ม valid ก่อนส่ง
+            if (form.checkValidity()) {
+                form.submit();
+            } else {
+                form.reportValidity(); // แสดงข้อความเตือนบน input ที่ยังไม่กรอก
+            }
         }
 
         // Event listeners สำหรับ dropdown ต่าง ๆ
