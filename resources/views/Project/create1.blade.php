@@ -364,7 +364,7 @@
 
                             @if (count($strategic3Level) > 0 || count($strategic2Level) > 0 || count($strategic1Level) > 0)
                                 <div class="ln_solid">
-                                    <div class="form-group ">
+                                    <div class="form-group text-center p-2">
                                         <div class="col-md-6 offset-md-3">
                                             {{-- <button type='submit' class="btn btn-primary"
                                                 onclick="submitButton('saveStrategic')">บันทึก</button> --}}

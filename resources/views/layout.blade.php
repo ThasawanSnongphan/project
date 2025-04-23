@@ -186,7 +186,7 @@
 
                                                 <li><a href="/DepartmentHeadProjectOutPlan">รายชื่อโครงการนอกแผน</a>
                                                 </li>
-                                                <li><a href="#">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
+                                                <li><a href="/DepartmentHeadProjectCancel">รายชื่อโครงการที่ไม่อนุมัติ/ยกเลิก</a></li>
                                             </ul>
                                         </li>
                                     </ul>

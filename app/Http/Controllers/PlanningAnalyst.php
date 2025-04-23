@@ -75,13 +75,14 @@ class PlanningAnalyst extends Controller
         return view('Planning_Analyst.projectOutPlan',compact('users','project','status','year','projectYear'));
     }
     function projectCancel(){
-        $year = Year::all();
-        $projectYear = Projects::with('year')->get();
-        $project=DB::table('projects')->where('statusID','15')->get();
-        // dd($project);
-        $status=Status::all();
-        $users = $users=DB::table('users')->get();
-        return view('Planning_Analyst.projectCancel',compact('users','project','status','year','projectYear'));
+        $data['year'] = Year::all();
+        $data['projectYear'] = Projects::with('year')->get();
+        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+
+        // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+
+        // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
+        return view('Planning_Analyst.projectCancel',compact('data'));
     }
 
     //เอกสารเสนอโครงการ

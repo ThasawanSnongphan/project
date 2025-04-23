@@ -140,6 +140,7 @@ Route::post('EvaluationPass/{id}', [PlanningAnalyst::class,'EvaluationPass'])->n
 //หัวหน้าฝ่าย
 Route::get('/DepartmentHeadProject', [Department_Head::class,'index']); //รายชื่อโครงการในแผน
 Route::get('/DepartmentHeadProjectOutPlan', [Department_Head::class,'projectOutPlan']); //รายชื่อโครงการนอกแผน
+Route::get('/DepartmentHeadProjectCancel', [Department_Head::class,'projectCancel']); //รายชื่อโครงการไม่อนุมัติ
 //เสนอโครงการ
 Route::get('DepartmentHeadProjectDetail/{id}',[Department_Head::class,'detail'])->name('Department.detail');
 Route::post('departmentPass/{id}', [Department_Head::class,'departmentPass'])->name('departmentPass');

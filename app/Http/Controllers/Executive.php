@@ -71,12 +71,14 @@ class Executive extends Controller
     }
 
     function projectDenied(){
-        $year = Year::all();
-        $projectYear = Projects::with('year')->get();
-        $project=Projects::all();
-        $status=Status::all();
-        $users = $users=DB::table('users')->get();
-        return view('Executive.projectDenied',compact('users','project','status','year','projectYear'));
+        $data['year'] = Year::all();
+        $data['projectYear'] = Projects::with('year')->get();
+        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+
+        // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
+
+        // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
+        return view('Executive.projectDenied',compact('data'));
     }
 
     //เอกสารเสนอโครงการ

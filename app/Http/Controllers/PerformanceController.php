@@ -25,7 +25,7 @@ class PerformanceController extends Controller
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         $data['quarter'] = Quarters::find($data['selectQuarID']);
 
-        if(!empty($data['selectQuarID']) && !empty($data['selectQuarID'])){
+        // if(!empty($data['selectQuarID']) && !empty($data['selectQuarID'])){
             $data['quarter'] = Quarters::find($data['selectQuarID']);
 
             //โครงการทั้งหมด
@@ -36,12 +36,13 @@ class PerformanceController extends Controller
             // ->where('report_quarters.quarID',$data['selectQuarID'])
             ->get();
             // dd($data['projectAll']);
-        }else{
-            $data['projectAll'] = DB::table('projects')
-            ->whereBetween('projects.statusID',[4,11])
-            ->where('projects.yearID',$data['selectYearID'])
-            ->get();
-        }
+        // }else{
+        //     $data['projectAll'] = DB::table('projects')
+        //     ->whereBetween('projects.statusID',[4,11])
+        //     ->where('projects.yearID',$data['selectYearID'])
+        //     ->get();
+        //     dd($data['projectAll']);
+        // }
 
         // โครงการทั้งหมด
         $data['projectEvaCompleteAll'] = $data['projectAll']->where('statusID',8)->count(); //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
