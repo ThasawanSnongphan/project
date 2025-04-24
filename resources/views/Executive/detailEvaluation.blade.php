@@ -199,39 +199,55 @@
                     <form action="" method="POST" id="actionForm">
                         @csrf
                         @if (count($data['comment']) > 0)
-                        <div class="row field item form-group " style="background-color: #FFF9B1">
-                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align" ><b>ข้อเสนอแนะ
-                                    :</b></label>
-                            <div class="col-md-6 col-sm-6">
-                               @foreach ($data['comment'] as $item)
-                                <b>{{$item->user->displayname}} : </b> {{$item->detail}} <br>
-                                <b>เมื่อ</b> {{$item->created_at}} <br>
-                               @endforeach
+                            <div class="row field item form-group " style="background-color: #FFF9B1">
+                                <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ
+                                        :</b></label>
+                                <div class="col-md-6 col-sm-6">
+                                    @foreach ($data['comment'] as $item)
+                                        <b>{{ $item->user->displayname }} : </b> {{ $item->detail }} <br>
+                                        <b>เมื่อ</b> {{ $item->created_at }} <br>
+                                    @endforeach
+                                </div>
                             </div>
-                        </div>
                         @endif
                         <div class="row field item form-group ">
-                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align"> @if (count($data['comment']) == 0)
-                                <b>ข้อเสนอแนะ
-                                    :</b>
-                            @endif</label>
+                            <label for="comment" class="col-form-lable col-md-4 col-sm-4 label-align">
+                                @if (count($data['comment']) == 0)
+                                    <b>ข้อเสนอแนะ
+                                        :</b>
+                                @endif
+                            </label>
                             <div class="col-md-6 col-sm-6">
                                 <textarea name="comment" id="comment" class="form-control"></textarea>
                             </div>
                         </div>
 
-                        <div class="form-group mt-2">
-                            <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+                        @if ($data['project']->statusID == 5)
+                            <div class="form-group mt-2">
+                                <div class="col-md-6 offset-md-3 d-flex justify-content-center">
 
-                                <button type="submit" class="btn btn-success" onclick="submitButton('pass')">อนุมัติปิดโครงการ</button>
-                                <button type="submit" class="btn btn-danger"
-                                    onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+                                    <button type="submit" class="btn btn-success"
+                                        onclick="submitButton('pass')">ผ่าน</button>
+                                    <button type="submit" class="btn btn-danger"
+                                        onclick="submitButton('edit')">กลับไปแก้ไข</button>
 
-                                <button type="submit" class="btn btn-warning"
-                                    onclick="submitButton('edit')">กลับไปแก้ไข</button>
-
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="form-group mt-2">
+                                <div class="col-md-6 offset-md-3 d-flex justify-content-center">
+
+                                    <button type="submit" class="btn btn-success"
+                                        onclick="submitButton('approve')">อนุมัติปิดโครงการ</button>
+                                    <button type="submit" class="btn btn-danger"
+                                        onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+
+                                    <button type="submit" class="btn btn-warning"
+                                        onclick="submitButton('edit')">กลับไปแก้ไข</button>
+
+                                </div>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -252,13 +268,16 @@
                     form.action = "{{ route('Executive.EditEvaluation', $data['project']->proID) }}";
                     form.submit();
                 }
-            } else {
+            }else if(action === 'approve'){
+                form.action = "{{ route('Executive.ApproveEvaluation', $data['project']->proID) }}";
+            }
+             else {
                 document.getElementById('comment').required = true;
                 var comment = document.getElementById('comment').value.trim();
-                if (comment !== ""){
+                if (comment !== "") {
                     form.action = "{{ route('Executive.DeniedEvaluation', $data['project']->proID) }}";
                     form.submit();
-                }  
+                }
             }
         }
     </script>

@@ -46,7 +46,7 @@ class Executive extends Controller
         if(auth()->user()->username == 'prasertsakt'){
             $project=Projects::with('status')->where([['proTypeID',3]])->whereIn('statusID',[3,7])->orWhere('statusID',1)->where('approverID',auth()->id())->get();
         }else{
-            $project=Projects::with('status')->where([['proTypeID',3],['statusID',1],['approverID',auth()->id()]])->get();
+            $project=Projects::with('status')->where([['proTypeID',3],['approverID',auth()->id()]])->whereIn('statusID',[1,5])->get();
             // dd($project);
         }
         $proID = $project->pluck('proID');
@@ -292,18 +292,18 @@ class Executive extends Controller
     function EvaluationPass(Request $request, $id){
         $data['evaluation'] = DB::table('project_evaluations')->where('proID',$id)->first();
 
-        $data['statusID'] = '';
-        if($data['evaluation']->operID == 1){
-            $data['statusID'] = 8;
-        }elseif($data['evaluation']->operID == 2){
-            $data['statusID'] = 9;
-        }elseif($data['evaluation']->operID == 3){
-            $data['statusID'] = 10;
-        }else{
-            $data['statusID'] = 11;
-        }
+        // $data['statusID'] = '';
+        // if($data['evaluation']->operID == 1){
+        //     $data['statusID'] = 8;
+        // }elseif($data['evaluation']->operID == 2){
+        //     $data['statusID'] = 9;
+        // }elseif($data['evaluation']->operID == 3){
+        //     $data['statusID'] = 10;
+        // }else{
+        //     $data['statusID'] = 11;
+        // }
 
-        DB::table('projects')->where('proID',$id)->update(['statusID' => $data['statusID']]);
+        DB::table('projects')->where('proID',$id)->update(['statusID' => 6]);
         $data['project'] = Projects::with('status')->where('proID',$id)->first();
         $detail = $request->input('comment');
         if(!empty($detail)){
@@ -405,6 +405,58 @@ class Executive extends Controller
                 ));
             }
             
+
+        return redirect('/ExecutiveProjectlist');
+    }
+
+    function EvaluationApprove(Request $request, $id){
+        $data['evaluation'] = DB::table('project_evaluations')->where('proID',$id)->first();
+
+        $data['statusID'] = '';
+        if($data['evaluation']->operID == 1){
+            $data['statusID'] = 8;
+        }elseif($data['evaluation']->operID == 2){
+            $data['statusID'] = 9;
+        }elseif($data['evaluation']->operID == 3){
+            $data['statusID'] = 10;
+        }else{
+            $data['statusID'] = 11;
+        }
+
+        DB::table('projects')->where('proID',$id)->update(['statusID' => $data['statusID']]);
+        $data['project'] = Projects::with('status')->where('proID',$id)->first();
+        $detail = $request->input('comment');
+        if(!empty($detail)){
+            $userID = Auth::id();
+            $commentID = DB::table('comments')->insertGetId(
+                [
+                    'proID' => $id,
+                    'detail' => $detail,
+                    'type' => 'เอกสารประเมินโครงการ',
+                    'userID' => $userID,
+                    'updated_at' => now(), 
+                    'created_at' => now() 
+                ]);
+        }
+
+        if(!empty($commentID)){
+            $comment = DB::table('comments')->where('commentID',$commentID)->first();
+        }
+
+        $userMap = UsersMapProject::with('users')->where('proID',$id)->get();
+        
+        foreach ($userMap as $index => $item) {
+            $mailData = [
+                'name' => $data['project']->name,
+                'text' => $data['project']->status->name
+            ];
+            if(!empty($comment)){
+                $mailData['comment'] = $comment->detail;
+                $mailData['userComment'] = Auth::user()->displayname;
+                $mailData['created_at'] = $comment->created_at;
+            }
+            Mail::to($item->users->email)->send(new SendMail($mailData));
+        }
 
         return redirect('/ExecutiveProjectlist');
     }

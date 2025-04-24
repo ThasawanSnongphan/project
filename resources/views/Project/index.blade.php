@@ -3,309 +3,403 @@
 @section('content')
 
     {{-- <body class="nav-md"> --}}
-        {{-- <div class="container body"> --}}
-            <div class="main_container">
-                <div role="main">
-                    <div class="">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
-                                        <h2>โครงการประจำปี</h2>
-                                        <ul class="nav navbar-right panel_toolbox">
-                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                            </li>
-                                        </ul>
-                                        <div class="clearfix"></div>
+    {{-- <div class="container body"> --}}
+    <div class="main_container">
+        <div role="main">
+            <div class="">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>โครงการประจำปี</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+                                <div class="field item form-group ">
+                                    <label class="col-form-label col-md-1 col-sm-1 " for="heard">ปีงบประมาณ*</label>
+                                    <div class="col-md-2 col-sm-2 m-2 ">
+                                        <select name="year" id="yearID" class="form-control">
+                                            <option data-year="ทั้งหมด">ทั้งหมด</option>
+                                            @foreach ($year as $year)
+                                                <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
+                                                    {{ $year->year }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="x_content">
-                                        <div class="field item form-group ">
-                                            <label class="col-form-label col-md-1 col-sm-1 "
-                                                for="heard">ปีงบประมาณ*</label>
-                                            <div class="col-md-2 col-sm-2 m-2 ">
-                                                <select name="year" id="yearID" class="form-control">
-                                                    <option data-year="ทั้งหมด">ทั้งหมด</option>
-                                                    @foreach ($year as $year)
-                                                        <option value="{{ $year->yearID }}" data-year="{{ $year->yearID }}">
-                                                            {{ $year->year }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <table id="example" class="display">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>ชื่อโครงการ</th>
-                                                    <th>สถานะ</th>
-                                                    <th>ไตรมาส 1</th>
-                                                    <th>ไตรมาส 2</th>
-                                                    <th>ไตรมาส 3</th>
-                                                    <th>ไตรมาส 4</th>
-                                                    <th></th>
+                                </div>
+                                <table id="example" class="display">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>ชื่อโครงการ</th>
+                                            <th>สถานะ</th>
+                                            <th>ไตรมาส 1</th>
+                                            <th>ไตรมาส 2</th>
+                                            <th>ไตรมาส 3</th>
+                                            <th>ไตรมาส 4</th>
+                                            <th></th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @php
-                                                    $currentDate = date('Y-m-d');
-                                                    $i = 1;
-                                                @endphp
-                                                @foreach ($project as $index => $item)
-                                                    <tr>
-                                                        <td>{{ $i }}</td>
-                                                        <td data-project="{{ $item->proID }}">
-                                                            @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
-                                                                {{ $item->name }}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $currentDate = date('Y-m-d');
+                                            $i = 1;
+                                        @endphp
+                                        @foreach ($project as $index => $item)
+                                            <tr>
+                                                <td>{{ $i }}</td>
+                                                <td data-project="{{ $item->proID }}">
+                                                    @if ($item->statusID == 12 || $item->statusID == 13 || $item->statusID == 14)
+                                                        {{ $item->name }}
+                                                    @else
+                                                        <a
+                                                            href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
+                                                    @endif
+                                                </td>
+                                                <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}
+                                                </td>
+
+                                                <td>
+                                                    @if ($item->statusID == 4)
+                                                        @if (count($data['dateQuarter1']) > 0)
+                                                            @foreach ($data['dateQuarter1'] as $date)
+                                                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                                                    @php $found = false; @endphp
+                                                                    @if (count($data['report']) > 0)
+                                                                        @foreach ($data['report'] as $report)
+                                                                            @if ($report->proID == $item->proID && $report->quarID == 1)
+                                                                                <a
+                                                                                    href="{{ route('report.quarter', [$item->proID, 1]) }}"><i
+                                                                                        class="fa fa-pencil btn btn-danger">
+                                                                                        เสนอปิดโครงการ</i></a>
+                                                                                @php $found = true; @endphp
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if (!$found)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                                                class="fa fa-pencil btn btn-primary">
+                                                                                เขียน</i></a>
+                                                                    @endif
+                                                                @else
+                                                                    <a href="#" class="disabled"><i
+                                                                            class="fa fa-pencil btn btn-secondary disabled">
+                                                                            เขียน</i></a>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            <a href="#" class="disabled"><i
+                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                    เขียน</i></a>
+                                                        @endif
+                                                    @elseif($item->statusID == 13)
+                                                        <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                                                class="fa fa-pencil btn btn-warning">
+                                                                แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                                                    @elseif($item->statusID >= 5 && $item->statusID <= 11)
+                                                        @foreach ($data['evaluation'] as $eva)
+                                                            @if ($eva->proID == $item->proID && $eva->quarID == 1)
+                                                                <a href="{{ route('report.quarter', [$item->proID, 1]) }}">
+                                                                    <i class="fa fa-eye btn btn-primary">
+                                                                        ดูรายงาน</i>
+                                                                </a>
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                    @endif
+
+                                                </td>
+                                                <td>
+                                                    @if ($item->statusID == 4)
+                                                        @if (count($data['dateQuarter2']) > 0)
+                                                            @foreach ($data['dateQuarter2'] as $date)
+                                                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                                                    @php$found = false;
+                                                                        $found2 = false;
+                                                                    @endphp
+                                                                    @if (count($data['report']) > 0)
+                                                                        @foreach ($data['report'] as $report)
+                                                                            @if ($report->proID == $item->proID && $report->quarID == 1)
+                                                                                @php $found2 = true; @endphp
+                                                                                @if (!$found2)
+                                                                                    <a
+                                                                                        href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                                                            class="fa fa-pencil btn btn-primary">
+                                                                                            เขียน</i></a>
+                                                                                    @php$found = true;
+
+                                                                                    @endphp
+                                                                                @endif
+                                                                            @elseif ($report->proID == $item->proID && $report->quarID == 2 && $found2)
+                                                                                <a
+                                                                                    href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
+                                                                                        class="fa fa-pencil btn btn-danger">
+                                                                                        เสนอปิดโครงการ</i></a>
+                                                                                @php$found = true;
+                                                                                    $found2 = false;
+                                                                                @endphp
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if (!$found)
+                                                                        @if ($found2)
+                                                                            <a
+                                                                                href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
+                                                                                    class="fa fa-pencil btn btn-primary">
+                                                                                    เขียน</i></a>
+                                                                        @else
+                                                                            <a href="#" class="disabled"><i
+                                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                                    เขียน</i></a>
+                                                                        @endif
+                                                                    @endif
+                                                                @else
+                                                                    <a href="#" class="disabled"><i
+                                                                            class="fa fa-pencil btn btn-secondary disabled">
+                                                                            เขียน</i></a>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            <a href="#" class="disabled"><i
+                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                    เขียน</i></a>
+                                                        @endif
+                                                    @elseif($item->statusID == 13)
+                                                        @foreach ($data['report'] as $report)
+                                                            @if ($report->proID == $item->proID && $report->quarID == 2)
+                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                                                        class="fa fa-pencil btn btn-warning">
+                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
                                                             @else
+                                                                <a href="#" class="disabled"><i
+                                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                                        เขียน</i></a>
+                                                                @break
+                                                            @endif
+                                                        @endforeach
+                                                    @elseif($item->statusID >= 5 && $item->statusID <= 11)
+                                                    @php
+                                                            $hasQuarter1 = false;
+                                                            $hasQuarter2 = false;
+
+                                                            foreach ($data['evaluation'] as $eva) {
+                                                                if ($eva->proID == $item->proID) {
+                                                                    if ($eva->quarID == 1) {
+                                                                        $hasQuarter1 = true;
+                                                                    }
+                                                                    if ($eva->quarID == 2) {
+                                                                        $hasQuarter2 = true;
+                                                                    }
+                                                                }
+                                                            }
+                                                        @endphp
+
+                                                        @if ($hasQuarter2)
+                                                            <a href="{{ route('report.quarter', [$item->proID, 2]) }}">
+                                                                <i class="fa fa-eye btn btn-primary"> ดูรายงาน</i>
+                                                            </a>
+                                                        @elseif ($hasQuarter1)
+                                                            <a href="#" class="disabled">
+                                                                <i class="fa fa-pencil btn btn-secondary disabled"> เขียน</i>
+                                                            </a>
+                                                        @endif
+                                                    @else
+                                                        <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                    @endif
+
+                                                </td>
+                                                <td>
+                                                    @if ($item->statusID == 4)
+                                                        @if (count($data['dateQuarter3']) > 0)
+                                                            @foreach ($data['dateQuarter3'] as $date)
+                                                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                                                    @php$found = false;
+                                                                        $found2 = false;
+                                                                    @endphp
+                                                                    @if (count($data['report']) > 0)
+                                                                        @foreach ($data['report'] as $report)
+                                                                            @if ($report->proID == $item->proID && $report->quarID == 2)
+                                                                                @php $found2 = true; @endphp
+                                                                                @if (!$found2)
+                                                                                    <a
+                                                                                        href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                                                            class="fa fa-pencil btn btn-primary">
+                                                                                            เขียน</i></a>
+                                                                                    @php$found = true;
+
+                                                                                    @endphp
+                                                                                @endif
+                                                                            @elseif($report->proID == $item->proID && $report->quarID == 3 && $found2)
+                                                                                <a
+                                                                                    href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                                                                        class="fa fa-pencil btn btn-danger">
+                                                                                        เสนอปิดโครงการ</i></a>
+                                                                                @php$found = true;
+                                                                                    $found2 = false;
+                                                                                @endphp
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if (!$found)
+                                                                        @if ($found2)
+                                                                            <a
+                                                                                href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                                                                    class="fa fa-pencil btn btn-primary">
+                                                                                    เขียน</i></a>
+                                                                        @else
+                                                                            <a href="#" class="disabled"><i
+                                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                                    เขียน</i></a>
+                                                                        @endif
+                                                                    @endif
+                                                                @else
+                                                                    <a href="#" class="disabled"><i
+                                                                            class="fa fa-pencil btn btn-secondary disabled">
+                                                                            เขียน</i></a>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            <a href="#" class="disabled"><i
+                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                    เขียน</i></a>
+                                                        @endif
+                                                    @elseif($item->statusID == 13)
+                                                        @foreach ($data['report'] as $report)
+                                                            @if ($report->proID == $item->proID && $report->quarID == 3)
+                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                                                        class="fa fa-pencil btn btn-warning">
+                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                                                            @else
+                                                                <a href="#" class="disabled"><i
+                                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                                        เขียน</i></a>
+                                                                @break
+                                                            @endif
+                                                        @endforeach
+                                                    @elseif($item->statusID >= 5 && $item->statusID <= 11)
+                                                        @foreach ($data['evaluation'] as $eva)
+                                                            {{-- @php $found2 = false; @endphp --}}
+                                                            @if ($eva->proID == $item->proID && $eva->quarID == 3)
+                                                                <a href="{{ route('report.quarter', [$item->proID, 3]) }}">
+                                                                    <i class="fa fa-eye btn btn-primary">
+                                                                        ดูรายงาน</i>
+                                                                </a>
+                                                                {{-- @php $found2 = true; @endphp
+                                                                @break --}}
+                                                                {{-- @elseif ($eva->proID != $item->proID && $eva->quarID == 3)
+                                                                <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                                @break --}}
+                                                            @endif
+                                                            {{-- @if (!$found2)
+                                                                <a href="#" class="disabled"><i
+                                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                                        เขียน</i></a>
+                                                                @break
+                                                            @endif --}}
+                                                        @endforeach
+                                                    @else
+                                                        <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->statusID == 4)
+                                                        @if (count($data['dateQuarter4']) > 0)
+                                                            @foreach ($data['dateQuarter4'] as $date)
+                                                                @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
+                                                                    @php $found = false; @endphp
+                                                                    @if (count($data['report']) > 0)
+                                                                        @foreach ($data['report'] as $report)
+                                                                            @if ($report->proID == $item->proID && $report->quarID == 4)
+                                                                                <a
+                                                                                    href="{{ route('report.quarter', [$item->proID, 4]) }}"><i
+                                                                                        class="fa fa-pencil btn btn-danger">
+                                                                                        เสนอปิดโครงการ</i></a>
+                                                                                @php $found = true; @endphp
+                                                                                @break
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                    @if (!$found)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
+                                                                                class="fa fa-pencil btn btn-primary">
+                                                                                เขียน</i></a>
+                                                                    @endif
+                                                                @else
+                                                                    <a href="#" class="disabled"><i
+                                                                            class="fa fa-pencil btn btn-secondary disabled">
+                                                                            เขียน</i></a>
+                                                                @endif
+                                                            @endforeach
+                                                        @else
+                                                            <a href="#" class="disabled"><i
+                                                                    class="fa fa-pencil btn btn-secondary disabled">
+                                                                    เขียน</i></a>
+                                                        @endif
+                                                    @elseif($item->statusID == 13)
+                                                        <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                                                class="fa fa-pencil btn btn-warning">
+                                                                แก้ไขเอกสารเสนอปิดโครงการ</i></a>
+                                                    @elseif($item->statusID >= 5 && $item->statusID <= 11)
+                                                        @foreach ($data['evaluation'] as $eva)
+                                                            @php $found2 = false; @endphp
+                                                            @if ($eva->proID == $item->proID && $eva->quarID == 4)
                                                                 <a
-                                                                    href="{{ route('project.detail', $item->proID) }}">{{ $item->name }}</a>
+                                                                    href="{{ route('report.quarter', [$item->proID, 4]) }}">
+                                                                    <i class="fa fa-eye btn btn-primary">
+                                                                        ดูรายงาน</i>
+                                                                </a>
+                                                                @php $found2 = true; @endphp
+                                                                @break
                                                             @endif
-                                                        </td>
-                                                        <td>{{ $status->firstWhere('statusID', $item->statusID)->name ?? 'ไม่พบ' }}
-                                                        </td>
-
-                                                        <td>
-                                                            @if ($item->statusID == 4)
-                                                                @if (count($data['dateQuarter1']) > 0)
-                                                                    @foreach ($data['dateQuarter1'] as $date)
-                                                                        @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                                                            @php $found = false; @endphp
-                                                                            @if (count($data['report']) > 0)
-                                                                                @foreach ($data['report'] as $report)
-                                                                                    @if ($report->proID == $item->proID && $report->quarID == 1)
-                                                                                        <a
-                                                                                            href="{{ route('report.quarter', [$item->proID, 1]) }}"><i
-                                                                                                class="fa fa-pencil btn btn-danger">
-                                                                                                เสนอปิดโครงการ</i></a>
-                                                                                        @php $found = true; @endphp
-                                                                                        @break
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                            @if (!$found)
-                                                                                <a
-                                                                                    href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                                                                        class="fa fa-pencil btn btn-primary">
-                                                                                        เขียน</i></a>
-                                                                            @endif
-                                                                        @else
-                                                                            <a href="#" class="disabled"><i
-                                                                                    class="fa fa-pencil btn btn-secondary disabled">
-                                                                                    เขียน</i></a>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    <a href="#" class="disabled"><i
-                                                                            class="fa fa-pencil btn btn-secondary disabled">
-                                                                            เขียน</i></a>
-                                                                @endif
-                                                            @elseif($item->statusID == 13)
-                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning">
-                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
-                                                            @elseif($item->statusID >= 5 && $item->statusID <= 11)
-                                                                @foreach ($data['evaluation'] as $eva)
-                                                                    @if ($eva->proID == $item->proID && $eva->quarID == 1 )
-                                                                        <a
-                                                                            href="{{ route('report.quarter', [$item->proID, 1]) }}">
-                                                                            <i class="fa fa-eye btn btn-primary">
-                                                                                ดูรายงาน</i>
-                                                                        </a>
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
+                                                            @if (!$found2)
                                                                 <a href="#" class="disabled"><i
                                                                         class="fa fa-pencil btn btn-secondary disabled">
                                                                         เขียน</i></a>
+                                                                @break
                                                             @endif
+                                                        @endforeach
+                                                    @else
+                                                        <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->statusID == 12 || $item->statusID == 14)
+                                                        <a href="{{ route('project.edit1', $item->proID) }}"><i
+                                                                class="fa fa-pencil btn btn-warning"></i></a>
+                                                        <a href="{{ route('project.delete', $item->proID) }}"
+                                                            onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
+                                                                class="fa fa-times btn btn-danger"></i></a>
+                                                    @elseif($item->statusID == 13)
+                                                        <a href="{{ route('edit.evaluation', $item->proID) }}"><i
+                                                                class="fa fa-pencil btn btn-warning"></i></a>
+                                                        <a href="{{ route('project.delete', $item->proID) }}"
+                                                            onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
+                                                                class="fa fa-times btn btn-danger"></i></a>
+                                                    @endif
+                                                </td>
 
-                                                        </td>
-                                                        <td>
-                                                            @if ($item->statusID == 4)
-                                                                @if (count($data['dateQuarter2']) > 0)
-                                                                    @foreach ($data['dateQuarter2'] as $date)
-                                                                        @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                                                            @php $found = false; @endphp
-                                                                            @if (count($data['report']) > 0)
-                                                                                @foreach ($data['report'] as $report)
-                                                                                    @if ($report->proID == $item->proID && $report->quarID == 2)
-                                                                                        <a
-                                                                                            href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
-                                                                                                class="fa fa-pencil btn btn-danger">
-                                                                                                เสนอปิดโครงการ</i></a>
-                                                                                        @php $found = true; @endphp
-                                                                                        @break
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                            @if (!$found)
-                                                                                <a
-                                                                                    href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                                                                        class="fa fa-pencil btn btn-primary">
-                                                                                        เขียน</i></a>
-                                                                            @endif
-                                                                        @else
-                                                                            <a href="#" class="disabled"><i
-                                                                                    class="fa fa-pencil btn btn-secondary disabled">
-                                                                                    เขียน</i></a>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    <a href="#" class="disabled"><i
-                                                                            class="fa fa-pencil btn btn-secondary disabled">
-                                                                            เขียน</i></a>
-                                                                @endif
-                                                            @elseif($item->statusID == 13)
-                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning">
-                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
-                                                            @elseif($item->statusID >= 5 && $item->statusID <= 11)
-                                                                @foreach ($data['evaluation'] as $eva)
-                                                                    @if ($eva->proID == $item->proID && $eva->quarID == 2)
-                                                                        <a
-                                                                            href="{{ route('report.quarter', [$item->proID, 2]) }}">
-                                                                            <i class="fa fa-eye btn btn-primary">
-                                                                                ดูรายงาน</i>
-                                                                        </a>
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <a href="#" class="disabled"><i
-                                                                        class="fa fa-pencil btn btn-secondary disabled">
-                                                                        เขียน</i></a>
-                                                            @endif
-
-                                                        </td>
-                                                        <td>
-                                                            @if ($item->statusID == 4)
-                                                                @if (count($data['dateQuarter3']) > 0)
-                                                                    @foreach ($data['dateQuarter3'] as $date)
-                                                                        @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                                                            @php $found = false; @endphp
-                                                                            @if (count($data['report']) > 0)
-                                                                                @foreach ($data['report'] as $report)
-                                                                                    @if ($report->proID == $item->proID && $report->quarID == 3)
-                                                                                        <a
-                                                                                            href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
-                                                                                                class="fa fa-pencil btn btn-danger">
-                                                                                                เสนอปิดโครงการ</i></a>
-                                                                                        @php $found = true; @endphp
-                                                                                        @break
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                            @if (!$found)
-                                                                                <a
-                                                                                    href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                                                                        class="fa fa-pencil btn btn-primary">
-                                                                                        เขียน</i></a>
-                                                                            @endif
-                                                                        @else
-                                                                            <a href="#" class="disabled"><i
-                                                                                    class="fa fa-pencil btn btn-secondary disabled">
-                                                                                    เขียน</i></a>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    <a href="#" class="disabled"><i
-                                                                            class="fa fa-pencil btn btn-secondary disabled">
-                                                                            เขียน</i></a>
-                                                                @endif
-                                                            @elseif($item->statusID == 13)
-                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning">
-                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
-                                                            @elseif($item->statusID >= 5 && $item->statusID <= 11)
-                                                                @foreach ($data['evaluation'] as $eva)
-                                                                    @if ($eva->proID == $item->proID && $eva->quarID == 3)
-                                                                        <a
-                                                                            href="{{ route('report.quarter', [$item->proID, 3]) }}">
-                                                                            <i class="fa fa-eye btn btn-primary">
-                                                                                ดูรายงาน</i>
-                                                                        </a>
-                                                                    
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <a href="#" class="disabled"><i
-                                                                        class="fa fa-pencil btn btn-secondary disabled">
-                                                                        เขียน</i></a>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($item->statusID == 4)
-                                                                @if (count($data['dateQuarter4']) > 0)
-                                                                    @foreach ($data['dateQuarter4'] as $date)
-                                                                        @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
-                                                                            @php $found = false; @endphp
-                                                                            @if (count($data['report']) > 0)
-                                                                                @foreach ($data['report'] as $report)
-                                                                                    @if ($report->proID == $item->proID && $report->quarID == 4)
-                                                                                        <a
-                                                                                            href="{{ route('report.quarter', [$item->proID, 4]) }}"><i
-                                                                                                class="fa fa-pencil btn btn-danger">
-                                                                                                เสนอปิดโครงการ</i></a>
-                                                                                        @php $found = true; @endphp
-                                                                                        @break
-                                                                                    
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                            @if (!$found)
-                                                                                <a
-                                                                                    href="{{ route('report.quarter', [$item->proID, $date->quarID]) }}"><i
-                                                                                        class="fa fa-pencil btn btn-primary">
-                                                                                        เขียน</i></a>
-                                                                            @endif
-                                                                        @else
-                                                                            <a href="#" class="disabled"><i
-                                                                                    class="fa fa-pencil btn btn-secondary disabled">
-                                                                                    เขียน</i></a>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    <a href="#" class="disabled"><i
-                                                                            class="fa fa-pencil btn btn-secondary disabled">
-                                                                            เขียน</i></a>
-                                                                @endif
-                                                            @elseif($item->statusID == 13)
-                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning">
-                                                                        แก้ไขเอกสารเสนอปิดโครงการ</i></a>
-                                                            @elseif($item->statusID >= 5 && $item->statusID <= 11)
-                                                                @foreach ($data['evaluation'] as $eva)
-                                                                    @if ($eva->proID == $item->proID && $eva->quarID == 4)
-                                                                        <a
-                                                                            href="{{ route('report.quarter', [$item->proID, 4]) }}">
-                                                                            <i class="fa fa-eye btn btn-primary">
-                                                                                ดูรายงาน</i>
-                                                                        </a>
-                                                                    @endif
-                                                                @endforeach
-                                                            @else
-                                                                <a href="#" class="disabled"><i
-                                                                        class="fa fa-pencil btn btn-secondary disabled">
-                                                                        เขียน</i></a>
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($item->statusID == 12 || $item->statusID == 14)
-                                                                <a href="{{ route('project.edit1', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning"></i></a>
-                                                                <a href="{{ route('project.delete', $item->proID) }}"
-                                                                    onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                                                        class="fa fa-times btn btn-danger"></i></a>
-                                                            @elseif($item->statusID == 13)
-                                                                <a href="{{ route('edit.evaluation', $item->proID) }}"><i
-                                                                        class="fa fa-pencil btn btn-warning"></i></a>
-                                                                <a href="{{ route('project.delete', $item->proID) }}"
-                                                                    onclick="return confirm('ต้องการลบโปรเจค {{ $item->name }}  หรือไม่')"><i
-                                                                        class="fa fa-times btn btn-danger"></i></a>
-                                                            @endif
-                                                        </td>
-
-                                                        {{-- <td>
+                                                {{-- <td>
 
 
                                                                 @if ($currentMonth >= 10 && $currentMonth <= 12)
@@ -407,21 +501,21 @@
 
                                                                 @endif --}}
 
-                                                    </tr>
-                                                    @php
-                                                        $i++;
-                                                    @endphp
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                            </tr>
+                                            @php
+                                                $i++;
+                                            @endphp
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        {{-- </div> --}}
+        </div>
+    </div>
+    {{-- </div> --}}
     {{-- </body> --}}
 
 

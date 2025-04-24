@@ -122,6 +122,8 @@ Route::get('ExecutiveProjectDetailEvaluation/{id}',[Executive::class,'detailEval
 Route::post('ExecutiveEvaluationPass/{id}', [Executive::class,'EvaluationPass'])->name('Executive.PassEvaluation');
 Route::post('/ExecutiveEvaluationEdit/{id}', [Executive::class,'EvaluationEdit'])->name('Executive.EditEvaluation');
 Route::post('/ExecutiveEvaluationDenied/{id}', [Executive::class,'EvaluationDenied'])->name('Executive.DeniedEvaluation');
+Route::post('ExecutiveEvaluationApprove/{id}', [Executive::class,'EvaluationApprove'])->name('Executive.ApproveEvaluation');
+
 
 
 /***** เจ้าหน้าที่แผน  *****/
