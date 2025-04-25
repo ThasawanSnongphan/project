@@ -158,6 +158,11 @@ class ProjectController extends Controller
         $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
 
         $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
+        $data['evaluation']=DB::table('projects')
+        ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
+        ->join('report_quarters','report_quarters.proID','=','projects.proID')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')->get();
+        
         return view('Project.projectCancel',compact('data'));
     }
 

@@ -49,7 +49,12 @@ class PlanningAnalyst extends Controller
         $users = $users=DB::table('users')->get();
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
         // dd($report_quarter);
-        return view('Planning_Analyst.projectAll',compact('users','project','status','year','projectYear','report_quarter'));
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
+       
+        return view('Planning_Analyst.projectAll',compact('users','project','status','year','projectYear','report_quarter','data'));
     }
     
     function index(){
@@ -62,7 +67,11 @@ class PlanningAnalyst extends Controller
         $users = $users=DB::table('users')->get();
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
         // dd($report_quarter);
-        return view('Planning_Analyst.project',compact('users','project','status','year','projectYear','report_quarter'));
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
+        return view('Planning_Analyst.project',compact('users','project','status','year','projectYear','report_quarter','data'));
     }
 
     function projectOutPlan(){

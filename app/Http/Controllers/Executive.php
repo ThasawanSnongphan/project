@@ -52,9 +52,17 @@ class Executive extends Controller
         $proID = $project->pluck('proID');
         // dd($proID);
         $users = $users=DB::table('users')->get();
+         
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+        
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
+        // dd($data['evaluation']);
+
         // dd($report_quarter);
-        return view('Executive.projectlist',compact('users','project','year','projectYear','report_quarter'));
+        return view('Executive.projectlist',compact('users','project','year','projectYear','report_quarter','data'));
     }
 
     function projectOutPlan(){

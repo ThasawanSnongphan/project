@@ -58,11 +58,14 @@ class Department_Head extends Controller
         
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
            
-
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
        
         // dd($report_quarter);
        
-        return view('Department_Head.project',compact('project','status','year','projectYear','report_quarter'));
+        return view('Department_Head.project',compact('project','status','year','projectYear','report_quarter','data'));
     }
 
     function projectOutPlan(){
