@@ -14,7 +14,9 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
+                @php
+                     $currentYear = date('Y') + 543;
+                @endphp
                 <div class="x_content">
                     <form id="actionForm" method="POST" action="" enctype="multipart/form-data">
                         @csrf
@@ -22,13 +24,17 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ปีงบประมาณ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
+                                
                                 <select id="year" name="yearID" class="form-control" required
                                     onchange="submitForm(event)">
                                     <option value="">--เลือกปีงบประมาณ--</option>
                                     @foreach ($year as $item)
-                                        <option value="{{ $item->yearID }}"
+                                        @if ($item->year >= $currentYear)
+                                            <option value="{{ $item->yearID }}"
                                             {{ request('yearID') == $item->yearID ? 'selected' : '' }}>{{ $item->year }}
                                         </option>
+                                        @endif
+                                        
                                     @endforeach
                                 </select>
                             </div>

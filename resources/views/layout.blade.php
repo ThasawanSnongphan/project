@@ -154,7 +154,7 @@
                                                 <li><a href="/countKPI">หน่วยนับKPI</a></li>
                                                 <li><a href="/dateInPlan">กำหนดการเสนอโครงการในแผน</a></li>
                                                 <li><a href="/dateReportQuarter">กำหนดการกรอกรายงานรายไตรมาส</a></li>
-                                                <li><a href="/project">โครงการ</a></li>
+                                                
                                             </ul>
                                         </li>
                                     </ul>

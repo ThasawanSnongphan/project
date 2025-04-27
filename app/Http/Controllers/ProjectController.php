@@ -89,7 +89,7 @@ class ProjectController extends Controller
         $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->get();
         $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->get();
         $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
-
+        
         $data['reportQuarter'] = DB::table('report_quarters')->whereIn('proID',$user->pluck('proID'))->get();
         // dd($data['reportQuarter']);
 
@@ -141,10 +141,25 @@ class ProjectController extends Controller
         $report = DB::table('report_quarters')->whereIn('proID',$project->pluck('proID'))->get();
         $proID = $report->pluck('proID');
         // dd($proID );
-        $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
+        // $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
         // dd($evaluation);
         // dd($proID);
-        return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','evaluation'));
+        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->get();
+        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->get();
+        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->get();
+        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
+        
+        $data['report']=DB::table('projects')
+        ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
+        ->join('report_quarters','report_quarters.proID','=','projects.proID')
+        ->get();
+
+        $data['evaluation']=DB::table('projects')
+        ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
+        ->join('report_quarters','report_quarters.proID','=','projects.proID')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')->get();
+
+        return view('Project.projectOutPlan',compact('users','project','status','year','projectYear','report','proID','data'));
 
 
         

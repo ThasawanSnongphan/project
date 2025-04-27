@@ -86,6 +86,10 @@ class Department_Head extends Controller
 
         // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
         $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
         return view('Department_Head.projectCancel',compact('data'));
     }
 

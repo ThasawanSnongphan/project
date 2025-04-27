@@ -87,7 +87,10 @@ class PlanningAnalyst extends Controller
         $data['year'] = Year::all();
         $data['projectYear'] = Projects::with('year')->get();
         $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
-
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
         // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
 
         // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
