@@ -30,7 +30,7 @@
                 <div class="x_content">
                     <form id="actionForm" method="POST" action="" novalidate enctype="multipart/form-data">
                         @csrf
-                       
+
                         @if (count($comment) > 0)
                             <div class="row field item form-group align-items-center" style="background-color: #FFF9B1; ">
                                 <label for="title"
@@ -84,7 +84,7 @@
                                             <option value="{{$item->userID}}" selected>{{$item->displayname}}</option>
                                         @else
                                         <option value="{{$item->userID}}">{{$item->displayname}}</option>
-                                            
+
                                         @endif
                                     @endforeach
                                 </select>
@@ -108,7 +108,7 @@
                                     <input type="checkbox" name="stra3LVID[]" value="{{ $item->stra3LVID }}"
                                         @foreach ($strategic3LVMap as $map)
                                             @if ($item->stra3LVID == $map->stra3LVID)
-                                                    checked 
+                                                    checked
                                             @endif @endforeach>
 
 
@@ -286,7 +286,7 @@
                                                 <select id="KPIMain3LVID_{{ $index }}" name="KPIMain3LVID[]"
                                                     class="form-control" required>
                                                     <option value="">--เลือกตัวชี้วัด--</option>
-                                                   
+
 
                                                 </select>
                                             </div>
@@ -427,7 +427,7 @@
                                             @if ($KPIMap->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                 <div class="row col-md-12 col-sm-12">
                                                     <div class="col-md-4 col-sm-4 m-1">
-                                                        
+
                                                         <select id="KPIMain2LVID_{{ $index }}"
                                                             name="KPIMain2LVID[]" class="form-control" required>
                                                             <option value="">--เลือกตัวชี้วัด--</option>
@@ -453,7 +453,7 @@
                                                         @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                             @if ($KPI->KPIMain2LVID == ($KPIMap->KPIMain2LVID ?? ''))
                                                                 value="{{ $KPI->count ?? '-' }}"
-                                                           
+
                                                             @endif
                                                         @endif @endforeach
                                                             readonly>
@@ -466,7 +466,7 @@
                                                         @if ($KPI->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
                                                             @if ($KPI->KPIMain2LVID == $KPIMap->KPIMain2LVID)
                                                                 value="{{ $KPI->target ?? '-' }}"
-                                                            
+
                                                             @endif
                                                         @endif @endforeach
                                                             readonly>
@@ -493,7 +493,7 @@
                                     @else
                                     <div class="row col-md-12 col-sm-12">
                                         <div class="col-md-4 col-sm-4 m-1">
-                                           
+
                                             <select id="KPIMain2LVID_{{ $index }}"
                                                 name="KPIMain2LVID[]" class="form-control" required>
                                                 <option value="">--เลือกตัวชี้วัด--</option>
@@ -503,25 +503,25 @@
 
                                             <input class="form-control" type="text" name="countMain2LV[]"
                                                 id="count2LV_{{ $index }}"
-                                               
+
                                                 readonly>
 
                                         </div>
                                         <div class=" col-md-3 col-sm-3 m-1">
                                             <input class="form-control" type="text" name="targetMain2LV[]"
                                                 id="target2LV_{{ $index }}"
-                                                
+
                                                 readonly>
                                         </div>
 
-                                       
+
                                             <div class="col-md-1 col-sm-1 m-1">
                                                 <button type='button'
                                                     class="btn btn-primary insert-kpi2LV-button"
                                                     data-index="{{ $index }}">เพิ่ม
                                                 </button>
                                             </div>
-                                       
+
 
                                     </div>
                                     @endif
@@ -588,7 +588,7 @@
 
                         {{-- <div class="ln_solid"> --}}
                         <div class="form-group ">
-                            <div class="col-md-6 offset-md-3">
+                            <div class="col-md-6 offset-md-3 text-center">
                                 <button type='submit' class="btn btn-primary"
                                     onclick="submitButton('saveUpdate1',{{ $project->proID }})">บันทึก</button>
                                 <button type='button' class="btn btn-primary"

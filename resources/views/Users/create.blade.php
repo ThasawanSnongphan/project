@@ -81,7 +81,7 @@
                             @enderror
                         </div>
                     </div>
-                  
+
 
 
 
@@ -367,7 +367,7 @@
                     </div>
                     <div class="ln_solid">
                         <div class="form-group">
-                            <div class="col-md-6 offset-md-3">
+                            <div class="col-md-6 offset-md-3 text-center">
                                 <button type='submit' class="btn btn-primary">Submit</button>
                                 <button type='reset' class="btn btn-success">Reset</button>
                             </div>
