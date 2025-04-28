@@ -53,10 +53,10 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="ln_solid">
                             <div class="form-group ">
-                                <div class="col-md-6 offset-md-3">
+                                <div class="col-md-6 offset-md-3 text-center">
                                     <button type='submit' class="btn btn-warning" value="บันทึก">Edit</button>
                                     <a href=""><button type='reset' class="btn btn-danger">Back</button></a>
                                 </div>
@@ -74,7 +74,7 @@
             const fileInput = document.getElementById('img');
             const previewImage = document.getElementById('previewImage');
             const imgName = document.getElementById('imgName');
-    
+
             if (fileInput.files.length > 0) {
                 previewImage.style.display = 'none';
                 imgName.style.display = 'none';

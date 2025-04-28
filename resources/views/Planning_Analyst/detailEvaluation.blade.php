@@ -204,7 +204,7 @@
                                     <b>{{$item->user->displayname}} : </b> {{$item->detail}} <br>
                                     <b>เมื่อ</b> {{$item->created_at}} <br>
                                 @endforeach
-                                
+
                             </div>
                         </div>
                         @endif
