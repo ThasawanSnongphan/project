@@ -29,7 +29,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="title" id="title" required>
-                            
+
                         </div>
                     </div>
 
@@ -38,7 +38,7 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <textarea  name="content" id="content" rows="5" class="form-control" required></textarea>
-                           
+
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@
                     </div>
                     <div class="ln_solid">
                         <div class="form-group ">
-                            <div class="col-md-6 offset-md-3">
+                            <div class="col-md-6 offset-md-3 text-center">
                                 <button type='submit' class="btn btn-primary" value="บันทึก">Submit</button>
                                 <button type='reset' class="btn btn-success">Reset</button>
                             </div>

@@ -28,12 +28,12 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="name" id="name" required>
-                            
+
                         </div>
                     </div>
                     <div class="ln_solid ">
                         <div class="form-group ">
-                            <div class="col-md-6 offset-md-3">
+                            <div class="col-md-6 offset-md-3 text-center">
                                 <button type='submit' class="btn btn-primary" value="บันทึก">Submit</button>
                                 <button type='reset' class="btn btn-success">Reset</button>
                             </div>
