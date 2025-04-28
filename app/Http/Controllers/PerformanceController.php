@@ -111,10 +111,12 @@ class PerformanceController extends Controller
         // $data['report_quarteInPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDInPlan'])->get();
         $data['report_quarterCountInPlan'] = $data['report_quarteInPlan']->count();
         $data['no_ReportInPlan'] = $data['proIDInPlan']->count() -  $data['report_quarterCountInPlan'] ;
-        //ดึงข้อมูล
+        
+        //ดึงข้อมูลโครงการตามแผน
         $data['ID_report_quarteInPlan'] =json_decode( $request->input('detail_report_quar'),true); 
         // dd($data['ID_report_quarteInPlan']);
         if(!empty( $data['ID_report_quarteInPlan'])){
+            $data['report'] = DB::table('report_quarters')->whereIn('proID',$data['ID_report_quarteInPlan'])->get();
             $data['detail_report_quarteInPlan'] = ReportQuarters::with(['project','user'])->whereIn('proID', $data['ID_report_quarteInPlan'])->get();
             $data['KPI3LV'] = KPIMainMapProjects::with('KPI')->whereIn('proID',$data['ID_report_quarteInPlan'])->get();
             $data['KPI2LV'] = KPIMain2LevelMapProject::with('KPI')->whereIn('proID',$data['ID_report_quarteInPlan'])->get();
@@ -122,7 +124,9 @@ class PerformanceController extends Controller
         }
 
         $data['ID_projectEvaCompleteInPlan'] = json_decode( $request->input('projectEvaCompleteInPlan'),true);
+        
         if(!empty($data['ID_projectEvaCompleteInPlan'])){
+            $data['report'] = DB::table('report_quarters')->whereIn('proID',$data['ID_projectEvaCompleteInPlan'])->get();
             $data['datail_projectEvaCompleteInPlan'] = ProjectEvaluation::with(['project','user'])->whereIn('proID',$data['ID_projectEvaCompleteInPlan'])->get();
             $data['KPI3LV'] = KPIMainMapProjects::with('KPI')->whereIn('proID',$data['ID_projectEvaCompleteInPlan'])->get();
             $data['KPI2LV'] = KPIMain2LevelMapProject::with('KPI')->whereIn('proID',$data['ID_projectEvaCompleteInPlan'])->get();
@@ -147,6 +151,19 @@ class PerformanceController extends Controller
         
         // $data['proIDOutPlan'] = 
         $data['no_ReportOutPlan'] = $data['proIDOutPlan']->count() -  $data['report_quarteOutPlan']->count() ;
+
+        //ดึงข้อมูลโครงการนอกแผน
+        $data['ID_projectEvaCompleteOutPlan'] = json_decode( $request->input('projectEvaCompleteOutPlan'),true);
+        // dd($data['ID_projectEvaCompleteOutPlan']);
+        if(!empty($data['ID_projectEvaCompleteOutPlan'])){
+            $data['report'] = DB::table('report_quarters')->whereIn('proID',$data['ID_projectEvaCompleteOutPlan'])->get();
+            // dd($data['report']);
+            $data['datail_projectEvaCompleteOutPlan'] = ProjectEvaluation::with(['project','user'])->whereIn('proID',$data['ID_projectEvaCompleteOutPlan'])->get();
+            $data['KPI3LV'] = KPIMainMapProjects::with('KPI')->whereIn('proID',$data['ID_projectEvaCompleteOutPlan'])->get();
+            $data['KPI2LV'] = KPIMain2LevelMapProject::with('KPI')->whereIn('proID',$data['ID_projectEvaCompleteOutPlan'])->get();
+            $data['KPIProject'] = KPIProjects::with('count')->whereIn('proID',$data['ID_projectEvaCompleteOutPlan'])->get();
+            // dd($data['datail_projectEvaCompleteInPlan'] );     
+        }
 
     return view('Performance.index',compact('data'));
     }

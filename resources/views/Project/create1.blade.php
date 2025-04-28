@@ -174,8 +174,7 @@
                                     </div>
                                     <div class="row field item form-group align-items-center">
                                         <div class="col-md-12 col-sm-12">
-                                            <div
-                                                class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
+                                            <div class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
                                                 <label for="title"
                                                     class="col-form-label label-align">ตัวชี้วัดความสำเร็จ</label>
                                             </div>

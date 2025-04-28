@@ -68,6 +68,7 @@ class Executive extends Controller
     function projectOutPlan(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
+        $data['report'] = Db::table('report_quarters')->get();
         if(auth()->user()->username == 'prasertsakt'){
             $project=Projects::with('status')->where([['proTypeID',4]])->whereIn('statusID',[3,7])->orWhere('statusID',1)->where('approverID',auth()->id())->get();
         }else{
@@ -75,7 +76,7 @@ class Executive extends Controller
             // dd($project);
         }
         $users = $users=DB::table('users')->get();
-        return view('Executive.projectOutPlan',compact('users','project','year','projectYear'));
+        return view('Executive.projectOutPlan',compact('users','project','year','projectYear','data'));
     }
 
     function projectDenied(){
