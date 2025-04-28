@@ -34,7 +34,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>เอกสารที่เกี่ยวข้อง</b></label>
                                 <div class="col-md-7 col-sm-7">
-                                    
+
                                     @foreach ($data['file'] as $item)
                                     <a href="{{ asset('files/' . $item->name) }}"
                                         target="_blank">{{ $item->name }}</a> <br>
@@ -104,7 +104,7 @@
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>วัตถุประสงค์</b></label>
                                 <div class="col-md-8 col-sm-8">
                                    @foreach ($data['obj'] as $item)
-                                       -{{$item->detail}} <br> 
+                                       -{{$item->detail}} <br>
                                        <input type="radio" name="obj_{{$item->objID}}" value="1"> บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0"> ไม่บรรลุ <br>
                                    @endforeach
                                 </div>
@@ -121,7 +121,7 @@
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"></label>
                                 <div class="col-md-7 col-sm-7 d-flex">
-                                        <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput" style="display: none;"> 
+                                        <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput" style="display: none;">
                                 </div>
                             </div>
 
@@ -134,7 +134,7 @@
                                    @endforeach
                                 </div>
                             </div>
-                            
+
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>งบประมาณที่ใช้ดำเนินการ</b></label>
                                 <div class="col-md-8 col-sm-8">
@@ -191,7 +191,7 @@
 
                             <div class="ln_solid">
                                 <div class="form-group">
-                                    <div class="col-md-6 offset-md-3">
+                                    <div class="col-md-6 offset-md-3 text-center">
                                         <button type='submit' class="btn btn-primary">ส่งข้อมูลปิดโครงการ</button>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@
     </div>
     <script>
         function operatingRadio(radio){
-            
+
             var operatingInput = document.getElementById("operatingInput");
             if(radio.value !== '1'){
                 operatingInput.style.display = "flex";

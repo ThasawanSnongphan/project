@@ -37,7 +37,7 @@
                             <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
                     </li>
-                    <li><a href="/project"><i class="fa fa-arrow-left"></i></a>
+                    <li><a href="/project"><i class="fa fa-arrow-left"></i></a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>

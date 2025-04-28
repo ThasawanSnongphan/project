@@ -17,13 +17,13 @@
                                 <a class="dropdown-item" href="#">Settings 2</a>
                             </div>
                         </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        <li><a href="/DepartmentHeadProjectOutPlan"><i class="fa fa-arrow-left"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
 
                 <div class="x_content">
-                   
+
                     @if (count($data['file']) > 0)
                         <form method="POST" enctype="multipart/form-data">
                             @csrf
@@ -218,10 +218,10 @@
 
                         <div class="form-group mt-2">
                             <div class="col-md-6 offset-md-3 d-flex justify-content-center">
-                    
+
                                 <button type="submit" class="btn btn-success" onclick="submitButton('pass')">ผ่าน</button>
                                 <button type="submit" class="btn btn-danger" onclick="submitButton('edit')">กลับไปแก้ไข</button>
-                    
+
                             </div>
                         </div>
                     </form>

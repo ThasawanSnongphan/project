@@ -239,8 +239,8 @@
 
                                     <button type="submit" class="btn btn-success"
                                         onclick="submitButton('approve')">อนุมัติปิดโครงการ</button>
-                                    <button type="submit" class="btn btn-danger"
-                                        onclick="submitButton('Denied')">ไม่อนุมัติ</button>
+                                    {{-- <button type="submit" class="btn btn-danger"
+                                        onclick="submitButton('Denied')">ไม่อนุมัติ</button> --}}
 
                                     <button type="submit" class="btn btn-warning"
                                         onclick="submitButton('edit')">กลับไปแก้ไข</button>
