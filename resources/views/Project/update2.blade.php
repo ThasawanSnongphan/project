@@ -1035,8 +1035,8 @@
                                         </div>
                                         <div class="row col-md-12 col-sm-12 mt-2">
                                             <div class="row col-md-3 col-sm-3 mr-1">
-                                                <select id="costType_{{ $index }}" name="costID[]"
-                                                    class="form-control" required>
+                                                <select id="costType_{{ $index }}" name="costID[]" class="form-control" 
+                                                    onchange="document.getElementById('file').required = (this.value === '3' || this.value === '4' || this.value === '8')">
                                                     @foreach ($costTypes as $cost)
                                                         @if ($cost->expID == $item->expID)
                                                             <option value="{{ $cost->costID }}"
@@ -1104,13 +1104,8 @@
                         class="col-form-label col-md-3 col-sm-3  label-align">ประโยชน์ที่คาดว่าจะได้รับ<span
                             class="required">*</span></label>
                     <div class="col-md-6 col-sm-6">
-                        <input class="form-control" type="text" name="benefit[]" id="benefit" required='required'
-                            data-validate-length-range="8,20" value="{{ $benefit->detail ?? '' }}" />
-                        @error('benefit.*')
-                            <div class="m-2">
-                                <span class="text text-danger">{{ $message }}</span>
-                            </div>
-                        @enderror
+                        <input class="form-control" type="text" name="benefit[]" id="benefit" required value="{{ $benefit->detail ?? '' }}" />
+                       
                     </div>
                     <div class="col-md-1 col-sm-1 ">
                         <button type='button' class="btn btn-primary" onclick="insertBenefit()">เพิ่ม</button>
@@ -1123,10 +1118,10 @@
                             <div class="col-md-3 col-sm-3"></div>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="hidden" name="bnfID[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20"
+                                    required
                                     value="{{ $item->bnfID }}" />
                                 <input class="form-control" type="text" name="benefit[]" id="benefit"
-                                    required='required' data-validate-length-range="8,20"
+                                    required
                                     value="{{ $item->detail }}" />
 
                             </div>
@@ -1196,33 +1191,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        // $(document).ready(function() {
-        //     $('[id^="expID_"]').change(function(event) {
-        //         var expID = this.value;
-        //         var dropdownID = $(this).attr('id');
-        //         var idIndex = dropdownID.split("_")[1];
-        //         // alert(idIndex);
-        //         $('[id^="costType_"]')
-        //         $.ajax({
-        //             url: "/projectcostType",
-        //             type: 'POST',
-        //             dataType: 'json',
-        //             data: {
-        //                 expID: expID,
-        //                 _token: "{{ csrf_token() }}"
-        //             },
-        //             success: function(response) {
-        //                 $('#costType_' + idIndex).html('');
-        //                 $.each(response.costType, function(index, val) {
-        //                     $('#costType_' + idIndex).append('<option value="' + val
-        //                         .costID + '">' + val.name + '</option>');
-        //                 });
-        //             }
-        //         });
-        //     });
-            
-        // });
-
 
         const funds = @json($fund);
         const expenses = @json($expanses);

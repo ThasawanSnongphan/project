@@ -25,34 +25,71 @@ class PerformanceController extends Controller
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         $data['quarter'] = Quarters::find($data['selectQuarID']);
 
-        // if(!empty($data['selectQuarID']) && !empty($data['selectQuarID'])){
+       
             $data['quarter'] = Quarters::find($data['selectQuarID']);
 
             //โครงการทั้งหมด
             $data['projectAll'] = DB::table('projects')
-            // ->join('report_quarters','projects.proID','=','report_quarters.proID')
             ->whereBetween('projects.statusID',[4,11])
             ->where('projects.yearID',$data['selectYearID'])
-            // ->where('report_quarters.quarID',$data['selectQuarID'])
             ->get();
-            // dd($data['projectAll']);
-        // }else{
-        //     $data['projectAll'] = DB::table('projects')
-        //     ->whereBetween('projects.statusID',[4,11])
-        //     ->where('projects.yearID',$data['selectYearID'])
-        //     ->get();
-        //     dd($data['projectAll']);
-        // }
-
+            
+            // $data['proID'] = $data['projectAll']->pluck('proID');
+            // dd($data['proID']);
         // โครงการทั้งหมด
-        $data['projectEvaCompleteAll'] = $data['projectAll']->where('statusID',8)->count(); //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
-        $data['projectEvaDeadlineAll'] = $data['projectAll']->where('statusID',9)->count(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
-        $data['projectEvaPostponedAll'] = $data['projectAll']->where('statusID',10)->count(); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
-        $data['projectEvaCancleAll'] = $data['projectAll']->where('statusID',11)->count(); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
-        $data['proIDAll'] = $data['projectAll']->whereBetween('statusID',[4,7])->pluck('proID');
-        $data['report_quarterAll'] = DB::table('report_quarters')->whereIn('proID',$data['proIDAll'])->get();
-        $data['report_quarterCountAll'] = $data['report_quarterAll']->count();
-        $data['no_ReportAll'] = $data['proIDAll']->count() -  $data['report_quarterCountAll'] ;
+
+        // $data['projectEvaCompleteAll'] = DB::table('projects')
+        // ->join('report_quarters as report','report.proID','=','projects.proID')
+        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
+        // ->whereBetween('projects.statusID',[4,11])
+        // ->where([['projects.statusID',8],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
+        // ->get(); //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
+        $data['projectEvaCompleteAll'] = $data['projectAll']->where('statusID',8);
+        // dd($data['projectEvaCompleteAll']);
+        // dd($data['projectEvaCompleteAll']);
+
+        // $data['projectEvaDeadlineAll'] = DB::table('projects')
+        // ->join('report_quarters as report','report.proID','=','projects.proID')
+        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
+        // ->whereBetween('projects.statusID',[4,11])
+        // ->where([['projects.statusID',9],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
+        // ->get(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
+        $data['projectEvaDeadlineAll'] = $data['projectAll']->where('statusID',9);
+
+        // $data['projectEvaPostponedAll'] = DB::table('projects')
+        // ->join('report_quarters as report','report.proID','=','projects.proID')
+        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
+        // ->whereBetween('projects.statusID',[4,11])
+        // ->where([['projects.statusID',10],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
+        // ->get(); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
+        $data['projectEvaPostponedAll'] = $data['projectAll']->where('statusID',10);
+
+        // $data['projectEvaCancleAll'] = DB::table('projects')
+        // ->join('report_quarters as report','report.proID','=','projects.proID')
+        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
+        // ->whereBetween('projects.statusID',[4,11])
+        // ->where([['projects.statusID',11],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
+        // ->get(); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
+        $data['projectEvaCancleAll'] = $data['projectAll']->where('statusID',11);
+        
+        // $data['proIDAll'] = $data['projectAll']->whereBetween('statusID',[4,7])->pluck('proID');
+        // $data['proIDAll'] = DB::table('projects')
+        // ->whereBetween('statusID',[4,7])
+        // ->where([['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
+        // ->get();
+        // dd($data['proIDAll'] );
+       
+        // dd($data['xx'] );
+        $data['report_quarterAll'] = DB::table('report_quarters as report')
+        ->join('projects','projects.proID','=','report.proID')
+        ->whereBetween('projects.statusID',[4,7])
+        ->where([['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])->get();
+        // dd($data['report_quarterAll']);
+        // ->where('proID',$data['proIDAll'])->get();
+        $data['xx'] = DB::table('projects')
+        ->whereBetween('statusID',[4,7])
+        ->where('yearID',$data['selectYearID'])->get();
+        $data['no_ReportAll'] = $data['xx']->count() -  $data['report_quarterAll']->count() ;
         
         //โครงการตามแผนปฏิบัติ
         $data['projectInPlanAll'] = $data['projectAll']->whereBetween('statusID',[4,11])->where('proTypeID',3);//นับโปรเจคตามแผน
@@ -64,8 +101,14 @@ class PerformanceController extends Controller
         $data['projectEvaDeadlineInPlan'] = $data['projectInPlanAll']->where('statusID',9)->count(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
         $data['projectEvaPostponedInPlan'] = $data['projectInPlanAll']->where('statusID',10)->count(); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
         $data['projectEvaCancleInPlan'] = $data['projectInPlanAll']->where('statusID',11)->count(); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
+
+        $data['report_quarteInPlan'] = DB::table('report_quarters as report')
+        ->join('projects','projects.proID','=','report.proID')
+        ->whereBetween('projects.statusID',[4,7])
+        ->where([['projects.proTypeID',3],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])->get();
+        
         $data['proIDInPlan'] =  $data['projectInPlanAll']->whereBetween('statusID',[4,7])->pluck('proID'); 
-        $data['report_quarteInPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDInPlan'])->get();
+        // $data['report_quarteInPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDInPlan'])->get();
         $data['report_quarterCountInPlan'] = $data['report_quarteInPlan']->count();
         $data['no_ReportInPlan'] = $data['proIDInPlan']->count() -  $data['report_quarterCountInPlan'] ;
         //ดึงข้อมูล
@@ -90,16 +133,20 @@ class PerformanceController extends Controller
 
         //โครงการนอกแผนปฏิบัติ
         $data['projectOutPlanAll'] = $data['projectAll']->whereBetween('statusID',[4,11])->where('proTypeID',4);//นับโปรเจคนอกแผน
-        $data['projectCountOutPlan'] = $data['projectOutPlanAll']->count();
-        $data['projectEvaCompleteOutPlan'] = $data['projectOutPlanAll']->where('statusID',8)->count();
-        $data['projectEvaDeadlineOutPlan'] = $data['projectOutPlanAll']->where('statusID',9)->count(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
-        $data['projectEvaPostponedOutPlan'] = $data['projectOutPlanAll']->where('statusID',10)->count(); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
-        $data['projectEvaCancleOutPlan'] = $data['projectOutPlanAll']->where('statusID',11)->count(); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
+        $data['projectEvaCompleteOutPlan'] = $data['projectOutPlanAll']->where('statusID',8);
+        $data['projectEvaDeadlineOutPlan'] = $data['projectOutPlanAll']->where('statusID',9); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
+        $data['projectEvaPostponedOutPlan'] = $data['projectOutPlanAll']->where('statusID',10); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
+        $data['projectEvaCancleOutPlan'] = $data['projectOutPlanAll']->where('statusID',11); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
         $data['proIDOutPlan'] =  $data['projectOutPlanAll']->whereBetween('statusID',[4,7])->pluck('proID');
         
-        $data['report_quarteOutPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDOutPlan'])->get();
-        $data['report_quarterCountOutPlan'] = $data['report_quarteOutPlan']->count();
-        $data['no_ReportOutPlan'] = $data['proIDOutPlan']->count() -  $data['report_quarterCountOutPlan'] ;
+        // $data['report_quarteOutPlan'] = DB::table('report_quarters')->whereIn('proID',$data['proIDOutPlan'])->get();
+        $data['report_quarteOutPlan'] = DB::table('report_quarters as report')
+        ->join('projects','projects.proID','=','report.proID')
+        ->whereBetween('projects.statusID',[4,7])
+        ->where([['projects.proTypeID',4],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])->get();
+        
+        // $data['proIDOutPlan'] = 
+        $data['no_ReportOutPlan'] = $data['proIDOutPlan']->count() -  $data['report_quarteOutPlan']->count() ;
 
     return view('Performance.index',compact('data'));
     }

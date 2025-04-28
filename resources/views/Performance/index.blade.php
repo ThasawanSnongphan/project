@@ -58,7 +58,7 @@
                                 <h3 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการ
                                     และโครงการนอกแผนปฏิบัติการ
                                     ประจำปีงบประมาณ พ.ศ. {{ $data['year']->year }} ({{$data['quarter']->name}})</h3>
-                                <h6 style="text-align: center">ข้อมูลจากระบบ ... ณ {{ now() }}</h6> <br>
+                                <h6 style="text-align: center">ข้อมูลจากระบบ E-planning ณ {{ now()->setTimezone('Asia/Bangkok')  }}</h6> <br>
 
                                 <div class="d-flex justify-content-center" style="text-align: center">
                                     <div class="card border-secondary mb-3" style="width: 33%;">
@@ -72,32 +72,32 @@
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา
                                                 </p>
                                                 <p class="card-text" style="text-align: right">
-                                                    {{ $data['projectEvaCompleteAll'] }}
+                                                    {{ $data['projectEvaCompleteAll']->count() }}
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">
                                                     ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
                                                 <p class="card-text" style="text-align: right">
-                                                    {{ $data['projectEvaDeadlineAll'] }}
+                                                    {{ $data['projectEvaDeadlineAll']->count() }}
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/ขอเลื่อน</p>
                                                 <p class="card-text" style="text-align: right">
-                                                    {{ $data['projectEvaPostponedAll'] }}
+                                                    {{ $data['projectEvaPostponedAll']->count() }}
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
                                                 <p class="card-text" style="text-align: right">
-                                                    {{ $data['projectEvaCancleAll'] }}
+                                                    {{ $data['projectEvaCancleAll']->count() }}
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
                                                 <p class="card-text" style="text-align: right">
-                                                    {{ $data['report_quarterCountAll'] }}
+                                                    {{ $data['report_quarterAll']->count() }}
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
@@ -121,6 +121,7 @@
 
                                             <form action="/Performance" id="projectEvaCompleteInPlan">
                                                 <input type="hidden" name="yearID" value="{{ request('yearID') }}">
+                                                <input type="hidden" name="quarID" value="{{ request('quarID') }}">
                                                 <input type="hidden" name="projectEvaCompleteInPlan"
                                                     value="{{ $data['projectEvaCompleteInPlan'] }}">
                                                 <div class="d-flex justify-content-between">
@@ -156,7 +157,7 @@
                                                         name="detail_report_quar"value="{{ $data['report_quarteInPlan']->pluck('proID') }}">
                                                     <p class="card-text" style="text-align: right"><a href="#"
                                                             onclick="submit()">
-                                                            {{ $data['report_quarterCountInPlan'] }}</a> </p>
+                                                            {{ $data['report_quarteInPlan']->count() }}</a> </p>
                                                 </div>
                                             </form>
 
@@ -174,35 +175,35 @@
                                             <h4>โครงการนอกแผนปฏิบัติการ</h4>
                                         </div>
                                         <div class="card-body text-secondary">
-                                            <h5 class="card-title">{{ $data['projectCountOutPlan'] }}</h5>
+                                            <h5 class="card-title">{{ $data['projectOutPlanAll']->count() }}</h5>
                                             <hr>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/เสร็จตามระยะเวลา
                                                 </p>
                                                 <p class="card-text" style="text-align: right"><a
-                                                        href="">{{ $data['projectEvaCompleteOutPlan'] }}</a></p>
+                                                        href="">{{ $data['projectEvaCompleteOutPlan']->count() }}</a></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">
                                                     ปิดโครงการ/ไม่เป็นไปตามระยาเวลา</p>
                                                 <p class="card-text" style="text-align: right"><a
-                                                        href="">{{ $data['projectEvaDeadlineOutPlan'] }} </a></p>
+                                                        href="">{{ $data['projectEvaDeadlineOutPlan']->count() }} </a></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/ขอเลื่อน</p>
                                                 <p class="card-text" style="text-align: right"><a
-                                                        href="">{{ $data['projectEvaPostponedOutPlan'] }}</a> </p>
+                                                        href="">{{ $data['projectEvaPostponedOutPlan']->count() }}</a> </p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 <p class="card-text" style="text-align: left">ปิดโครงการ/ขอยกเลิก</p>
                                                 <p class="card-text" style="text-align: right"><a
-                                                        href="">{{ $data['projectEvaCancleOutPlan'] }}</a></p>
+                                                        href="">{{ $data['projectEvaCancleOutPlan']->count() }}</a></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 {{-- นับจากที่กรอกรายงานไตรมาส --}}
                                                 <p class="card-text" style="text-align: left">อยู่ระหว่างดำเนินการ</p>
                                                 <p class="card-text" style="text-align: right"><a
-                                                        href="">{{ $data['report_quarterCountOutPlan'] }} </a></p>
+                                                        href="">{{ $data['report_quarteOutPlan']->count() }} </a></p>
                                             </div>
                                             <div class="d-flex justify-content-between">
                                                 {{-- นับจากรายงานรายไตรมาส --}}
@@ -364,15 +365,11 @@
 
     <script>
         function submitForm() {
-
             document.getElementById('actionForm').submit();
-
         }
 
         function projectEvaCompleteInPlan() {
-
             document.getElementById('projectEvaCompleteInPlan').submit();
-
         }
 
         function submit() {

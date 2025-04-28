@@ -52,9 +52,17 @@ class Executive extends Controller
         $proID = $project->pluck('proID');
         // dd($proID);
         $users = $users=DB::table('users')->get();
+         
         $report_quarter = DB::table('report_quarters')->whereIn('proID',$proID)->get();
+        
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
+        // dd($data['evaluation']);
+
         // dd($report_quarter);
-        return view('Executive.projectlist',compact('users','project','year','projectYear','report_quarter'));
+        return view('Executive.projectlist',compact('users','project','year','projectYear','report_quarter','data'));
     }
 
     function projectOutPlan(){
@@ -74,7 +82,10 @@ class Executive extends Controller
         $data['year'] = Year::all();
         $data['projectYear'] = Projects::with('year')->get();
         $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
-
+        $data['evaluation']=DB::table('projects')
+        ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
+        ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
+        ->get();
         // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
 
         // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
@@ -143,7 +154,13 @@ class Executive extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        return redirect('/ExecutiveProjectlist');
+        if($project->proID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
+        
+       
     }
     function ExecutiveApprove(Request $request, $id){
         DB::table('projects')->where('proID',$id)->update(['statusID' => 4]);
@@ -182,7 +199,13 @@ class Executive extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        return redirect('/ExecutiveProjectlist');
+        if($project->proID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
+
+        
     }
     function ExecutiveDenied(Request $request,$id){
         $request->validate([
@@ -218,8 +241,13 @@ class Executive extends Controller
             ));
         }
 
+        if($project->proID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
 
-        return redirect('/ExecutiveProjectlist');
+        
     }
     function ExecutiveEdit(Request $request,$id){
         $request->validate([
@@ -252,7 +280,12 @@ class Executive extends Controller
                 ]
             ));
         }
-        return redirect('/ExecutiveProjectlist');
+        if($project->proID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
+        
     }
     
     //เอกสารประเมินโครงการ
@@ -337,7 +370,7 @@ class Executive extends Controller
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-
+       
         return redirect('/ExecutiveProjectlist');
     }
     function EvaluationEdit(Request $request,$id){

@@ -92,11 +92,13 @@ class QuarterReportController extends Controller
         $KPIMain3LVID = $request->KPIMain3LVID;
         $result3LV = $request->result3LV;
         $column = "result" . $quarter;
+        if (is_array($KPIMain3LVID)) {
         foreach($KPIMain3LVID as $index => $KPI){
             DB::table('k_p_i_main_map_projects')
             ->where('proID',$id)
             ->where('KPIMain3LVID',$KPI)
             ->update([$column=>$result3LV[$index]]);
+        }
         }
         $KPIMain2LVID = $request->KPIMain2LVID;
         $result2LV = $request->result2LV;

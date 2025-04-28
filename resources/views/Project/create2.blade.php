@@ -485,7 +485,7 @@
                                     </div>
                                     <div class="row col-md-3 col-sm-3 m-1">
                                         <input class="form-control" type="text" name="targetProject[]"
-                                            inputmode="decimal" pattern="[0-9]*" id="targetKPI" required>
+                                            inputmode="decimal"  id="targetKPI" required>
                                         <div class="invalid-feedback">
                                             กรุณากรอกเฉพาะตัวเลขหรือทศนิยมเท่านั้น
                                         </div>
@@ -730,11 +730,7 @@
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <input class="form-control" type="text" name="benefit[]" id="benefit" required>
-                                {{-- @error('benefit.*')
-                                    <div class="m-2">
-                                        <span class="text text-danger">{{ $message }}</span>
-                                    </div>
-                                @enderror --}}
+                                
                             </div>
                             <div class="col-md-1 col-sm-1 ">
                                 <button type='button' class="btn btn-primary" onclick="insertBenefit()">เพิ่ม</button>
@@ -759,7 +755,7 @@
 
 
                         <div class="ln_solid">
-                            <div class="form-group ">
+                            <div class="form-group text-center">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-primary">บันทึก</button>
                                 </div>
@@ -1303,27 +1299,7 @@
         }
 
 
-        $(document).ready(function() {
-            // $('planID').change(function(event){
-            //     var planID = this.value;
-            //     console.log(planID);
-            //     // $('[id^="expID_"]');
-            //     $('exp');
-            //     $.ajax({
-            //         url: "/projectfund",
-            //         type: "POST",
-            //         dataType: 'json',
-            //         data:{
-            //             planID: planID,
-            //             _token: "{{ csrf_token() }}"
-            //         },
-            //         success: function(response) {
-            //             $('expID').html('<option value="">--</option>');
-            //         }
-            //     });
-            // })
-
-        })
+       
 
         function insertCostType() {
             const dropdownCount = document.querySelectorAll('.Expense').length + 1;
@@ -1739,8 +1715,6 @@
 
         function updateExpenseDropdown(selectedPlanID) {
             // console.log(selectedPlanID);
-
-
             const expenseSelect = document.getElementById('expID');
             expenseSelect.innerHTML = '';
 

@@ -52,53 +52,87 @@
                     <td>{{ $item->status->name ?? 'ไม่พบ' }}</td>
                     {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                     <td>
-                        @if ($currentMonth >= 10 && $currentMonth <= 12)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> ดูรายงาน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    ดูรายงาน</i></a>
-                        @endif
-                    </td>
-                    <td>
-
-                        @if ($currentMonth >= 1 && $currentMonth <= 3 )
+                        {{-- @if ($item->statusID == 5) --}}
+                            @php
+                                $q1 = false;
+                                foreach ($data['evaluation'] as $eva){
+                                    if ($eva->proID == $item->proID && $eva->quarID == 1){
+                                        $q1 = true;
+                                    }
+                                }
+                            @endphp
+                            @if ($q1)
+                            <a href="{{ route('report.quarter', [$item->proID, 1]) }}"><i
+                                class="fa fa-eye btn btn-primary"> ดูรายงาน</i> </a>
+                            @else
+                            <a href="#" class="disabled"><i class="fa fa-eye btn btn-secondary disabled">
+                                ดูรายงาน</i></a> 
+                            @endif
+                        {{-- @elseif($item->statusID == 1) --}}
                         
-                            @if (($report_quarter[$index]->proID ?? '') == $item->proID )
-                                <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
-                                        class="fa fa-pencil btn btn-primary"> ดูรายงาน</i> </a>
-                            @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        ดูรายงาน</i>  </a>
-                            @endif
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    ดูรายงาน</i></a>
-                        @endif
+                        {{-- @endif --}}
+
+                        
                     </td>
                     <td>
-                        @if ($currentMonth >= 4 && $currentMonth <= 6)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            @if (($report_quarter[$index]->proID ?? '') === $item->proID)
-                                <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
-                                        class="fa fa-pencil btn btn-primary"> ดูรายงาน</i> </a>
+                        {{-- @if ($item->statusID == 5) --}}
+                            @php
+                                $q1 = false;
+                                foreach ($data['evaluation'] as $eva){
+                                    if ($eva->proID == $item->proID && $eva->quarID == 2){
+                                        $q1 = true;
+                                    }
+                                }
+                            @endphp
+                            @if ($q1)
+                            <a href="{{ route('report.quarter', [$item->proID, 2]) }}"><i
+                                class="fa fa-eye btn btn-primary"> ดูรายงาน</i> </a>
                             @else
-                                <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                        ดูรายงาน</i></a>
+                            <a href="#" class="disabled"><i class="fa fa-eye btn btn-secondary disabled">
+                                ดูรายงาน</i></a> 
                             @endif
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    ดูรายงาน</i></a>
-                        @endif
+                        
+                        
                     </td>
                     <td>
-                        @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 4)
-                            <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                            <a href=""><i class="fa fa-pencil btn btn-primary"> เขียน</i></a>
-                        @else
-                            <a href="#" class="disabled"><i class="fa fa-pencil btn btn-secondary disabled">
-                                    ดูรายงาน</i></a>
-                        @endif
+                        
+                            @php
+                                $q1 = false;
+                                foreach ($data['evaluation'] as $eva){
+                                    if ($eva->proID == $item->proID && $eva->quarID == 3){
+                                        $q1 = true;
+                                    }
+                                }
+                            @endphp
+                            @if ($q1)
+                            <a href="{{ route('report.quarter', [$item->proID, 3]) }}"><i
+                                class="fa fa-eye btn btn-primary"> ดูรายงาน</i> </a>
+                            @else
+                            <a href="#" class="disabled"><i class="fa fa-eye btn btn-secondary disabled">
+                                ดูรายงาน</i></a> 
+                            @endif
+                       
+                        
+                    </td>
+                    <td>
+                        
+                            @php
+                                $q1 = false;
+                                foreach ($data['evaluation'] as $eva){
+                                    if ($eva->proID == $item->proID && $eva->quarID == 4){
+                                        $q1 = true;
+                                    }
+                                }
+                            @endphp
+                            @if ($q1)
+                            <a href="{{ route('report.quarter', [$item->proID, 4]) }}"><i
+                                class="fa fa-eye btn btn-primary"> ดูรายงาน</i> </a>
+                            @else
+                            <a href="#" class="disabled"><i class="fa fa-eye btn btn-secondary disabled">
+                                ดูรายงาน</i></a> 
+                            @endif
+                        
+                       
                     </td>
 
                 </tr>
