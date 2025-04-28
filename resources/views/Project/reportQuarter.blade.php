@@ -11,18 +11,19 @@
                     @else
                         <h2>เขียนรายงานความก้าวหน้า ไตรมาส{{ $data['quarter'] }}</h2>
                     @endif
-                    
+
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
                         @if (!empty($data['evaluation']))
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-expanded="false"><i class="fa fa-file-text"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="{{ route('detail.evaluation', $data['project']->proID) }}">รายงานผลประเมิน</a>
-                            </div>
-                        </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                    aria-expanded="false"><i class="fa fa-file-text"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item"
+                                        href="{{ route('detail.evaluation', $data['project']->proID) }}">รายงานผลประเมิน</a>
+                                </div>
+                            </li>
                         @endif
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
                         </li>
@@ -223,14 +224,17 @@
 
                         </div>
                         <div id="insertProblem"></div>
-                        <div class="col-md-6 offset-md-3 ">
+                        <div class="col-md-6 offset-md-3 text-center">
                             @if (!empty($data['quarterReport']))
                                 @if (empty($data['evaluation']))
                                     <button type="button" class="btn btn-danger"
                                         onclick="submitButton('evaluation',{{ $data['project']->proID }})">กรอกข้อมูลขอปิดโครงการ</button>
                                 @endif
                             @else
-                                <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">ส่งรายงานความก้าวหน้า</button>
+                                </div>
+
                             @endif
                         </div>
                     </form>

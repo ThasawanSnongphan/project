@@ -114,13 +114,13 @@
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>วัตถุประสงค์</b></label>
                                 <div class="col-md-8 col-sm-8">
                                    @foreach ($data['obj'] as $item)
-                                       -{{$item->detail}} <br> 
+                                       -{{$item->detail}} <br>
                                        @if ($item->achieve == 1)
                                             <input type="radio" name="obj_{{$item->objID}}" value="1" checked> บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0"> ไม่บรรลุ <br>
                                        @else
                                        <input type="radio" name="obj_{{$item->objID}}" value="1" > บรรลุ  <input type="radio" name="obj_{{$item->objID}}" required value="0" checked> ไม่บรรลุ <br>
                                        @endif
-                                      
+
                                    @endforeach
                                 </div>
                             </div>
@@ -129,24 +129,24 @@
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการดำเนินงาน</b></label>
                                 <div class="col-md-8 col-sm-8">
                                     @foreach ($data['operating'] as $item)
-                                        <input type="radio" name="operating" value="{{$item->operID}}"  onchange="operatingRadio(this)"  
+                                        <input type="radio" name="operating" value="{{$item->operID}}"  onchange="operatingRadio(this)"
                                         @if ($data['evaluation']->operID === $item->operID) checked @endif> {{$item->name}} <br>
-                                        
+
                                     @endforeach
                                 </div>
                             </div>
-                           
+
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"></label>
                                 <div class="col-md-7 col-sm-7 d-flex">
                                         <input type="text" name="since" class="form-control" placeholder="เนื่องจาก" id="operatingInput"
-                                        @if (!empty($data['evaluation']->since)) value="{{$data['evaluation']->since}}" style="display: flex;"  
-                                        @else style="display: none;" @endif > 
+                                        @if (!empty($data['evaluation']->since)) value="{{$data['evaluation']->since}}" style="display: flex;"
+                                        @else style="display: none;" @endif >
                                 </div>
                             </div>
-                           
-                           
-                            
+
+
+
 
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>ผลการดำเนินงานตามตัวชี้วัดโครงการ</b></label>
@@ -157,7 +157,7 @@
                                    @endforeach
                                 </div>
                             </div>
-                            
+
                             <div class="row field item form-group ">
                                 <label class="col-form-lable col-md-3 col-sm-3 label-align"><b>งบประมาณที่ใช้ดำเนินการ</b></label>
                                 <div class="col-md-8 col-sm-8">
@@ -202,7 +202,7 @@
 
                             <div class="ln_solid">
                                 <div class="form-group">
-                                    <div class="col-md-6 offset-md-3">
+                                    <div class="col-md-6 offset-md-3 text-center">
                                         <button type='button' class="btn btn-primary" onclick="submitButton('update',{{$data['project']->proID}})">บันทึก</button>
                                         <button type='button' class="btn btn-primary" onclick="submitButton('send',{{$data['project']->proID}})">ส่ง</button>
                                     </div>
@@ -225,10 +225,10 @@
                 operatingInput.value = '';
             }else{
                 operatingInput.style.display = "none";
-                operatingInput.required = false;   
+                operatingInput.required = false;
             }
         }
-       
+
 
         function submitButton(action,proID){
             var form = document.getElementById('actionForm');

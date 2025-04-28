@@ -28,7 +28,9 @@
                             <a class="dropdown-item" href="#">Settings 2</a>
                         </div>
                     </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    {{-- <li><a class="close-link"><i class="fa fa-close"></i></a> --}}
+                        <li><a href="/DepartmentHeadProject"><i class="fa fa-arrow-left"></i></a></li>
+
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -304,7 +306,7 @@
                         </div>
                     </div>
                     @endif
-                    
+
                 </form>
                 @if (count($data['comment']) > 0)
                 <div class="row field item form-group " >
