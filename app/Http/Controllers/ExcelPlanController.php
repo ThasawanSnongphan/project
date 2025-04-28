@@ -610,7 +610,7 @@ class ExcelPlanController extends Controller
         $sheet->getStyle('A' . $row)->applyFromArray($centerAlignment);
 
         $row += 2;
-        
+
         //กำหนดช่วงของตารางที่ต้องการใส่ border (ตั้งแต่แถว 4 ถึงแถวสุดท้าย)
         $startRow = $row;
 
