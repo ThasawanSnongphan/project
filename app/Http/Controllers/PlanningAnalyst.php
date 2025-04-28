@@ -38,6 +38,22 @@ use Carbon\Carbon;
 
 class PlanningAnalyst extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function projectAll(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
@@ -81,7 +97,8 @@ class PlanningAnalyst extends Controller
         // dd($project);
         $status=Status::all();
         $users = $users=DB::table('users')->get();
-        return view('Planning_Analyst.projectOutPlan',compact('users','project','status','year','projectYear'));
+        $data['report'] = DB::table('report_quarters')->get();
+        return view('Planning_Analyst.projectOutPlan',compact('users','project','status','year','projectYear','data'));
     }
     function projectCancel(){
         $data['year'] = Year::all();
@@ -174,7 +191,14 @@ class PlanningAnalyst extends Controller
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-        return redirect('/PlanningAnalystProject');
+
+        if($project->proTypeID == 3){
+            return redirect('/PlanningAnalystProject');
+        }else{
+            return redirect('/PlanningAnalystProjectOutPlan');
+        }
+
+        
     }
 
     //เอกสารประเมินโครงการ

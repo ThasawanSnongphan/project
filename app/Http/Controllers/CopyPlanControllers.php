@@ -11,6 +11,22 @@ use Illuminate\Support\Facades\DB;
 
 class CopyPlanControllers extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index($id){
         $data['year']=Year::all();
         $data['strategic']=DB::table('strategic3_levels')->where('stra3LVID',$id)->first();

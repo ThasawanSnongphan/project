@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class YearController extends Controller
 {
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year=DB::table('years')->get();
         return view('Year.index',compact('year'));

@@ -27,7 +27,7 @@
                         <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <select id="yearID" name="yearID" class="form-control" required>
+                            <select id="yearID" name="yearID" class="form-control" required >
                                 @foreach ($year as $item)
                                     <option value="{{$item->yearID}}">{{$item->year}}</option>
                                 @endforeach

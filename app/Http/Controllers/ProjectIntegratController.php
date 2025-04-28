@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectIntegratController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $project_integrat=DB::table('project_integrats')->get();
         return view('ProjectIntegrat.index',compact('project_integrat'));

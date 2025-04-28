@@ -38,6 +38,22 @@ use Carbon\Carbon;
 
 class Department_Head extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
@@ -85,7 +101,15 @@ class Department_Head extends Controller
         // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
 
         // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
-        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+        
+        // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+        // $data['department'] = DB::table('users_map_projects')->whereIn('proID',$data['project']->pluck('proID'))->get();
+        $data['project'] = Projects::with('status')
+        ->join('users_map_projects as map','projects.proID','=','map.proID')
+        ->join('users','map.userID','=','users.userID')
+        ->whereIn('projects.statusID',[15,11])
+        ->where('users.department_name',Auth()->user()->department_name)->get();
+        // dd($data['project']);
         $data['evaluation']=DB::table('projects')
         ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
         ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')

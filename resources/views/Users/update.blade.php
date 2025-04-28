@@ -45,29 +45,29 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="{{route('users.update',$users->userID)}}" method="post" novalidate>
+                                <form action="{{route('users.update',$users->userID)}}" method="post" >
                                     @csrf
                                     <div class="field item form-group">
                                         <label for="username" class="col-form-label col-md-3 col-sm-3  label-align">UserName<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input type="text" class="form-control" data-validate-length-range="6" data-validate-words="2" name="username" id="username" required="required"  value="{{$users->username}}" />
+                                            <input type="text" class="form-control"  name="username" id="username" required value="{{$users->username}}" />
                                         </div>
                                     </div>
                                     <div class="field item form-group">
                                         <label for="email" class="col-form-label col-md-3 col-sm-3  label-align">email<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" name="email" id="email" class='email' required="required" type="email" value="{{$users->email}}" /></div>
+                                            <input class="form-control" name="email" id="email" class='email' required type="email" value="{{$users->email}}" /></div>
                                     </div>
 
                                     <div class="field item form-group">
                                         <label for="displayname" class="col-form-label col-md-3 col-sm-3  label-align">email<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" name="displayname" id="displayname"  required="required" type="text" value="{{$users->displayname}}" /></div>
+                                            <input class="form-control" name="displayname" id="displayname"  required type="text" value="{{$users->displayname}}" /></div>
                                     </div>
                                     <div class="field item form-group">
                                         <label for="person_key" class="col-form-label col-md-3 col-sm-3  label-align">email<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" name="person_key" id="person_key"  required="required" type="text" value="{{$users->person_key}}" /></div>
+                                            <input class="form-control" name="person_key" id="person_key"  required type="text" value="{{$users->person_key}}" /></div>
                                     </div>
                                     {{-- <div class="field item form-group">
                                         <label for="password1" class="col-form-label col-md-3 col-sm-3  label-align">Password<span class="required">*</span></label>
@@ -137,7 +137,7 @@
                                     <div class="field item form-group">
                                         <label for="position_name" class="col-form-label col-md-3 col-sm-3  label-align">position_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="position_name" id="position_name" required='required' data-validate-length-range="8,20" value="{{$users->position_name}}"/></div>
+                                            <input class="form-control" type="text"  name="position_name" id="position_name" required  value="{{$users->position_name}}"/></div>
                                     </div>
                                     {{-- <div class="field item form-group">
                                         <label for="position_type_id" class="col-form-label col-md-3 col-sm-3  label-align">position_type_id<span class="required">*</span></label>
@@ -157,7 +157,7 @@
                                     <div class="field item form-group">
                                         <label for="faculty_name" class="col-form-label col-md-3 col-sm-3  label-align">faculty_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text"  name="faculty_name" id="faculty_name" required='required' data-validate-length-range="8,20" value="{{$users->faculty_name}}" /></div>
+                                            <input class="form-control" type="text"  name="faculty_name" id="faculty_name" required value="{{$users->faculty_name}}" /></div>
                                     </div>
                                     {{-- <div class="field item form-group">
                                         <label for="department_code" class="col-form-label col-md-3 col-sm-3  label-align">department_code<span class="required">*</span></label>
@@ -167,7 +167,7 @@
                                     <div class="field item form-group">
                                         <label for="department_name" class="col-form-label col-md-3 col-sm-3  label-align">department_name<span class="required">*</span></label>
                                         <div class="col-md-6 col-sm-6">
-                                            <input class="form-control" type="text" name="department_name" id="department_name" required='required' data-validate-length-range="8,20" value="{{$users->department_name}}" /></div>
+                                            <input class="form-control" type="text" name="department_name" id="department_name" required value="{{$users->department_name}}" /></div>
                                     </div>
                                     <div class="field item form-group">
                                         <label class="col-form-label col-md-3 col-sm-3 label-align">Executive
@@ -254,9 +254,9 @@
                              
 
                                     <div class="ln_solid">
-                                        <div class="form-group">
+                                        <div class="form-group text-center">
                                             <div class="col-md-6 offset-md-3">
-                                                <button type='submit' class="btn btn-success">Update</button>
+                                                <button type='submit' class="btn btn-warning">Edit</button>
                                                 <a href="/users"><button type='button' class="btn btn-danger">Back</button></a>
                                             </div>
                                         </div>

@@ -25,11 +25,17 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-expanded="false"><i class="fa fa-file-text"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}" target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
-                            <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
+                            <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}"
+                                target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
+                            <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i
+                                    class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
                     </li>
-                    <li><a href="/project"><i class="fa fa-arrow-left"></i></a>
+                    @if ($data['project']->proTypeID == 3)
+                        <li><a href="/PlanningAnalystProject"><i class="fa fa-arrow-left"></i></a></li>
+                    @else
+                        <li><a href="/PlanningAnalystProjectOutPlan"><i class="fa fa-arrow-left"></i></a></li>
+                    @endif
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -301,17 +307,18 @@
                     </div>
                     @if (count($data['file']) > 0)
                         <div class="row field item form-group ">
-                        <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
-                                :</b></label>
-                        <div class="col-md-7 col-sm-7">
-                            @foreach ($data['file'] as $item)
-                                <a href="{{ asset('files/' . $item->name) }}" target="_blank">{{ $item->name }}</a>
-                                <br>
-                            @endforeach
+                            <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ไฟล์เอกสารประกอบโครงการ
+                                    :</b></label>
+                            <div class="col-md-7 col-sm-7">
+                                @foreach ($data['file'] as $item)
+                                    <a href="{{ asset('files/' . $item->name) }}"
+                                        target="_blank">{{ $item->name }}</a>
+                                    <br>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     @endif
-                    
+
                 </form>
 
                 {{-- <div class="ln_solid"> --}}
@@ -328,7 +335,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 <form action="" method="POST" id="actionForm">
                     @csrf
                     <div class="row field item form-group ">
@@ -354,7 +361,7 @@
                 </form>
                 {{-- </div> --}}
             </div>
-            <div class="clearfix"></div> 
+            <div class="clearfix"></div>
         </div>
         {{-- <table class="table table-bordered">
             <tr>

@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class ProjectTypeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $project_type=DB::table('project_types')->get();
         return view('ProjectType.index',compact('project_type'));

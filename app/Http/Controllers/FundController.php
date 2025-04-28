@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class FundController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $plan=UniPlan::all();
         $fund=DB::table('funds')->get();

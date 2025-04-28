@@ -12,6 +12,22 @@ use Illuminate\Http\Request;
 
 class SupplyAnalystController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();

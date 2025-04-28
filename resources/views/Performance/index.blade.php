@@ -231,12 +231,20 @@
                                                         </a>
                                                     </p>
                                                 </div>
-                                                <div class="d-flex justify-content-between">
-                                                    {{-- นับจากรายงานรายไตรมาส --}}
-                                                    <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
-                                                    <p class="card-text" style="text-align: right"><a
-                                                            href="">{{ $data['no_ReportOutPlan'] }}</a></p>
-                                                </div>
+                                                <form action="/Performance" id="no_ReportOutPlan">
+                                                    <input type="hidden" name="yearID"
+                                                        value="{{ request('yearID') }}">
+                                                    <input type="hidden" name="quarID"
+                                                        value="{{ request('quarID') }}">
+                                                        <input type="hidden" name="no_ReportOutPlan"
+                                                        value="{{ $data['no_ReportOutPlan'] }}">
+                                                    <div class="d-flex justify-content-between">
+                                                        {{-- นับจากรายงานรายไตรมาส --}}
+                                                        <p class="card-text" style="text-align: left">ยังไม่รายงานผล</p>
+                                                        <p class="card-text" style="text-align: right"><a
+                                                                href="">{{ $data['no_ReportOutPlan'] }}</a></p>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

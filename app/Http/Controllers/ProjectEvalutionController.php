@@ -20,6 +20,7 @@ use Carbon\Carbon;
 
 class ProjectEvalutionController extends Controller
 {
+    
     public function evaluation($id){
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         // dd($data['project']);

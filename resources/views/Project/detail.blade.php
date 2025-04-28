@@ -29,15 +29,24 @@
                 <h2>เอกสารเสนอโครงการ</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li class="dropdown">
+                    @if (Auth()->check())
+                        <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-expanded="false"><i class="fa fa-file-text"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}" target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
                             <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
+                        
                     </li>
+                    @endif
+                    
+                    {{-- @if ($data['project']->proTypeID == 3)
                     <li><a href="/project"><i class="fa fa-arrow-left"></i></a></li>
+                    @else
+                    <li><a href="/projectOutPlan"><i class="fa fa-arrow-left"></i></a></li>
+                    @endif --}}
+                    
                 </ul>
                 <div class="clearfix"></div>
             </div>
