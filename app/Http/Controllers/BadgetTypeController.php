@@ -51,7 +51,7 @@ class BadgetTypeController extends Controller
 
     function edit($id){
         $badget_type=DB::table('badget_Types')->where('badID',$id)->first();
-        return view('badgetType.update',compact('badget_type'));
+        return view('BadgetType.update',compact('badget_type'));
     }
     function update(Request $request,$id){
         $request->validate(

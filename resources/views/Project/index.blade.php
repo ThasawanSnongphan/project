@@ -65,9 +65,10 @@
                                                 </td>
 
                                                 <td>
-                                                    
+
                                                     @if ($item->statusID == 4)
                                                         @if (count($data['dateQuarter1']) > 0)
+                                                        
                                                             @foreach ($data['dateQuarter1'] as $date)
                                                                 @if ($date->yearID == $item->yearID && $currentDate >= $date->startDate && $currentDate <= $date->endDate)
                                                                     @php
@@ -153,7 +154,10 @@
                                                             </a>
                                                         @endif
                                                     @else
-                                                        @php
+                                                        <a href="#" class="disabled"><i
+                                                                class="fa fa-pencil btn btn-secondary disabled">
+                                                                เขียน</i></a>
+                                                        {{-- @php
                                                             $q1 = false;
                                                             foreach ($data['evaluation'] as $eva) {
                                                                 if ($eva->proID == $item->proID && $eva->quarID == 1) {
@@ -168,7 +172,7 @@
                                                             <a href="#" class="disabled"><i
                                                                     class="fa fa-eye btn btn-secondary disabled">
                                                                     ดูรายงาน</i></a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
 
                                                 </td>
@@ -295,7 +299,10 @@
                                                             </a>
                                                         @endif
                                                     @else
-                                                        @php
+                                                    <a href="#" class="disabled"><i
+                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                        เขียน</i></a>
+                                                        {{-- @php
                                                             $q1 = false;
                                                             foreach ($data['evaluation'] as $eva) {
                                                                 if ($eva->proID == $item->proID && $eva->quarID == 2) {
@@ -310,7 +317,7 @@
                                                             <a href="#" class="disabled"><i
                                                                     class="fa fa-eye btn btn-secondary disabled">
                                                                     ดูรายงาน</i></a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
 
                                                 </td>
@@ -440,7 +447,10 @@
                                                             </a>
                                                         @endif
                                                     @else
-                                                        @php
+                                                    <a href="#" class="disabled"><i
+                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                        เขียน</i></a>
+                                                        {{-- @php
                                                             $q1 = false;
                                                             foreach ($data['evaluation'] as $eva) {
                                                                 if ($eva->proID == $item->proID && $eva->quarID == 3) {
@@ -455,7 +465,7 @@
                                                             <a href="#" class="disabled"><i
                                                                     class="fa fa-eye btn btn-secondary disabled">
                                                                     ดูรายงาน</i></a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
                                                 </td>
                                                 <td>
@@ -576,7 +586,10 @@
                                                             @endif
                                                         @endforeach --}}
                                                     @else
-                                                        @php
+                                                    <a href="#" class="disabled"><i
+                                                        class="fa fa-pencil btn btn-secondary disabled">
+                                                        เขียน</i></a>
+                                                        {{-- @php
                                                             $q1 = false;
                                                             foreach ($data['evaluation'] as $eva) {
                                                                 if ($eva->proID == $item->proID && $eva->quarID == 4) {
@@ -591,7 +604,7 @@
                                                             <a href="#" class="disabled"><i
                                                                     class="fa fa-eye btn btn-secondary disabled">
                                                                     ดูรายงาน</i></a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
                                                 </td>
                                                 <td>

@@ -36,10 +36,7 @@ class YearController extends Controller
     function insert(Request $request ){
         $request->validate(
             [
-                'year'=>'required'
-            ],
-            [
-                'year.required'=>'กรุณากรอกปีงบประมาณ'
+                'year'=>'unique:years,year'
             ]
         );
         $year = new Year();

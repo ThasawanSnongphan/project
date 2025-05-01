@@ -34,6 +34,7 @@ class DateReportQuarterController extends Controller
     }
 
     function insert(Request $request){
+        
         $date = new DateReportQuarter();
         $date->startDate = $request->input('startDate');
         $date->endDate = $request->input('endDate');

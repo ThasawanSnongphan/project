@@ -29,9 +29,7 @@ class StatusController extends Controller
         return view('Status.index',compact('status'));
     }
 
-    function create(){
-        return view('status.create');
-    }
+   
 
     function insert(Request $request ){
         $request->validate(
@@ -55,7 +53,7 @@ class StatusController extends Controller
 
     function edit($id){
         $status=DB::table('statuses')->where('statusID',$id)->first();
-        return view('status.update',compact('status'));
+        return view('Status.update',compact('status'));
     }
     function update(Request $request,$id){
         $request->validate(

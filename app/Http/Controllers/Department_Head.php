@@ -146,7 +146,7 @@ class Department_Head extends Controller
     }
 
     function departmentPass(Request $request, $id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '2']);
+         DB::table('projects')->where('proID',$id)->update(['statusID' => '2']);
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
@@ -200,7 +200,13 @@ class Department_Head extends Controller
             // dd($mailData);
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
+        
+        
     }
 
     function departmentEdit(Request $request,$id){
@@ -240,7 +246,11 @@ class Department_Head extends Controller
                 ));
         }
         // dd($users);
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
     }
 
 
@@ -331,7 +341,11 @@ class Department_Head extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
     }
 
     function EvaluationEdit(Request $request,$id){
@@ -366,6 +380,10 @@ class Department_Head extends Controller
                     ]
                     ));
             }
-        return redirect('/DepartmentHeadProject');
+            if ($project->proTypeID == 3) {
+                return redirect('/DepartmentHeadProject');
+            } else {
+                return redirect('/DepartmentHeadProjectOutPlan');
+            }
     }
 }

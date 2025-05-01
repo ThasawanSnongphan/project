@@ -33,6 +33,11 @@ class DateInPlanControllers extends Controller
     }
 
     function insert(Request $request){
+        $request->validate(
+            [
+                'yearID'=>'unique:date_in_plans,yearID'
+            ]
+        );
         $data['date'] = new DateInPlan();
         $data['date']->startDate = $request->input('startDate');
         $data['date']->endDate = $request->input('endDate');

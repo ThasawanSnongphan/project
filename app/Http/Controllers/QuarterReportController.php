@@ -126,7 +126,8 @@ class QuarterReportController extends Controller
         ] 
         ));
 
-        if ($project->proTypeID == 3) {
+        if ($project->proTypeID == 3) { 
+          
             return redirect('/project');
         }else{
             return redirect('/projectOutPlan');

@@ -43,6 +43,7 @@
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์</label>
                             <div class="col-md-6 col-sm-6">
+                                <input type="hidden" name="stra3LVID" id="stra3LVID" value="{{$data['strategic']->stra3LVID}}">
                                 <input class="form-control" type="text" name="name" id="name" required='required'
                                     value="{{ $data['strategic']->name }}" readonly>
 
@@ -50,7 +51,7 @@
                         </div>
                         <div class="field item form-group">
                             <label for="title"
-                                class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณที่จะตัดลอก<span
+                                class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณที่จะคัดลอก<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="yearID" name="yearID" class="form-control" required>
@@ -62,21 +63,33 @@
                                 </select>
                             </div>
                         </div>
-                        @if (!empty($data['SFA3LV']))
-                            @foreach ($data['SFA3LV'] as $item)
-                                <input type="text" name="SFA3LVName[]" value="{{ $item->name }}">
+                        {{-- @if (!empty($data['SFA3LV']))
+                            @foreach ($data['SFA3LV'] as $SFA)
+                                <input type="text" name="SFA3LVName[]" value="{{ $SFA->name }}"> <br>
+                                @if (!empty($data['goal3LV']))
+                                    @foreach ($data['goal3LV'] as $goal)
+                                        @if ($goal->SFA3LVID == $SFA->SFA3LVID)
+                                            <input type="text" name="goal3LVName[]" value="{{ $goal->name }}"> <br>
+                                            @if (!empty($data['tac3LV']))
+                                                @foreach ($data['tac3LV'] as $tac)
+                                                    @if ($tac->goal3LVID == $goal->goal3LVID)
+                                                        <input type="text" name="goal3LVName[]"
+                                                            value="{{ $tac->name }}">
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @endif
+                                <br>
                             @endforeach
-                        @endif
-                        @if (!empty($data['goal']))
-                            @foreach ($data['goal'] as $item)
-                                <input type="text" name="goal3LVName[]" value="{{ $item->name }}">
-                            @endforeach
-                        @endif
+                        @endif --}}
+
                         <div class="ln_solid">
-                            <div class="form-group ">
+                            <div class="form-group text-center">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-success" value="บันทึก">Copy</button>
-                                    <button type='reset' class="btn btn-primary">back</button>
+                                    <button type='reset' class="btn btn-danger">back</button>
                                 </div>
                             </div>
                         </div>

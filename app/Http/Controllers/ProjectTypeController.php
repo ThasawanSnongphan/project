@@ -51,7 +51,7 @@ class ProjectTypeController extends Controller
 
     function edit($id){
         $project_type=DB::table('project_types')->where('proTypeID',$id)->first();
-        return view('projectType.update',compact('project_type'));
+        return view('ProjectType.update',compact('project_type'));
     }
     function update(Request $request,$id){
         $request->validate(

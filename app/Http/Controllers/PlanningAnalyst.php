@@ -290,7 +290,11 @@ class PlanningAnalyst extends Controller
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-        return redirect('/PlanningAnalystProject');
+        if($project->proTypeID == 3){
+            return redirect('/PlanningAnalystProject');
+        }else{
+            return redirect('/PlanningAnalystProjectOutPlan');
+        }
     }
 
     

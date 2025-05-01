@@ -288,10 +288,10 @@
                                             {{ $item->exp->name }} <br>
                                             {{ $item->cost->name }}
                                         </td>
-                                        <td><br>{{ $item->costQu1 }}</td>
-                                        <td><br>{{ $item->costQu2 }}</td>
-                                        <td><br>{{ $item->costQu3 }}</td>
-                                        <td><br>{{ $item->costQu4 }}</td>
+                                        <td><br>{{ $item->costQu1 }} บาท</td>
+                                        <td><br>{{ $item->costQu2 }} บาท</td>
+                                        <td><br>{{ $item->costQu3 }} บาท</td>
+                                        <td><br>{{ $item->costQu4 }} บาท</td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -302,7 +302,7 @@
                         <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ประมาณการงบประมาณที่ใช้
                             </b></label>
                         <div class="col-md-7 col-sm-7">
-                            {{ $data['project']->badgetTotal }}
+                            {{ $data['project']->badgetTotal }} บาท
                         </div>
                     </div>
 
