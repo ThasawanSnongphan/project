@@ -7,6 +7,7 @@ use App\Models\Year;
 use App\Models\Strategic3Level;
 use App\Models\StrategicIssues;
 use App\Models\Goals;
+use App\Models\KPIMainMapProjects;
 use App\Models\Tactics;
 use App\Models\KPIMains;
 use Illuminate\Http\Request;
@@ -85,16 +86,11 @@ class KPIMainController extends Controller
         $data['yearAll'] = Year::all();
         $data['selectYearID'] = $request->input('yearID');
         $data['year'] = Year::find($data['selectYearID']);
+        $data['kpiMainID'] = KPIMainMapProjects::whereNotNull('proID')
+            ->pluck('KPIMain3LVID')
+            ->values();
 
-        // ดึงเฉพาะ KPIMain3LVID ทั้งหมดที่มี proID
-        // $kpiIDs = KPIMainMapProjects::whereNotNull('proID')  // ตรวจสอบว่ามีโครงการเชื่อมโยงจริง
-        //     ->pluck('KPIMain3LVID') // ดึงเฉพาะคอลัมน์นี้
-        //     ->unique()              // ตัดค่าซ้ำ ถ้าต้องการไม่ให้ซ้ำ
-        //     ->values();             // รีเซ็ต key ให้สวยงาม
-
-        // $data = [
-        //     'kpi_ids' => $kpiIDs,
-        // ];
+        dd($data);
 
         return view('KPIMain_report.index', compact('data'));
     }
