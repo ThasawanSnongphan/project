@@ -50,7 +50,7 @@
                                         <th>#</th>
                                         <th>ปีงบประมาณ</th>
                                         <th>แผนยุทธศาสตร์</th>
-                                        <th>สถานะ</th>
+                                        {{-- <th>สถานะ</th> --}}
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -65,10 +65,10 @@
                                             <td>{{ $year->firstWhere('yearID', $stra->yearID)->year ?? 'ไม่ปีงบประมาณ' }}
                                             </td>
                                             <td>{{ $stra->name }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <input type="checkbox" class="js-switch" id="status"
                                                     name="status" checked {{ old('Supply_Analyst') ? 'checked' : '' }} />
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <a href="{{ route('strategic1LV.edit', $stra->stra1LVID) }}">
                                                     <i class="fa fa-pencil btn btn-warning"></i>

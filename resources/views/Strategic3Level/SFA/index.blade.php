@@ -77,7 +77,7 @@
                                                 <a href="{{ route('SFA.edit', $item->SFA3LVID) }}"><i
                                                         class="fa fa-pencil btn btn-warning"></i></a>
                                                 <a href="{{ route('SFA.delete', $item->SFA3LVID) }}"
-                                                    onclick="return confirm('ต้องการลบประเด็นยุทธศาสตร์ {{ $item->name }}  หรือไม่')"><i
+                                                    onclick="return confirm('ต้องการลบ {{ $item->name }}  หรือไม่')"><i
                                                         class="fa fa-times btn btn-danger"></i></a>
                                             </td>
                                         </tr>

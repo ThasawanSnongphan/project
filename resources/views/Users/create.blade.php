@@ -20,19 +20,14 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form action="/uInsert" method="post" novalidate>
+                <form action="/uInsert" method="post" >
                     @csrf
                     <div class="field item form-group">
                         <label for="username" class="col-form-label col-md-3 col-sm-3  label-align">UserName<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input type="text" class="form-control" data-validate-length-range="6"
-                                data-validate-words="2" name="username" id="username" required="required" />
-                            @error('username')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                            <input type="text" class="form-control"  name="username" id="username" required>
+                           
                         </div>
                     </div>
 
@@ -40,13 +35,9 @@
                         <label for="email" class="col-form-label col-md-3 col-sm-3  label-align">email<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
-                            <input class="form-control" name="email" id="email" class='email' required="required"
+                            <input class="form-control" name="email" id="email" class='email' required
                                 type="email" />
-                            @error('email')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                            
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -56,11 +47,7 @@
                             <input class="form-control" type="password" id="password1" name="password"
                                 title="Minimum 8 Characters Including An Upper And Lower Case Letter, A Number And A Unique Character"
                                 required />
-                            @error('password')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                            
                             {{-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}" --}}
                             <span style="position: absolute;right:15px;top:7px;" onclick="hideshow()">
                                 <i id="slash" class="fa fa-eye-slash"></i>
@@ -73,12 +60,8 @@
                             password<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="password" name="password2" id="password2"
-                                data-validate-linked='password' required='required' />
-                                @error('password2')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                data-validate-linked='password' required>
+                                
                         </div>
                     </div>
 
@@ -161,12 +144,9 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="displayname" id="displayname"
-                                required='required' data-validate-length-range="8,20" />
-                                @error('displayname')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                required>
+                                
+                           
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -175,12 +155,8 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="person_key" id="person_key"
-                                required='required' data-validate-length-range="8,20" />
-                                @error('person_key')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                required />
+                               
                         </div>
                     </div>
                     <div class="field item form-group">
@@ -189,12 +165,8 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="position_name" id="position_name"
-                                required='required' data-validate-length-range="8,20" />
-                                @error('position_name')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                required>
+                               
                         </div>
                     </div>
                     {{-- <div class="field item form-group">
@@ -245,12 +217,9 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="faculty_name" id="faculty_name"
-                                required='required' data-validate-length-range="8,20" />
-                                @error('faculty_name')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                required>
+                                
+                           
                         </div>
                     </div>
                     {{-- <div class="field item form-group">
@@ -273,12 +242,9 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="department_name" id="department_name"
-                                required='required' data-validate-length-range="8,20" />
-                                @error('department_name')
-                                <div class="m-2">
-                                    <span class="text text-danger">{{ $message }}</span>
-                                </div>
-                            @enderror
+                                required>
+                               
+                          
                         </div>
                     </div>
                     <div class="field item form-group">

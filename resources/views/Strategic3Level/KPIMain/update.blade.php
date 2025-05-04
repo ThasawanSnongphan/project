@@ -292,7 +292,7 @@
                             <div class="form-group text-center p-2">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-warning" value="บันทึก">Edit</button>
-                                    <button type='reset' class="btn btn-danger"><a href="/KPIMain" style="color: white">Back</a></button>
+                                    <a href="/KPIMain" style="color: white"><button type='button' class="btn btn-danger">Back</button></a>
                                 </div>
                             </div>
                         </div>

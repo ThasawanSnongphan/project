@@ -19,6 +19,9 @@
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="text" name="year" id="year" required>
+                            @error('year')
+                                <p style="color: red">มีปีงบประาณนี้แล้ว</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="ln_solid ">

@@ -38,6 +38,22 @@ use Carbon\Carbon;
 
 class Executive extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
@@ -68,14 +84,15 @@ class Executive extends Controller
     function projectOutPlan(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
+        $data['report'] = Db::table('report_quarters')->get();
         if(auth()->user()->username == 'prasertsakt'){
             $project=Projects::with('status')->where([['proTypeID',4]])->whereIn('statusID',[3,7])->orWhere('statusID',1)->where('approverID',auth()->id())->get();
         }else{
-            $project=Projects::with('status')->where([['proTypeID',4],['statusID',1],['approverID',auth()->id()]])->get();
+            $project=Projects::with('status')->where([['proTypeID',4],['approverID',auth()->id()]])->whereIn('statusID',[1,5])->get();
             // dd($project);
         }
         $users = $users=DB::table('users')->get();
-        return view('Executive.projectOutPlan',compact('users','project','year','projectYear'));
+        return view('Executive.projectOutPlan',compact('users','project','year','projectYear','data'));
     }
 
     function projectDenied(){
@@ -154,7 +171,7 @@ class Executive extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        if($project->proID == '3'){
+        if($project->proTypeID == '3'){
             return redirect('/ExecutiveProjectlist');
         }else {
             return redirect('/ExecutiveProjectOutPlan');
@@ -199,7 +216,7 @@ class Executive extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        if($project->proID == '3'){
+        if($project->proTypeID == '3'){
             return redirect('/ExecutiveProjectlist');
         }else {
             return redirect('/ExecutiveProjectOutPlan');
@@ -241,7 +258,7 @@ class Executive extends Controller
             ));
         }
 
-        if($project->proID == '3'){
+        if($project->proTypeID == '3'){
             return redirect('/ExecutiveProjectlist');
         }else {
             return redirect('/ExecutiveProjectOutPlan');
@@ -280,13 +297,15 @@ class Executive extends Controller
                 ]
             ));
         }
-        if($project->proID == '3'){
+        if($project->proTypeID == '3'){
             return redirect('/ExecutiveProjectlist');
         }else {
             return redirect('/ExecutiveProjectOutPlan');
         }
         
     }
+
+    
     
     //เอกสารประเมินโครงการ
     function detailEvaluation($id){
@@ -370,8 +389,13 @@ class Executive extends Controller
             }
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-       
-        return redirect('/ExecutiveProjectlist');
+        
+        if($data['project']->proTypeID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
+        
     }
     function EvaluationEdit(Request $request,$id){
         
@@ -402,7 +426,12 @@ class Executive extends Controller
                     ]
                 ));
             }
-        return redirect('/ExecutiveProjectlist');
+
+            if($data['project']->proTypeID == '3'){
+                return redirect('/ExecutiveProjectlist');
+            }else {
+                return redirect('/ExecutiveProjectOutPlan');
+            }
     }
     function EvaluationDenied(Request $request,$id){
         // $request->validate([
@@ -439,7 +468,11 @@ class Executive extends Controller
             }
             
 
-        return redirect('/ExecutiveProjectlist');
+            if($data['project']->proTypeID == '3'){
+                return redirect('/ExecutiveProjectlist');
+            }else {
+                return redirect('/ExecutiveProjectOutPlan');
+            }
     }
 
     function EvaluationApprove(Request $request, $id){
@@ -491,7 +524,11 @@ class Executive extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        return redirect('/ExecutiveProjectlist');
+        if($data['project']->proTypeID == '3'){
+            return redirect('/ExecutiveProjectlist');
+        }else {
+            return redirect('/ExecutiveProjectOutPlan');
+        }
     }
 
 }

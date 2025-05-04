@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class ProCharecController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $pro_char=DB::table('project_charecs')->get();
         return view('ProjectCharac.index',compact('pro_char'));

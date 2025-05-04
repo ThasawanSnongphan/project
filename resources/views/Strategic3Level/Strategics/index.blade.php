@@ -47,7 +47,7 @@
                                         <th>#</th>
                                         <th>ปีงบประมาณ</th>
                                         <th>แผนยุทธศาสตร์</th>
-                                        <th>สถานะ</th>
+                                        {{-- <th>สถานะ</th> --}}
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -62,16 +62,16 @@
                                             <td>{{ $year->firstWhere('yearID', $stra->yearID)->year ?? 'ไม่ปีงบประมาณ' }}
                                             </td>
                                             <td>{{ $stra->name }}</td>
-                                            <td>
+                                            {{-- <td>
                                                 <input type="checkbox" class="js-switch" id="status"
                                                     name="status" checked {{ old('Supply_Analyst') ? 'checked' : '' }} />
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <a href="{{ route('strategic.edit', $stra->stra3LVID) }}">
                                                     <i class="fa fa-pencil btn btn-warning"></i>
                                                 </a>
                                                 <a href="{{ route('strategic.delete', $stra->stra3LVID) }}"
-                                                    onclick="return confirm('ต้องการลบข่าว {{ $stra->name }} หรือไม่')">
+                                                    onclick="return confirm('ต้องการลบ {{ $stra->name }} หรือไม่')">
                                                     <i class="fa fa-times btn btn-danger"></i>
                                                 </a>
                                                 <a href="{{route('copyPlan',$stra->stra3LVID)}}">copy</a>

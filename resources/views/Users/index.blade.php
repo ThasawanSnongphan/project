@@ -81,7 +81,7 @@
                                                                 href="{{ route('users.edit', $user->userID) }}"><i
                                                                     class="fa fa-pencil btn btn-warning"></i></a>
                                                             <a href="{{ route('users.delete', $user->userID) }}"
-                                                                onclick="return confirm('ต้องการลบข่าว {{ $user->username }} หรือไม่')"><i
+                                                                onclick="return confirm('ต้องการลบ {{ $user->username }} หรือไม่')"><i
                                                                     class="fa fa-times btn btn-danger"></i></a></td>
                                                         
                                                     </tr>

@@ -14,25 +14,23 @@ use App\Mail\SendMail;
 
 class QuarterReportController extends Controller
 {
-    // public function quarter1($id)
-    // {
-    //     $data['project'] = DB::table('projects')->where('proID',$id)->first();
-    //     $data['steps'] = DB::table('steps')->where('proID',$id)->get();
-    //     $data['KPIMain3LV']=KPIMainMapProjects::with('KPI')->where('proID',$id)->get();
-    //     $data['KPIMain2LV'] = KPIMain2LevelMapProject::with('KPI')->where('proID',$id)->get();
-    //     // dd($data['KPIMain2LV']);
-    //     $data['KPI'] = DB::table('k_p_i_projects')->where('proID',$id)->get();
-    //     $data['costQuarter']= DB::table('cost_quarters')->where('proID',$id)->get();
-    //     // dd($data['costQuarter']);
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
-    //     $data['quarterReport']=DB::table('report_quarters')->where('proID',$id)->first();
-    //     if(!empty($data['quarterReport'])){
-    //         $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
-
-    //     }
-    //     // dd($data['detail']);
-    //     return view('QuarterlyProgressReport.quarter1-4',compact('data'));
-    // }
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
+    
 
     public function reportQuarter($id, $quarter)
     {
@@ -128,7 +126,14 @@ class QuarterReportController extends Controller
         ] 
         ));
 
-        return redirect('/project');
+        if ($project->proTypeID == 3) { 
+          
+            return redirect('/project');
+        }else{
+            return redirect('/projectOutPlan');
+        }
+        
+        
 
 
     }

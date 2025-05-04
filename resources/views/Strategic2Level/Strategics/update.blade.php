@@ -38,7 +38,7 @@
                                                 class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณ<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
-                                                <select id="yearID" name="yearID" class="form-control" required>
+                                                <select id="yearID" name="yearID" class="form-control" required >
                                                     @foreach ($year as $year)
                                                         <option value="{{ $year->yearID }}"  @if ($year->yearID == $strategic->yearID) selected @endif > {{ $year->year }}</option>
                                                     @endforeach
@@ -64,7 +64,7 @@
                                                 <div class="col-md-6 offset-md-3">
                                                     <button type='submit' class="btn btn-warning"
                                                         value="บันทึก">Edit</button>
-                                                    <button type='reset' class="btn btn-danger"><a href="/strategic2LV" style="color: white">Back</a></button>
+                                                    <a href="/strategic2LV" style="color: white"><button type='button' class="btn btn-danger">Back</button></a>
                                                 </div>
                                             </div>
                                         </div>

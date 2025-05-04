@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class StrategicController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     
     function index(){
         $year=Year::all();
@@ -45,8 +61,6 @@ class StrategicController extends Controller
         return view('Strategic3Level.Strategics.update',compact('strategic','year'));
     }
     function update(Request $request,$id){
-        
-        
         $strategic=[
             'yearID' => $request->yearID,
             'name'=>$request->name
@@ -54,4 +68,5 @@ class StrategicController extends Controller
         DB::table('strategic3_levels')->where('stra3LVID',$id)->update($strategic);
         return redirect('/strategic'); 
     }
+
 }

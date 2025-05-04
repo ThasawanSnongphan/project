@@ -75,52 +75,104 @@
                                                                 </td>
                                                                 {{-- <td>  <a href=""><i class="fa fa-eye btn btn-primary"> ดูสถานะ</i></a> </td> --}}
                                                                 <td>
-                                                                    @if ($currentMonth >= 10 && $currentMonth <= 12 && $item->statusID === 7)
-                                                                        <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                                                        <a href=""><i
-                                                                                class="fa fa-pencil btn btn-primary">
-                                                                                เขียน</i></a>
+                                                                    @php
+                                                                        $found1 = false;
+
+                                                                        foreach ($data['report'] as $report) {
+                                                                            if ($report->proID == $item->proID) {
+                                                                                if ($report->quarID == 1) {
+                                                                                    $found1 = true;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    @endphp
+                                                                    @if ($found1)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, 1]) }}">
+                                                                            <i class="fa fa-eye btn btn-primary">
+                                                                                ดูรายงาน</i>
+                                                                        </a>
                                                                     @else
                                                                         <a href="#" class="disabled"><i
                                                                                 class="fa fa-pencil btn btn-secondary disabled">
-                                                                                เขียน</i></a>
+                                                                                ดูรายงาน</i></a>
                                                                     @endif
                                                                 </td>
                                                                 <td>
 
-                                                                    @if ($currentMonth >= 1 && $currentMonth <= 3 && $item->statusID === 7)
-                                                                        <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                                                        <a href=""><i
-                                                                                class="fa fa-pencil btn btn-primary">
-                                                                                เขียน</i></a>
+                                                                    @php
+                                                                        $found2 = false;
+
+                                                                        foreach ($data['report'] as $report) {
+                                                                            if ($report->proID == $item->proID) {
+                                                                                if ($report->quarID == 2) {
+                                                                                    $found2 = true;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    @endphp
+                                                                    @if ($found2)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, 2]) }}">
+                                                                            <i class="fa fa-eye btn btn-primary">
+                                                                                ดูรายงาน</i>
+                                                                        </a>
                                                                     @else
                                                                         <a href="#" class="disabled"><i
                                                                                 class="fa fa-pencil btn btn-secondary disabled">
-                                                                                เขียน</i></a>
+                                                                                ดูรายงาน</i></a>
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    @if ($currentMonth >= 4 && $currentMonth <= 6 && $item->statusID === 7)
-                                                                        <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                                                        <a href=""><i
-                                                                                class="fa fa-pencil btn btn-primary">
-                                                                                เขียน</i></a>
+                                                                    @php
+                                                                        $found3 = false;
+
+                                                                        foreach ($data['report'] as $report) {
+                                                                            if ($report->proID == $item->proID) {
+                                                                                if ($report->quarID == 3) {
+                                                                                    $found3 = true;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    @endphp
+                                                                    @if ($found3)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, 3]) }}">
+                                                                            <i class="fa fa-eye btn btn-primary">
+                                                                                ดูรายงาน</i>
+                                                                        </a>
                                                                     @else
                                                                         <a href="#" class="disabled"><i
                                                                                 class="fa fa-pencil btn btn-secondary disabled">
-                                                                                เขียน</i></a>
+                                                                                ดูรายงาน</i></a>
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    @if ($currentMonth >= 7 && $currentMonth <= 9 && $item->statusID === 7)
-                                                                        <!-- เช็คว่าเป็นเดือนตุลาคมถึงธันวาคม -->
-                                                                        <a href=""><i
-                                                                                class="fa fa-pencil btn btn-primary">
-                                                                                เขียน</i></a>
+                                                                    @php
+                                                                        $found4 = false;
+
+                                                                        foreach ($data['report'] as $report) {
+                                                                            if ($report->proID == $item->proID) {
+                                                                                if ($report->quarID == 4) {
+                                                                                    $found4 = true;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    @endphp
+                                                                    @if ($found4)
+                                                                        <a
+                                                                            href="{{ route('report.quarter', [$item->proID, 14]) }}">
+                                                                            <i class="fa fa-eye btn btn-primary">
+                                                                                ดูรายงาน</i>
+                                                                        </a>
                                                                     @else
                                                                         <a href="#" class="disabled"><i
                                                                                 class="fa fa-pencil btn btn-secondary disabled">
-                                                                                เขียน</i></a>
+                                                                                ดูรายงาน</i></a>
                                                                     @endif
                                                                 </td>
                                                             @endif

@@ -34,6 +34,9 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @error('yearID')
+                                <p style="color: red">มีปีงบประาณนี้แล้ว</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="field item form-group">

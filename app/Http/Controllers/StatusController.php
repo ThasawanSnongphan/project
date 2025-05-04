@@ -8,14 +8,28 @@ use Illuminate\Support\Facades\DB;
 
 class StatusController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $status=DB::table('statuses')->get();
         return view('Status.index',compact('status'));
     }
 
-    function create(){
-        return view('status.create');
-    }
+   
 
     function insert(Request $request ){
         $request->validate(
@@ -39,7 +53,7 @@ class StatusController extends Controller
 
     function edit($id){
         $status=DB::table('statuses')->where('statusID',$id)->first();
-        return view('status.update',compact('status'));
+        return view('Status.update',compact('status'));
     }
     function update(Request $request,$id){
         $request->validate(

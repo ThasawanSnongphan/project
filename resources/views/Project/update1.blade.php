@@ -28,7 +28,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <form id="actionForm" method="POST" action="" novalidate enctype="multipart/form-data">
+                    <form id="actionForm" method="POST" action="" enctype="multipart/form-data">
                         @csrf
 
                         @if (count($comment) > 0)
@@ -36,11 +36,11 @@
                                 <label for="title"
                                     class="col-form-label col-md-3 col-sm-3 label-align"><b>ข้อเสนอแนะ</b></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <table >
+                                    <table>
                                         <td style="padding: 2px">
                                             @foreach ($comment as $item)
-                                                 <b>{{ $item->user->displayname }} {{ $item->user->lastname_en }}</b> :
-                                                 {{ $item->detail }} <br> <b>เมื่อ</b> {{$item->created_at}}<br>
+                                                <b>{{ $item->user->displayname }} {{ $item->user->lastname_en }}</b> :
+                                                {{ $item->detail }} <br> <b>เมื่อ</b> {{ $item->created_at }}<br>
                                             @endforeach
                                         </td>
                                     </table>
@@ -74,17 +74,17 @@
                             </div>
                         </div>
                         <div class="row field item form-group align-items-center">
-                            <label for="title" class="col-form-label col-md-3 col-sm-3 label-align">ผู้กำกับดูแลโครงการ<span
+                            <label for="title"
+                                class="col-form-label col-md-3 col-sm-3 label-align">ผู้กำกับดูแลโครงการ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
                                 <select id="Approver" name="ApproverID" class="form-control" required>
                                     <option value="">--กรุณาเลือก--</option>
                                     @foreach ($user as $item)
                                         @if ($item->userID == $project->approverID)
-                                            <option value="{{$item->userID}}" selected>{{$item->displayname}}</option>
+                                            <option value="{{ $item->userID }}" selected>{{ $item->displayname }}</option>
                                         @else
-                                        <option value="{{$item->userID}}">{{$item->displayname}}</option>
-
+                                            <option value="{{ $item->userID }}">{{ $item->displayname }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -153,13 +153,14 @@
                                         class="col-form-label col-md-3 col-sm-3  label-align">เป้าประสงค์<span
                                             class="required">*</span></label>
                                     <div class="col-md-8 col-sm-8">
-                                        <select id="goal3LVID_{{ $index }}" name="goal3LVID[]" class="form-control"
-                                            required>
+                                        <select id="goal3LVID_{{ $index }}" name="goal3LVID[]"
+                                            class="form-control" required>
                                             <option value="">--เลือกเป้าประสงค์--</option>
                                             @foreach ($goal3Level as $goal)
                                                 @if ($goal->SFA3LVID == ($SFA3LVMap[$index] ?? ''))
                                                     @if ($goal->goal3LVID == $goal3LVMap[$index])
-                                                        <option value="{{ $goal->goal3LVID }}"selected>{{ $goal->name }}
+                                                        <option value="{{ $goal->goal3LVID }}"selected>
+                                                            {{ $goal->name }}
                                                         </option>
                                                     @else
                                                         <option value="{{ $goal->goal3LVID }}">{{ $goal->name }}
@@ -171,7 +172,8 @@
                                     </div>
                                 </div>
                                 <div class="row field item form-group align-items-center">
-                                    <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
+                                    <label for="title"
+                                        class="col-form-label col-md-3 col-sm-3  label-align">กลยุทธ์<span
                                             class="required">*</span></label>
                                     <div class="col-md-8 col-sm-8">
                                         <select id="tac3LVID_{{ $index }}" name="tac3LVID[]" class="form-control"
@@ -191,12 +193,9 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            {{-- @endif --}}
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
-                                <div class="row col-md-9 col-sm-9 border m-1">
+
+                                {{-- @endif --}}
+                                <div class="row field item form-group align-items-center">
                                     <div class="col-md-12 col-sm-12">
                                         <div
                                             class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
@@ -213,10 +212,11 @@
                                             <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                         </div>
                                     </div>
+
                                     @if (isset($KPIMain3LVMapFirst[$index]) && $KPIMain3LVMapFirst[$index]->goal3LVID == $goal3LVMap[$index])
                                         @foreach ($KPIMain3LVMaps as $KPIMap)
                                             @if ($KPIMap->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                <div class="row col-md-12 col-sm-12">
+                                                <div class="col-md-12 col-sm-12">
                                                     <div class="col-md-4 col-sm-4 m-1">
                                                         {{-- <input type="hidden" name="goal3LVID[]"   value="{{$goal3LVMap[$index]}}"> --}}
                                                         <select id="KPIMain3LVID_{{ $index }}"
@@ -240,11 +240,11 @@
                                                         <input class="form-control" type="text" name="countMain3LV[]"
                                                             id="count3LV_{{ $index }}"
                                                             @foreach ($KPIMain3LV as $KPI)
-                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
-                                                        value="{{ $KPI->count ?? '-' }}"
-                                                    @endif
-                                                @endif @endforeach
+                                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
+                                                                        value="{{ $KPI->count ?? '-' }}"
+                                                                    @endif
+                                                                @endif @endforeach
                                                             readonly>
 
                                                     </div>
@@ -252,11 +252,11 @@
                                                         <input class="form-control" type="text" name="targetMain3LV[]"
                                                             id="target3LV_{{ $index }}"
                                                             @foreach ($KPIMain3LV as $KPI)
-                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
-                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
-                                                        value="{{ $KPI->target ?? '-' }}"
-                                                    @endif
-                                                @endif @endforeach
+                                                                @if ($KPI->goal3LVID == ($goal3LVMap[$index] ?? ''))
+                                                                    @if ($KPI->KPIMain3LVID == ($KPIMap->KPIMain3LVID ?? ''))
+                                                                        value="{{ $KPI->target ?? '-' }}"
+                                                                    @endif
+                                                                @endif @endforeach
                                                             readonly>
                                                     </div>
 
@@ -324,8 +324,10 @@
 
                                     {{-- <div id="insertKPIMain1_{{ $index }}"></div> --}}
                                     {{-- @endif --}}
+
                                 </div>
                             </div>
+                            {{-- </div> --}}
 
                             @php
                                 $index += 1;
@@ -400,11 +402,8 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row field item form-group align-items-center">
-                                <label for="title"
-                                    class="col-form-label col-md-2 col-sm-2 label-align">ตัวชี้วัดของ{{ $item->name }}</label>
-                                <div class="row col-md-9 col-sm-9 border m-1">
+
+                                <div class="row field item form-group align-items-center">
                                     <div class="col-md-12 col-sm-12">
                                         <div
                                             class="row col-md-4 col-sm-4 m-1 d-flex justify-content-center align-items-center">
@@ -421,7 +420,6 @@
                                             <label for="title" class="col-form-label label-align">ค่าเป้าหมาย</label>
                                         </div>
                                     </div>
-
                                     @if (isset($KPIMain2LVMapFirst[$index]) && $KPIMain2LVMapFirst[$index]->SFA2LVID == $SFA2LVMap[$index])
                                         @foreach ($KPIMain2LVMaps as $KPIMap)
                                             @if ($KPIMap->SFA2LVID == ($SFA2LVMap[$index] ?? ''))
@@ -491,39 +489,34 @@
                                             @endif
                                         @endforeach
                                     @else
-                                    <div class="row col-md-12 col-sm-12">
-                                        <div class="col-md-4 col-sm-4 m-1">
+                                        <div class="row col-md-12 col-sm-12">
+                                            <div class="col-md-4 col-sm-4 m-1">
 
-                                            <select id="KPIMain2LVID_{{ $index }}"
-                                                name="KPIMain2LVID[]" class="form-control" required>
-                                                <option value="">--เลือกตัวชี้วัด--</option>
-                                            </select>
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
+                                                <select id="KPIMain2LVID_{{ $index }}" name="KPIMain2LVID[]"
+                                                    class="form-control" required>
+                                                    <option value="">--เลือกตัวชี้วัด--</option>
+                                                </select>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
 
-                                            <input class="form-control" type="text" name="countMain2LV[]"
-                                                id="count2LV_{{ $index }}"
+                                                <input class="form-control" type="text" name="countMain2LV[]"
+                                                    id="count2LV_{{ $index }}" readonly>
 
-                                                readonly>
-
-                                        </div>
-                                        <div class=" col-md-3 col-sm-3 m-1">
-                                            <input class="form-control" type="text" name="targetMain2LV[]"
-                                                id="target2LV_{{ $index }}"
-
-                                                readonly>
-                                        </div>
+                                            </div>
+                                            <div class=" col-md-3 col-sm-3 m-1">
+                                                <input class="form-control" type="text" name="targetMain2LV[]"
+                                                    id="target2LV_{{ $index }}" readonly>
+                                            </div>
 
 
                                             <div class="col-md-1 col-sm-1 m-1">
-                                                <button type='button'
-                                                    class="btn btn-primary insert-kpi2LV-button"
+                                                <button type='button' class="btn btn-primary insert-kpi2LV-button"
                                                     data-index="{{ $index }}">เพิ่ม
                                                 </button>
                                             </div>
 
 
-                                    </div>
+                                        </div>
                                     @endif
 
                                     <div id="insertKPIMain2_{{ $index }}"></div>
@@ -589,8 +582,7 @@
                         {{-- <div class="ln_solid"> --}}
                         <div class="form-group ">
                             <div class="col-md-6 offset-md-3 text-center">
-                                <button type='submit' class="btn btn-primary"
-                                    onclick="submitButton('saveUpdate1',{{ $project->proID }})">บันทึก</button>
+                               
                                 <button type='button' class="btn btn-primary"
                                     onclick="submitButton('sendUpdate1',{{ $project->proID }})">ถัดไป</button>
                             </div>

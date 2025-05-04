@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class BadgetTypeController extends Controller
 {
+     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $badget_type=DB::table('badget_types')->get();
         return view('BadgetType.index',compact('badget_type'));
@@ -35,7 +51,7 @@ class BadgetTypeController extends Controller
 
     function edit($id){
         $badget_type=DB::table('badget_Types')->where('badID',$id)->first();
-        return view('badgetType.update',compact('badget_type'));
+        return view('BadgetType.update',compact('badget_type'));
     }
     function update(Request $request,$id){
         $request->validate(

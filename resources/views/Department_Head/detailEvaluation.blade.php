@@ -12,12 +12,16 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                 aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Settings 1</a>
-                                <a class="dropdown-item" href="#">Settings 2</a>
-                            </div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{{route('closed.PDF', $data['project']->proID) }}" target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
+                                    
+                                </div>
                         </li>
+                        @if ($data['project']->proTypeID == 3)
+                        <li><a href="/DepartmentHeadProject"><i class="fa fa-arrow-left"></i></a></li>
+                        @else
                         <li><a href="/DepartmentHeadProjectOutPlan"><i class="fa fa-arrow-left"></i></a></li>
+                        @endif                       
                     </ul>
                     <div class="clearfix"></div>
                 </div>

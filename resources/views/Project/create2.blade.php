@@ -801,7 +801,6 @@
         });
 
         const input = document.getElementById('targetKPI');
-        // const feedback = document.getElementById('targetKPI-feedback');
         input.addEventListener('keypress', function(e) {
             const char = String.fromCharCode(e.which);
 

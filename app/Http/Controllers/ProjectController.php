@@ -53,21 +53,21 @@ use Illuminate\Support\Facades\Session;
 class ProjectController extends Controller
 {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // /**
+    //  * Create a new controller instance.
+    //  *
+    //  * @return void
+    //  */
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    // /**
+    //  * Show the application dashboard.
+    //  *
+    //  * @return \Illuminate\Contracts\Support\Renderable
+    //  */
 
     function index(){
 
@@ -82,13 +82,14 @@ class ProjectController extends Controller
         $users = $users=DB::table('users')->get();
 
 
-
+        
         $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
 
-        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->get();
-        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->get();
-        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->get();
-        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
+        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->whereIn('yearID',$project->pluck('yearID'))->get();
+        // dd($data['dateQuarter1']);
+        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->whereIn('yearID',$project->pluck('yearID'))->get();
+        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->whereIn('yearID',$project->pluck('yearID'))->get();
+        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->whereIn('yearID',$project->pluck('yearID'))->get();
         
         $data['reportQuarter'] = DB::table('report_quarters')->whereIn('proID',$user->pluck('proID'))->get();
         // dd($data['reportQuarter']);
@@ -144,10 +145,10 @@ class ProjectController extends Controller
         // $evaluation = DB::table('project_evaluations')->whereIn('proID',$proIDs)->get();
         // dd($evaluation);
         // dd($proID);
-        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->get();
-        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->get();
-        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->get();
-        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->get();
+        $data['dateQuarter1'] = DateReportQuarter::where('quarID',1)->whereIn('yearID',$project->pluck('yearID'))->get();
+        $data['dateQuarter2'] = DateReportQuarter::where('quarID',2)->whereIn('yearID',$project->pluck('yearID'))->get();
+        $data['dateQuarter3'] = DateReportQuarter::where('quarID',3)->whereIn('yearID',$project->pluck('yearID'))->get();
+        $data['dateQuarter4'] = DateReportQuarter::where('quarID',4)->whereIn('yearID',$project->pluck('yearID'))->get();
         
         $data['report']=DB::table('projects')
         ->join('users_map_projects','users_map_projects.proID','=','projects.proID')->where('users_map_projects.userID',auth()->id())
