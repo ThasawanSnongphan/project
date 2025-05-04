@@ -76,6 +76,7 @@ Route::get('/excelEffective/{id}', [ExcelEffectiveController::class, 'excel_gen'
 
 
 
+
 Route::get('/news', [NewsController::class,'index']);
 Auth::routes();
 Route::get('/login', [AuthController::class,'login'])->name('login');
@@ -359,6 +360,7 @@ Route::post('KPIMainInsert',[KPIMainController::class,'insert']);
 Route::get('KPIMainDelete/{id}',[KPIMainController::class,'delete'])->name('KPIMain.delete');
 Route::get('KPIMainsEdit/{id}',[KPIMainController::class,'edit'])->name('KPIMain.edit');
 Route::post('KPIMainUpdate/{id}',[KPIMainController::class,'update'])->name('KPIMain.update');
+Route::get('/KPIMainReport', [KPIMainController::class, 'report'])->name('KPIMain.report');
 
 Route::get('fund',[FundController::class,'index']);
 Route::post('fundInsert',[FundController::class,'insert']);

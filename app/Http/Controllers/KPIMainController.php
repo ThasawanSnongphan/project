@@ -14,64 +14,88 @@ use Illuminate\Support\Facades\DB;
 
 class KPIMainController extends Controller
 {
-    function index(){
-        $user=Users::all();
+    function index()
+    {
+        $user = Users::all();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
-        $KPIMain=KPIMains::with('goal.SFA.strategic.year','director','recorder')->get();
-        return view('Strategic3Level.KPIMain.index',compact('user','year','strategic','SFA','goal','KPIMain'));
+        $KPIMain = KPIMains::with('goal.SFA.strategic.year', 'director', 'recorder')->get();
+        return view('Strategic3Level.KPIMain.index', compact('user', 'year', 'strategic', 'SFA', 'goal', 'KPIMain'));
     }
 
-    function insert(Request $request){
-        $goal = Goals::where('goal3LVID',$request->input('goalID'))->first();
+    function insert(Request $request)
+    {
+        $goal = Goals::where('goal3LVID', $request->input('goalID'))->first();
         $request->validate(
             [
-                'name'=>'required',
-                'count'=>'required',
-                'target'=>'required'
+                'name' => 'required',
+                'count' => 'required',
+                'target' => 'required'
             ]
         );
         $KPIMain = new KPIMains();
         $KPIMain->name = $request->input('name');
         $KPIMain->count = $request->input('count');
         $KPIMain->target = $request->input('target');
-        if(!empty($goal->goal3LVID)){
+        if (!empty($goal->goal3LVID)) {
             $KPIMain->goal3LVID = $goal->goal3LVID;
         }
-        
+
         $KPIMain->directorID = $request->input('directorID');
         $KPIMain->recorderID = $request->input('recorderID');
         $KPIMain->save();
         return redirect('/KPIMain');
     }
 
-    function edit($id){
+    function edit($id)
+    {
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();
         $goal = Goals::all();
-        $user=Users::all();
-        
-        $KPIMain=KPIMains::with(['goal.SFA.strategic.year'])->where('KPIMain3LVID',$id)->first();
-        return view('Strategic3Level.KPIMain.update',compact('year','strategic','SFA','goal','KPIMain','user'));
+        $user = Users::all();
+
+        $KPIMain = KPIMains::with(['goal.SFA.strategic.year'])->where('KPIMain3LVID', $id)->first();
+        return view('Strategic3Level.KPIMain.update', compact('year', 'strategic', 'SFA', 'goal', 'KPIMain', 'user'));
     }
-    function update(Request $request,$id){
+    function update(Request $request, $id)
+    {
         // $tacID = Tactics::where('tacID',$request->input('tacID'))->first();
-        $KPIMain=[
-            'goal3LVID'=>$request->goalID,
-            'name'=>$request->name,
-            'count'=>$request->count,
-            'target'=>$request->target,
-            'directorID'=>$request->director,
-            'recorderID'=>$request->recorder
+        $KPIMain = [
+            'goal3LVID' => $request->goalID,
+            'name' => $request->name,
+            'count' => $request->count,
+            'target' => $request->target,
+            'directorID' => $request->director,
+            'recorderID' => $request->recorder
         ];
-        DB::table('k_p_i_mains')->where('KPIMain3LVID',$id)->update($KPIMain);
-        return redirect('/KPIMain'); 
-    }
-    function delete($id){
-        DB::table('k_p_i_mains')->where('KPIMain3LVID',$id)->delete();
+        DB::table('k_p_i_mains')->where('KPIMain3LVID', $id)->update($KPIMain);
         return redirect('/KPIMain');
+    }
+    function delete($id)
+    {
+        DB::table('k_p_i_mains')->where('KPIMain3LVID', $id)->delete();
+        return redirect('/KPIMain');
+    }
+
+    function report(Request $request)
+    {
+        $data['yearAll'] = Year::all();
+        $data['selectYearID'] = $request->input('yearID');
+        $data['year'] = Year::find($data['selectYearID']);
+
+        // ดึงเฉพาะ KPIMain3LVID ทั้งหมดที่มี proID
+        // $kpiIDs = KPIMainMapProjects::whereNotNull('proID')  // ตรวจสอบว่ามีโครงการเชื่อมโยงจริง
+        //     ->pluck('KPIMain3LVID') // ดึงเฉพาะคอลัมน์นี้
+        //     ->unique()              // ตัดค่าซ้ำ ถ้าต้องการไม่ให้ซ้ำ
+        //     ->values();             // รีเซ็ต key ให้สวยงาม
+
+        // $data = [
+        //     'kpi_ids' => $kpiIDs,
+        // ];
+
+        return view('KPIMain_report.index', compact('data'));
     }
 }
