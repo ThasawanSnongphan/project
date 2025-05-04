@@ -9,31 +9,33 @@
                     <h2>เอกสารประเมินโครงการ</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                                aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Settings 1</a>
-                                <a class="dropdown-item" href="#">Settings 2</a>
-                            </div>
-                        </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        @if (Auth()->check())
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                    aria-expanded="false"><i class="fa fa-file-text"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="{{ route('closed.PDF', $data['project']->proID) }}"
+                                        target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
+
+                                </div>
+                            </li>
+                        @endif
+                        {{-- <li><a class="close-link"><i class="fa fa-close"></i></a> --}}
                     </ul>
                     <div class="clearfix"></div>
                 </div>
 
                 <div class="x_content">
                     @if (Auth::check() && count($data['comment']) > 0)
-                    <div class="row field item form-group " style="background-color: #FFF9B1">
-                        <label
-                            class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
-                        <div class="col-md-7 col-sm-7">
-                            @foreach ($data['comment'] as $item)
-                                <b>{{$item->user->displayname}}  : </b> {{$item->detail}} <br>
-                                <b>เมื่อ</b> {{$item->created_at}} <br>
-                            @endforeach
+                        <div class="row field item form-group " style="background-color: #FFF9B1">
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>ข้อเสนอแนะ :</b></label>
+                            <div class="col-md-7 col-sm-7">
+                                @foreach ($data['comment'] as $item)
+                                    <b>{{ $item->user->displayname }} : </b> {{ $item->detail }} <br>
+                                    <b>เมื่อ</b> {{ $item->created_at }} <br>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
                     @endif
                     @if (count($data['file']) > 0)
                         <form method="POST" enctype="multipart/form-data">
@@ -41,8 +43,8 @@
                             <h6>เอกสารที่เกี่ยวข้องกับการประเมินโครงการ</h6>
                             <hr>
                             <div class="row field item form-group ">
-                                <label
-                                    class="col-form-lable col-md-4 col-sm-4 label-align"><b>เอกสารที่เกี่ยวข้อง :</b></label>
+                                <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>เอกสารที่เกี่ยวข้อง
+                                        :</b></label>
                                 <div class="col-md-7 col-sm-7">
                                     @foreach ($data['file'] as $item)
                                         <a href="{{ asset('files/' . $item->name) }}"
@@ -55,20 +57,20 @@
                     <form method="POST">
                         @csrf
                         @if (count($data['file']) > 0)
-                        <h6>เอกสารประเมินโครงการ</h6>
-                        <hr>
+                            <h6>เอกสารประเมินโครงการ</h6>
+                            <hr>
                         @endif
                         <div class="row field item form-group">
                             <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>สถานะ :</b></label>
                             <div class="col-md-7 col-sm-7">
-                                {{$data['status']->name}}
+                                {{ $data['status']->name }}
                             </div>
                         </div>
 
                         <div class="row field item form-group">
                             <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>คำชี้แจง :</b></label>
                             <div class="col-md-7 col-sm-7">
-                                {{$data['evaluation']->statement}}
+                                {{ $data['evaluation']->statement }}
                             </div>
                         </div>
                         <div class="row field item form-group">
@@ -105,15 +107,16 @@
                         </div>
 
                         <div class="row field item form-group ">
-                            <label class="col-form-lable col-md-4 col-sm-4 label-align "><b>วิธีการดำเนินโครงการ :</b></label>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align "><b>วิธีการดำเนินโครงการ
+                                    :</b></label>
                             <div class="col-md-7 col-sm-7">
                                 {{ $data['evaluation']->implementation }}
                             </div>
                         </div>
 
                         <div class="row field item form-group ">
-                            <label
-                                class="col-form-lable col-md-4 col-sm-4 label-align"><b>ระยะเวลาในการดำเนินงาน :</b></label>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>ระยะเวลาในการดำเนินงาน
+                                    :</b></label>
                             <div class="col-md-8 col-sm-8">
                                 <b>เริ่มต้น</b> {{ $data['stepStartFormat'] }} <b>สิ้นสุด</b> {{ $data['stepEndFormat'] }}
                             </div>
@@ -148,8 +151,8 @@
 
 
                         <div class="row field item form-group ">
-                            <label
-                                class="col-form-lable col-md-4 col-sm-4 label-align"><b>ผลการดำเนินงานตามตัวชี้วัดโครงการ :</b></label>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>ผลการดำเนินงานตามตัวชี้วัดโครงการ
+                                    :</b></label>
                             <div class="col-md-7 col-sm-7">
                                 @foreach ($data['KPIProject'] as $item)
                                     -{{ $item->name }} <br>
@@ -159,8 +162,8 @@
                         </div>
 
                         <div class="row field item form-group ">
-                            <label
-                                class="col-form-lable col-md-4 col-sm-4 label-align"><b>งบประมาณที่ใช้ดำเนินการ :</b></label>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>งบประมาณที่ใช้ดำเนินการ
+                                    :</b></label>
                             <div class="col-md-8 col-sm-8">
                                 {{ $data['project']->badgetType->name }}
                             </div>
@@ -177,12 +180,13 @@
                         <div class="row field item form-group ">
                             <label class="col-form-lable col-md-4 col-sm-4 label-align"><b>ใช้จริง :</b></label>
                             <div class="col-md-7 col-sm-7">
-                               {{ $data['costResult'] }}
+                                {{ $data['costResult'] }} บาท
                             </div>
                         </div>
 
                         <div class="row field item form-group ">
-                            <label class="col-form-lable col-md-4 col-sm-4 label-align "><b>ประโยชน์ที่ได้รับจากการดำเนินโครงการ <br>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align "><b>ประโยชน์ที่ได้รับจากการดำเนินโครงการ
+                                    <br>
                                     (หลังการจัดโครงการ) :</b></label>
                             <div class="col-md-7 col-sm-7">
                                 {{ $data['evaluation']->benefit }}
@@ -190,8 +194,8 @@
                         </div>
 
                         <div class="row field item form-group ">
-                            <label
-                                class="col-form-lable col-md-4 col-sm-4 label-align "><b>ปัญหาและอุปสรรคในการดำเนินโครงการ :</b></label>
+                            <label class="col-form-lable col-md-4 col-sm-4 label-align "><b>ปัญหาและอุปสรรคในการดำเนินโครงการ
+                                    :</b></label>
                             <div class="col-md-7 col-sm-7">
                                 {{ $data['evaluation']->problem }}
                             </div>

@@ -20,6 +20,7 @@ use Carbon\Carbon;
 
 class ProjectEvalutionController extends Controller
 {
+    
     public function evaluation($id){
         $data['project'] = Projects::with('badgetType')->where('proID',$id)->first();
         // dd($data['project']);
@@ -134,8 +135,13 @@ class ProjectEvalutionController extends Controller
         // dd($data['result_eva']);
        
         // dd($obj_achieve);
-
-        return  redirect('/project');
+        if ($data['project']->proTypeID == 3) {
+            return  redirect('/project');
+        } else {
+            return  redirect('/projectOutPlan');
+        }
+        
+        
     }
 
     public function detail($id){
@@ -235,7 +241,11 @@ class ProjectEvalutionController extends Controller
             DB::table('k_p_i_projects')->where('KPIProID',$item->KPIProID)->update(['result_eva' => $result_eva[$index]]);
         }
             
-        return redirect('/project');
+        if ($data['projetc']->proTypeID == 3) {
+            return  redirect('/project');
+        } else {
+            return  redirect('/projectOutPlan');
+        }
     }
 
     public function send(Request $request ,$id){
@@ -294,6 +304,10 @@ class ProjectEvalutionController extends Controller
         ));
         }
             
-        return redirect('/project');
+        if ($data['projetc']->proTypeID == 3) {
+            return  redirect('/project');
+        } else {
+            return  redirect('/projectOutPlan');
+        }
     }
 }

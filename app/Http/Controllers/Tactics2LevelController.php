@@ -13,6 +13,22 @@ use Illuminate\Support\Facades\DB;
 
 class Tactics2LevelController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year=Year::all();
         $strategic=Strategic2Level::all();

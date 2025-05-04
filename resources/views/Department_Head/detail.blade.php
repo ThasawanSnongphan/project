@@ -279,7 +279,7 @@
                         <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ประมาณการงบประมาณที่ใช้
                             </b></label>
                         <div class="col-md-7 col-sm-7">
-                            {{ $data['project']->badgetTotal }}
+                            {{ $data['project']->badgetTotal }} บาท
                         </div>
                     </div>
 

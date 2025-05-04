@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class DateInPlanControllers extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $data['year'] = Year::all();
         $data['date'] = DateInPlan::with('year')->get();
@@ -17,6 +33,11 @@ class DateInPlanControllers extends Controller
     }
 
     function insert(Request $request){
+        $request->validate(
+            [
+                'yearID'=>'unique:date_in_plans,yearID'
+            ]
+        );
         $data['date'] = new DateInPlan();
         $data['date']->startDate = $request->input('startDate');
         $data['date']->endDate = $request->input('endDate');

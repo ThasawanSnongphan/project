@@ -9,6 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class TargetController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $target=DB::table('targets')->get();
         return view('Targets.index',compact('target'));

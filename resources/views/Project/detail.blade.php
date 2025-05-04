@@ -29,15 +29,24 @@
                 <h2>เอกสารเสนอโครงการ</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li class="dropdown">
+                    @if (Auth()->check())
+                        <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-expanded="false"><i class="fa fa-file-text"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="{{ route('project.PDF', $data['project']->proID) }}" target="_blank"><i class="fa fa-file-pdf-o text-danger"></i> PDF</a>
                             <a class="dropdown-item" href="{{ route('project.Word', $data['project']->proID) }}"><i class="fa fa-file-word-o text-primary"></i> Word</a>
                         </div>
+                        
                     </li>
+                    @endif
+                    
+                    {{-- @if ($data['project']->proTypeID == 3)
                     <li><a href="/project"><i class="fa fa-arrow-left"></i></a></li>
+                    @else
+                    <li><a href="/projectOutPlan"><i class="fa fa-arrow-left"></i></a></li>
+                    @endif --}}
+                    
                 </ul>
                 <div class="clearfix"></div>
             </div>
@@ -279,10 +288,10 @@
                                             {{ $item->exp->name }} <br>
                                             {{ $item->cost->name }}
                                         </td>
-                                        <td><br>{{ $item->costQu1 }}</td>
-                                        <td><br>{{ $item->costQu2 }}</td>
-                                        <td><br>{{ $item->costQu3 }}</td>
-                                        <td><br>{{ $item->costQu4 }}</td>
+                                        <td><br>{{ $item->costQu1 }} บาท</td>
+                                        <td><br>{{ $item->costQu2 }} บาท</td>
+                                        <td><br>{{ $item->costQu3 }} บาท</td>
+                                        <td><br>{{ $item->costQu4 }} บาท</td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -293,7 +302,7 @@
                         <label class="col-form-lable col-md-3 col-sm-3 label-align "><b>ประมาณการงบประมาณที่ใช้
                             </b></label>
                         <div class="col-md-7 col-sm-7">
-                            {{ $data['project']->badgetTotal }}
+                            {{ $data['project']->badgetTotal }} บาท
                         </div>
                     </div>
 

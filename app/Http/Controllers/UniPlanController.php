@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class UniPlanController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $plan=DB::table('uni_plans')->get();
         return view('UniPlan.index',compact('plan'));

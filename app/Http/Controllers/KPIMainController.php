@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\DB;
 
 class KPIMainController extends Controller
 {
-    function index()
-    {
-        $user = Users::all();
+
+    function index(){
+        $user=Users::all();
         $year = Year::all(); // ดึงข้อมูลปี
         $strategic = Strategic3Level::all(); // ดึงข้อมูลแผนทั้งหมด
         $SFA = StrategicIssues::all();

@@ -10,6 +10,22 @@ use App\Models\DateReportQuarter;
 
 class DateReportQuarterController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $data['year'] = Year::all();
         $data['quarter'] = Quarters::all();
@@ -18,6 +34,7 @@ class DateReportQuarterController extends Controller
     }
 
     function insert(Request $request){
+        
         $date = new DateReportQuarter();
         $date->startDate = $request->input('startDate');
         $date->endDate = $request->input('endDate');

@@ -58,7 +58,7 @@
                             <div class="form-group ">
                                 <div class="col-md-6 offset-md-3 text-center">
                                     <button type='submit' class="btn btn-warning" value="บันทึก">Edit</button>
-                                    <a href=""><button type='reset' class="btn btn-danger">Back</button></a>
+                                    <a href="/news"><button type='button' class="btn btn-danger">Back</button></a>
                                 </div>
                             </div>
                         </div>

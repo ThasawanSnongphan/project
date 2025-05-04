@@ -38,6 +38,22 @@ use Carbon\Carbon;
 
 class Department_Head extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    
     function index(){
         $year = Year::all();
         $projectYear = Projects::with('year')->get();
@@ -85,7 +101,15 @@ class Department_Head extends Controller
         // $data['user'] = DB::table('users_map_projects')->where('userID',auth()->id())->get();
 
         // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->whereIn('proID',$data['user']->pluck('proID'))->get();
-        $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+        
+        // $data['project'] = Projects::with('status')->whereIn('statusID',[15,11])->get();
+        // $data['department'] = DB::table('users_map_projects')->whereIn('proID',$data['project']->pluck('proID'))->get();
+        $data['project'] = Projects::with('status')
+        ->join('users_map_projects as map','projects.proID','=','map.proID')
+        ->join('users','map.userID','=','users.userID')
+        ->whereIn('projects.statusID',[15,11])
+        ->where('users.department_name',Auth()->user()->department_name)->get();
+        // dd($data['project']);
         $data['evaluation']=DB::table('projects')
         ->join('project_evaluations','project_evaluations.proID','=','projects.proID')
         ->join('report_quarters','report_quarters.proID','=','project_evaluations.proID')
@@ -122,7 +146,7 @@ class Department_Head extends Controller
     }
 
     function departmentPass(Request $request, $id){
-        DB::table('projects')->where('proID',$id)->update(['statusID' => '2']);
+         DB::table('projects')->where('proID',$id)->update(['statusID' => '2']);
         $detail = $request->input('comment');
         if(!empty($detail)){
             $userID = Auth::id();
@@ -176,7 +200,13 @@ class Department_Head extends Controller
             // dd($mailData);
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
+        
+        
     }
 
     function departmentEdit(Request $request,$id){
@@ -216,7 +246,11 @@ class Department_Head extends Controller
                 ));
         }
         // dd($users);
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
     }
 
 
@@ -307,7 +341,11 @@ class Department_Head extends Controller
             Mail::to($item->users->email)->send(new SendMail($mailData));
         }
 
-        return redirect('/DepartmentHeadProject');
+        if ($project->proTypeID == 3) {
+            return redirect('/DepartmentHeadProject');
+        } else {
+            return redirect('/DepartmentHeadProjectOutPlan');
+        }
     }
 
     function EvaluationEdit(Request $request,$id){
@@ -342,6 +380,10 @@ class Department_Head extends Controller
                     ]
                     ));
             }
-        return redirect('/DepartmentHeadProject');
+            if ($project->proTypeID == 3) {
+                return redirect('/DepartmentHeadProject');
+            } else {
+                return redirect('/DepartmentHeadProjectOutPlan');
+            }
     }
 }
