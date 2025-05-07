@@ -54,7 +54,7 @@
                                 class="col-form-label col-md-3 col-sm-3  label-align">ปีงบประมาณที่จะคัดลอก<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="yearID" name="yearID" class="form-control" required>
+                                <select id="to_yearID" name="to_yearID" class="form-control" required>
                                     @foreach ($data['year'] as $item)
                                         @if ($item->yearID > $data['strategic']->yearID)
                                             <option value="{{ $item->yearID }}"> {{ $item->year }}</option>

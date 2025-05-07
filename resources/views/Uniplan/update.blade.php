@@ -7,11 +7,11 @@
                 <div class="">
                     
                     <div class="row">
-                        <div class="col-md-3 col-sm-3"></div>
-                        <div class="col-md-6 col-sm-6">
+                        <div class="col-md-2 col-sm-2"></div>
+                        <div class="col-md-8 col-sm-8">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>แก้ไขแผนงานมหาลัย </h2>
+                                    <h2>แก้ไขแผนงานมหาวิทยาลัย</h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -33,7 +33,7 @@
                                         @csrf
                                         <div class="field item form-group">
                                             <label for="name"
-                                                class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาลัย<span
+                                                class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาวิทยาลัย<span
                                                     class="required">*</span></label>
                                             <div class="col-md-6 col-sm-6">
                                                 <input class="form-control" type="text" name="name" id="name"
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 col-sm-3"></div>
+                        <div class="col-md-2 col-sm-2"></div>
                     </div>
                 </div>
             </div>

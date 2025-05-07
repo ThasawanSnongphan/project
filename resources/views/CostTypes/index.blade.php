@@ -39,7 +39,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>แผนงานมหาลัย</th>
+                                            <th>แผนงานมหาวิทยาลัย</th>
                                             <th>กองทุน</th>
                                             <th>งบรายจ่าย</th>
                                             <th>หมวดรายจ่าย</th>
@@ -53,7 +53,7 @@
                                         @foreach ($cost_types as $cost )
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td>{{$cost->expense->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
+                                                <td>{{$cost->expense->fund->uniplan->name ?? 'ไม่พบแผนงานมหาวิทยาลัย'}}</td>
                                                 <td>{{$cost->expense->fund->name ?? 'ไม่พบกองทุน'}}</td>
                                                 <td>{{$expanses->firstWhere('expID',$cost->expID)->name ?? 'ไม่พบงบรายจ่าย'}}</td>
                                                 <td>{{ $cost->name }}</td>

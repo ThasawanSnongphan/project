@@ -141,7 +141,7 @@
                                                 <li><a href="/target1LV">เป้าหมาย</a></li>
                                                 <hr>
 
-                                                <li><a href="/plan">แผนงานมหาลัย</a></li>
+                                                <li><a href="/plan">แผนงานมหาวิทยาลัย</a></li>
                                                 <li><a href="/fund">กองทุน</a></li>
                                                 <li><a href="/Expense">งบรายจ่าย</a></li>
                                                 <li><a href="/cost_type">หมวดรายจ่าย</a></li>

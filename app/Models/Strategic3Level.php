@@ -14,6 +14,13 @@ class Strategic3Level extends Model
         return $this->belongsTo(Year::class, 'yearID','yearID');
     }
 
+    public function SFA() {
+        return $this->hasMany(StrategicIssues::class, 'stra3LVID');
+    }
+
+
+   
+
     // public function projects()
     // {
     //     return $this->belongsToMany(Projects::class, 'strategic_maps', 'straID', 'proID');

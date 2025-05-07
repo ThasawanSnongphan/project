@@ -13,4 +13,8 @@ class StrategicIssues extends Model
     {
         return $this->belongsTo(Strategic3Level::class, 'stra3LVID','stra3LVID');
     }
+
+    public function Goal() {
+        return $this->hasMany(Goals::class, 'SFA3LVID');
+    }
 }

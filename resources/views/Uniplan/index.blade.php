@@ -11,11 +11,11 @@
                 @include('UniPlan.create')
 
                 <div class="row" style="display: block;">
-                    <div class="col-md-3 col-sm-3  "></div>
-                    <div class="col-md-6 col-sm-6  ">
+                    <div class="col-md-2 col-sm-2  "></div>
+                    <div class="col-md-8 col-sm-8  ">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>แผนงานมหาลัย</h2>
+                                <h2>แผนงานมหาวิทยาลัย</h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
@@ -38,7 +38,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>name</th>
+                                            <th>แผนงานมหาวิทยาลัย</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-3  "></div>
+                    <div class="col-md-2 col-sm-2  "></div>
                 </div>
             </div>
         </div>

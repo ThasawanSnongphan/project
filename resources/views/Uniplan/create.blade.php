@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="col-md-3 col-sm-3"></div>
-    <div class="col-md-6 col-sm-6">
+    <div class="col-md-2 col-sm-2"></div>
+    <div class="col-md-8 col-sm-8">
         <div class="x_panel">
             <div class="x_title">
-                <h2>เพิ่มแผนงานมหาลัย</h2>
+                <h2>เพิ่มแผนงานมหาวิทยาลัย</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -24,7 +24,7 @@
                 <form method="POST" action="/planInsert" enctype="multipart/form-data">
                     @csrf
                     <div class="field item form-group">
-                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาลัย<span
+                        <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">แผนงานมหาวิทยาลัย<span
                                 class="required">*</span></label>
                         <div class="col-md-6 col-sm-6">
                             <input class="form-control" type="textt" name="name" id="name" required>
@@ -46,5 +46,5 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-sm-3"></div>
+    <div class="col-md-2 col-sm-2"></div>
 </div>

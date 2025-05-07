@@ -10,8 +10,8 @@
             @include('Funds.create')
 
             <div class="row" style="display: block;">
-                <div class="col-md-3 col-sm-3  "></div>
-                <div class="col-md-6 col-sm-6  ">
+                <div class="col-md-2 col-sm-2  "></div>
+                <div class="col-md-8 col-sm-8  ">
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>กองทุน</h2>
@@ -28,7 +28,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>แผนงานมหาลัย</th>
+                                        <th>แผนงานมหาวิทยาลัย</th>
                                         <th>กองทุน</th>
                                         <th></th>
                                     </tr>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-3  "></div>
+                <div class="col-md-2 col-sm-2  "></div>
             </div>
         </div>
     </div>

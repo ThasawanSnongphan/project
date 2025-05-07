@@ -10,8 +10,8 @@
                 @include('ExpenseBadgets.create')
 
                 <div class="row" style="display: block;">
-                    <div class="col-md-3 col-sm-3  "></div>
-                    <div class="col-md-6 col-sm-6  ">
+                    <div class="col-md-2 col-sm-2  "></div>
+                    <div class="col-md-8 col-sm-8  ">
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>งบรายจ่าย</h2>
@@ -37,7 +37,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>แผนงานมหาลัย</th>
+                                            <th>แผนงานมหาวิทยาลัย</th>
                                             <th>กองุทน</th>
                                             <th>งบรายจ่าย</th>
                                             <th></th>
@@ -50,7 +50,7 @@
                                         @foreach ($expense as $ex)
                                             <tr>
                                                 <th scope="row">{{$i}}</th>
-                                                <td>{{$ex->fund->uniplan->name ?? 'ไม่พบแผนงานมหาลัย'}}</td>
+                                                <td>{{$ex->fund->uniplan->name ?? 'ไม่พบแผนงานมหาวิทยาลัย'}}</td>
                                                 <td>{{ $fund->firstWhere('fundID',$ex->fundID)->name ?? 'ไม่พบกองทุน' }}</td>
                                                 <td>{{ $ex->name ?? 'ไม่พบงบรายจ่าย' }}</td>
                                                 <td>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-sm-3  "></div>
+                    <div class="col-md-2 col-sm-2  "></div>
                 </div>
             </div>
         </div>
