@@ -8,6 +8,7 @@ use App\Models\Strategic3Level;
 use App\Models\StrategicIssues;
 use App\Models\Goals;
 use App\Models\Tactics;
+use App\Models\KPIMains;
 use Illuminate\Support\Facades\DB;
 
 class CopyPlanControllers extends Controller
@@ -50,16 +51,21 @@ class CopyPlanControllers extends Controller
 
     DB::transaction(function () use ($stra3LVID, $toYearID) {
         // 1. ดึงกลยุทธ์ + ความสัมพันธ์ที่เกี่ยวข้อง
-        $strategic = Strategic3Level::with('SFA.Goal')->findOrFail($stra3LVID);
+        $strategic = Strategic3Level::with('SFA.Goal.Tactics', 'SFA.Goal.KPI')->findOrFail($stra3LVID);
 
         // 2. replicate กลยุทธ์
         $newStrategic = $strategic->replicate();
+        $newStrategic->stra3LVID =  Strategic3Level::max('stra3LVID') + 1;
         $newStrategic->yearID = $toYearID;
         $newStrategic->save();
 
+        // เก็บ mapping ID เดิมกับ ID ใหม่
+        $oldToNewKPI = [];
+        $oldToNewTactics = [];
         // 3. replicate SFA ทั้งหมด
         foreach ($strategic->SFA as $sfa) {
             $newSFA = $sfa->replicate();
+            $newSFA->SFA3LVID = StrategicIssues::max('SFA3LVID') + 1;
             $newSFA->stra3LVID = $newStrategic->stra3LVID;
             $newSFA->save();
 
@@ -69,6 +75,45 @@ class CopyPlanControllers extends Controller
                 $newGoal->goal3LVID = Goals::max('goal3LVID') + 1;
                 $newGoal->SFA3LVID = $newSFA->SFA3LVID;
                 $newGoal->save();
+
+                // Copy KPI ก่อน แล้วเก็บ mapping
+                foreach ($goal->KPI as $kpi){
+                    $newKPI = $kpi->replicate();
+                    $newKPI->KPIMain3LVID = KPIMains::max('KPIMain3LVID')+1;
+                    $newKPI->goal3LVID = $newGoal->goal3LVID;
+                    $newKPI->save();
+
+                     // เก็บ mapping ID
+                    $oldToNewKPI[$kpi->KPIMain3LVID] = $newKPI->KPIMain3LVID;
+                }
+
+                // Copy Tactics และ map KPIMain3LVID ถ้ามี
+                foreach ($goal->Tactics as $tactics){
+                    $newTactics = $tactics->replicate();
+                    $newTactics->tac3LVID = Tactics::max('tac3LVID') + 1;
+                    $newTactics->goal3LVID = $newGoal->goal3LVID;
+                    $newTactics->save();
+
+                    // เก็บ mapping ID
+                    $oldToNewTactics[$tactics->tac3LVID] = $newTactics->tac3LVID;
+                }
+
+                // คัดลอก mapping ของ KPIMainMapTactics
+                foreach ($goal->KPI as $kpi) {
+                    foreach ($kpi->MapTactics as $map) { // สมมุติว่า KPI มีความสัมพันธ์ชื่อ 'MapTactics'
+                        $oldKPIID = $map->KPIMain3LVID;
+                        $oldTacID = $map->tac3LVID;
+
+                        if (isset($oldToNewKPI[$oldKPIID]) && isset($oldToNewTactics[$oldTacID])) {
+                            DB::table('k_p_i_main_map_tactics')->insert([
+                                'KPIMain3LVID' => $oldToNewKPI[$oldKPIID],
+                                'tac3LVID' => $oldToNewTactics[$oldTacID],
+                                // ใส่ฟิลด์อื่นที่จำเป็น เช่น created_at updated_at
+                            ]);
+                        }
+                    }
+                }
+                
             }
         }
     });
