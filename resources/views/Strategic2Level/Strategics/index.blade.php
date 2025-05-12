@@ -77,6 +77,7 @@
                                                     onclick="return confirm('ต้องการลบ {{ $stra->name }} หรือไม่')">
                                                     <i class="fa fa-times btn btn-danger"></i>
                                                 </a>
+                                                <a href="{{route('copyPlan',[$stra->stra2LVID,2])}}">copy</a>
                                             </td>
                                         </tr>
                                         @php

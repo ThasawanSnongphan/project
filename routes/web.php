@@ -89,7 +89,7 @@ Route::post('/logout', function () {
 });
 
 //copyplan
-Route::get('/copyPlan{id}',[CopyPlanControllers::class,'index'])->name('copyPlan');
+Route::get('copyPlan/{id}{level}',[CopyPlanControllers::class,'index'])->name('copyPlan');
 Route::post('/copy',[CopyPlanControllers::class,'insert']);
 
 Route::get('/projectAll', [HomeController::class, 'projectAll']);

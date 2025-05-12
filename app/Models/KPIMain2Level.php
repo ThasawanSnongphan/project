@@ -21,4 +21,8 @@ class KPIMain2Level extends Model
     {
         return $this->belongsTo(Users::class, 'recorderID','userID');
     }
+
+    public function MapTactics() {
+        return $this->hasMany(Tactic2LevelMapKPIMain2Level::class, 'KPIMain2LVID');
+    }
 }

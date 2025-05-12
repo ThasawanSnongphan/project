@@ -43,7 +43,14 @@
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">แผนยุทธศาสตร์</label>
                             <div class="col-md-6 col-sm-6">
-                                <input type="hidden" name="stra3LVID" id="stra3LVID" value="{{$data['strategic']->stra3LVID}}">
+                                @if ($data['lv'] == 3)
+                                    <input type="hidden" name="stra3LVID" id="stra3LVID" value="{{$data['strategic']->stra3LVID}}">
+                                @elseif($data['lv'] == 2)
+                                    <input type="hidden" name="stra2LVID" id="stra2LVID" value="{{$data['strategic']->stra2LVID}}">
+                                @else
+                                    <input type="hidden" name="stra1LVID" id="stra1LVID" value="{{$data['strategic']->stra1LVID}}">
+                                @endif
+                                <input type="hidden" name="lv" id="lv" value="{{$data['lv']}}">
                                 <input class="form-control" type="text" name="name" id="name" required='required'
                                     value="{{ $data['strategic']->name }}" readonly>
 
@@ -63,33 +70,20 @@
                                 </select>
                             </div>
                         </div>
-                        {{-- @if (!empty($data['SFA3LV']))
-                            @foreach ($data['SFA3LV'] as $SFA)
-                                <input type="text" name="SFA3LVName[]" value="{{ $SFA->name }}"> <br>
-                                @if (!empty($data['goal3LV']))
-                                    @foreach ($data['goal3LV'] as $goal)
-                                        @if ($goal->SFA3LVID == $SFA->SFA3LVID)
-                                            <input type="text" name="goal3LVName[]" value="{{ $goal->name }}"> <br>
-                                            @if (!empty($data['tac3LV']))
-                                                @foreach ($data['tac3LV'] as $tac)
-                                                    @if ($tac->goal3LVID == $goal->goal3LVID)
-                                                        <input type="text" name="goal3LVName[]"
-                                                            value="{{ $tac->name }}">
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endif
-                                <br>
-                            @endforeach
-                        @endif --}}
+
 
                         <div class="ln_solid">
                             <div class="form-group text-center">
                                 <div class="col-md-6 offset-md-3">
                                     <button type='submit' class="btn btn-success" value="บันทึก">Copy</button>
-                                    <button type='reset' class="btn btn-danger">back</button>
+                                    @if ($data['lv'] == 3)
+                                        <button type='button' class="btn btn-danger"><a href="/strategic" style="color: white">Back</a></button>
+                                    @elseif($data['lv'] == 2)
+                                        <button type='button' class="btn btn-danger"><a href="/strategic2LV" style="color: white">Back</a></button>
+                                    @else
+                                        <button type='button' class="btn btn-danger"><a href="/strategic1LV" style="color: white">Back</a></button>
+                                    @endif
+                                    
                                 </div>
                             </div>
                         </div>
