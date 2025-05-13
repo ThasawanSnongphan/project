@@ -26,60 +26,24 @@ class PerformanceController extends Controller
         $data['quarter'] = Quarters::find($data['selectQuarID']);
 
        
-            $data['quarter'] = Quarters::find($data['selectQuarID']);
+        // $data['quarter'] = Quarters::find($data['selectQuarID']);
 
             //โครงการทั้งหมด
             $data['projectAll'] = DB::table('projects')
             ->whereBetween('projects.statusID',[4,11])
             ->where('projects.yearID',$data['selectYearID'])
             ->get();
-            
-            // $data['proID'] = $data['projectAll']->pluck('proID');
-            // dd($data['proID']);
+      
         // โครงการทั้งหมด
 
-        // $data['projectEvaCompleteAll'] = DB::table('projects')
-        // ->join('report_quarters as report','report.proID','=','projects.proID')
-        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
-        // ->whereBetween('projects.statusID',[4,11])
-        // ->where([['projects.statusID',8],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
-        // ->get(); //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
+      //นับโครงการที่ปิดโครงการ/เสร็จตามระยะเวลา
         $data['projectEvaCompleteAll'] = $data['projectAll']->where('statusID',8);
-        // dd($data['projectEvaCompleteAll']);
-        // dd($data['projectEvaCompleteAll']);
-
-        // $data['projectEvaDeadlineAll'] = DB::table('projects')
-        // ->join('report_quarters as report','report.proID','=','projects.proID')
-        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
-        // ->whereBetween('projects.statusID',[4,11])
-        // ->where([['projects.statusID',9],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
-        // ->get(); //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
+       //นับโครงการที่ปิดโครงการ/ไม่เป็นไปตามระยะเวลา
         $data['projectEvaDeadlineAll'] = $data['projectAll']->where('statusID',9);
-
-        // $data['projectEvaPostponedAll'] = DB::table('projects')
-        // ->join('report_quarters as report','report.proID','=','projects.proID')
-        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
-        // ->whereBetween('projects.statusID',[4,11])
-        // ->where([['projects.statusID',10],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
-        // ->get(); //นับโครงการที่ปิดโครงการ/ขอเลื่อน
+        //นับโครงการที่ปิดโครงการ/ขอเลื่อน
         $data['projectEvaPostponedAll'] = $data['projectAll']->where('statusID',10);
-
-        // $data['projectEvaCancleAll'] = DB::table('projects')
-        // ->join('report_quarters as report','report.proID','=','projects.proID')
-        // ->join('project_evaluations as eva','eva.proID','=','projects.proID')
-        // ->whereBetween('projects.statusID',[4,11])
-        // ->where([['projects.statusID',11],['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
-        // ->get(); //นับโครงการที่ปิดโครงการ/ขอยกเลิก
+       //นับโครงการที่ปิดโครงการ/ขอยกเลิก
         $data['projectEvaCancleAll'] = $data['projectAll']->where('statusID',11);
-        
-        // $data['proIDAll'] = $data['projectAll']->whereBetween('statusID',[4,7])->pluck('proID');
-        // $data['proIDAll'] = DB::table('projects')
-        // ->whereBetween('statusID',[4,7])
-        // ->where([['projects.yearID',$data['selectYearID']],['report.quarID','=',$data['selectQuarID']]])
-        // ->get();
-        // dd($data['proIDAll'] );
-       
-        // dd($data['xx'] );
         $data['report_quarterAll'] = DB::table('report_quarters as report')
         ->join('projects','projects.proID','=','report.proID')
         ->whereBetween('projects.statusID',[4,7])
@@ -250,5 +214,16 @@ class PerformanceController extends Controller
     return view('Performance.index',compact('data'));
     }
 
+    function supportPlan(Request $request){
+        $data['yearAll'] = Year::all();
+        $data['quarterAll'] = Quarters::all();
+        $data['selectYearID'] = $request->input('yearID'); //yearID
+        $data['selectQuarID'] = $request->input('quarID'); //quarID
+
+        $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
+        $data['quarter'] = Quarters::find($data['selectQuarID']);
+        
+        return view('Performance.supportPlan',compact('data'));
+    }
    
 }

@@ -107,7 +107,8 @@
                                 <li><a><i class="fa fa-file"></i> ผลการดำเนินงาน <span
                                             class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="/Performance">ผลการดำเนินงาน</a></li>
+                                        <li><a href="/Performance">ผลการดำเนินงานตามแผนปฏิบัติการ</a></li>
+                                        <li><a href="/PerformanceSupportPlan">ผลการดำเนินงานตามแผนสนับสนุนฯ</a></li>
                                     </ul>
                                 </li>
                             </ul>

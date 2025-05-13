@@ -49,10 +49,6 @@
                                         <button class="btn btn-primary" type="submit">search</button>
                                     </div>
                                 </div>
-
-
-                                {{-- </div> --}}
-
                             </form>
                             @if (!empty($data['selectYearID']) && !empty($data['selectQuarID']))
                                 <h3 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนปฏิบัติการ

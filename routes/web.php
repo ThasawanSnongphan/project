@@ -95,8 +95,9 @@ Route::post('/copy',[CopyPlanControllers::class,'insert']);
 Route::get('/projectAll', [HomeController::class, 'projectAll']);
 Route::get('/', [HomeController::class, 'news']);
 
-Route::get('/Performance', [PerformanceController::class,'index']);
-Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');
+Route::get('/Performance', [PerformanceController::class,'index']);//หน้าผลการดำเนินงานตามแผนปฏิบัติการ
+Route::get('/Performance/{id}', [PerformanceController::class,'detail'])->name('performance.detail');//รายละเอียด
+Route::get('/PerformanceSupportPlan', [PerformanceController::class,'supportPlan']);//หน้าผลการดำเนินงานตามแผนสนับสนุน
 
 Route::get('/countKPI', [CountKPIProject::class,'index']);
 Route::post('/countKPIInsert',[CountKPIProject::class,'insert']);
