@@ -222,6 +222,19 @@ class PerformanceController extends Controller
 
         $data['year'] = Year::find($data['selectYearID']);  //แสดงปีที่เลือก
         $data['quarter'] = Quarters::find($data['selectQuarID']);
+
+        //KPi ทั้งหมด
+        $data['report_q'] = DB::table('report_quarters')
+        ->join('projects','projects.proID','=','report_quarters.proID')
+        ->leftJoin('k_p_i_main_map_projects','k_p_i_main_map_projects.proID','=','projects.proID')
+        ->leftJoin('k_p_i_main2_level_map_projects','k_p_i_main2_level_map_projects.proID','=','projects.proID')
+        ->where('projects.yearID',$data['selectYearID'])
+        ->where('quarID',$data['selectQuarID'])
+        ->get();
+            // dd($data['report_q']);
+        
+        //บรรลุ
+        
         
         return view('Performance.supportPlan',compact('data'));
     }

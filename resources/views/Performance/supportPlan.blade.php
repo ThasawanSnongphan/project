@@ -53,10 +53,14 @@
                             @if (!empty($data['selectYearID']) && !empty($data['selectQuarID']))
                                 <h3 style="text-align: center">รายงานผลการดำเนินงานโครงการตามแผนสนับสนุน
                                     ประจำปีงบประมาณ พ.ศ. {{ $data['year']->year }} - {{ $data['quarter']->name }}</h3>
-                                <h4 style="text-align: center">สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ มจพ.</h4>
+                                <h4 style="text-align: center">สำนักคอมพิวเตอร์และเทคโนโลยีสารสนเทศ มจพ.</h4> <br>
                                 <div class="row justify-content-center" style="text-align: center">
                                     <div class="col-10 col-md-5">
-                                        <div class="p-3 mb-3 bg-light text-dark rounded border"></div>
+                                        <div class="p-3 mb-3 bg-light text-dark rounded border">
+                                            <h3 class="border rounded bg-white p-2">จำนวน KPI ทั้งสิ้น {{$data['report_q']->count()}} ตัวชี้วัด</h3>
+                                            <h4 class="border rounded bg-white p-2" style="color: green">บรรลุ ตามค่าเป้าหมาย <br></h4>
+                                            <h4 class="border rounded bg-white p-2" style="color: darkred">ไม่บรรลุ ตามค่าเป้าหมาย <br></h4>
+                                        </div>
                                     </div>
                                     <div class="col-10 col-md-5">
                                         <div class="p-3 mb-3 bg-light text-dark rounded border"></div>
