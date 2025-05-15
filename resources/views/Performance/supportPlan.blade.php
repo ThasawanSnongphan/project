@@ -57,9 +57,12 @@
                                 <div class="row justify-content-center" style="text-align: center">
                                     <div class="col-10 col-md-5">
                                         <div class="p-3 mb-3 bg-light text-dark rounded border">
-                                            <h3 class="border rounded bg-white p-2">จำนวน KPI ทั้งสิ้น {{$data['report_q']->count()}} ตัวชี้วัด</h3>
-                                            <h4 class="border rounded bg-white p-2" style="color: green">บรรลุ ตามค่าเป้าหมาย <br></h4>
-                                            <h4 class="border rounded bg-white p-2" style="color: darkred">ไม่บรรลุ ตามค่าเป้าหมาย <br></h4>
+                                            <h3 class="border rounded bg-white p-2">จำนวน KPI ทั้งสิ้น
+                                                {{ $data['report_q']->count() }} ตัวชี้วัด</h3>
+                                            <h4 class="border rounded bg-white p-2" style="color: green">บรรลุ
+                                                ตามค่าเป้าหมาย <br></h4>
+                                            <h4 class="border rounded bg-white p-2" style="color: darkred">ไม่บรรลุ
+                                                ตามค่าเป้าหมาย <br></h4>
                                         </div>
                                     </div>
                                     <div class="col-10 col-md-5">
@@ -68,6 +71,9 @@
                                 </div>
                                 <br>
                                 <hr>
+                                @php
+                                    $i = 1;
+                                @endphp
                                 <table id="example" class="display">
                                     <thead>
                                         <tr>
@@ -81,7 +87,42 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        @foreach ($data['report_q'] as $item)
+                                            @if ($item->KPI3_name)
+                                                <tr>
+                                                    <td> {{$i}} </td>
+                                                    <td>{{ $item->KPI3_name }}</td>
+                                                    <td> {{ $item->KPI3_count }} </td>
+                                                    <td> {{ $item->KPI3_target }} </td>
+                                                    <td> {{ $item->KPI3_result }} </td>
+                                                    <td>
+                                                        @if ($item->KPI3_result >= $item->KPI3_target)
+                                                            บรรลุ
+                                                        @endif
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            @endif
+
+                                            @if ($item->KPI2_name)
+                                                <tr>
+                                                    <td> </td>
+                                                    <td>{{ $item->KPI2_name }}</td>
+                                                    <td> {{ $item->KPI2_count }} </td>
+                                                    <td> {{ $item->KPI2_target }} </td>
+                                                    <td> {{ $item->KPI2_result }} </td>
+                                                    <td>
+                                                        @if ($item->KPI2_result >= $item->KPI2_target)
+                                                            บรรลุ
+                                                        @endif
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            @endif
+                                            @php
+                                                $i++;
+                                            @endphp
+                                        @endforeach
                                     </tbody>
                                 </table>
                             @endif
@@ -101,6 +142,5 @@
         function clearTable() {
             document.querySelector("#data tbody").innerHTML = "";
         }
-
     </script>
 @endsection

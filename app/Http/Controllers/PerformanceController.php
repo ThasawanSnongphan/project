@@ -226,14 +226,41 @@ class PerformanceController extends Controller
         //KPi ทั้งหมด
         $data['report_q'] = DB::table('report_quarters')
         ->join('projects','projects.proID','=','report_quarters.proID')
-        ->leftJoin('k_p_i_main_map_projects','k_p_i_main_map_projects.proID','=','projects.proID')
-        ->leftJoin('k_p_i_main2_level_map_projects','k_p_i_main2_level_map_projects.proID','=','projects.proID')
+        ->leftJoin('k_p_i_main_map_projects as KPI3LVMap','KPI3LVMap.proID','=','projects.proID')
+        ->leftjoin('k_p_i_mains as KPI3LV','KPI3LV.KPIMain3LVID','KPI3LVMap.KPIMain3LVID')
+        ->leftJoin('k_p_i_main2_level_map_projects as KPI2LVMap','KPI2LVMap.proID','=','projects.proID')
+        ->leftjoin('k_p_i_main2_levels as KPI2LV','KPI2LV.KPIMain2LVID','KPI2LVMap.KPIMain2LVID')
         ->where('projects.yearID',$data['selectYearID'])
         ->where('quarID',$data['selectQuarID'])
+        ->select(
+            'projects.proID'
+            ,'KPI3LVMap.KPIMain3LVID'
+            ,'KPI3LV.name as KPI3_name','KPI3LV.count as KPI3_count','KPI3LV.target as KPI3_target'
+            ,DB::raw("
+                CASE 
+                    WHEN report_quarters.quarID = 1 THEN KPI3LVMap.result1
+                    WHEN report_quarters.quarID = 2 THEN KPI3LVMap.result2
+                    WHEN report_quarters.quarID = 3 THEN KPI3LVMap.result3
+                    WHEN report_quarters.quarID = 4 THEN KPI3LVMap.result4
+                END as KPI3_result
+            ")
+            ,'KPI2LVMap.KPIMain2LVID'
+            ,'KPI2LV.name as KPI2_name','KPI2LV.count as KPI2_count','KPI2LV.target as KPI2_target'
+            ,DB::raw("
+                CASE 
+                    WHEN report_quarters.quarID = 1 THEN KPI2LVMap.result1
+                    WHEN report_quarters.quarID = 2 THEN KPI2LVMap.result2
+                    WHEN report_quarters.quarID = 3 THEN KPI2LVMap.result3
+                    WHEN report_quarters.quarID = 4 THEN KPI2LVMap.result4
+                END as KPI2_result
+            ")
+            
+            )
         ->get();
             // dd($data['report_q']);
         
         //บรรลุ
+        
         
         
         return view('Performance.supportPlan',compact('data'));
