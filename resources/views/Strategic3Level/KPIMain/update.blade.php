@@ -260,7 +260,9 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้กำกับ<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="director" name="director" class="form-control" required>
+                                <select id="director" name="director" class="form-control" 
+                                {{-- required --}}
+                                >
                                     <option value="">---เลือกผู้กำกับ---</option>
                                     @foreach ($user as $item)
                                         <option value="{{ $item->userID }}"
@@ -275,7 +277,9 @@
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ผู้บันทึกข้อมูล<span
                                     class="required">*</span></label>
                             <div class="col-md-6 col-sm-6">
-                                <select id="recorder" name="recorder" class="form-control" required>
+                                <select id="recorder" name="recorder" class="form-control"
+                                 {{-- required --}}
+                                 >
                                     <option value="">---เลือกผู้บันทึกข้อมูล---</option>
                                     @foreach ($user as $item)
                                         <option value="{{ $item->userID }}"
