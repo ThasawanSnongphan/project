@@ -59,10 +59,22 @@
                                         <div class="p-3 mb-3 bg-light text-dark rounded border">
                                             <h3 class="border rounded bg-white p-2">จำนวน KPI ทั้งสิ้น
                                                 {{ $data['report_q']->count() }} ตัวชี้วัด</h3>
-                                            <h4 class="border rounded bg-white p-2" style="color: green">บรรลุ
-                                                ตามค่าเป้าหมาย <br></h4>
+                                            <h4 class="border rounded bg-white p-2" style="color: green">
+                                                บรรลุตามค่าเป้าหมาย <br>
+                                                @php
+                                                    $count = 0;
+                                                    foreach ($data['report_q'] as $item) {
+                                                        if ($item->KPI3_result >= $item->KPI3_target || $item->KPI2_result >= $item->KPI2_target) {
+                                                            $count++;
+                                                        }
+                                                    }
+                                                @endphp
+                                                {{ $count }}
+                                            </h4>
                                             <h4 class="border rounded bg-white p-2" style="color: darkred">ไม่บรรลุ
-                                                ตามค่าเป้าหมาย <br></h4>
+                                                ตามค่าเป้าหมาย <br>
+                                                {{ $data['report_q']->count() - $count }}
+                                            </h4>
                                         </div>
                                     </div>
                                     <div class="col-10 col-md-5">
@@ -90,7 +102,7 @@
                                         @foreach ($data['report_q'] as $item)
                                             @if ($item->KPI3_name)
                                                 <tr>
-                                                    <td> {{$i}} </td>
+                                                    <td> {{ $i }} </td>
                                                     <td>{{ $item->KPI3_name }}</td>
                                                     <td> {{ $item->KPI3_count }} </td>
                                                     <td> {{ $item->KPI3_target }} </td>
@@ -100,7 +112,7 @@
                                                             บรรลุ
                                                         @endif
                                                     </td>
-                                                    <td></td>
+                                                    <td>{{ $item->detail }}</td>
                                                 </tr>
                                             @endif
 

@@ -232,8 +232,10 @@ class PerformanceController extends Controller
         ->leftjoin('k_p_i_main2_levels as KPI2LV','KPI2LV.KPIMain2LVID','KPI2LVMap.KPIMain2LVID')
         ->where('projects.yearID',$data['selectYearID'])
         ->where('quarID',$data['selectQuarID'])
+        ->whereNotNull('KPI3LVMap.KPIMain3LVID')
+        ->orWhereNotNull('KPI2LVMap.KPIMain2LVID')
         ->select(
-            'projects.proID'
+            'projects.proID','report_quarters.detail as detail'
             ,'KPI3LVMap.KPIMain3LVID'
             ,'KPI3LV.name as KPI3_name','KPI3LV.count as KPI3_count','KPI3LV.target as KPI3_target'
             ,DB::raw("
@@ -257,6 +259,7 @@ class PerformanceController extends Controller
             
             )
         ->get();
+           
             // dd($data['report_q']);
         
         //บรรลุ

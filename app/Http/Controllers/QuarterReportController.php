@@ -51,10 +51,10 @@ class QuarterReportController extends Controller
         $data['quarterReport']=DB::table('report_quarters')->where([['proID',$id],['quarID',$quarter]])->first();
 
         // dd($data['quarterReport']);
-        if(!empty($data['quarterReport'])){
-            $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
+        // if(!empty($data['quarterReport'])){
+        //     $data['detail']=DB::table('progress_details')->where('reportID',$data['quarterReport']->reportID)->get();
 
-        }
+        // }
         
         $data['evaluation'] = DB::table('project_evaluations')->where([['proID',$id]])->first();
         // dd($data['evaluation']);
@@ -70,23 +70,14 @@ class QuarterReportController extends Controller
             'proID'=>$project->proID,
             'userID'=> Auth::id(),
             'costResult'=>$request->costResult,
+            'detail'=>$request->detail,
             'problem'=>$request->problem,
             'created_at'=>now(),
             'updated_at'=>now()
         ];
         $reportID = Db::table('report_quarters')->insertGetId($report);
 
-        $detail = $request->input('detail');
-        if(is_array($detail)){
-            foreach($detail as $index => $item){
-                DB::table('progress_details')->insert([
-                    'detail'=>$item,
-                    'reportID' => $reportID,
-                    'updated_at' => now(), // ใช้เวลาปัจจุบันที่ Laravel รองรับ
-                    'created_at' => now() 
-                ]);
-            }
-        }
+       
         $KPIMain3LVID = $request->KPIMain3LVID;
         $result3LV = $request->result3LV;
         $column = "result" . $quarter;

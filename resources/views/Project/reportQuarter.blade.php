@@ -194,29 +194,20 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="row field item form-group">
+                        <div class="row field item form-group align-items-center">
                             <label for="title"
                                 class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดความก้าวหน้า : </label>
                             <div class="col-md-6 col-sm-6">
                                 @if (!empty($data['quarterReport']))
-                                    @foreach ($data['detail'] as $item)
-                                        {{ $item->detail }} <br>
-                                    @endforeach
+                                        {{ $data['quarterReport']->detail }} <br>
                                 @else
-                                    <textarea class="form-control" type="text" name="detail[]" id="" required></textarea>
+                                    <textarea class="form-control" type="text" name="detail" id="" required></textarea>
                                 @endif
 
                             </div>
-                            {{-- @if (empty($data['quarterReport']))
-                                <div class=" col-md-1 col-sm-1 m-1">
-                                    <button type='button' class="btn btn-primary" onclick="insertDetail()">เพิ่ม
-                                    </button>
-
-                                </div>
-                            @endif --}}
+                            
 
                         </div>
-                        <div id="insertDetail"></div>
 
                         <div class="row field item form-group align-items-center">
                             <label for="title" class="col-form-label col-md-3 col-sm-3  label-align">ปัญหา/อุปสรรค :
